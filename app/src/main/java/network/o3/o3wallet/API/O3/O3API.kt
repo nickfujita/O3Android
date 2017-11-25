@@ -1,0 +1,54 @@
+package network.o3.o3wallet.API.O3
+
+import com.github.kittinunf.fuel.httpGet
+import com.github.salomonbrys.kotson.fromJson
+import com.google.gson.Gson
+import network.o3.o3wallet.API.CoZ.Claims
+import network.o3.o3wallet.API.CoZ.CoZClient
+import network.o3.o3wallet.API.CoZ.TransactionHistory
+
+/**
+ * Created by drei on 11/24/17.
+ */
+
+class O3API {
+    val baseURL = "https://staging-api.o3.network/"
+    enum class Route() {
+        HISTORY,
+        PORTFOLIO;
+
+        fun routeName(): String {
+            return this.name.toLowerCase()
+        }
+    }
+
+    fun getPriceHistory(symbol: String, interval: Int, completion: (Pair<PriceHistory?, Error?>) -> (Unit)) {
+        val url = baseURL + Route.HISTORY.routeName() + "/" + symbol + String.format("?i=%d", interval)
+        var request = url.httpGet()
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val history = gson.fromJson<PriceHistory>(data!!)
+                completion(Pair<PriceHistory?, Error?>(history, null))
+            } else {
+                completion(Pair<PriceHistory?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+
+    fun getPortfolio(neoAmount: Double, gasAmount: Double, interval: Int, completion: (Pair<Portfolio?, Error?>) -> Unit) {
+        val url = baseURL + Route.PORTFOLIO.routeName() + String.format("?i=%d&neo=%d&gas=%f", interval, neoAmount, gasAmount)
+        var request = url.httpGet()
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val history = gson.fromJson<Portfolio>(data!!)
+                completion(Pair<Portfolio?, Error?>(history, null))
+            } else {
+                completion(Pair<Portfolio?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+}
