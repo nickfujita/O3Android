@@ -23,10 +23,12 @@ class CoZClient {
     }
 
     fun getTransactionHistory(address: String, completion: (Pair<TransactionHistory?, Error?>) -> (Unit)) {
-        val url = baseAPIURL + Route.HISTORY.routeName() + address
+        val url = "http://api.wallet.cityofzion.io/v2/address/history/AHa8Fk7Zyu2Vq3jYSuiHyCiNaibDiMsUMK"
         var request = url.httpGet()
+        request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
             val (data, error) = result
+            print(response)
             if (error == null) {
                 val gson = Gson()
                 val history = gson.fromJson<TransactionHistory>(data!!)
@@ -40,6 +42,7 @@ class CoZClient {
     fun getClaims(address: String, completion: (Pair<Claims?, Error?>) -> Unit) {
         val url = baseAPIURL + Route.CLAIMS.routeName() + address
         var request = url.httpGet()
+        request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
             val (data, error) = result
             if (error == null) {
