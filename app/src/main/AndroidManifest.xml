@@ -19,7 +19,8 @@
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".CreateWalletActivity"></activity>
+        <activity android:name=".CreateWalletActivity" />
+        <activity android:name=".MainTabbedActivity"></activity>
     </application>
 
 </manifest>
