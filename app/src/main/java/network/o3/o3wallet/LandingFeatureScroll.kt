@@ -2,6 +2,7 @@ package network.o3.o3wallet
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,14 +33,16 @@ class LandingFeatureScroll: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_landing_feature_scroll, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_landing_feature_scroll, container, false)
         val position = arguments.getInt("position")
-        val featureImageView = view?.findViewById<ImageView>(R.id.featureImage)
-        val featureTextView = view?.findViewById<TextView>(R.id.featureText)
+        val featureImageView = view.findViewById<ImageView>(R.id.featureImage)
+        val featureTextView = view.findViewById<TextView>(R.id.featureText)
 
-        featureImageView?.setImageResource(imageIds[position])
-        featureTextView?.text = titles[position]
+        featureImageView.setImageResource(imageIds[position])
+        featureTextView.text = titles[position]
 
         return view
     }
+
+
 }

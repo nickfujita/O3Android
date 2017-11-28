@@ -13,75 +13,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/changeAmountTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/portfolioHeaderFragment"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fundAmountTitle" />
-
-            <TextView
-                android:id="@+id/fundAmountTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="21dp"
-                android:text="0.1242BTC"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fundSourceTitle" />
-
-            <TextView
-                android:id="@+id/fundSourceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ozone Wallet"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/chevron_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/fundAmountTitle"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.033" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="16dp"
-                android:adjustViewBounds="false"
-                android:src="@drawable/chevron_left"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/fundAmountTitle"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.033" />
-
             <FrameLayout
+                android:id="@+id/graphLayout"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/assetsTable"
+                app:layout_constraintBottom_toTopOf="@+id/intervalButtonLayout"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/changeAmountTitle"
+                app:layout_constraintTop_toBottomOf="@+id/portfolioHeaderFragment"
+                app:layout_constraintVertical_bias="1.0"
                 tools:background="@android:color/white">
 
                 <com.robinhood.spark.SparkView
@@ -90,6 +39,72 @@
                     android:layout_height="match_parent" />
 
             </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/intervalButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toTopOf="@+id/assetsTable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/graphLayout"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/fiveMinInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_unselected"
+                    android:text="5m" />
+
+                <Button
+                    android:id="@+id/fifteenMinuteInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_selected"
+                    android:text="15m" />
+
+                <Button
+                    android:id="@+id/thirtyMinuteInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_unselected"
+                    android:text="30m" />
+
+                <Button
+                    android:id="@+id/sixtyMinuteInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_unselected"
+                    android:text="60m" />
+
+                <Button
+                    android:id="@+id/oneDayInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_unselected"
+                    android:text="1D" />
+
+                <Button
+                    android:id="@+id/allInterval"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_unselected"
+                    android:text="All" />
+            </LinearLayout>
 
             <TableLayout
                 android:id="@+id/assetsTable"
@@ -227,9 +242,7 @@
 
                     </android.support.constraint.ConstraintLayout>
                 </TableRow>
-
             </TableLayout>
-
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
