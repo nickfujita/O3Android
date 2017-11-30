@@ -19,7 +19,7 @@ class CryptoTests {
         print (encryptedString)
         Decryptor().decrypt(alias, encryptedString!!, encryptor.getIv()!!)
         // Somewhere later in the code, to decrypt
-        //val info = SettingsRepository.getProperty(alias, context)
+        //val info = EncryptedSettingsRepository.getProperty(alias, context)
 
         // decrypt them
         // info?.data
