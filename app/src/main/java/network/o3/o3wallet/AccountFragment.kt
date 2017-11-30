@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.support.v4.app.Fragment
 import android.support.design.widget.FloatingActionButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import android.content.Context
 import neowallet.Wallet
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
+import network.o3.o3wallet.API.CoZ.CoZClient
 
 class AccountFragment : Fragment() {
 
@@ -19,6 +20,7 @@ class AccountFragment : Fragment() {
     private lateinit var myAddressLayout: LinearLayout
     private lateinit var neoAmountLabel: TextView
     private lateinit var gasAmountLabel: TextView
+    private lateinit var transactionListView: ListView
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -32,14 +34,17 @@ class AccountFragment : Fragment() {
         myAddressLayout = view!!.findViewById<LinearLayout>(R.id.layoutFabMyAddress)
         neoAmountLabel = view!!.findViewById<TextView>(R.id.neoAmountLabel)
         gasAmountLabel = view!!.findViewById<TextView>(R.id.gasAmountLabel)
+        transactionListView = view!!.findViewById<ListView>(R.id.transactionListView)
         menuButton.setOnClickListener { menuButtonTapped() }
         closeMenu();
         loadAccountState()
+        loadTransactionHistory()
     }
 
     override fun onResume() {
         super.onResume()
         loadAccountState()
+        loadTransactionHistory()
     }
 
     fun loadAccountState() {
@@ -59,6 +64,23 @@ class AccountFragment : Fragment() {
                 }
             }
 
+        }
+    }
+
+    fun loadTransactionHistory() {
+        CoZClient().getTransactionHistory(address = "") {
+            var error = it.second
+            var data = it.first
+            if (error != null) {
+
+            } else {
+                activity.runOnUiThread(Runnable {
+                    kotlin.run {
+                        val adapter = TransactionHistoryAdapter(activity as Context, data!!.history)
+                        transactionListView.adapter = adapter
+                    }
+                })
+            }
         }
     }
 

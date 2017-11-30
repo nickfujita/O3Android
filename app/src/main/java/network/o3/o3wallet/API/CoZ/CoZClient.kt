@@ -23,7 +23,7 @@ class CoZClient {
     }
 
     fun getTransactionHistory(address: String, completion: (Pair<TransactionHistory?, Error?>) -> (Unit)) {
-        val url = "http://api.wallet.cityofzion.io/v2/address/history/AHa8Fk7Zyu2Vq3jYSuiHyCiNaibDiMsUMK"
+        val url = "http://api.wallet.cityofzion.io/v2/address/history/AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6"
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
