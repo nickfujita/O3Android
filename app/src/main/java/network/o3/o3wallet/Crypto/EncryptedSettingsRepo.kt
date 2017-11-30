@@ -13,7 +13,7 @@ class EncryptedInfo {
     var iv: ByteArray? = null
 }
 
-object SettingsRepository {
+object EncryptedSettingsRepository {
     fun getProperty(key: String, context: Context): EncryptedInfo {
         val info = EncryptedInfo()
 
