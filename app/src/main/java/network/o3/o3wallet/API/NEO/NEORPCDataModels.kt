@@ -1,3 +1,5 @@
+package network.o3.o3wallet.API.NEO
+
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 

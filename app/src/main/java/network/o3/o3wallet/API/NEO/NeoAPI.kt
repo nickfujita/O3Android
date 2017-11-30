@@ -1,3 +1,5 @@
+package network.o3.o3wallet.API.NEO
+
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
@@ -5,6 +7,19 @@ import com.google.gson.JsonObject
 
 class NeoNodeRPC {
     var nodeURL = "http://seed3.neo.org:10332"
+
+    enum class Asset(){
+        NEO,
+        GAS;
+        fun assetID(): String{
+            if (this == GAS) {
+                return "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
+            } else if (this == NEO) {
+                return "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
+            }
+            return ""
+        }
+    }
 
     enum class RPC() {
         GETBLOCKCOUNT,
