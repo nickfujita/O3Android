@@ -3,6 +3,7 @@ package network.o3.o3wallet
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -44,8 +45,27 @@ class TransactionHistoryAdapter(context: Context, list: Array<TransactionHistory
             view = convertView
             vh = view.tag as TransactionHistoryRow
         }
+        val t = transactions.get(position)
+        if (t.NEO.toInt() == 0) {
+            vh.assetTextView.text = "GAS"
+            vh.amountTextView.text = "%.8f".format(t.GAS)
+            if (t.GAS < 0) {
+                vh.amountTextView.setTextColor(Color.parseColor("#D0011B"))
+            } else  if (t.GAS > 0) {
+                vh.amountTextView.setTextColor(Color.parseColor("#7ED321"))
+            }
+        }
+        if (t.GAS == 0.0) {
+            vh.assetTextView.text = "NEO"
+            vh.amountTextView.text = "%d".format(t.NEO.toInt())
+            if (t.NEO.toInt() < 0) {
+                vh.amountTextView.setTextColor(Color.parseColor("#D0011B"))
+            } else if (t.NEO.toInt() > 0) {
+                vh.amountTextView.setTextColor(Color.parseColor("#7ED321"))
+            }
 
-        vh.assetTextView.text = transactions.get(position).txid
+        }
+        vh.transactionIDTextView.text = t.txid
 
         return view!!
     }
@@ -54,9 +74,12 @@ class TransactionHistoryAdapter(context: Context, list: Array<TransactionHistory
 
 private class TransactionHistoryRow(row: View?) {
     public val assetTextView: TextView
+    public val transactionIDTextView: TextView
+    public val amountTextView: TextView
 
     init {
         this.assetTextView = row?.findViewById<TextView>(R.id.assetTextView) as TextView
-
+        this.transactionIDTextView = row?.findViewById<TextView>(R.id.transactionIDTextView) as TextView
+        this.amountTextView = row?.findViewById<TextView>(R.id.amountTextView) as TextView
     }
 }
