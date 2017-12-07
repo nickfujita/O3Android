@@ -13,21 +13,49 @@ import android.widget.TableRow
 import com.robinhood.spark.SparkView
 import kotlinx.android.synthetic.main.fragment_home.*
 import network.o3.o3wallet.API.O3.O3API
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import NeoNodeRPC
+import android.app.AlertDialog
+import android.arch.lifecycle.Observer
+import android.util.Log
+import android.widget.Toast
+import network.o3.o3wallet.API.O3.PriceData
+import android.arch.lifecycle.ViewModelProviders
+
+
+
 
 class HomeFragment : Fragment() {
     var selectedButton: Button? = null
+    var neoAmountWatchAddresses: Int = 0
+    var gasAmountWatchAddresses: Double = 0.0
+    var neoAmountO3Address: Int = 0
+    var gasAmountO3Address: Double = 0.0
+    var headerPosition = 0
+    var isPricedInBTC = true
+    var latestPrice: PriceData? = null
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
-        val viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
-        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(activity.supportFragmentManager)
-        viewPager.adapter = portfolioHeaderAdapter
+
+        val homeModel = ViewModelProviders.of(this).get(HomeViewModel::class.java!!)
+        homeModel.getDisplayedBalance().observe(this,  Observer<Pair<Int, Double>> { resoruce ->
+            Toast.makeText(activity, resoruce.toString(), Toast.LENGTH_LONG).show()
+        })
+
 
         initiateIntervalButtons(view)
+
+        val viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
+        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
+        viewPager.adapter = portfolioHeaderAdapter
         initiateTableRows(view)
+
         return view
     }
+
 
     fun initiateIntervalButtons(view: View) {
         val fiveMinButton = view.findViewById<Button>(R.id.fiveMinInterval)
@@ -51,15 +79,6 @@ class HomeFragment : Fragment() {
         selectedButton?.setBackgroundResource(R.drawable.bottom_unselected)
         button.setBackgroundResource(R.drawable.bottom_selected)
         selectedButton = button
-        O3API().getPortfolio(2, 2.0, 15) {
-            val portfolioGraph = view?.findViewById<SparkView>(R.id.sparkview)
-            val data = it.first?.data?.map { it.averageUSD }?.toTypedArray()!!
-            var floats = FloatArray(data.count())
-            for (i in data.indices) {
-                floats[i] = data[i].toFloat()
-            }
-            portfolioGraph?.setAdapter(PortfolioDataAdapter(floats))
-        }
     }
 
     fun initiateTableRows(view: View) {

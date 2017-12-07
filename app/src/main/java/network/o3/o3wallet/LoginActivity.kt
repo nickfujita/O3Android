@@ -20,7 +20,10 @@ class LoginActivity : AppCompatActivity() {
     fun login() {
         Account.restoreWalletFromDevice()
         //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
-        //PersistentStore.addWatchAddress("abaceadadfsfadfa", "Hellllllo")
+      //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")
+      //  PersistentStore.addWatchAddress("AJy6mZwSH8pWC4eHBAAcbkztcufTw51rfE", "Test 1")
+       // PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
+
         val intent = Intent(this, MainTabbedActivity::class.java)
         startActivity(intent)
     }

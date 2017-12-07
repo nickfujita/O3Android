@@ -5,11 +5,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_home.*
 import org.w3c.dom.Text
 
 
@@ -31,6 +33,7 @@ class PortfolioHeader:Fragment() {
             args.putInt("position", position)
             val fragment = PortfolioHeader()
             fragment.arguments = args
+            //fragment.updateHeaderFunds(position)
             return fragment
         }
     }
@@ -41,14 +44,25 @@ class PortfolioHeader:Fragment() {
         val fundSourceTextView = view?.findViewById<TextView>(R.id.fundSourceTextView)
         fundSourceTextView?.text = titles[position]
 
-        val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
-        fundAmountTextView?.text = amounts[position]
 
         val fundChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
         fundChangeTextView?.text = changes[position]
 
         configureArrows(view)
         return view
+    }
+
+    fun updateHeaderFunds(position: Int) {
+        var parent = parentFragment as HomeFragment
+        parent.headerPosition = position
+      //  parent.updatePortfolio()
+
+        val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
+        if ( parent.isPricedInBTC ) {
+            fundAmountTextView?.text = parent.latestPrice?.averageBTC.toString()
+        } else {
+            fundAmountTextView?.text = parent.latestPrice?.averageUSD.toString()
+        }
     }
 
     fun configureArrows(view: View?) {
