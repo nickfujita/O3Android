@@ -13,7 +13,7 @@ import network.o3.o3wallet.API.CoZ.TransactionHistory
  */
 
 class O3API {
-    val baseURL = "https://staging-api.o3.network/v1/"
+    val baseURL = "http://staging-api.o3.network/v1/"
     enum class Route() {
         HISTORY,
         PORTFOLIO;
@@ -53,8 +53,6 @@ class O3API {
                 println(o3Response.result["data"])
                 val history = gson.fromJson<Portfolio>(o3Response.result["data"])
                 completion(Pair<Portfolio?, Error?>(history, null))
-                FuelManager.instance.executor.shutdown()
-
             } else {
                 completion(Pair<Portfolio?, Error?>(null, Error(error.localizedMessage)))
             }

@@ -1,5 +1,6 @@
 package network.o3.o3wallet
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -33,7 +34,7 @@ class PortfolioHeader:Fragment() {
             args.putInt("position", position)
             val fragment = PortfolioHeader()
             fragment.arguments = args
-            //fragment.updateHeaderFunds(position)
+            fragment.updateHeaderFunds(position)
             return fragment
         }
     }
@@ -53,16 +54,20 @@ class PortfolioHeader:Fragment() {
     }
 
     fun updateHeaderFunds(position: Int) {
-        var parent = parentFragment as HomeFragment
-        parent.headerPosition = position
-      //  parent.updatePortfolio()
+        var fragments = parentFragment
+        Log.d("DERP", fragments.toString())
+        //var parent = parentFragment
+/*        var parent = parentFragment as HomeFragment
+  //      parent.headerPosition = position*/
+         // /var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
 
+/*
         val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
-        if ( parent.isPricedInBTC ) {
-            fundAmountTextView?.text = parent.latestPrice?.averageBTC.toString()
+        if ( homeModel.getCurrency() == HomeViewModel.Currency.BTC ) {
+            fundAmountTextView?.text = homeModel.getLatestPrice().averageBTC.toString()
         } else {
-            fundAmountTextView?.text = parent.latestPrice?.averageUSD.toString()
-        }
+            fundAmountTextView?.text = homeModel.getLatestPrice().averageUSD.toString()
+        }*/
     }
 
     fun configureArrows(view: View?) {

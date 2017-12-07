@@ -35,11 +35,11 @@ class HomeViewModel: ViewModel()  {
 
     private var displayType: DisplayType = DisplayType.COMBINED
     private var interval: Int = 15
-    private var currency: Currency = Currency.BTC
+    private var currency: Currency = Currency.USD
     private var neoGasColdStorage: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasHotWallet: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasCombined: MutableLiveData<Pair<Int, Double>>? = null
-    private var portfolioData: MutableLiveData<FloatArray>? = null
+    private var portfolio: MutableLiveData<Portfolio>? = null
 
     private var latestPrice: PriceData? = null
 
@@ -67,6 +67,10 @@ class HomeViewModel: ViewModel()  {
         return this.displayType
     }
 
+    fun getLatestPrice(): PriceData {
+        return this.latestPrice!!
+    }
+
     fun getAccountState(): LiveData<Pair<Int, Double>> {
         if (neoGasColdStorage == null || neoGasHotWallet == null) {
             neoGasColdStorage = MutableLiveData()
@@ -81,35 +85,38 @@ class HomeViewModel: ViewModel()  {
         }
     }
 
-    fun getPortfolioDataFromModel(): LiveData<FloatArray> {
-        if (portfolioData == null) {
-            portfolioData = MutableLiveData()
+    fun getPortfolioFromModel(refresh: Boolean): LiveData<Portfolio> {
+        if (portfolio == null || refresh) {
+            portfolio = MutableLiveData()
             loadPortfolio()
         }
-        return portfolioData!!
+        return portfolio!!
+    }
+
+    fun getPriceFloats(): FloatArray {
+        val data = when (currency) {
+            Currency.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
+            Currency.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
+        }
+
+        var floats = FloatArray(data.count())
+        latestPrice = portfolio?.value?.data?.first()!!
+        for (i in data.indices) {
+            floats[i] = data[i].toFloat()
+        }
+        return floats
     }
 
     fun loadPortfolio() {
-       /* val balance = when (displayType) {
+        val balance = when (displayType) {
             DisplayType.HOT -> neoGasHotWallet?.value!!
             DisplayType.COLD ->  neoGasColdStorage?.value!!
             DisplayType.COMBINED ->  neoGasCombined?.value!!
-        }*/
+        }
 
-        O3API().getPortfolio(5/*balance.first*/, 5.0/*balance.second*/, interval) {
+        O3API().getPortfolio(balance.first, balance.second, interval) {
             if ( it?.second != null ) return@getPortfolio
-            val data = when (currency) {
-                Currency.USD -> it.first?.data?.map { it.averageUSD }?.toTypedArray()!!
-                Currency.BTC -> it.first?.data?.map { it.averageBTC }?.toTypedArray()!!
-            }
-
-            var floats = FloatArray(data.count())
-            latestPrice = it.first?.data?.first()!!
-            for (i in data.indices) {
-                floats[i] = data[i].toFloat()
-            }
-
-            portfolioData?.value = floats
+            portfolio?.postValue(it?.first!!)
         }
     }
 

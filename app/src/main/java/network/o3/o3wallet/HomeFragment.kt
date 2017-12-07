@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TableRow
 import com.robinhood.spark.SparkView
 import kotlinx.android.synthetic.main.fragment_home.*
 import network.o3.o3wallet.API.O3.O3API
@@ -19,11 +16,10 @@ import NeoNodeRPC
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.util.Log
-import android.widget.Toast
 import network.o3.o3wallet.API.O3.PriceData
 import android.arch.lifecycle.ViewModelProviders
-
-
+import android.widget.*
+import network.o3.o3wallet.API.O3.Portfolio
 
 
 class HomeFragment : Fragment() {
@@ -35,35 +31,33 @@ class HomeFragment : Fragment() {
     var headerPosition = 0
     var isPricedInBTC = true
     var latestPrice: PriceData? = null
+    var homeModel: HomeViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
+        val viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
+        val derp = childFragmentManager
+        Log.d("derp", derp.toString())
+        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
+        viewPager.adapter = portfolioHeaderAdapter
+
+
+
 
         val sparkView = view.findViewById<SparkView>(R.id.sparkview)
+       /* homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
 
-
-        val homeModel = ViewModelProviders.of(this).get(HomeViewModel::class.java!!)
-
-        //homeModel.getAccountState().observe(this,  Observer<Pair<Int, Double>> { balance ->
-            //Toast.makeText(activity, "data", Toast.LENGTH_LONG).show()
-        //})
-
-        homeModel.getPortfolioDataFromModel().observe(this, Observer<FloatArray> {  data ->
-            Toast.makeText(activity, "data", Toast.LENGTH_LONG).show()
-            sparkView.adapter = PortfolioDataAdapter(data)
-        })
-
-
+        homeModel?.getAccountState()?.observe(this,  Observer<Pair<Int, Double>> { balance ->
+            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
+                sparkView.adapter = PortfolioDataAdapter(homeModel?.getPriceFloats())
+                initiateTableRows(view)
+            })
+        })*/
 
 
         initiateIntervalButtons(view)
-
-        val viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
-        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
-        viewPager.adapter = portfolioHeaderAdapter
-        initiateTableRows(view)
-
         return view
     }
 
@@ -90,6 +84,37 @@ class HomeFragment : Fragment() {
         selectedButton?.setBackgroundResource(R.drawable.bottom_unselected)
         button.setBackgroundResource(R.drawable.bottom_selected)
         selectedButton = button
+        homeModel?.setInterval(button.tag.toString().toInt())
+        val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
+        homeModel?.getPortfolioFromModel(true)?.observe(this, Observer<Portfolio> {  _ ->
+            sparkView?.adapter = PortfolioDataAdapter(homeModel?.getPriceFloats())
+            updateTableData()
+        })
+    }
+
+    fun updateTableData() {
+        homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
+            view?.findViewById<TextView>(R.id.neoPrice)?.text = data!!.price["neo"]?.averageUSD.toString()
+            view?.findViewById<TextView>(R.id.gasPrice)?.text = data!!.price["gas"]?.averageUSD.toString()
+            homeModel?.getAccountState()?.observe(this,  Observer<Pair<Int, Double>> { balance ->
+                view?.findViewById<TextView>(R.id.neoAmount)?.text = balance?.first.toString()
+                view?.findViewById<TextView>(R.id.gasAmount)?.text = balance?.second.toString()
+
+                val currentNeoPrice = data!!.price["neo"]?.averageUSD!!
+                val firstNeoPrice = data.firstPrice["neo"]?.averageUSD!!
+                val currentGasPrice = data!!.price["gas"]?.averageUSD!!
+                val firstGasPrice = data.firstPrice["gas"]?.averageUSD!!
+
+                view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).toString()
+                view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).toString()
+
+                val percentNeoChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
+                val percentGasChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
+
+                view?.findViewById<TextView>(R.id.neoChange)?.text = percentNeoChange.toString()
+                view?.findViewById<TextView>(R.id.gasChange)?.text = percentGasChange.toString()
+            })
+        })
     }
 
     fun initiateTableRows(view: View) {
@@ -107,6 +132,13 @@ class HomeFragment : Fragment() {
             intent.putExtra("SYMBOL", "GAS")
             startActivity(intent)
         }
+
+        updateTableData()
+
+
+
+
+
     }
 
     companion object {
