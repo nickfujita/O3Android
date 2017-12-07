@@ -182,7 +182,7 @@
             android:paddingRight="20dp">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/claimButton"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

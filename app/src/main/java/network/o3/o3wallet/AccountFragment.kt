@@ -21,6 +21,7 @@ class AccountFragment : Fragment() {
     private lateinit var neoAmountLabel: TextView
     private lateinit var gasAmountLabel: TextView
     private lateinit var transactionListView: ListView
+    private lateinit var claimButton: Button
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -35,9 +36,13 @@ class AccountFragment : Fragment() {
         neoAmountLabel = view!!.findViewById<TextView>(R.id.neoAmountLabel)
         gasAmountLabel = view!!.findViewById<TextView>(R.id.gasAmountLabel)
         transactionListView = view!!.findViewById<ListView>(R.id.transactionListView)
+        claimButton = view!!.findViewById<Button>(R.id.claimButton)
+
         menuButton.setOnClickListener { menuButtonTapped() }
+        claimButton.setOnClickListener{ claimGasTapped() }
         closeMenu();
         loadAccountState()
+        loadClaimableGAS()
         loadTransactionHistory()
     }
 
@@ -65,6 +70,25 @@ class AccountFragment : Fragment() {
             }
 
         }
+    }
+
+    fun loadClaimableGAS() {
+        CoZClient().getClaims(address = "AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6") {
+            var error = it.second
+            var data = it.first
+            if (error != null) {
+
+            } else {
+                val amount = data!!.total_unspent_claim / 100000000.0
+                activity.runOnUiThread {
+                    claimButton.setText("Claim %.8f".format(amount))
+                }
+            }
+        }
+    }
+
+    fun claimGasTapped() {
+
     }
 
     fun loadTransactionHistory() {
