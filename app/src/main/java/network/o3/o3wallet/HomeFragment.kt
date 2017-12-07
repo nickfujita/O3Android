@@ -40,10 +40,21 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
 
+        val sparkView = view.findViewById<SparkView>(R.id.sparkview)
+
+
         val homeModel = ViewModelProviders.of(this).get(HomeViewModel::class.java!!)
-        homeModel.getDisplayedBalance().observe(this,  Observer<Pair<Int, Double>> { resoruce ->
-            Toast.makeText(activity, resoruce.toString(), Toast.LENGTH_LONG).show()
+
+        //homeModel.getAccountState().observe(this,  Observer<Pair<Int, Double>> { balance ->
+            //Toast.makeText(activity, "data", Toast.LENGTH_LONG).show()
+        //})
+
+        homeModel.getPortfolioDataFromModel().observe(this, Observer<FloatArray> {  data ->
+            Toast.makeText(activity, "data", Toast.LENGTH_LONG).show()
+            sparkView.adapter = PortfolioDataAdapter(data)
         })
+
+
 
 
         initiateIntervalButtons(view)

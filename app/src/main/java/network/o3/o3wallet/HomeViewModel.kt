@@ -12,7 +12,7 @@ import android.content.Context
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-
+import network.o3.o3wallet.API.O3.Portfolio
 
 
 /**
@@ -39,8 +39,9 @@ class HomeViewModel: ViewModel()  {
     private var neoGasColdStorage: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasHotWallet: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasCombined: MutableLiveData<Pair<Int, Double>>? = null
+    private var portfolioData: MutableLiveData<FloatArray>? = null
+
     private var latestPrice: PriceData? = null
-    private var portfolioData: FloatArray? = null
 
     fun setCurrency(currency: Currency) {
         this.currency = currency
@@ -66,43 +67,53 @@ class HomeViewModel: ViewModel()  {
         return this.displayType
     }
 
-    fun getDisplayedBalance(): LiveData<Pair<Int, Double>> {
+    fun getAccountState(): LiveData<Pair<Int, Double>> {
         if (neoGasColdStorage == null || neoGasHotWallet == null) {
-            neoGasColdStorage = MutableLiveData<Pair<Int, Double>>()
-            neoGasHotWallet = MutableLiveData<Pair<Int, Double>>()
-            neoGasCombined = MutableLiveData<Pair<Int, Double>>()
-            getAccountState()
+            neoGasColdStorage = MutableLiveData()
+            neoGasHotWallet = MutableLiveData()
+            neoGasCombined = MutableLiveData()
+            loadAccountState()
         }
-        when (displayType) {
-            DisplayType.HOT -> return neoGasHotWallet!!
-            DisplayType.COLD ->  return neoGasColdStorage!!
-            DisplayType.COMBINED ->  return neoGasCombined!!
+        return when (displayType) {
+            DisplayType.HOT ->  neoGasHotWallet!!
+            DisplayType.COLD -> neoGasColdStorage!!
+            DisplayType.COMBINED -> neoGasCombined!!
         }
     }
 
-    fun getPortfolio() {
-        O3API().getPortfolio(getDisplayedBalance().value!!.first!!, getDisplayedBalance().value!!.second!!, interval) {
-            if ( it?.second != null ) {
-                return@getPortfolio
+    fun getPortfolioDataFromModel(): LiveData<FloatArray> {
+        if (portfolioData == null) {
+            portfolioData = MutableLiveData()
+            loadPortfolio()
+        }
+        return portfolioData!!
+    }
+
+    fun loadPortfolio() {
+       /* val balance = when (displayType) {
+            DisplayType.HOT -> neoGasHotWallet?.value!!
+            DisplayType.COLD ->  neoGasColdStorage?.value!!
+            DisplayType.COMBINED ->  neoGasCombined?.value!!
+        }*/
+
+        O3API().getPortfolio(5/*balance.first*/, 5.0/*balance.second*/, interval) {
+            if ( it?.second != null ) return@getPortfolio
+            val data = when (currency) {
+                Currency.USD -> it.first?.data?.map { it.averageUSD }?.toTypedArray()!!
+                Currency.BTC -> it.first?.data?.map { it.averageBTC }?.toTypedArray()!!
             }
 
-            var data: Array<Double>
-            if (currency == Currency.USD) {
-                data = it.first?.data?.map { it.averageUSD }?.toTypedArray()!!
-            } else {
-                data = it.first?.data?.map { it.averageBTC }?.toTypedArray()!!
-            }
             var floats = FloatArray(data.count())
-            this.latestPrice = it.first?.data?.first()!!
-                for (i in data.indices) {
-                    floats[i] = data[i].toFloat()
-                }
+            latestPrice = it.first?.data?.first()!!
+            for (i in data.indices) {
+                floats[i] = data[i].toFloat()
+            }
 
-            this.portfolioData = floats
+            portfolioData?.value = floats
         }
     }
 
-    fun getAccountState() {
+    fun loadAccountState() {
         var watchAddresses = PersistentStore.getWatchAddresses()
 
         val latch = CountDownLatch(1 + watchAddresses.size)
@@ -110,10 +121,10 @@ class HomeViewModel: ViewModel()  {
         var runningNeoHot = 0
         var runningGasCold = 0.0
         var runningNeoCold = 0
-        NeoNodeRPC().getAccountState(Account.getWallet()?.address!!) rpc@{
+        NeoNodeRPC().getAccountState(Account.getWallet()?.address!!) {
             if (it.second != null) {
                 latch.countDown()
-                return@rpc
+                return@getAccountState
             }
             var balances = it?.first?.balances!!
             for (balance in balances) {
@@ -127,10 +138,10 @@ class HomeViewModel: ViewModel()  {
         }
 
         for (address: WatchAddress in watchAddresses) {
-            NeoNodeRPC().getAccountState(address.address) rpc@{
+            NeoNodeRPC().getAccountState(address.address) {
                 if (it.second != null) {
                     latch.countDown()
-                    return@rpc
+                    return@getAccountState
                 }
                 var balances = it?.first?.balances!!
                 for (balance in balances) {
