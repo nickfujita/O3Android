@@ -4,6 +4,11 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import neowallet.Wallet
+import network.o3.o3wallet.API.CoZ.*
+import network.o3.o3wallet.hexStringToByteArray
+import network.o3.o3wallet.toHex
+import neowallet.Neowallet
 
 class NeoNodeRPC {
     var nodeURL = "http://seed3.neo.org:10332"
@@ -13,9 +18,9 @@ class NeoNodeRPC {
         GAS;
         fun assetID(): String{
             if (this == GAS) {
-                return "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
+                return "602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"
             } else if (this == NEO) {
-                return "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
+                return "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"
             }
             return ""
         }
@@ -130,7 +135,28 @@ class NeoNodeRPC {
         }
     }
 
+    fun sendRawTransaction(data: ByteArray, completion:(Pair<Boolean?, Error?>) -> Unit) {
+        val dataJson = jsonObject(
+                "jsonrpc" to "2.0",
+                "method" to RPC.SENDRAWTRANSACTION.methodName(),
+                "params" to jsonArray(data.toHex()),
+                "id" to 1
+        )
 
+        var request = nodeURL.httpPost().body(dataJson.toString())
+        request.headers["Content-Type"] =  "application/json"
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val success = gson.fromJson<Boolean>(nodeResponse.result["result"])
+                completion(Pair<Boolean?, Error?>(success, null))
+            } else {
+                completion(Pair<Boolean?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 
     /*
     fun getBlockBy(index: Int, completion: (Pair<Block?, Error?>) -> (Unit)) {
@@ -215,4 +241,53 @@ class NeoNodeRPC {
             }
         }
     }*/
+
+    private fun concatenatePayloadData(wallet: Wallet, txData: ByteArray, signatureData: ByteArray): ByteArray {
+        var payload = txData + byteArrayOf(0x01.toByte())                        // signature number
+        payload += byteArrayOf(0x41.toByte())                              // signature struct length
+        payload += byteArrayOf(0x40.toByte())                                 // signature data length
+        payload += signatureData                    // signature
+        payload += byteArrayOf(0x23.toByte())                                 // contract data length
+        payload = payload + byteArrayOf(0x21.toByte()) + wallet.publicKey + byteArrayOf(0xac.toByte()) // NeoSigned publicKey
+        return payload
+    }
+
+    fun hexStringToByteArray(s: String): ByteArray {
+        val len = s.length
+        val data = ByteArray(len / 2)
+        var i = 0
+        while (i < len) {
+            data[i / 2] = ((Character.digit(s[i], 16) shl 4) + Character.digit(s[i + 1], 16)).toByte()
+            i += 2
+        }
+        return data
+    }
+
+    private fun generateClaimInputData(wallet: Wallet, claims: Claims): ByteArray {
+        var payload:ByteArray = byteArrayOf(0x02.toByte()) // Claim Transaction Type
+        payload += byteArrayOf(0x00.toByte()) // Version
+        val claimsCount = claims.claims.count().toByte()
+        payload +=  byteArrayOf(claimsCount)
+        for (claim:Claim in claims.claims) {
+            payload += hexStringToByteArray(claim.txid).reversedArray()
+            payload += byteArrayOf(claim.index.toByte())
+        }
+        payload += byteArrayOf(0x00.toByte()) // Attributes
+        payload += byteArrayOf(0x00.toByte()) // Inputs
+        payload += byteArrayOf(0x01.toByte()) // Output Count
+        payload += hexStringToByteArray(NeoNodeRPC.Asset.GAS.assetID()).reversedArray()
+        payload += byteArrayOf(claims.total_claim.toByte())
+        payload += wallet.hashedSignature
+
+        return payload
+    }
+
+    fun generateClaimTransactionPayload(wallet: Wallet, claims: Claims): ByteArray {
+        val rawClaim = generateClaimInputData(wallet,claims)
+        val privateKeyHex = wallet.privateKey.toHex()
+        val signature = Neowallet.sign(rawClaim,privateKeyHex)
+        val finalPayload = concatenatePayloadData(wallet,rawClaim,signature)
+        return finalPayload
+    }
+
 }

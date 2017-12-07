@@ -5,7 +5,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import NeoNodeRPC
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.O3.O3API
 
@@ -105,4 +105,5 @@ class APIUnitTests {
         }
         latch.await(20000, TimeUnit.MILLISECONDS)
     }
+
 }

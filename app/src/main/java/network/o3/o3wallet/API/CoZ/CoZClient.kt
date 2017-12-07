@@ -6,6 +6,11 @@ import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
+import neowallet.Neowallet
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.hexStringToByteArray
+import network.o3.o3wallet.toHex
 
 /**
  * Created by drei on 11/24/17.
@@ -23,7 +28,7 @@ class CoZClient {
     }
 
     fun getTransactionHistory(address: String, completion: (Pair<TransactionHistory?, Error?>) -> (Unit)) {
-        val url = "http://api.wallet.cityofzion.io/v2/address/history/AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6"
+        val url = "http://api.wallet.cityofzion.io/v2/address/history/" + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
@@ -54,4 +59,5 @@ class CoZClient {
             }
         }
     }
+
 }

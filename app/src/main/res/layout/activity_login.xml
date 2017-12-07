@@ -14,10 +14,10 @@
         android:layout_marginTop="8dp"
         android:text="A footnote"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/wipTextView" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/wipTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

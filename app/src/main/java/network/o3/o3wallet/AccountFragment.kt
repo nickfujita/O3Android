@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton
 import android.widget.*
 import android.content.Context
 import neowallet.Wallet
+import network.o3.o3wallet.API.CoZ.Claims
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
 
@@ -22,6 +23,7 @@ class AccountFragment : Fragment() {
     private lateinit var gasAmountLabel: TextView
     private lateinit var transactionListView: ListView
     private lateinit var claimButton: Button
+    private lateinit var claims: Claims
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -39,7 +41,7 @@ class AccountFragment : Fragment() {
         claimButton = view!!.findViewById<Button>(R.id.claimButton)
 
         menuButton.setOnClickListener { menuButtonTapped() }
-        claimButton.setOnClickListener{ claimGasTapped() }
+        claimButton.setOnClickListener { claimGasTapped() }
         closeMenu();
         loadAccountState()
         loadClaimableGAS()
@@ -61,9 +63,9 @@ class AccountFragment : Fragment() {
             } else {
                 for (balance in accountState!!.balances.iterator()) {
                     //NEO
-                    if (balance.asset == NeoNodeRPC.Asset.NEO.assetID()) {
+                    if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
                         neoAmountLabel.setText("%d".format(balance.value.toInt()))
-                    } else if (balance.asset == NeoNodeRPC.Asset.GAS.assetID()) {
+                    } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
                         gasAmountLabel.setText("%.8f".format(balance.value))
                     }
                 }
@@ -73,12 +75,14 @@ class AccountFragment : Fragment() {
     }
 
     fun loadClaimableGAS() {
-        CoZClient().getClaims(address = "AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6") {
+        print(Account.getWallet()!!.address)
+        CoZClient().getClaims(address = Account.getWallet()!!.address) {
             var error = it.second
             var data = it.first
             if (error != null) {
 
             } else {
+                this.claims = data!!
                 val amount = data!!.total_unspent_claim / 100000000.0
                 activity.runOnUiThread {
                     claimButton.setText("Claim %.8f".format(amount))
@@ -88,11 +92,17 @@ class AccountFragment : Fragment() {
     }
 
     fun claimGasTapped() {
+        val claimData = NeoNodeRPC().generateClaimTransactionPayload(Account.getWallet()!!, this.claims)
 
+        NeoNodeRPC().sendRawTransaction(claimData) {
+            var success = it.first
+            var error = it.second
+            print(success)
+        }
     }
 
     fun loadTransactionHistory() {
-        CoZClient().getTransactionHistory(address = "") {
+        CoZClient().getTransactionHistory(address =  Account.getWallet()!!.address) {
             var error = it.second
             var data = it.first
             if (error != null) {
