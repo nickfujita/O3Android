@@ -1,5 +1,7 @@
 package network.o3.o3wallet
 
+import neowallet.Neowallet
+import neowallet.Wallet
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -104,6 +106,19 @@ class APIUnitTests {
             latch.countDown()
         }
         latch.await(20000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun claim() {
+        //testnet
+        val wif = ""
+        val wallet = Neowallet.generateFromWIF(wif)
+        NeoNodeRPC().claimGAS(wallet) {
+            var error = it.second
+            assert(error == null)
+            print(it.first.toString())
+        }
+
     }
 
 }

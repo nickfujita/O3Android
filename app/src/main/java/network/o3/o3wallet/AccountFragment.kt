@@ -92,13 +92,18 @@ class AccountFragment : Fragment() {
     }
 
     fun claimGasTapped() {
-        val claimData = NeoNodeRPC().generateClaimTransactionPayload(Account.getWallet()!!, this.claims)
-
-        NeoNodeRPC().sendRawTransaction(claimData) {
+        NeoNodeRPC().claimGAS(Account.getWallet()!!) {
             var success = it.first
             var error = it.second
             print(success)
         }
+//        val claimData = NeoNodeRPC().generateClaimTransactionPayload(Account.getWallet()!!, this.claims)
+//
+//        NeoNodeRPC().sendRawTransaction(claimData) {
+//            var success = it.first
+//            var error = it.second
+//            print(success)
+//        }
     }
 
     fun loadTransactionHistory() {

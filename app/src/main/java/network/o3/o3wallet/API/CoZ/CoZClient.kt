@@ -18,6 +18,7 @@ import network.o3.o3wallet.toHex
 
 class CoZClient {
     val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
+    //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
     enum class Route() {
         HISTORY,
         CLAIMS;
