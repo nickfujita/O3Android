@@ -3,6 +3,7 @@ package network.o3.o3wallet
 /**
  * Created by drei on 11/22/17.
  */
+import java.security.MessageDigest
 
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
@@ -33,4 +34,21 @@ fun String.hexStringToByteArray() : ByteArray {
     }
 
     return result
+}
+
+fun String.hashFromAddress(): String {
+    val HEX_CHARS = "0123456789ABCDEF"
+    val bytes = MessageDigest
+            .getInstance("SHA-256")
+            .digest(this.toByteArray())
+
+    val result = StringBuilder(21)
+
+    bytes.forEach {
+        val i = it.toInt()
+        result.append(HEX_CHARS[i shr 4 and 0x0f])
+        result.append(HEX_CHARS[i and 0x0f])
+    }
+
+    return result.toString()
 }

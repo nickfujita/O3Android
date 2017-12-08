@@ -21,7 +21,8 @@ class CoZClient {
     //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
     enum class Route() {
         HISTORY,
-        CLAIMS;
+        CLAIMS,
+        BALANCE;
 
         fun routeName(): String {
             return this.name.toLowerCase() + "/"
@@ -57,6 +58,22 @@ class CoZClient {
                 completion(Pair<Claims?, Error?>(history, null))
             } else {
                 completion(Pair<Claims?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+
+    fun getBalance(address: String, completion: (Pair<Assets?, Error?>) -> Unit) {
+        val url = baseAPIURL + Route.BALANCE.routeName() + address
+        var request = url.httpGet()
+        request.headers["User-Agent"] =  ""
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val assets = gson.fromJson<Assets>(data!!)
+                completion(Pair<Assets?, Error?>(assets, null))
+            } else {
+                completion(Pair<Assets?, Error?>(null, Error(error.localizedMessage)))
             }
         }
     }

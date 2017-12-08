@@ -12,6 +12,7 @@ import neowallet.Neowallet
 import java.math.BigInteger
 import android.R.array
 import android.util.Size
+import network.o3.o3wallet.hashFromAddress
 import java.nio.*
 
 
@@ -249,6 +250,7 @@ class NeoNodeRPC {
         }
     }*/
 
+
     fun claimGAS(wallet: Wallet, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
         CoZClient().getClaims(wallet.address) {
             val claims = it.first
@@ -266,6 +268,123 @@ class NeoNodeRPC {
 
             }
         }
+    }
+
+    fun sendAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
+        CoZClient().getBalance(wallet.address) {
+            var assets = it.first
+            var error = it.second
+            if (error != null) {
+                completion(Pair<Boolean?, Error?>(false, error))
+            } else {
+                val payload = generateSendTransactionPayload(wallet,asset,amount,toAddress,assets!!,attributes)
+                System.out.println(payload.toHex())
+                sendRawTransaction(payload) {
+                    var success = it.first
+                    var error = it.second
+                    completion(Pair<Boolean?, Error?>(success, error))
+                }
+            }
+        }
+    }
+
+    private fun to8BytesArray(value: Int): ByteArray {
+        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array()
+    }
+
+
+    data class SendAssetReturn(val totalAmount: Double?, val payload: ByteArray?, val error: Error?)
+    data class TransactionAttritbute(val messaeg: String?)
+
+    private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, assets: Assets): SendAssetReturn {
+        var sortedUnspents: List<Unspent>
+        var neededForTransaction: MutableList<Unspent> = arrayListOf()
+
+        if (asset == Asset.NEO) {
+            if (assets.NEO.balance < amount) {
+                return SendAssetReturn(null, null, Error(message = "insufficient balance"))
+            }
+
+            sortedUnspents = assets.NEO.unspent.sortedBy { it.value }
+        } else {
+            if (assets.GAS.balance < amount) {
+                return SendAssetReturn(null, null, Error(message = "insufficient balance"))
+            }
+            sortedUnspents = assets.GAS.unspent.sortedBy { it.value }
+        }
+        var runningAmount = 0.0
+        var index = 0
+        var count: Int = 0
+        //Assume we always have enough balance to do this, prevent the check for bal
+        while (runningAmount < amount) {
+            neededForTransaction.add(sortedUnspents[index])
+            runningAmount += sortedUnspents[index].value
+            index += 1
+            count += 1
+        }
+        var inputData: ByteArray = byteArrayOf(count.toByte())
+        for ((index, value) in neededForTransaction) {
+            val data = neededForTransaction[index].txid.hexStringToByteArray()
+            val reversedBytes = data.reversedArray()
+            inputData = inputData + reversedBytes + ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(neededForTransaction[index].index).array()
+        }
+        return SendAssetReturn(runningAmount, inputData, null)
+    }
+
+
+    private fun packRawTransactionBytes(wallet: Wallet, asset: Asset, inputData: ByteArray, runningAmount: Double, toSendAmount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?): ByteArray {
+        var inputDataBytes = inputData
+        val needsTwoOutputTransactions = runningAmount != toSendAmount
+
+        var numberOfAttributes: Byte = 0x00.toByte()
+        var attributesPayload: ByteArray = ByteArray(0)
+//        if attributes != nil {
+//            for (attribute in attributes!!) {
+//            if attribute.data != nil {
+//                attributesPayload = attributesPayload + attribute.data!
+//                numberOfAttributes = numberOfAttributes + 1
+//            }
+//        }
+//        }
+
+        var payload: ByteArray = byteArrayOf(0x80.toByte()) + byteArrayOf(0x00.toByte()) + numberOfAttributes
+        payload = payload + attributesPayload + inputDataBytes
+
+        if (needsTwoOutputTransactions) {
+            //Transaction To Reciever
+            payload = payload + byteArrayOf(0x02.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
+            val amountToSendInMemory: Int = (toSendAmount * 100000000).toInt()
+            payload = payload + to8BytesArray(amountToSendInMemory)
+
+            //reciever addressHash
+
+            payload = payload + toAddress.hashFromAddress().hexStringToByteArray()
+
+            //Transaction To Sender
+            payload = payload + asset.assetID().hexStringToByteArray().reversedArray()
+            val amountToGetBackInMemory = (runningAmount * 100000000).toInt() - (toSendAmount * 100000000).toInt()
+            payload += to8BytesArray(amountToGetBackInMemory)
+            payload += wallet.hashedSignature
+
+        } else {
+            payload = payload + byteArrayOf(0x01.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
+            val amountToSendInMemory = (toSendAmount * 100000000).toInt()
+            payload += to8BytesArray(amountToSendInMemory)
+            payload += toAddress.hashFromAddress().hexStringToByteArray()
+        }
+        return payload
+    }
+
+    fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, assets: Assets, attributes: Array<TransactionAttritbute>?): ByteArray {
+        var error: Error?
+        val inputData = getInputsNecessaryToSendAsset(asset, amount, assets)
+        val rawTransaction = packRawTransactionBytes(wallet, asset, inputData.payload!!, inputData.totalAmount!!,
+                amount, toAddress, attributes)
+        val privateKeyHex = wallet.privateKey.toHex()
+        val signatureData = Neowallet.sign(rawTransaction, privateKeyHex)
+        val finalPayload = concatenatePayloadData(wallet, rawTransaction, signatureData)
+        return finalPayload
+
     }
 
     private fun concatenatePayloadData(wallet: Wallet, txData: ByteArray, signatureData: ByteArray): ByteArray {
@@ -297,6 +416,7 @@ class NeoNodeRPC {
         for (claim: Claim in claims.claims) {
             payload += hexStringToByteArray(claim.txid).reversedArray()
             payload += ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(claim.index.toShort()).array()
+            System.out.println(claim.index.toShort())
         }
         payload += byteArrayOf(0x00.toByte()) // Attributes
         payload += byteArrayOf(0x00.toByte()) // Inputs
