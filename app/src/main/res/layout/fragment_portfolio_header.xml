@@ -4,7 +4,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="85dp"
-    tools:context="network.o3.o3wallet.PortfolioHeader">
+    tools:context="network.o3.o3wallet.Portfolio.PortfolioHeader">
 
     <!-- TODO: Update blank fragment layout -->
 

@@ -1,4 +1,4 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Portfolio
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,28 +8,13 @@ import android.view.View
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import com.robinhood.spark.SparkView
-import kotlinx.android.synthetic.main.fragment_home.*
-import network.o3.o3wallet.API.O3.O3API
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import NeoNodeRPC
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
-import android.util.Log
-import network.o3.o3wallet.API.O3.PriceData
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
-import com.robinhood.spark.animation.SparkAnimator
+import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
-import network.o3.o3wallet.R.id.viewPager
-import com.robinhood.spark.animation.LineSparkAnimator
-
-
-
-
 
 
 class HomeFragment : Fragment() {

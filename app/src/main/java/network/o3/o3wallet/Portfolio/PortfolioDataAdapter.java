@@ -1,4 +1,4 @@
-package network.o3.o3wallet;
+package network.o3.o3wallet.Portfolio;
 import com.robinhood.spark.SparkAdapter;
 
 /**

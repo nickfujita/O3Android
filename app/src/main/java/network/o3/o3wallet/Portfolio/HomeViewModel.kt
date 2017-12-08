@@ -1,18 +1,16 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Portfolio
 
-import android.util.Log
-import com.robinhood.spark.SparkView
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.API.O3.PriceData
 import NeoNodeRPC
-import android.view.Display
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import android.content.Context
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import network.o3.o3wallet.API.O3.Portfolio
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.PersistentStore
+import network.o3.o3wallet.WatchAddress
 
 
 /**
@@ -140,7 +138,6 @@ class HomeViewModel: ViewModel()  {
         }
 
         var floats = FloatArray(data.count())
-        latestPrice = portfolio?.value?.data?.first()!!
         for (i in data.indices) {
             floats[i] = data[i].toFloat()
         }
@@ -157,6 +154,7 @@ class HomeViewModel: ViewModel()  {
         O3API().getPortfolio(balance.first, balance.second, interval) {
             if ( it?.second != null ) return@getPortfolio
             portfolio?.postValue(it?.first!!)
+            latestPrice = portfolio?.value?.data?.first()!!
         }
     }
 
@@ -175,7 +173,7 @@ class HomeViewModel: ViewModel()  {
             }
             var balances = it?.first?.balances!!
             for (balance in balances) {
-                if (balance.asset == HomeViewModel.Asset.NEO.name) {
+                if (balance.asset == Asset.NEO.name) {
                     runningNeoHot += balance.value.toInt()
                 } else {
                     runningGasHot += balance.value
@@ -192,7 +190,7 @@ class HomeViewModel: ViewModel()  {
                 }
                 var balances = it?.first?.balances!!
                 for (balance in balances) {
-                    if (balance.asset == HomeViewModel.Asset.NEO.name) {
+                    if (balance.asset == Asset.NEO.name) {
                         runningNeoCold += balance.value.toInt()
                     } else {
                         runningGasCold += balance.value
