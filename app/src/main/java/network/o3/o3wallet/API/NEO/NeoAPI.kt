@@ -302,13 +302,14 @@ class NeoNodeRPC {
 
         if (asset == Asset.NEO) {
             if (assets.NEO.balance < amount) {
-                return SendAssetReturn(null, null, Error(message = "insufficient balance"))
+
+                return SendAssetReturn(null, null, Error("insufficient balance"))
             }
 
             sortedUnspents = assets.NEO.unspent.sortedBy { it.value }
         } else {
             if (assets.GAS.balance < amount) {
-                return SendAssetReturn(null, null, Error(message = "insufficient balance"))
+                return SendAssetReturn(null, null, Error("insufficient balance"))
             }
             sortedUnspents = assets.GAS.unspent.sortedBy { it.value }
         }
