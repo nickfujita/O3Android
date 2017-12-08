@@ -33,7 +33,7 @@ class HomeViewModel: ViewModel()  {
         GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
     }
 
-    private var displayType: DisplayType = DisplayType.COMBINED
+    private var displayType: DisplayType = DisplayType.HOT
     private var interval: Int = 15
     private var currency: Currency = Currency.USD
     private var neoGasColdStorage: MutableLiveData<Pair<Int, Double>>? = null
@@ -71,17 +71,25 @@ class HomeViewModel: ViewModel()  {
         return this.latestPrice!!
     }
 
-    fun getAccountState(): LiveData<Pair<Int, Double>> {
+    fun getAccountState(display: DisplayType? = null): LiveData<Pair<Int, Double>> {
         if (neoGasColdStorage == null || neoGasHotWallet == null) {
             neoGasColdStorage = MutableLiveData()
             neoGasHotWallet = MutableLiveData()
             neoGasCombined = MutableLiveData()
             loadAccountState()
         }
-        return when (displayType) {
-            DisplayType.HOT ->  neoGasHotWallet!!
-            DisplayType.COLD -> neoGasColdStorage!!
-            DisplayType.COMBINED -> neoGasCombined!!
+        if (display == null) {
+            return when (displayType) {
+                DisplayType.HOT -> neoGasHotWallet!!
+                DisplayType.COLD -> neoGasColdStorage!!
+                DisplayType.COMBINED -> neoGasCombined!!
+            }
+        } else {
+            return when (display!!) {
+                DisplayType.HOT -> neoGasHotWallet!!
+                DisplayType.COLD -> neoGasColdStorage!!
+                DisplayType.COMBINED -> neoGasCombined!!
+            }
         }
     }
 

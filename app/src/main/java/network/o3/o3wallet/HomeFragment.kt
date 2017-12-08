@@ -18,19 +18,16 @@ import android.arch.lifecycle.Observer
 import android.util.Log
 import network.o3.o3wallet.API.O3.PriceData
 import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.view.ViewPager.*
 import android.widget.*
 import network.o3.o3wallet.API.O3.Portfolio
+import network.o3.o3wallet.R.id.viewPager
+
+
 
 
 class HomeFragment : Fragment() {
     var selectedButton: Button? = null
-    var neoAmountWatchAddresses: Int = 0
-    var gasAmountWatchAddresses: Double = 0.0
-    var neoAmountO3Address: Int = 0
-    var gasAmountO3Address: Double = 0.0
-    var headerPosition = 0
-    var isPricedInBTC = true
-    var latestPrice: PriceData? = null
     var homeModel: HomeViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -38,23 +35,24 @@ class HomeFragment : Fragment() {
 
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
         val viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
-        val derp = childFragmentManager
-        Log.d("derp", derp.toString())
         val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
+        viewPager.addOnPageChangeListener(object: SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+             //   (portfolioHeaderAdapter.getItem(position) as PortfolioHeader).updateHeaderFunds()
+            }
+        })
         viewPager.adapter = portfolioHeaderAdapter
 
 
-
-
         val sparkView = view.findViewById<SparkView>(R.id.sparkview)
-       /* homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
 
         homeModel?.getAccountState()?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
                 sparkView.adapter = PortfolioDataAdapter(homeModel?.getPriceFloats())
                 initiateTableRows(view)
             })
-        })*/
+        })
 
 
         initiateIntervalButtons(view)
@@ -134,10 +132,6 @@ class HomeFragment : Fragment() {
         }
 
         updateTableData()
-
-
-
-
 
     }
 
