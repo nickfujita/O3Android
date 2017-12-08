@@ -11,6 +11,7 @@ import network.o3.o3wallet.API.O3.O3API
 class AssetGraph : AppCompatActivity() {
     var selectedButton: Button? = null
     var symbol: String? = null
+    var unscrubbedDisplayAmount = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +19,15 @@ class AssetGraph : AppCompatActivity() {
         symbol = intent.getStringExtra("SYMBOL")
         val sparkView = findViewById<SparkView>(R.id.sparkview)
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
-        sparkView.setScrubListener(SparkView.OnScrubListener {
-            value -> priceView.text = value.toString()
-        })
+        sparkView.scrubListener = SparkView.OnScrubListener { value ->
+
+            if (value == null) { //return to original state
+                priceView.text = unscrubbedDisplayAmount.formattedUSDString()
+                return@OnScrubListener
+            } else {
+                priceView?.text = (value as Float).toDouble().formattedUSDString()
+            }
+        }
         initiateIntervalButtons()
     }
 

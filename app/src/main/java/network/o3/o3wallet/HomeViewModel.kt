@@ -59,6 +59,38 @@ class HomeViewModel: ViewModel()  {
         this.interval = interval
     }
 
+    fun getCurrentGasPrice(): Double {
+        if (currency == Currency.USD) {
+            return portfolio!!.value!!.price["gas"]?.averageUSD!!
+        } else {
+            return portfolio!!.value!!.price["gas"]?.averageBTC!!
+        }
+    }
+
+    fun getFirstGasPrice(): Double {
+        if (currency == Currency.USD) {
+            return portfolio!!.value!!.firstPrice["gas"]?.averageUSD!!
+        } else {
+            return portfolio!!.value!!.firstPrice["gas"]?.averageBTC!!
+        }
+    }
+
+    fun getCurrentNeoPrice(): Double {
+        if (currency == Currency.USD) {
+            return portfolio!!.value!!.price["neo"]?.averageUSD!!
+        } else {
+            return portfolio!!.value!!.price["neo"]?.averageBTC!!
+        }
+    }
+
+    fun getFirstNeoPrice(): Double {
+        if (currency == Currency.USD) {
+            return portfolio!!.value!!.firstPrice["neo"]?.averageUSD!!
+        } else {
+            return portfolio!!.value!!.firstPrice["neo"]?.averageBTC!!
+        }
+    }
+
     fun setDisplayType(displayType: DisplayType) {
         this.displayType = displayType
     }

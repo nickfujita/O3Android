@@ -49,12 +49,39 @@ class HomeFragment : Fragment() {
         val sparkView = view.findViewById<SparkView>(R.id.sparkview)
         sparkView.sparkAnimator = MorphSparkAnimator()
         sparkView.adapter = chartDataAdapter
+        sparkView.scrubListener = SparkView.OnScrubListener { value ->
+            val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
+            val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
+            if (value == null) { //return to original state
+                if (homeModel?.getCurrency() == HomeViewModel.Currency.USD) {
+                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
+                            header.unscrubbedDisplayedAmount.formattedUSDString()
+                } else {
+                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
+                            header.unscrubbedDisplayedAmount.formattedBTCString()
+                }
+                return@OnScrubListener
+            } else {
+
+                if (homeModel?.getCurrency() == HomeViewModel.Currency.USD) {
+                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
+                            (value as Float).toDouble().formattedUSDString()
+                } else {
+                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
+                            (value as Float).toDouble().formattedBTCString()
+                }
+
+            }
+        }
+
+
+
+
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
 
         homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-                //sparkView.adapter = PortfolioDataAdapter(homeModel?.getPriceFloats())
                 initiateTableRows(view)
             })
         })
@@ -121,19 +148,28 @@ class HomeFragment : Fragment() {
 
     fun updateTableData(refresh: Boolean) {
         homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> {  data ->
-            view?.findViewById<TextView>(R.id.neoPrice)?.text = data!!.price["neo"]?.averageUSD?.formattedUSDString()
-            view?.findViewById<TextView>(R.id.gasPrice)?.text = data!!.price["gas"]?.averageUSD?.formattedUSDString()
+
             homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
                 view?.findViewById<TextView>(R.id.neoAmount)?.text = balance?.first?.toString()
                 view?.findViewById<TextView>(R.id.gasAmount)?.text = balance?.second?.formattedGASString()
 
-                val currentNeoPrice = data!!.price["neo"]?.averageUSD!!
-                val firstNeoPrice = data.firstPrice["neo"]?.averageUSD!!
-                val currentGasPrice = data!!.price["gas"]?.averageUSD!!
-                val firstGasPrice = data.firstPrice["gas"]?.averageUSD!!
+                val currentNeoPrice = homeModel!!.getCurrentNeoPrice()
+                val firstNeoPrice = homeModel!!.getFirstNeoPrice()
+                val currentGasPrice = homeModel!!.getCurrentGasPrice()
+                val firstGasPrice = homeModel!!.getFirstGasPrice()
 
-                view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).formattedUSDString()
-                view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).formattedUSDString()
+                if (homeModel!!.getCurrency() == HomeViewModel.Currency.USD) {
+                    view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).formattedUSDString()
+                    view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).formattedUSDString()
+                    view?.findViewById<TextView>(R.id.neoPrice)?.text = currentNeoPrice.formattedUSDString()
+                    view?.findViewById<TextView>(R.id.gasPrice)?.text = currentGasPrice.formattedUSDString()
+                } else {
+                    view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).formattedBTCString()
+                    view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).formattedBTCString()
+                    view?.findViewById<TextView>(R.id.neoPrice)?.text = currentNeoPrice.formattedBTCString()
+                    view?.findViewById<TextView>(R.id.gasPrice)?.text = currentGasPrice.formattedBTCString()
+                }
+
 
                 val percentNeoChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
                 val percentGasChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100

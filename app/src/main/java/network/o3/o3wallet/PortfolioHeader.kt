@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import network.o3.o3wallet.API.O3.Portfolio
 import org.w3c.dom.Text
 import android.arch.lifecycle.Observer
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_portfolio_header.*
 
 
@@ -32,6 +33,7 @@ class PortfolioHeader:Fragment() {
     val amounts: List<String> = listOf("0.1BTC", "1.33BTC", "1.23BTC")
     val changes: List<String> = listOf("+2.5%", "+2.5%", "+2.5%")
     var position: Int = 0
+    var unscrubbedDisplayedAmount = 0.0
     var viewCreated = false
     companion object {
         fun newInstance(position: Int): PortfolioHeader {
@@ -52,7 +54,7 @@ class PortfolioHeader:Fragment() {
 
 
         val fundChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
-        fundChangeTextView?.text = changes[position]
+        fundChangeTextView?.text = ""
 
         configureArrows(view)
         return view
@@ -78,17 +80,22 @@ class PortfolioHeader:Fragment() {
 
         homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
             homeModel?.getAccountState(displayType, refresh = false)?.observe(this, Observer<Pair<Int, Double>> { balance ->
-                val currentNeoPrice = data!!.price["neo"]?.averageUSD!!
-                val firstNeoPrice = data.firstPrice["neo"]?.averageUSD!!
-                val currentGasPrice = data!!.price["gas"]?.averageUSD!!
-                val firstGasPrice = data.firstPrice["gas"]?.averageUSD!!
+                val currentNeoPrice = homeModel.getCurrentNeoPrice()
+                val firstNeoPrice = homeModel.getFirstNeoPrice()
+                val currentGasPrice = homeModel.getCurrentGasPrice()
+                val firstGasPrice = homeModel.getFirstGasPrice()
 
                 val currentPortfolioValue  = (balance?.first!! * currentNeoPrice +
                                              balance?.second!! * currentGasPrice)
                 val initialPortfolioValue  = (balance?.first!! * firstNeoPrice +
                                               balance?.second!! * firstGasPrice)
+                unscrubbedDisplayedAmount = currentPortfolioValue
+                if (homeModel.getCurrency() == HomeViewModel.Currency.USD) {
+                    fundAmountTextView?.text = currentPortfolioValue.formattedUSDString()
+                } else {
+                    fundAmountTextView?.text = currentPortfolioValue.formattedBTCString()
+                }
 
-                fundAmountTextView?.text = currentPortfolioValue.formattedUSDString()
                 val percentChange = ((currentPortfolioValue - initialPortfolioValue) / initialPortfolioValue* 100)
                 if (percentChange < 0) {
                     fundChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
@@ -107,12 +114,22 @@ class PortfolioHeader:Fragment() {
 
         val leftIndex: Int? = if (position > 0) position - 1 else null
         val rightIndex: Int? = if (position < 2) position + 1 else null
+        var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        view?.findViewById<TextView>(R.id.fundAmountTextView)!!.setOnClickListener {
+            if (homeModel.getCurrency() == HomeViewModel.Currency.USD) {
+                homeModel.setCurrency(HomeViewModel.Currency.BTC)
+            } else {
+                homeModel.setCurrency(HomeViewModel.Currency.USD)
+            }
+            (parentFragment as HomeFragment).updatePortfolioAndTable(true)
+        }
 
         if (position > 0) {
             leftArrow?.setOnClickListener {
                 pager?.currentItem = position - 1
             }
         }
+
 
         if (position < 2) {
             rightArrow?.setOnClickListener {

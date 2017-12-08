@@ -1,10 +1,11 @@
+import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
 class NeoNodeRPC {
-    var nodeURL = "http://seed3.neo.org:10332"
+    var nodeURL = "http://seed2.neo.org:10332"
 
     enum class RPC() {
         GETBLOCKCOUNT,
@@ -87,6 +88,7 @@ class NeoNodeRPC {
                 val block = gson.fromJson<AccountState>(nodeResponse.result)
                 completion(Pair<AccountState?, Error?>(block, null))
             } else {
+                Log.d("ERROR", error.localizedMessage)
                 completion(Pair<AccountState?, Error?>(null, Error(error.localizedMessage)))
             }
         }
