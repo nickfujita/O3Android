@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import network.o3.o3wallet.API.O3.Portfolio
 import org.w3c.dom.Text
 import android.arch.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_portfolio_header.*
 
 
 /**
@@ -73,12 +74,28 @@ class PortfolioHeader:Fragment() {
 
         var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
+        val percentChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
+
         homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
-            homeModel?.getAccountState(displayType)?.observe(this, Observer<Pair<Int, Double>> { balance ->
+            homeModel?.getAccountState(displayType, refresh = false)?.observe(this, Observer<Pair<Int, Double>> { balance ->
                 val currentNeoPrice = data!!.price["neo"]?.averageUSD!!
+                val firstNeoPrice = data.firstPrice["neo"]?.averageUSD!!
                 val currentGasPrice = data!!.price["gas"]?.averageUSD!!
-                fundAmountTextView?.text = (balance?.first!! * currentNeoPrice +
-                                            balance?.second!! * currentGasPrice).toString()
+                val firstGasPrice = data.firstPrice["gas"]?.averageUSD!!
+
+                val currentPortfolioValue  = (balance?.first!! * currentNeoPrice +
+                                             balance?.second!! * currentGasPrice)
+                val initialPortfolioValue  = (balance?.first!! * firstNeoPrice +
+                                              balance?.second!! * firstGasPrice)
+
+                fundAmountTextView?.text = currentPortfolioValue.formattedUSDString()
+                val percentChange = ((currentPortfolioValue - initialPortfolioValue) / initialPortfolioValue* 100)
+                if (percentChange < 0) {
+                    fundChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
+                } else {
+                    fundChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
+                }
+                fundChangeTextView?.text = percentChange.formattedPercentString()
             })
         })
     }
@@ -87,31 +104,19 @@ class PortfolioHeader:Fragment() {
         val pager = activity.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
         val leftArrow = view?.findViewById<ImageView>(R.id.leftArrowImageView)
         val rightArrow = view?.findViewById<ImageView>(R.id.rightArrowImageView)
-        var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
 
         val leftIndex: Int? = if (position > 0) position - 1 else null
         val rightIndex: Int? = if (position < 2) position + 1 else null
 
-        if (leftIndex != null) {
-            leftArrow?.setOnClickListener() {
-               /* if (leftIndex!! == 1) {
-                    homeModel.setDisplayType(HomeViewModel.DisplayType.COMBINED)
-                } else {
-                    homeModel.setDisplayType(HomeViewModel.DisplayType.HOT)
-                }*/
-                pager?.setCurrentItem(leftIndex)
+        if (position > 0) {
+            leftArrow?.setOnClickListener {
+                pager?.currentItem = position - 1
             }
         }
 
-        if (rightIndex != null) {
-            rightArrow?.setOnClickListener() {
-               /* if (rightIndex!! == 1) {
-                    homeModel.setDisplayType(HomeViewModel.DisplayType.COMBINED)
-                } else {
-                    homeModel.setDisplayType(HomeViewModel.DisplayType.COLD)
-                }*/
-                pager?.setCurrentItem(rightIndex)
-
+        if (position < 2) {
+            rightArrow?.setOnClickListener {
+                pager?.currentItem = position + 1
             }
         }
     }

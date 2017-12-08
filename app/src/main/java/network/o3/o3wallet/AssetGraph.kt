@@ -17,7 +17,6 @@ class AssetGraph : AppCompatActivity() {
         setContentView(R.layout.activity_asset_graph)
         symbol = intent.getStringExtra("SYMBOL")
         val sparkView = findViewById<SparkView>(R.id.sparkview)
-        sparkView.animateChanges = true
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         sparkView.setScrubListener(SparkView.OnScrubListener {
             value -> priceView.text = value.toString()

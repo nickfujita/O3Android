@@ -71,8 +71,8 @@ class HomeViewModel: ViewModel()  {
         return this.latestPrice!!
     }
 
-    fun getAccountState(display: DisplayType? = null): LiveData<Pair<Int, Double>> {
-        if (neoGasColdStorage == null || neoGasHotWallet == null) {
+    fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
+        if (neoGasColdStorage == null || neoGasHotWallet == null || refresh) {
             neoGasColdStorage = MutableLiveData()
             neoGasHotWallet = MutableLiveData()
             neoGasCombined = MutableLiveData()
@@ -112,7 +112,7 @@ class HomeViewModel: ViewModel()  {
         for (i in data.indices) {
             floats[i] = data[i].toFloat()
         }
-        return floats
+        return floats.reversedArray()
     }
 
     fun loadPortfolio() {

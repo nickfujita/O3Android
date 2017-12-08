@@ -158,6 +158,7 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginTop="8dp"
                             android:text="$531.70"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -168,6 +169,7 @@
                             android:layout_marginEnd="32dp"
                             android:layout_marginTop="8dp"
                             android:text="26"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toStartOf="@+id/neoValue"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -178,6 +180,8 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:text="NEO"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -223,6 +227,7 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginTop="8dp"
                             android:text="$531.70"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -233,6 +238,7 @@
                             android:layout_marginEnd="32dp"
                             android:layout_marginTop="8dp"
                             android:text="26"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toStartOf="@+id/gasValue"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -243,6 +249,8 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:text="GAS"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

@@ -17,6 +17,11 @@ public class PortfolioDataAdapter extends SparkAdapter {
         return yData.length;
     }
 
+    public void setData(float[] yData) {
+        this.yData = yData;
+        notifyDataSetChanged();
+    }
+
     @Override
     public Object getItem(int index) {
         return yData[index];
