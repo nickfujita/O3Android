@@ -132,9 +132,15 @@ class AccountFragment : Fragment() {
     }
 
     fun openMenu() {
-        sendLayout.visibility = View.VISIBLE
-        myAddressLayout.visibility = View.VISIBLE
-        fabExpanded = true
+        val wallet = Account.getWallet()!!
+        NeoNodeRPC().sendAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
+            var error = it.second
+            assert(error != null)
+            print(it.first.toString())
+        }
+//        sendLayout.visibility = View.VISIBLE
+//        myAddressLayout.visibility = View.VISIBLE
+//        fabExpanded = true
     }
 
     fun closeMenu() {

@@ -118,7 +118,17 @@ class APIUnitTests {
             assert(error == null)
             print(it.first.toString())
         }
+    }
 
+    @Test
+    fun sendTransaction() {
+        val wif = ""
+        val wallet = Neowallet.generateFromWIF(wif)
+        NeoNodeRPC().sendAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
+            var error = it.second
+            assert(error != null)
+            print(it.first.toString())
+        }
     }
 
 }

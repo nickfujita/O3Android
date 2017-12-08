@@ -143,7 +143,7 @@ class NeoNodeRPC {
         }
     }
 
-    fun sendRawTransaction(data: ByteArray, completion: (Pair<Boolean?, Error?>) -> Unit) {
+    private fun sendRawTransaction(data: ByteArray, completion: (Pair<Boolean?, Error?>) -> Unit) {
         val dataJson = jsonObject(
                 "jsonrpc" to "2.0",
                 "method" to RPC.SENDRAWTRANSACTION.methodName(),
@@ -277,7 +277,7 @@ class NeoNodeRPC {
             if (error != null) {
                 completion(Pair<Boolean?, Error?>(false, error))
             } else {
-                val payload = generateSendTransactionPayload(wallet,asset,amount,toAddress,assets!!,attributes)
+                val payload = generateSendTransactionPayload(wallet, asset, amount, toAddress, assets!!, attributes)
                 System.out.println(payload.toHex())
                 sendRawTransaction(payload) {
                     var success = it.first
@@ -324,14 +324,13 @@ class NeoNodeRPC {
             count += 1
         }
         var inputData: ByteArray = byteArrayOf(count.toByte())
-        for ((index, value) in neededForTransaction) {
-            val data = neededForTransaction[index].txid.hexStringToByteArray()
+        for ( t: Unspent in neededForTransaction) {
+            val data = hexStringToByteArray(t.txid)
             val reversedBytes = data.reversedArray()
-            inputData = inputData + reversedBytes + ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(neededForTransaction[index].index).array()
+            inputData = inputData + reversedBytes + ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(t.index.toShort()).array()
         }
         return SendAssetReturn(runningAmount, inputData, null)
     }
-
 
     private fun packRawTransactionBytes(wallet: Wallet, asset: Asset, inputData: ByteArray, runningAmount: Double, toSendAmount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?): ByteArray {
         var inputDataBytes = inputData
@@ -350,19 +349,20 @@ class NeoNodeRPC {
 
         var payload: ByteArray = byteArrayOf(0x80.toByte()) + byteArrayOf(0x00.toByte()) + numberOfAttributes
         payload = payload + attributesPayload + inputDataBytes
-
+        System.out.println(payload.toHex())
         if (needsTwoOutputTransactions) {
             //Transaction To Reciever
             payload = payload + byteArrayOf(0x02.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
             val amountToSendInMemory: Int = (toSendAmount * 100000000).toInt()
-            payload = payload + to8BytesArray(amountToSendInMemory)
+            payload += to8BytesArray(amountToSendInMemory)
 
             //reciever addressHash
-
-            payload = payload + toAddress.hashFromAddress().hexStringToByteArray()
+            System.out.println(payload.toHex())
+            System.out.println(toAddress.hashFromAddress().hexStringToByteArray())
+            payload += toAddress.hashFromAddress().hexStringToByteArray()
 
             //Transaction To Sender
-            payload = payload + asset.assetID().hexStringToByteArray().reversedArray()
+            payload += asset.assetID().hexStringToByteArray().reversedArray()
             val amountToGetBackInMemory = (runningAmount * 100000000).toInt() - (toSendAmount * 100000000).toInt()
             payload += to8BytesArray(amountToGetBackInMemory)
             payload += wallet.hashedSignature
