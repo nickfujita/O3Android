@@ -12,27 +12,12 @@ import android.widget.TextView
 import network.o3.o3wallet.API.O3.Portfolio
 import android.arch.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_portfolio_header.*
-import network.o3.o3wallet.R
-import network.o3.o3wallet.formattedBTCString
-import network.o3.o3wallet.formattedPercentString
-import network.o3.o3wallet.formattedUSDString
+import network.o3.o3wallet.*
 
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [PortfolioHeader.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [PortfolioHeader.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PortfolioHeader:Fragment() {
-    val titles: List<String> = listOf("OZONE WALLET", "COMBINED", "COLD STORAGE")
-    val amounts: List<String> = listOf("0.1BTC", "1.33BTC", "1.23BTC")
-    val changes: List<String> = listOf("+2.5%", "+2.5%", "+2.5%")
+    private val titles: List<String> = listOf("OZONE WALLET", "COMBINED", "COLD STORAGE")
     var position: Int = 0
     var unscrubbedDisplayedAmount = 0.0
-    var viewCreated = false
     companion object {
         fun newInstance(position: Int): PortfolioHeader {
             val args = Bundle()
@@ -45,11 +30,9 @@ class PortfolioHeader:Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_portfolio_header, container, false)
-        userVisibleHint = false
         position = arguments.getInt("position")
         val fundSourceTextView = view?.findViewById<TextView>(R.id.fundSourceTextView)
         fundSourceTextView?.text = titles[position]
-
 
         val fundChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
         fundChangeTextView?.text = ""
@@ -60,15 +43,14 @@ class PortfolioHeader:Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         updateHeaderFunds()
     }
 
     fun updateHeaderFunds() {
-        val displayType = when {
-            position == 0 -> HomeViewModel.DisplayType.HOT
-            position == 1 -> HomeViewModel.DisplayType.COMBINED
-            position == 2 -> HomeViewModel.DisplayType.COLD
+        val displayType = when(position) {
+            0 -> HomeViewModel.DisplayType.HOT
+            1 -> HomeViewModel.DisplayType.COMBINED
+            2 -> HomeViewModel.DisplayType.COLD
             else -> return
         }
 
@@ -88,11 +70,7 @@ class PortfolioHeader:Fragment() {
                 val initialPortfolioValue  = (balance?.first!! * firstNeoPrice +
                                               balance?.second!! * firstGasPrice)
                 unscrubbedDisplayedAmount = currentPortfolioValue
-                if (homeModel.getCurrency() == HomeViewModel.Currency.USD) {
-                    fundAmountTextView?.text = currentPortfolioValue.formattedUSDString()
-                } else {
-                    fundAmountTextView?.text = currentPortfolioValue.formattedBTCString()
-                }
+                fundAmountTextView?.text = currentPortfolioValue.formattedCurrencyString(homeModel.getCurrency())
 
                 val percentChange = ((currentPortfolioValue - initialPortfolioValue) / initialPortfolioValue* 100)
                 if (percentChange < 0) {
@@ -105,19 +83,17 @@ class PortfolioHeader:Fragment() {
         })
     }
 
-    fun configureArrows(view: View?) {
+    private fun configureArrows(view: View?) {
         val pager = activity.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
         val leftArrow = view?.findViewById<ImageView>(R.id.leftArrowImageView)
         val rightArrow = view?.findViewById<ImageView>(R.id.rightArrowImageView)
 
-        val leftIndex: Int? = if (position > 0) position - 1 else null
-        val rightIndex: Int? = if (position < 2) position + 1 else null
         var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         view?.findViewById<TextView>(R.id.fundAmountTextView)!!.setOnClickListener {
-            if (homeModel.getCurrency() == HomeViewModel.Currency.USD) {
-                homeModel.setCurrency(HomeViewModel.Currency.BTC)
+            if (homeModel.getCurrency() == CurrencyType.USD) {
+                homeModel.setCurrency(CurrencyType.BTC)
             } else {
-                homeModel.setCurrency(HomeViewModel.Currency.USD)
+                homeModel.setCurrency(CurrencyType.USD)
             }
             (parentFragment as HomeFragment).updatePortfolioAndTable(true)
         }

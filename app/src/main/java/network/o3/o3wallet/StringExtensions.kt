@@ -18,3 +18,13 @@ fun Double.formattedPercentString(): String {
 fun Double.formattedGASString(): String {
     return "%.2f".format(this)
 }
+enum class CurrencyType {
+    BTC, USD
+}
+
+fun Double.formattedCurrencyString(currency: CurrencyType): String {
+    return when(currency) {
+        CurrencyType.BTC -> this.formattedBTCString()
+        CurrencyType.USD -> this.formattedUSDString()
+    }
+}

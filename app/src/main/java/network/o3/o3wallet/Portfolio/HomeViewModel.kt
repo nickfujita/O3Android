@@ -9,6 +9,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import network.o3.o3wallet.API.O3.Portfolio
 import network.o3.o3wallet.Account
+import network.o3.o3wallet.CurrencyType
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.WatchAddress
 
@@ -22,10 +23,6 @@ class HomeViewModel: ViewModel()  {
         HOT(0), COMBINED(1), COLD(2)
     }
 
-    enum class Currency {
-        BTC, USD
-    }
-
     enum class Asset(id: String) {
         NEO("0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"),
         GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
@@ -33,7 +30,7 @@ class HomeViewModel: ViewModel()  {
 
     private var displayType: DisplayType = DisplayType.HOT
     private var interval: Int = 15
-    private var currency: Currency = Currency.USD
+    private var currency = CurrencyType.USD
     private var neoGasColdStorage: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasHotWallet: MutableLiveData<Pair<Int, Double>>? = null
     private var neoGasCombined: MutableLiveData<Pair<Int, Double>>? = null
@@ -41,16 +38,12 @@ class HomeViewModel: ViewModel()  {
 
     private var latestPrice: PriceData? = null
 
-    fun setCurrency(currency: Currency) {
+    fun setCurrency(currency: CurrencyType) {
         this.currency = currency
     }
 
-    fun getCurrency(): Currency {
+    fun getCurrency(): CurrencyType {
         return currency
-    }
-
-    fun getInterval(): Int{
-        return interval
     }
 
     fun setInterval(interval: Int) {
@@ -58,47 +51,39 @@ class HomeViewModel: ViewModel()  {
     }
 
     fun getCurrentGasPrice(): Double {
-        if (currency == Currency.USD) {
-            return portfolio!!.value!!.price["gas"]?.averageUSD!!
+        return if (currency == CurrencyType.USD) {
+            portfolio!!.value!!.price["gas"]?.averageUSD!!
         } else {
-            return portfolio!!.value!!.price["gas"]?.averageBTC!!
+            portfolio!!.value!!.price["gas"]?.averageBTC!!
         }
     }
 
     fun getFirstGasPrice(): Double {
-        if (currency == Currency.USD) {
-            return portfolio!!.value!!.firstPrice["gas"]?.averageUSD!!
+        return if (currency == CurrencyType.USD) {
+            portfolio!!.value!!.firstPrice["gas"]?.averageUSD!!
         } else {
-            return portfolio!!.value!!.firstPrice["gas"]?.averageBTC!!
+            portfolio!!.value!!.firstPrice["gas"]?.averageBTC!!
         }
     }
 
     fun getCurrentNeoPrice(): Double {
-        if (currency == Currency.USD) {
-            return portfolio!!.value!!.price["neo"]?.averageUSD!!
+        return if (currency == CurrencyType.USD) {
+            portfolio!!.value!!.price["neo"]?.averageUSD!!
         } else {
-            return portfolio!!.value!!.price["neo"]?.averageBTC!!
+            portfolio!!.value!!.price["neo"]?.averageBTC!!
         }
     }
 
     fun getFirstNeoPrice(): Double {
-        if (currency == Currency.USD) {
-            return portfolio!!.value!!.firstPrice["neo"]?.averageUSD!!
+        return if (currency == CurrencyType.USD) {
+            portfolio!!.value!!.firstPrice["neo"]?.averageUSD!!
         } else {
-            return portfolio!!.value!!.firstPrice["neo"]?.averageBTC!!
+            portfolio!!.value!!.firstPrice["neo"]?.averageBTC!!
         }
     }
 
     fun setDisplayType(displayType: DisplayType) {
         this.displayType = displayType
-    }
-
-    fun getDisplayType(): DisplayType {
-        return this.displayType
-    }
-
-    fun getLatestPrice(): PriceData {
-        return this.latestPrice!!
     }
 
     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
@@ -108,8 +93,8 @@ class HomeViewModel: ViewModel()  {
             neoGasCombined = MutableLiveData()
             loadAccountState()
         }
-        if (display == null) {
-            return when (displayType) {
+        return if (display == null) {
+             when (displayType) {
                 DisplayType.HOT -> neoGasHotWallet!!
                 DisplayType.COLD -> neoGasColdStorage!!
                 DisplayType.COMBINED -> neoGasCombined!!
@@ -133,8 +118,8 @@ class HomeViewModel: ViewModel()  {
 
     fun getPriceFloats(): FloatArray {
         val data = when (currency) {
-            Currency.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
-            Currency.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
+            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
+            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
         }
 
         var floats = FloatArray(data.count())
@@ -144,7 +129,7 @@ class HomeViewModel: ViewModel()  {
         return floats.reversedArray()
     }
 
-    fun loadPortfolio() {
+    private fun loadPortfolio() {
         val balance = when (displayType) {
             DisplayType.HOT -> neoGasHotWallet?.value!!
             DisplayType.COLD ->  neoGasColdStorage?.value!!
@@ -158,7 +143,7 @@ class HomeViewModel: ViewModel()  {
         }
     }
 
-    fun loadAccountState() {
+    private fun loadAccountState() {
         var watchAddresses = PersistentStore.getWatchAddresses()
 
         val latch = CountDownLatch(1 + watchAddresses.size)

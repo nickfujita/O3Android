@@ -3,12 +3,12 @@ package network.o3.o3wallet.Portfolio
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.robinhood.spark.SparkView
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.API.O3.PriceData
 import network.o3.o3wallet.API.O3.PriceHistory
-import network.o3.o3wallet.R
-import java.util.*
+import network.o3.o3wallet.CurrencyType
+import network.o3.o3wallet.formattedBTCString
+import network.o3.o3wallet.formattedUSDString
 
 /**
  * Created by drei on 12/8/17.
@@ -18,23 +18,24 @@ class AssetGraphViewModel: ViewModel() {
     private var history: MutableLiveData<PriceHistory>? = null
     private var symbol = "NEO"
     private var interval = 15
-    private var currency = Currency.USD
+    private var currency = CurrencyType.USD
     private var latestPrice: PriceData? = null
 
-    enum class Currency {
-        BTC, USD
-    }
 
-    fun getCurrency(): Currency {
+    fun getCurrency(): CurrencyType {
         return currency
     }
 
-    fun setCurrency(currency: Currency) {
+    fun setCurrency(currency: CurrencyType) {
         this.currency = currency
     }
 
-    fun getLatestPrice(): PriceData {
-        return latestPrice!!
+    fun getLatestPriceFormattedString(): String {
+        return if (currency == CurrencyType.BTC) {
+            latestPrice?.averageBTC?.formattedBTCString()!!
+        } else {
+            latestPrice?.averageUSD?.formattedUSDString()!!
+        }
     }
 
     fun setInterval(interval: Int) {
@@ -51,8 +52,8 @@ class AssetGraphViewModel: ViewModel() {
 
     fun getPriceFloats(): FloatArray {
         val data = when (currency) {
-            Currency.USD -> history?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
-            Currency.BTC -> history?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
+            CurrencyType.USD -> history?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
+            CurrencyType.BTC -> history?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
         }
 
         var floats = FloatArray(data.count())
@@ -62,7 +63,7 @@ class AssetGraphViewModel: ViewModel() {
         return floats.reversedArray()
     }
 
-    fun loadHistory() {
+    private fun loadHistory() {
         O3API().getPriceHistory(symbol, interval) {
             if (it?.second != null) return@getPriceHistory
             latestPrice = it?.first?.data?.first()!!

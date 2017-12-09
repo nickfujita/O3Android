@@ -6,62 +6,62 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.robinhood.spark.SparkView
-import network.o3.o3wallet.API.O3.O3API
-import network.o3.o3wallet.API.O3.Portfolio
-import network.o3.o3wallet.R
-import network.o3.o3wallet.formattedUSDString
 import android.arch.lifecycle.Observer
 import com.robinhood.spark.animation.MorphSparkAnimator
+import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
-import network.o3.o3wallet.formattedBTCString
+
+/**
+ * Created by drei on 12/8/17.
+ */
 
 class AssetGraph : AppCompatActivity() {
-    var selectedButton: Button? = null
-    var symbol: String? = null
-    var unscrubbedDisplayAmount = 0.0
-    var assetGraphModel: AssetGraphViewModel? = null
-    var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
+    private var selectedButton: Button? = null
+    private var symbol: String? = null
+    private var assetGraphModel: AssetGraphViewModel? = null
+    private var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asset_graph)
         symbol = intent.getStringExtra("SYMBOL")
         assetGraphModel = ViewModelProviders.of(this).get(AssetGraphViewModel::class.java)
-        val priceView = findViewById<TextView>(R.id.currentPriceTextView)
+
+        initiateGraph()
+        initiateIntervalButtons()
+        initiatePriceView()
+    }
+
+    private fun initiateGraph() {
         val sparkView = findViewById<SparkView>(R.id.sparkview)
+        val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         sparkView.sparkAnimator = MorphSparkAnimator()
         sparkView.adapter = chartDataAdapter
         loadGraph(true)
 
         sparkView.scrubListener = SparkView.OnScrubListener { value ->
             if (value == null) { //return to original state
-                if (assetGraphModel?.getCurrency() == AssetGraphViewModel.Currency.USD) {
-                    priceView.text = assetGraphModel?.getLatestPrice()?.averageUSD?.formattedUSDString()
-                } else {
-                    priceView.text = assetGraphModel?.getLatestPrice()?.averageBTC?.formattedBTCString()
-                }
+                priceView.text = assetGraphModel?.getLatestPriceFormattedString()
                 return@OnScrubListener
             } else {
-                if (assetGraphModel?.getCurrency() == AssetGraphViewModel.Currency.USD) {
-                    priceView?.text = (value as Float).toDouble().formattedUSDString()
-                } else {
-                    priceView?.text = (value as Float).toDouble().formattedBTCString()
-                }
+                priceView?.text = (value as Float).toDouble().formattedCurrencyString(assetGraphModel!!.getCurrency())
             }
         }
-        initiateIntervalButtons()
+    }
 
+    private fun initiatePriceView() {
+        val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         priceView.setOnClickListener {
-            if (assetGraphModel?.getCurrency() == AssetGraphViewModel.Currency.USD) {
-                assetGraphModel?.setCurrency(AssetGraphViewModel.Currency.BTC)
+            if (assetGraphModel?.getCurrency() == CurrencyType.USD) {
+                assetGraphModel?.setCurrency(CurrencyType.USD)
             } else {
-                assetGraphModel?.setCurrency(AssetGraphViewModel.Currency.USD)
+                assetGraphModel?.setCurrency(CurrencyType.USD)
             }
             loadGraph(true)
         }
     }
 
-    fun initiateIntervalButtons() {
+    private fun initiateIntervalButtons() {
         val fiveMinButton = findViewById<Button>(R.id.fiveMinInterval)
         val fifteenMinButton = findViewById<Button>(R.id.fifteenMinuteInterval)
         val thirtyMinButton = findViewById<Button>(R.id.thirtyMinuteInterval)
@@ -79,19 +79,15 @@ class AssetGraph : AppCompatActivity() {
         allButton.setOnClickListener { tappedIntervalButton(allButton) }
     }
 
-    fun loadGraph(refresh: Boolean) {
+    private fun loadGraph(refresh: Boolean) {
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         assetGraphModel?.getHistoryFromModel(refresh)?.observe(this, Observer<PriceHistory> { data ->
             chartDataAdapter.setData(assetGraphModel?.getPriceFloats())
-            if (assetGraphModel?.getCurrency() == AssetGraphViewModel.Currency.USD) {
-                priceView.text = assetGraphModel?.getLatestPrice()?.averageUSD?.formattedUSDString()
-            } else {
-                priceView.text = assetGraphModel?.getLatestPrice()?.averageBTC?.formattedBTCString()
-            }
+            priceView.text = assetGraphModel?.getLatestPriceFormattedString()
         })
     }
 
-    fun tappedIntervalButton(button: Button) {
+    private fun tappedIntervalButton(button: Button) {
         selectedButton?.setBackgroundResource(R.drawable.bottom_unselected)
         button.setBackgroundResource(R.drawable.bottom_selected)
         selectedButton = button

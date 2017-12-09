@@ -27,48 +27,47 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
-        viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
-        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
-        viewPager?.adapter = portfolioHeaderAdapter
 
+        homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        initiateGraph(view)
+        initiateViewPager(view)
+        initiateData(view)
+        initiateIntervalButtons(view)
+        return view
+    }
+
+    fun initiateGraph(view: View) {
         val sparkView = view.findViewById<SparkView>(R.id.sparkview)
-        sparkView.sparkAnimator = MorphSparkAnimator()
-        sparkView.adapter = chartDataAdapter
-        sparkView.scrubListener = SparkView.OnScrubListener { value ->
+        sparkView?.sparkAnimator = MorphSparkAnimator()
+        sparkView?.adapter = chartDataAdapter
+        sparkView?.scrubListener = SparkView.OnScrubListener { value ->
             val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
             val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
             if (value == null) { //return to original state
-                if (homeModel?.getCurrency() == HomeViewModel.Currency.USD) {
-                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
-                            header.unscrubbedDisplayedAmount.formattedUSDString()
-                } else {
-                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
-                            header.unscrubbedDisplayedAmount.formattedBTCString()
-                }
+                header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
+                        header.unscrubbedDisplayedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
                 return@OnScrubListener
             } else {
-
-                if (homeModel?.getCurrency() == HomeViewModel.Currency.USD) {
-                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
-                            (value as Float).toDouble().formattedUSDString()
-                } else {
-                    header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
-                            (value as Float).toDouble().formattedBTCString()
-                }
-
+                (value as Float).toDouble().formattedCurrencyString(homeModel?.getCurrency()!!)
             }
         }
+    }
 
-
-
-
-        homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
-
-        homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
-            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
-                chartDataAdapter.setData(homeModel?.getPriceFloats())
-                initiateTableRows(view)
-            })
+    fun initiateViewPager(view: View) {
+        viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
+        val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
+        viewPager?.adapter = portfolioHeaderAdapter
+        viewPager?.addOnPageChangeListener(object: SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                val displayType = when {
+                    position == 0 -> HomeViewModel.DisplayType.HOT
+                    position == 1 -> HomeViewModel.DisplayType.COMBINED
+                    position == 2 -> HomeViewModel.DisplayType.COLD
+                    else -> return
+                }
+                homeModel?.setDisplayType(displayType)
+                updatePortfolioAndTable(true)
+            }
         })
 
         viewPager?.addOnPageChangeListener(object: SimpleOnPageChangeListener() {
@@ -83,12 +82,16 @@ class HomeFragment : Fragment() {
                 updatePortfolioAndTable(true)
             }
         })
-
-
-        initiateIntervalButtons(view)
-        return view
     }
 
+    fun initiateData(view: View) {
+        homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
+            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
+                chartDataAdapter.setData(homeModel?.getPriceFloats())
+                initiateTableRows(view)
+            })
+        })
+    }
 
     fun initiateIntervalButtons(view: View) {
         val fiveMinButton = view.findViewById<Button>(R.id.fiveMinInterval)
@@ -120,7 +123,6 @@ class HomeFragment : Fragment() {
         val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
         homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
-                //sparkView?.adapter = PortfolioDataAdapter(homeModel?.getPriceFloats())
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
                 updateTableData(false)
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
@@ -133,48 +135,52 @@ class HomeFragment : Fragment() {
 
     fun updateTableData(refresh: Boolean) {
         homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> {  data ->
-
             homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
-                view?.findViewById<TextView>(R.id.neoAmount)?.text = balance?.first?.toString()
-                view?.findViewById<TextView>(R.id.gasAmount)?.text = balance?.second?.formattedGASString()
+                val gasChangeTextView = view?.findViewById<TextView>(R.id.gasChange)
+                val neoChangeTextView = view?.findViewById<TextView>(R.id.neoChange)
+
+                val gasAmountTextView = view?.findViewById<TextView>(R.id.gasAmount)
+                val neoAmountTextView = view?.findViewById<TextView>(R.id.neoAmount)
+
+                val gasValueTextView = view?.findViewById<TextView>(R.id.gasValue)
+                val neoValueTextView = view?.findViewById<TextView>(R.id.neoValue)
+
+                val gasPriceTextView = view?.findViewById<TextView>(R.id.gasPrice)
+                val neoPriceTextView = view?.findViewById<TextView>(R.id.neoPrice)
+
+
+                neoAmountTextView?.text = balance?.first?.toString()
+                gasAmountTextView?.text = balance?.second?.formattedGASString()
 
                 val currentNeoPrice = homeModel!!.getCurrentNeoPrice()
                 val firstNeoPrice = homeModel!!.getFirstNeoPrice()
                 val currentGasPrice = homeModel!!.getCurrentGasPrice()
                 val firstGasPrice = homeModel!!.getFirstGasPrice()
 
-                if (homeModel!!.getCurrency() == HomeViewModel.Currency.USD) {
-                    view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).formattedUSDString()
-                    view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).formattedUSDString()
-                    view?.findViewById<TextView>(R.id.neoPrice)?.text = currentNeoPrice.formattedUSDString()
-                    view?.findViewById<TextView>(R.id.gasPrice)?.text = currentGasPrice.formattedUSDString()
-                } else {
-                    view?.findViewById<TextView>(R.id.neoValue)?.text = (balance?.first!! * currentNeoPrice).formattedBTCString()
-                    view?.findViewById<TextView>(R.id.gasValue)?.text = (balance?.second!! * currentGasPrice).formattedBTCString()
-                    view?.findViewById<TextView>(R.id.neoPrice)?.text = currentNeoPrice.formattedBTCString()
-                    view?.findViewById<TextView>(R.id.gasPrice)?.text = currentGasPrice.formattedBTCString()
-                }
+                neoValueTextView?.text = (balance?.first!! * currentNeoPrice).formattedCurrencyString(homeModel!!.getCurrency())
+                gasValueTextView?.text = (balance?.second!! * currentGasPrice).formattedCurrencyString(homeModel!!.getCurrency())
+                neoPriceTextView?.text = currentNeoPrice.formattedCurrencyString(homeModel!!.getCurrency())
+                gasPriceTextView?.text = currentGasPrice.formattedCurrencyString(homeModel!!.getCurrency())
 
 
                 val percentNeoChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
                 val percentGasChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
 
+
                 if (percentGasChange < 0) {
-                    view?.findViewById<TextView>(R.id.gasChange)?.setTextColor(resources.getColor(R.color.colorLoss))
+                    gasChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
-                    view?.findViewById<TextView>(R.id.gasChange)?.setTextColor(resources.getColor(R.color.colorGain))
+                    gasChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
 
                 if (percentNeoChange < 0) {
-                    view?.findViewById<TextView>(R.id.neoChange)?.setTextColor(resources.getColor(R.color.colorLoss))
+                    neoChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
-                    view?.findViewById<TextView>(R.id.neoChange)?.setTextColor(resources.getColor(R.color.colorGain))
+                    neoChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
 
-
-
-                view?.findViewById<TextView>(R.id.neoChange)?.text = percentNeoChange.formattedPercentString()
-                view?.findViewById<TextView>(R.id.gasChange)?.text = percentGasChange.formattedPercentString()
+                neoChangeTextView?.text = percentNeoChange.formattedPercentString()
+                gasChangeTextView?.text = percentGasChange.formattedPercentString()
             })
         })
     }
