@@ -1,5 +1,8 @@
+
 package network.o3.o3wallet.API.NEO
 
+
+import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
@@ -18,8 +21,7 @@ import java.nio.*
 
 class NeoNodeRPC {
     var nodeURL = "http://node1.o3.network:10332"
-
-    //    var nodeURL = "http://seed3.neo.org:20332" //TESTNET
+    //var nodeURL = "http://seed3.neo.org:20332" //TESTNET
     enum class Asset() {
         NEO,
         GAS;
@@ -115,6 +117,7 @@ class NeoNodeRPC {
                 val block = gson.fromJson<AccountState>(nodeResponse.result)
                 completion(Pair<AccountState?, Error?>(block, null))
             } else {
+                Log.d("ERROR", error.localizedMessage)
                 completion(Pair<AccountState?, Error?>(null, Error(error.localizedMessage)))
             }
         }

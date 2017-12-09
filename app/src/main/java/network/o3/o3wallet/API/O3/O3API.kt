@@ -1,6 +1,7 @@
 package network.o3.o3wallet.API.O3
 
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.core.FuelManager
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import network.o3.o3wallet.API.CoZ.Claims
@@ -12,7 +13,7 @@ import network.o3.o3wallet.API.CoZ.TransactionHistory
  */
 
 class O3API {
-    val baseURL = "https://staging-api.o3.network/v1/"
+    val baseURL = "http://staging-api.o3.network/v1/"
     enum class Route() {
         HISTORY,
         PORTFOLIO;
@@ -43,8 +44,8 @@ class O3API {
         val url = baseURL + Route.PORTFOLIO.routeName() + String.format("?i=%d&neo=%d&gas=%f", interval, neoAmount, gasAmount)
         var request = url.httpGet()
         request.responseString { request, response, result ->
-            print (request)
-            print (response)
+           // print (request)
+           // print (response)
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()

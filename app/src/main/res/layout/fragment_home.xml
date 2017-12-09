@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="network.o3.o3wallet.HomeFragment">
+    tools:context="network.o3.o3wallet.Portfolio.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -58,7 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_unselected"
-                    android:text="5m" />
+                    android:text="5m"
+                    android:tag="5"/>
 
                 <Button
                     android:id="@+id/fifteenMinuteInterval"
@@ -67,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_selected"
-                    android:text="15m" />
+                    android:text="15m"
+                    android:tag="15"/>
 
                 <Button
                     android:id="@+id/thirtyMinuteInterval"
@@ -76,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_unselected"
-                    android:text="30m" />
+                    android:text="30m"
+                    android:tag="30"/>
 
                 <Button
                     android:id="@+id/sixtyMinuteInterval"
@@ -85,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_unselected"
-                    android:text="60m" />
+                    android:text="60m"
+                    android:tag="60"/>
 
                 <Button
                     android:id="@+id/oneDayInterval"
@@ -94,7 +98,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_unselected"
-                    android:text="1D" />
+                    android:text="1D"
+                    android:tag="1440"/>
 
                 <Button
                     android:id="@+id/allInterval"
@@ -103,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bottom_unselected"
-                    android:text="All" />
+                    android:text="All"
+                    android:tag="1500"/>
             </LinearLayout>
 
             <TableLayout
@@ -152,6 +158,7 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginTop="8dp"
                             android:text="$531.70"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -162,6 +169,7 @@
                             android:layout_marginEnd="32dp"
                             android:layout_marginTop="8dp"
                             android:text="26"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toStartOf="@+id/neoValue"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,6 +180,8 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:text="NEO"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -217,6 +227,7 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginTop="8dp"
                             android:text="$531.70"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -227,6 +238,7 @@
                             android:layout_marginEnd="32dp"
                             android:layout_marginTop="8dp"
                             android:text="26"
+                            android:textColor="@android:color/black"
                             app:layout_constraintEnd_toStartOf="@+id/gasValue"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -237,6 +249,8 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:text="GAS"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

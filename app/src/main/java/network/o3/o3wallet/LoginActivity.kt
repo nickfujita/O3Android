@@ -2,6 +2,7 @@ package network.o3.o3wallet
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_login.*
@@ -23,9 +24,11 @@ class LoginActivity : AppCompatActivity() {
     fun login() {
 
         Account.fromWIF(wifTextfield.text.toString())
-        //Account.restoreWalletFromDevice()
         //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
-        //PersistentStore.addWatchAddress("abaceadadfsfadfa", "Hellllllo")
+      //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")
+      //  PersistentStore.addWatchAddress("AJy6mZwSH8pWC4eHBAAcbkztcufTw51rfE", "Test 1")
+       // PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
+
         val intent = Intent(this, MainTabbedActivity::class.java)
         startActivity(intent)
     }

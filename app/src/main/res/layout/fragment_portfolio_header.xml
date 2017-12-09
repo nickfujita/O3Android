@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    tools:context="network.o3.o3wallet.PortfolioHeader">
+    android:layout_height="85dp"
+    tools:context="network.o3.o3wallet.Portfolio.PortfolioHeader">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:text="0.2144BTC"
         android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
