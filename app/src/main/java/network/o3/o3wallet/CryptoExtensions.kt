@@ -4,6 +4,7 @@ package network.o3.o3wallet
  * Created by drei on 11/22/17.
  */
 import java.security.MessageDigest
+import network.o3.o3wallet.core.*
 
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
@@ -30,39 +31,10 @@ fun String.hexStringToByteArray() : ByteArray {
         i += 2
     }
     return data
-
-//    val result = ByteArray(length / 2)
-//
-//    for (i in 0 until length step 2) {
-//        val firstIndex = HEX_CHARS.indexOf(this[i]);
-//        val secondIndex = HEX_CHARS.indexOf(this[i + 1]);
-//
-//        val octet = firstIndex.shl(4).or(secondIndex)
-//        result.set(i.shr(1), octet.toByte())
-//    }
-//
-//    return result
 }
 
 fun String.hashFromAddress(): String {
-    val HEX_CHARS = "0123456789ABCDEF"
-    val shortened = this.toByteArray().sliceArray(IntRange(0,20))
-    val hashOne = MessageDigest
-            .getInstance("SHA-256")
-            .digest(shortened)
-
-    val hashTwo = MessageDigest
-            .getInstance("SHA-256")
-            .digest(hashOne)
-
-    System.out.println(hashTwo.size)
-    val result = StringBuilder(hashOne.size * 2)
-
-    hashTwo.forEach {
-        val i = it.toInt()
-        result.append(HEX_CHARS[i shr 4 and 0x0f])
-        result.append(HEX_CHARS[i and 0x0f])
-    }
-
-    return result.toString()
+    val bytes = Base58.decodeChecked(this)
+    val shortened = bytes.sliceArray(IntRange(0,20))
+    return shortened.sliceArray(IntRange(1,shortened.count() - 1)).toHex()
 }

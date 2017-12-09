@@ -17,7 +17,7 @@ import java.nio.*
 
 
 class NeoNodeRPC {
-    var nodeURL = "http://seed3.neo.org:10332"
+    var nodeURL = "http://node1.o3.network:10332"
 
     //    var nodeURL = "http://seed3.neo.org:20332" //TESTNET
     enum class Asset() {
@@ -148,7 +148,7 @@ class NeoNodeRPC {
                 "jsonrpc" to "2.0",
                 "method" to RPC.SENDRAWTRANSACTION.methodName(),
                 "params" to jsonArray(data.toHex()),
-                "id" to 1
+                "id" to 3
         )
 
         var request = nodeURL.httpPost().body(dataJson.toString())
@@ -157,9 +157,12 @@ class NeoNodeRPC {
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                val success = gson.fromJson<Boolean>(nodeResponse.result["result"])
-                completion(Pair<Boolean?, Error?>(success, null))
+                try {
+                    val nodeResponse = gson.fromJson<SendRawTransactionResponse>(data!!)
+                    completion(Pair<Boolean?, Error?>(nodeResponse.result, null))
+                } catch (error: Error) {
+                    completion(kotlin.Pair<kotlin.Boolean?, Error?>(null, Error(error.localizedMessage)))
+                }
             } else {
                 completion(Pair<Boolean?, Error?>(null, Error(error.localizedMessage)))
             }
@@ -259,7 +262,6 @@ class NeoNodeRPC {
                 completion(Pair<Boolean?, Error?>(false, error))
             } else {
                 val payload = generateClaimTransactionPayload(wallet, claims!!)
-                System.out.println(payload.toHex())
                 sendRawTransaction(payload) {
                     var success = it.first
                     var error = it.second
@@ -278,7 +280,6 @@ class NeoNodeRPC {
                 completion(Pair<Boolean?, Error?>(false, error))
             } else {
                 val payload = generateSendTransactionPayload(wallet, asset, amount, toAddress, assets!!, attributes)
-                System.out.println(payload.toHex())
                 sendRawTransaction(payload) {
                     var success = it.first
                     var error = it.second
@@ -302,10 +303,8 @@ class NeoNodeRPC {
 
         if (asset == Asset.NEO) {
             if (assets.NEO.balance < amount) {
-
                 return SendAssetReturn(null, null, Error("insufficient balance"))
             }
-
             sortedUnspents = assets.NEO.unspent.sortedBy { it.value }
         } else {
             if (assets.GAS.balance < amount) {
@@ -338,6 +337,7 @@ class NeoNodeRPC {
 
         var numberOfAttributes: Byte = 0x00.toByte()
         var attributesPayload: ByteArray = ByteArray(0)
+        //TODO add attribute
 //        if attributes != nil {
 //            for (attribute in attributes!!) {
 //            if attribute.data != nil {
@@ -349,18 +349,13 @@ class NeoNodeRPC {
 
         var payload: ByteArray = byteArrayOf(0x80.toByte()) + byteArrayOf(0x00.toByte()) + numberOfAttributes
         payload = payload + attributesPayload + inputDataBytes
-        System.out.println(payload.toHex())
         if (needsTwoOutputTransactions) {
             //Transaction To Reciever
             payload = payload + byteArrayOf(0x02.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
             val amountToSendInMemory: Int = (toSendAmount * 100000000).toInt()
             payload += to8BytesArray(amountToSendInMemory)
-
             //reciever addressHash
-            System.out.println(payload.toHex())
-            System.out.println(toAddress.hashFromAddress().hexStringToByteArray())
             payload += toAddress.hashFromAddress().hexStringToByteArray()
-
             //Transaction To Sender
             payload += asset.assetID().hexStringToByteArray().reversedArray()
             val amountToGetBackInMemory = (runningAmount * 100000000).toInt() - (toSendAmount * 100000000).toInt()
@@ -376,7 +371,7 @@ class NeoNodeRPC {
         return payload
     }
 
-    fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, assets: Assets, attributes: Array<TransactionAttritbute>?): ByteArray {
+    private fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, assets: Assets, attributes: Array<TransactionAttritbute>?): ByteArray {
         var error: Error?
         val inputData = getInputsNecessaryToSendAsset(asset, amount, assets)
         val rawTransaction = packRawTransactionBytes(wallet, asset, inputData.payload!!, inputData.totalAmount!!,
@@ -417,7 +412,6 @@ class NeoNodeRPC {
         for (claim: Claim in claims.claims) {
             payload += hexStringToByteArray(claim.txid).reversedArray()
             payload += ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(claim.index.toShort()).array()
-            System.out.println(claim.index.toShort())
         }
         payload += byteArrayOf(0x00.toByte()) // Attributes
         payload += byteArrayOf(0x00.toByte()) // Inputs
