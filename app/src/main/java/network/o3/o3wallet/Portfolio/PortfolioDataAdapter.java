@@ -1,4 +1,4 @@
-package network.o3.o3wallet;
+package network.o3.o3wallet.Portfolio;
 import com.robinhood.spark.SparkAdapter;
 
 /**
@@ -15,6 +15,11 @@ public class PortfolioDataAdapter extends SparkAdapter {
     @Override
     public int getCount() {
         return yData.length;
+    }
+
+    public void setData(float[] yData) {
+        this.yData = yData;
+        notifyDataSetChanged();
     }
 
     @Override
