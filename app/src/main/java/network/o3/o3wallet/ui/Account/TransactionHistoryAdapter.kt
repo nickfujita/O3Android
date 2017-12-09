@@ -1,7 +1,5 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.ui.Account
 
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.content.Context
 import android.graphics.Color
 import android.view.View
@@ -9,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import network.o3.o3wallet.API.CoZ.TransactionHistoryEntry
 import android.widget.*
+import network.o3.o3wallet.R
 
 /**
  * Created by apisit on 11/30/17.

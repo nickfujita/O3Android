@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
+import network.o3.o3wallet.ui.Account.AccountFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 
 

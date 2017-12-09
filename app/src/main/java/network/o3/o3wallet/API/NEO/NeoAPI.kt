@@ -296,6 +296,9 @@ class NeoNodeRPC {
         return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array()
     }
 
+    private fun to8BytesArray(value: Long): ByteArray {
+        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(value).array()
+    }
 
     data class SendAssetReturn(val totalAmount: Double?, val payload: ByteArray?, val error: Error?)
     data class TransactionAttritbute(val messaeg: String?)
@@ -361,13 +364,13 @@ class NeoNodeRPC {
             payload += toAddress.hashFromAddress().hexStringToByteArray()
             //Transaction To Sender
             payload += asset.assetID().hexStringToByteArray().reversedArray()
-            val amountToGetBackInMemory = (runningAmount * 100000000).toInt() - (toSendAmount * 100000000).toInt()
+            val amountToGetBackInMemory = (runningAmount * 100000000).toLong() - (toSendAmount * 100000000).toLong()
             payload += to8BytesArray(amountToGetBackInMemory)
             payload += wallet.hashedSignature
 
         } else {
             payload = payload + byteArrayOf(0x01.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
-            val amountToSendInMemory = (toSendAmount * 100000000).toInt()
+            val amountToSendInMemory = (toSendAmount * 100000000).toLong()
             payload += to8BytesArray(amountToSendInMemory)
             payload += toAddress.hashFromAddress().hexStringToByteArray()
         }
