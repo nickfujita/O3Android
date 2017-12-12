@@ -7,6 +7,10 @@ import com.google.gson.JsonObject
 class NeoNodeRPC {
     var nodeURL = "http://seed2.neo.org:10332"
 
+    constructor(url: String) {
+        nodeURL = url
+    }
+
     enum class RPC() {
         GETBLOCKCOUNT,
         GETCONNECTIONCOUNT,

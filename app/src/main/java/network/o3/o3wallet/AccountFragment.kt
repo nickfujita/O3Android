@@ -1,5 +1,6 @@
 package network.o3.o3wallet
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.support.v4.app.Fragment
 import android.support.design.widget.FloatingActionButton
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class AccountFragment : Fragment() {

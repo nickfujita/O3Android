@@ -48,3 +48,7 @@ data class AccountState(val version: Int,
                         val votes: Array<Int>,
                         val balances: Array<Balance>)
 
+
+data class Node(val url: String, val blockcount: Int, val peercount: Int)
+data class NeoNetwork(val main: Array<Node>, val test: Array<Node>)
+

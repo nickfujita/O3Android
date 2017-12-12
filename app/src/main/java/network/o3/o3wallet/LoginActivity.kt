@@ -1,10 +1,14 @@
 package network.o3.o3wallet
 import android.content.Intent
+import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
+import com.github.salomonbrys.kotson.*
+import NeoNetwork
 
 class LoginActivity : AppCompatActivity() {
 

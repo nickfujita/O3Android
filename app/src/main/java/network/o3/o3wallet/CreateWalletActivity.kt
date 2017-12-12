@@ -1,8 +1,10 @@
 package network.o3.o3wallet
 
 import android.content.Intent
+import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
