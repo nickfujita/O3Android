@@ -1,4 +1,4 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Settings
 
 import android.app.Dialog
 import android.os.Bundle
@@ -6,12 +6,9 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
-import android.support.v4.app.Fragment
 import android.annotation.SuppressLint
 import android.widget.*
-import android.widget.AdapterView.OnItemClickListener
-
-
+import network.o3.o3wallet.R
 
 
 class SettingsFragment : BottomSheetDialogFragment() {
@@ -26,7 +23,6 @@ class SettingsFragment : BottomSheetDialogFragment() {
         val view = inflater!!.inflate(R.layout.fragment_settings, container, false)
         val listView = view.findViewById<ListView>(R.id.settingsListView)
 
-        val items = arrayListOf<String>("IM", "DA", "BEST")
         val basicAdapter = SettingsAdapter(this.context)
         listView.adapter = basicAdapter
         return view

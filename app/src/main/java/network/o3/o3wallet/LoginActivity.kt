@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
       //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")
       //  PersistentStore.addWatchAddress("AJy6mZwSH8pWC4eHBAAcbkztcufTw51rfE", "Test 1")
        // PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
-
+        //PersistentStore.addContact("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Bittrex Address")
         val intent = Intent(this, MainTabbedActivity::class.java)
         startActivity(intent)
     }

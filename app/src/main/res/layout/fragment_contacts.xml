@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="network.o3.o3wallet.Settings.SettingsFragment">
+    tools:context="network.o3.o3wallet.Settings.ContactsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
-        android:id="@+id/settingsListView"
+        android:id="@+id/contactsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

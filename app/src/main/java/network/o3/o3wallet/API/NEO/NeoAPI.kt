@@ -97,7 +97,7 @@ class NeoNodeRPC {
     fun validateAddress(address: String, completion:(Pair<Boolean?, Error?>) -> Unit) {
         val dataJson = jsonObject(
                 "jsonrpc" to "2.0",
-                "method" to RPC.GETACCOUNTSTATE.methodName(),
+                "method" to RPC.VALIDATEADDRESS.methodName(),
                 "params" to jsonArray(address),
                 "id" to 1
         )

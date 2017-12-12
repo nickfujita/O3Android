@@ -2,7 +2,13 @@
     <string name="app_name">O3Wallet</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name = "hello_blank_fragment">Hello blank fragment</string>
-    <string name = "neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>
-    <string name = "gas_asset_id">0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>
+    <string name="gas_asset_id">0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+
+    <string name="add_address_watch_address_description">Watch only let you monitor your portfolio in
+        an isolated environment. Although you won\'t be able to send funds from these addresses you will be able
+        to check the balance</string>
+    <string name="add_address_contact_description">Your address book will let you send funds
+        all over the world without needing to remember your address</string>
 </resources>

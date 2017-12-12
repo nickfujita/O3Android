@@ -5,14 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".O3Wallet"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="network.o3.o3wallet.O3Wallet">
-    <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +24,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".CreateWalletActivity" />
         <activity android:name=".MainTabbedActivity" />
-        <activity android:name=".Portfolio.AssetGraph"></activity>
+        <activity android:name=".Portfolio.AssetGraph" />
+        <activity android:name=".Settings.AddWatchAddress" />
+        <activity android:name=".Settings.AddContact"></activity>
     </application>
 
 </manifest>

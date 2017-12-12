@@ -3,10 +3,10 @@ package network.o3.o3wallet
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import network.o3.o3wallet.Portfolio.HomeFragment
+import network.o3.o3wallet.Settings.SettingsFragment
 
 
 class MainTabbedActivity : AppCompatActivity() {
