@@ -36,7 +36,7 @@ class NetworkViewModel: ViewModel() {
     }
 
     fun loadNodes() {
-        val jsonString = O3Wallet.appContext?.resources?.openRawResource(R.raw.nodes).bufferedReader().use { it.readText() }
+        val jsonString = O3Wallet.appContext?.resources?.openRawResource(R.raw.nodes)?.bufferedReader().use { it?.readText() } ?: ""
         var neoNodes: Array<Node>? = null
         if (type == NetworkType.MAIN) {
             neoNodes = Gson().fromJson<NeoNetwork>(jsonString).main

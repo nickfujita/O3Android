@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import Node
+import android.net.Network
 import network.o3.o3wallet.API.O3.Portfolio
 import network.o3.o3wallet.R
 
@@ -29,10 +30,10 @@ class NetworkFragment: BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         networkModel = NetworkViewModel()
-        val view = inflater!!.inflate(R.layout.network, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_network, container, false)
 
 
-        val listView = view.findViewById<ListView>(R.id.nodesListView)
+        val listView = view.findViewById<ListView>(R.id.nodeListView)
 
         val networkAdapter = NetworkAdapter(this.context)
         listView.adapter = networkAdapter
@@ -44,8 +45,8 @@ class NetworkFragment: BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): ContactsFragment {
-            return ContactsFragment()
+        fun newInstance(): NetworkFragment {
+            return NetworkFragment()
         }
     }
 }

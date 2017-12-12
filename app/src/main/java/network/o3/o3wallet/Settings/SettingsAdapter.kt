@@ -74,6 +74,10 @@ class SettingsAdapter(context: Context): BaseAdapter() {
             val watchAddressModal = WatchAddressFragment.newInstance()
             watchAddressModal.show((mContext as AppCompatActivity).supportFragmentManager, watchAddressModal.tag)
             return
+        } else if (position == CellType.NETWORK.ordinal) {
+            val networkModal = NetworkFragment.newInstance()
+            networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
+            return
         }
 
         Toast.makeText(mContext, position.toString(), Toast.LENGTH_SHORT).show()

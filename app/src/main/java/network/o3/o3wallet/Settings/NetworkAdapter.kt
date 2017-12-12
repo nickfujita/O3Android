@@ -27,7 +27,7 @@ import Node
 class NetworkAdapter(context: Context): BaseAdapter() {
 
     private val mContext: Context
-    private var neoNodes: Array<Node>? = nil
+    private var neoNodes: Array<Node>? = null
 
     init {
         mContext = context
@@ -52,6 +52,12 @@ class NetworkAdapter(context: Context): BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(mContext)
+        val view = layoutInflater.inflate(R.layout.node_entry_row, viewGroup, false)
+        val node = getItem(position)
+        view.findViewById<TextView>(R.id.urlTextView).text = node.url
+        view.findViewById<TextView>(R.id.peerCountTextView).text = node.peercount.toString()
+        view.findViewById<TextView>(R.id.blockCountTextView).text = node.blockcount.toString()
+        return view
 
         /*if (position != getCount() - 1) {
             val view = layoutInflater.inflate(R.layout.address_entry_row, viewGroup, false)

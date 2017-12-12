@@ -7,8 +7,8 @@ import com.google.gson.JsonObject
 class NeoNodeRPC {
     var nodeURL = "http://seed2.neo.org:10332"
 
-    constructor(url: String) {
-        nodeURL = url
+    constructor(url: String = "http://seed2.neo.org:10332") {
+        this.nodeURL = url
     }
 
     enum class RPC() {
@@ -40,7 +40,7 @@ class NeoNodeRPC {
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val nodeResponse = gson.fromJson<NodeResponsePrimitive>(data!!)
                 val blockCount = gson.fromJson<Int>(nodeResponse.result)
                 completion(Pair<Int?, Error?>(blockCount, null))
             } else {
@@ -64,7 +64,7 @@ class NeoNodeRPC {
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val nodeResponse = gson.fromJson<NodeResponsePrimitive>(data!!)
                 val blockCount = gson.fromJson<Int>(nodeResponse.result)
                 completion(Pair<Int?, Error?>(blockCount, null))
             } else {
