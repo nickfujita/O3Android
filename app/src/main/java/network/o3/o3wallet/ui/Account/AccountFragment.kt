@@ -199,8 +199,9 @@ class AccountFragment : Fragment() {
 
     fun menuButtonTapped() {
         val intent:Intent = Intent(context,SendActivity::class.java)
-        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity,menuButton,"transition")
-        ActivityCompat.startActivity(context,intent,option.toBundle())
+        //val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity,menuButton,"transition")
+        //ActivityCompat.startActivity(context,intent,option.toBundle())
+        startActivity(intent)
     }
 
 
