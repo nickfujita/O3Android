@@ -69,10 +69,10 @@ class SendActivity : AppCompatActivity() {
     fun toggleAsset() {
         if (selectedAsset == NeoNodeRPC.Asset.NEO) {
             selectedAsset = NeoNodeRPC.Asset.GAS
-            amountTextView.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+            amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
         } else {
             selectedAsset = NeoNodeRPC.Asset.NEO
-            amountTextView.inputType = InputType.TYPE_CLASS_NUMBER
+            amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED)
             var amount = amountTextView.text.trim().toString().toDouble()
             if (amount < 1) {
                 amountTextView.text = "1"
