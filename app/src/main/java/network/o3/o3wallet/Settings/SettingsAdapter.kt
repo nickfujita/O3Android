@@ -10,6 +10,11 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import network.o3.o3wallet.R
+import android.support.v4.content.ContextCompat.startActivity
+import android.content.Intent
+import android.net.Uri
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.PersistentStore
 
 
 /**
@@ -19,12 +24,11 @@ import network.o3.o3wallet.R
 class SettingsAdapter(context: Context): BaseAdapter() {
     private val mContext: Context
     var settingsTitles = listOf<String>("My Private Key", "Address Book", "Watch-Only-Address",
-            "Network", "Theme", "Share", "Contact", "Log out", "Version")
+            "Network", "Share", "Contact", "Log out", "Version")
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon,
-            R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsshareicon,
-            R.drawable.ic_settingscontacticon, R.drawable.ic_settingscontacticon,
-            R.drawable.ic_settingscontacticon)
+            R.drawable.ic_settingsshareicon, R.drawable.ic_settingscontacticon,
+            R.drawable.ic_settingscontacticon, R.drawable.ic_settingscontacticon)
     init {
         mContext = context
     }
@@ -77,6 +81,18 @@ class SettingsAdapter(context: Context): BaseAdapter() {
         } else if (position == CellType.NETWORK.ordinal) {
             val networkModal = NetworkFragment.newInstance()
             networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
+            return
+        } else if (position == CellType.CONTACT.ordinal) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            val data = Uri.parse("mailto:o3walletapp@gmail.com")
+            intent.data = data
+            startActivity(mContext, intent, null)
+            return
+        } else if (position == CellType.LOGOUT.ordinal) {
+            Account.deleteKeyFromDevice()
+        } else if (position == CellType.PRIVATEKEY.ordinal) {
+            val privateKeyModal = PrivateKeyFragment.newInstance()
+            privateKeyModal.show((mContext as AppCompatActivity).supportFragmentManager, privateKeyModal.tag)
             return
         }
 

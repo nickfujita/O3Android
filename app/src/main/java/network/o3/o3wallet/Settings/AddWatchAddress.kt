@@ -26,7 +26,7 @@ class AddWatchAddress : AppCompatActivity() {
                 _, _ ->
             }
 
-            NeoNodeRPC().validateAddress(addressField.text.toString()) {
+            NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(addressField.text.toString()) {
                 if (it.second != null || it?.first == false) {
                     runOnUiThread {
                         errorAlert.show()

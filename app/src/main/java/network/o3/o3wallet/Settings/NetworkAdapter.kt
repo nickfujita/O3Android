@@ -15,6 +15,10 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import NeoNetwork
 import Node
+import android.graphics.Color
+import android.util.Log
+import android.widget.CheckBox
+import network.o3.o3wallet.O3Wallet
 
 /**
  * Created by drei on 12/11/17.
@@ -38,6 +42,10 @@ class NetworkAdapter(context: Context): BaseAdapter() {
         notifyDataSetChanged()
     }
 
+    fun getHighestBlockCount(): Int {
+        return neoNodes?.maxBy { it.blockcount }?.blockcount!!
+    }
+
     override fun getItem(position: Int): Node {
         return neoNodes!![position]
     }
@@ -54,25 +62,36 @@ class NetworkAdapter(context: Context): BaseAdapter() {
         val layoutInflater = LayoutInflater.from(mContext)
         val view = layoutInflater.inflate(R.layout.node_entry_row, viewGroup, false)
         val node = getItem(position)
-        view.findViewById<TextView>(R.id.urlTextView).text = node.url
-        view.findViewById<TextView>(R.id.peerCountTextView).text = node.peercount.toString()
-        view.findViewById<TextView>(R.id.blockCountTextView).text = node.blockcount.toString()
-        return view
+        val urlView = view.findViewById<TextView>(R.id.urlTextView)
+        val peerCountView = view.findViewById<TextView>(R.id.peerCountTextView)
+        val blockCountView = view.findViewById<TextView>(R.id.blockCountTextView)
 
-        /*if (position != getCount() - 1) {
-            val view = layoutInflater.inflate(R.layout.address_entry_row, viewGroup, false)
-            val titleTextView = view.findViewById<TextView>(R.id.addressNickNameTextView)
-            val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
-            titleTextView.text = getItem(position).nickname
-            subtitleTextView.text = getItem(position).address
-            return view
+        urlView.text = node.url
+        peerCountView.text = node.peercount.toString()
+        blockCountView.text = node.blockcount.toString()
+        if (getHighestBlockCount() - node.blockcount >= 10) {
+            urlView.setTextColor(mContext.getColor(R.color.colorLoss))
+            peerCountView.setTextColor(mContext.getColor(R.color.colorLoss))
+            blockCountView.setTextColor(mContext.getColor(R.color.colorLoss))
         } else {
-            val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
-            view.findViewById<Button>(R.id.AddButton).setOnClickListener {
-                val intent = Intent(mContext, AddContact::class.java)
-                mContext.startActivity(intent)
-            }
-            return view
-        }*/
+            urlView.setTextColor(Color.BLACK)
+            peerCountView.setTextColor(mContext.getColor(R.color.colorAccent))
+            blockCountView.setTextColor(mContext.getColor(R.color.colorPrimary))
+        }
+
+        val checkbox = view.findViewById<CheckBox>(R.id.checkBox)
+        if (PersistentStore.getNodeURL() == node.url) {
+            checkbox.visibility = View.VISIBLE
+            checkbox.isChecked = true
+        } else {
+            checkbox.visibility = View.INVISIBLE
+            checkbox.isChecked = false
+        }
+
+        view.setOnClickListener {
+            PersistentStore.setNodeURL(node.url)
+            notifyDataSetChanged()
+        }
+        return view
     }
 }

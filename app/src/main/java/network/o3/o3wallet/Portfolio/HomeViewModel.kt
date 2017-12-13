@@ -151,7 +151,7 @@ class HomeViewModel: ViewModel()  {
         var runningNeoHot = 0
         var runningGasCold = 0.0
         var runningNeoCold = 0
-        NeoNodeRPC().getAccountState(Account.getWallet()?.address!!) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(Account.getWallet()?.address!!) {
             if (it.second != null) {
                 latch.countDown()
                 return@getAccountState
@@ -168,7 +168,7 @@ class HomeViewModel: ViewModel()  {
         }
 
         for (address: WatchAddress in watchAddresses) {
-            NeoNodeRPC().getAccountState(address.address) {
+            NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address.address) {
                 if (it.second != null) {
                     latch.countDown()
                     return@getAccountState

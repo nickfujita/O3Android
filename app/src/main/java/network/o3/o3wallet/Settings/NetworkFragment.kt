@@ -10,8 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import Node
-import android.net.Network
-import network.o3.o3wallet.API.O3.Portfolio
+import android.widget.TextView
 import network.o3.o3wallet.R
 
 /**
@@ -31,9 +30,11 @@ class NetworkFragment: BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         networkModel = NetworkViewModel()
         val view = inflater!!.inflate(R.layout.fragment_network, container, false)
-
+        val headerView = layoutInflater.inflate(R.layout.settings_header, null)
+        headerView.findViewById<TextView>(R.id.headerTextView).text = "Available Nodes"
 
         val listView = view.findViewById<ListView>(R.id.nodeListView)
+        listView.addHeaderView(headerView)
 
         val networkAdapter = NetworkAdapter(this.context)
         listView.adapter = networkAdapter

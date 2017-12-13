@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.TextView
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 
@@ -25,7 +26,11 @@ class ContactsFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_contacts, container, false)
+        val headerView = layoutInflater.inflate(R.layout.settings_header, null)
+        headerView.findViewById<TextView>(R.id.headerTextView).text = "Contacts"
+
         val listView = view.findViewById<ListView>(R.id.contactsListView)
+        listView.addHeaderView(headerView)
 
         val basicAdapter = ContactsAdapter(this.context)
         listView.adapter = basicAdapter

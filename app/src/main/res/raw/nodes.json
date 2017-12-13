@@ -16,16 +16,6 @@
 				"peercount": 0
 			},
 			{
-				"url": "http://seed4.neo.org:10332",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
-				"url": "http://seed5.neo.org:10332",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
 				"url": "http://seed1.cityofzion.io:8080",
 				"blockcount": 0,
 				"peercount": 0
@@ -41,25 +31,10 @@
 				"peercount": 0
 			},
 			{
-				"url": "http://seed4.cityofzion.io:8080",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
-				"url": "http://seed5.cityofzion.io:8080",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
 				"url": "http://node1.o3.network:10332",
 				"blockcount": 0,
 				"peercount": 0
-			},
-            {
-                "url": "http://node2.o3.network:10332",
-                "blockcount": 0,
-                "peercount": 0
-            }
+			}
 	],
 	"test": [{
 				"url": "http://seed2.neo.org:20332",
@@ -77,16 +52,6 @@
 				"peercount": 0
 			},
 			{
-				"url": "http://seed4.neo.org:20332",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
-				"url": "http://seed5.neo.org:20332",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
 				"url": "http://test1.cityofzion.io:8080",
 				"blockcount": 0,
 				"peercount": 0
@@ -98,16 +63,6 @@
 			},
 			{
 				"url": "http://test3.cityofzion.io:8080",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
-				"url": "http://test4.cityofzion.io:8080",
-				"blockcount": 0,
-				"peercount": 0
-			},
-			{
-				"url": "http://test5.cityofzion.io:8080",
 				"blockcount": 0,
 				"peercount": 0
 			}
