@@ -26,8 +26,8 @@ import android.support.v4.app.ActivityOptionsCompat
 import network.o3.o3wallet.SendActivity
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
-
-
+import android.support.v4.view.ViewCompat
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 
 class AccountFragment : Fragment() {
@@ -59,18 +59,24 @@ class AccountFragment : Fragment() {
         claimButton = view!!.findViewById<Button>(R.id.claimButton)
         swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light)
+        transactionListView.emptyView = view!!.findViewById<TextView>(R.id.emptyTransaction)
+        swipeContainer.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary)
 
         menuButton.setOnClickListener { menuButtonTapped() }
         claimButton.setOnClickListener { claimGasTapped() }
+
+        menuButton.transitionName = "reveal"
 
         swipeContainer.setOnRefreshListener {
             swipeContainer.isRefreshing = true
             this.refreshData()
         }
+
+
+        activity.title = "Account"
         loadAccountState()
         loadClaimableGAS()
         loadTransactionHistory()
@@ -89,6 +95,7 @@ class AccountFragment : Fragment() {
 
 
     fun loadAccountState() {
+        claimButton.isEnabled = false
         NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
             val error = it.second
             val accountState = it.first
@@ -105,6 +112,7 @@ class AccountFragment : Fragment() {
                         if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
                             this.neoBalance = balance
                             neoAmountLabel.text = "%d".format(balance.value.toInt())
+                            this.enableClaimGASButton(balance.value)
                         } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
                             gasAmountLabel.text = "%.8f".format(balance.value)
                             this.gasBalance = balance
@@ -132,9 +140,11 @@ class AccountFragment : Fragment() {
             }
         }
     }
-    fun claimGasAsync() {
 
+    fun enableClaimGASButton(neoAmount: Double) {
+        claimButton.isEnabled = if (neoAmount == 0.0) false else true
     }
+
     fun claimGasTapped() {
         if (this.currentAccountState == null) {
             //manage error here
@@ -197,14 +207,14 @@ class AccountFragment : Fragment() {
         }
     }
 
-    fun menuButtonTapped() {
-        val intent:Intent = Intent(context,SendActivity::class.java)
-        //val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity,menuButton,"transition")
-        //ActivityCompat.startActivity(context,intent,option.toBundle())
-        startActivity(intent)
+    private fun menuButtonTapped() {
+        val intent: Intent = Intent(
+                context,
+                SendActivity::class.java
+        )
+        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity,menuButton,ViewCompat.getTransitionName(menuButton))
+        ActivityCompat.startActivity(context,intent,option.toBundle())
     }
-
-
 
     companion object {
         fun newInstance(): AccountFragment {

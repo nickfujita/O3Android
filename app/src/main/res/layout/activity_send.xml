@@ -10,17 +10,6 @@
     android:padding="20dp"
     tools:context="network.o3.o3wallet.SendActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/scrollView2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

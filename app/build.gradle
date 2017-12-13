@@ -44,5 +44,5 @@ dependencies {
     implementation 'com.android.support:gridlayout-v7:26.1.0'
     implementation project(':neowallet')
     compile 'com.google.guava:guava:23.3-android'
-
+    compileOnly 'com.google.auto.value:auto-value:1.2'
 }

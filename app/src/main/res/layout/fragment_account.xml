@@ -119,7 +119,10 @@
                 android:text="Claim 0.00235 GAS" />
 
         </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
@@ -128,6 +131,16 @@
             android:layout_marginRight="20dp"
             android:text="Transactions"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/emptyTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="No Transactions"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         <android.support.v4.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
@@ -137,9 +150,11 @@
             android:id="@+id/transactionListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </ListView>
+
         </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

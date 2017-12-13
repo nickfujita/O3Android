@@ -1,5 +1,7 @@
 package network.o3.o3wallet
 
+import android.app.Activity
+import android.app.Fragment
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -7,11 +9,16 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v4.app.NavUtils
 import android.support.v7.app.ActionBar
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.transition.Transition
+import android.transition.TransitionInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,6 +26,8 @@ import android.widget.Toolbar
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.ui.toast
 import network.o3.o3wallet.ui.toastUntilCancel
+import android.transition.*
+import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : AppCompatActivity() {
 
@@ -31,6 +40,9 @@ class SendActivity : AppCompatActivity() {
     lateinit var pasteAddressButton: Button
     lateinit var scanAddressButton: Button
     lateinit var selectAddressButton: Button
+    lateinit var view: View
+
+    public val ARG_REVEAL_SETTINGS:String = "arg_reveal_settings"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +51,7 @@ class SendActivity : AppCompatActivity() {
         this.title = "Send"
         //default asset
         selectedAsset = NeoNodeRPC.Asset.NEO
-
+        view = findViewById<View>(R.id.root_layout)
         addressTextView = findViewById<TextView>(R.id.addressTextView)
         amountTextView = findViewById<TextView>(R.id.amountTextView)
         noteTextView = findViewById<TextView>(R.id.noteTextView)
@@ -60,13 +72,29 @@ class SendActivity : AppCompatActivity() {
         pasteAddressButton.setOnClickListener { pasteAddressTapped() }
         scanAddressButton.setOnClickListener { scanAddressTapped() }
         selectAddressButton.setOnClickListener { selectAddressTapped() }
+
     }
 
-    fun checkEnableSendButton() {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == R.id.home){
+            NavUtils.navigateUpFromSameTask(this)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupEnterAnimation() {
+
+
+    }
+
+
+
+    private fun checkEnableSendButton() {
         sendButton.isEnabled = (addressTextView.text.trim().count() > 0 && amountTextView.text.count() > 0)
     }
 
-    fun toggleAsset() {
+    private fun toggleAsset() {
         if (selectedAsset == NeoNodeRPC.Asset.NEO) {
             selectedAsset = NeoNodeRPC.Asset.GAS
             amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
@@ -81,7 +109,9 @@ class SendActivity : AppCompatActivity() {
         selectedAssetTextView.text = selectedAsset.name.toUpperCase()
     }
 
-    fun sendTapped() {
+    private fun sendTapped() {
+        this.hideKeyboard()
+
         //validate field
         val address = addressTextView.text.trim().toString()
         var amount = amountTextView.text.trim().toString().toDouble()
@@ -102,15 +132,21 @@ class SendActivity : AppCompatActivity() {
                     baseContext!!.toast("Sent Successfully")
                     Handler().postDelayed(Runnable {
                         finish()
-                    },1000)
+                    }, 1000)
                 } else {
-                    baseContext!!.toast("Error while sending. Please check your network")
+                    this.checkEnableSendButton()
+                    val message = "Error while sending. Please check your network"
+                    val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                    snack.setAction("Close") {
+                        finish()
+                    }
+                    snack.show()
                 }
             }
         }
     }
 
-    fun pasteAddressTapped() {
+    private fun pasteAddressTapped() {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = clipboard.primaryClip
         if (clip != null) {
@@ -127,7 +163,6 @@ class SendActivity : AppCompatActivity() {
     fun selectAddressTapped() {
 
     }
-
 }
 
 fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
@@ -142,4 +177,17 @@ fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
             afterTextChanged.invoke(editable.toString())
         }
     })
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Fragment.hideKeyboard() {
+    activity.hideKeyboard(view)
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(if (currentFocus == null) View(this) else currentFocus)
 }
