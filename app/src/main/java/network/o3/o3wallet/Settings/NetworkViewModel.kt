@@ -44,20 +44,17 @@ class NetworkViewModel: ViewModel() {
             neoNodes = Gson().fromJson<NeoNetwork>(jsonString).test
         }
 
-        val latch = CountDownLatch(neoNodes.count() * 2)
         val newNodes = ArrayList<Node>()
         for (node in neoNodes!!) {
             NeoNodeRPC(node.url).getConnectionCount {
                 val connectionCount = it.first ?: 0
-                latch.countDown()
+                //latch.countDown()
                 NeoNodeRPC(node.url).getBlockCount {
                     val blockCount = it.first ?: 0
                     newNodes.add(Node(node.url, blockCount, connectionCount))
-                    latch.countDown()
+                    nodes?.postValue(newNodes?.toTypedArray())
                 }
             }
         }
-        latch.await()
-        nodes?.postValue(newNodes?.toTypedArray())
     }
 }
