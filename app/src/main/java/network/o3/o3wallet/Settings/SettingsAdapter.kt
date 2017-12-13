@@ -1,5 +1,7 @@
 package network.o3.o3wallet.Settings
 
+import android.app.Activity
+import android.app.KeyguardManager
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
@@ -15,14 +17,18 @@ import android.content.Intent
 import android.net.Uri
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
+import android.support.v4.app.ActivityCompat.startActivityForResult
+
+
 
 
 /**
  * Created by drei on 12/8/17.
  */
 
-class SettingsAdapter(context: Context): BaseAdapter() {
+class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter() {
     private val mContext: Context
+    private var mFragment: SettingsFragment
     var settingsTitles = listOf<String>("My Private Key", "Address Book", "Watch-Only-Address",
             "Network", "Share", "Contact", "Log out", "Version")
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
@@ -31,6 +37,7 @@ class SettingsAdapter(context: Context): BaseAdapter() {
             R.drawable.ic_settingscontacticon, R.drawable.ic_settingscontacticon)
     init {
         mContext = context
+        mFragment = fragment
     }
 
     enum class CellType {
@@ -91,9 +98,20 @@ class SettingsAdapter(context: Context): BaseAdapter() {
         } else if (position == CellType.LOGOUT.ordinal) {
             Account.deleteKeyFromDevice()
         } else if (position == CellType.PRIVATEKEY.ordinal) {
-            val privateKeyModal = PrivateKeyFragment.newInstance()
-            privateKeyModal.show((mContext as AppCompatActivity).supportFragmentManager, privateKeyModal.tag)
-            return
+            val mKeyguardManager =  mContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            if (!mKeyguardManager.isKeyguardSecure) {
+                // Show a message that the user hasn't set up a lock screen.
+                Toast.makeText(mContext,
+                        "Secure lock screen hasn't set up.\n"
+                                + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                        Toast.LENGTH_LONG).show();
+                return
+            } else {
+                val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(null, null)
+                if (intent != null) {
+                    mFragment.startActivityForResult( intent, 0, null)
+                }
+            }
         }
 
         Toast.makeText(mContext, position.toString(), Toast.LENGTH_SHORT).show()
