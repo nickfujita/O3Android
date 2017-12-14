@@ -114,7 +114,7 @@ class NeoNodeRPC {
                 val gson = Gson()
                 val nodeResponse = gson.fromJson<NodeResponse>(data!!)
                 val validatedAddress = gson.fromJson<ValidatedAddress>(nodeResponse.result)
-                completion(Pair<Boolean?, Error?>(validatedAddress.isValid, null))
+                completion(Pair<Boolean?, Error?>(validatedAddress.isvalid, null))
             } else {
                 completion(Pair<Boolean?, Error?>(null, Error(error.localizedMessage)))
             }

@@ -113,7 +113,5 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
                 }
             }
         }
-
-        Toast.makeText(mContext, position.toString(), Toast.LENGTH_SHORT).show()
     }
 }

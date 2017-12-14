@@ -7,12 +7,16 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import network.o3.o3wallet.Contact
+import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import network.o3.o3wallet.WatchAddress
 
 
 /**
@@ -20,6 +24,8 @@ import network.o3.o3wallet.R
  */
 
 class WatchAddressFragment : BottomSheetDialogFragment() {
+    var adapter: WatchAddressAdapter? = null
+
     @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -35,9 +41,26 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
         val listView = view.findViewById<ListView>(R.id.watchAddressListView)
         listView.addHeaderView(headerView)
 
-        val basicAdapter = WatchAddressAdapter(this.context)
-        listView.adapter = basicAdapter
+        adapter = WatchAddressAdapter(this.context, this)
+        listView.adapter = adapter
         return view
+    }
+
+    fun showRemoveAlert(watchAddress: WatchAddress) {
+        val simpleAlert = AlertDialog.Builder(this.activity).create()
+        simpleAlert.setTitle("Remove address")
+        simpleAlert.setMessage("Are you sure you want to remove this watch address?")
+
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
+            dialogInterface, i ->
+            PersistentStore.removeWatchAddress(watchAddress.address, watchAddress.nickname)
+            adapter?.updateData()
+        })
+
+        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", {
+            dialogInterface, i ->
+        })
+        simpleAlert.show()
     }
 
     companion object {

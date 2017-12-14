@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class NodeResponse(var jsonrpc: String, var id: Int, var result: JsonObject)
 data class NodeResponsePrimitive(var jsonrpc: String, var id: Int, var result: JsonPrimitive)
 
-data class ValidatedAddress(val address: String, val isValid: Boolean)
+data class ValidatedAddress(val address: String, val isvalid: Boolean)
 
 data class Script(val invocation: String, val verification: String)
 

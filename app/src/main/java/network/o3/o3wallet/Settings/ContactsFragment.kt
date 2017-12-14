@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
+import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 
@@ -17,6 +20,8 @@ import network.o3.o3wallet.R
  */
 
 class ContactsFragment : BottomSheetDialogFragment() {
+    var adapter: ContactsAdapter? = null
+
     @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
@@ -32,9 +37,26 @@ class ContactsFragment : BottomSheetDialogFragment() {
         val listView = view.findViewById<ListView>(R.id.contactsListView)
         listView.addHeaderView(headerView)
 
-        val basicAdapter = ContactsAdapter(this.context)
-        listView.adapter = basicAdapter
+        adapter = ContactsAdapter(this.context, this)
+        listView?.adapter = adapter
         return view
+    }
+
+    fun showRemoveAlert(contact: Contact) {
+        val simpleAlert = AlertDialog.Builder(this.activity).create()
+        simpleAlert.setTitle("Remove Contact")
+        simpleAlert.setMessage("Are you sure you want to remove this contact?")
+
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
+            dialogInterface, i ->
+            PersistentStore.removeContact(contact.address, contact.nickname)
+            adapter?.updateData()
+        })
+
+        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", {
+            dialogInterface, i ->
+        })
+        simpleAlert.show()
     }
 
     companion object {

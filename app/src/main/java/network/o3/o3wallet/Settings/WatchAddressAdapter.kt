@@ -1,5 +1,6 @@
 package network.o3.o3wallet.Settings
 
+import android.app.Fragment
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,20 @@ import network.o3.o3wallet.R
 import network.o3.o3wallet.WatchAddress
 
 
-class WatchAddressAdapter(context: Context): BaseAdapter() {
+class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): BaseAdapter() {
 
     private val mContext: Context
-    val watchAddresses = PersistentStore.getWatchAddresses()
+    private val mFragment: WatchAddressFragment
+    var watchAddresses = PersistentStore.getWatchAddresses()
 
     init {
         mContext = context
+        mFragment = fragment
+    }
+
+    fun updateData() {
+        watchAddresses = PersistentStore.getWatchAddresses()
+        notifyDataSetChanged()
     }
 
     override fun getItem(position: Int): WatchAddress {
@@ -41,6 +49,11 @@ class WatchAddressAdapter(context: Context): BaseAdapter() {
             val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
             titleTextView.text = getItem(position).nickname
             subtitleTextView.text = getItem(position).address
+
+            view.setOnClickListener {
+                mFragment.showRemoveAlert(getItem(position))
+            }
+
             return view
         } else {
             val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
