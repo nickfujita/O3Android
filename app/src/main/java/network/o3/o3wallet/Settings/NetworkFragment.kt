@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import Node
+import network.o3.o3wallet.API.NEO.*
 import android.widget.TextView
 import network.o3.o3wallet.R
 

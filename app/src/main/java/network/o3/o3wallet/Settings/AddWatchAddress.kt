@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
-import NeoNodeRPC
+import network.o3.o3wallet.API.NEO.*
 
 class AddWatchAddress : AppCompatActivity() {
 

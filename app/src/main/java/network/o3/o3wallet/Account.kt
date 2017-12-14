@@ -47,6 +47,11 @@ object Account {
         val alias = "O3 Key"
         setProperty(alias, "", kotlin.ByteArray(0), O3Wallet.appContext!!)
     }
+    
+    fun fromWIF(wif: String){
+        wallet = Neowallet.generateFromWIF(wif)
+        storeEncryptedKeyOnDevice()
+    }
 
     fun getWallet(): Wallet? {
         return wallet

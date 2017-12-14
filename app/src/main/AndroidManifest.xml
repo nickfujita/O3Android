@@ -24,9 +24,10 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".CreateWalletActivity" />
         <activity android:name=".MainTabbedActivity" />
-        <activity android:name=".Portfolio.AssetGraph" />
         <activity android:name=".Settings.AddWatchAddress" />
         <activity android:name=".Settings.AddContact"></activity>
+        <activity android:name=".Portfolio.AssetGraph" />
+        <activity android:name=".SendActivity"></activity>
     </application>
 
 </manifest>

@@ -29,3 +29,29 @@ data class Claims(val address: String,
                   val net: String,
                   val total_claim: Int,
                   val total_unspent_claim: Int)
+
+
+
+data class Assets(
+		val GAS: GAS,
+		val NEO: NEO,
+		val address: String, //AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6
+		val net: String //MainNet
+)
+
+data class GAS(
+		val balance: Double, //1.7666314800000003
+		val unspent: List<Unspent>
+)
+
+data class Unspent(
+		val index: Int, //0
+		val txid: String, //3f1e7ddd63eee2f4836aa7ce8505be41af1cdc02e93fdcea8150c3f64c140f68
+		val value: Double //0.02024064
+)
+
+data class NEO(
+		val balance: Int, //235
+		val unspent: List<Unspent>
+)
+

@@ -3,9 +3,7 @@ package network.o3.o3wallet.Settings
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import network.o3.o3wallet.API.O3.PriceHistory
-import Node
-import NeoNodeRPC
-import NeoNetwork
+import network.o3.o3wallet.API.NEO.*
 import android.app.Application
 import android.arch.lifecycle.LiveData
 import com.github.salomonbrys.kotson.fromJson

@@ -13,8 +13,7 @@ import com.google.gson.Gson
 import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
-import NeoNetwork
-import Node
+import network.o3.o3wallet.API.NEO.*
 import android.graphics.Color
 import android.util.Log
 import android.widget.CheckBox
