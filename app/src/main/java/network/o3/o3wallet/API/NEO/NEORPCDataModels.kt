@@ -1,13 +1,15 @@
 package network.o3.o3wallet.API.NEO
 
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import com.google.gson.annotations.SerializedName
 
 data class SendRawTransactionResponse(var jsonrpc: String, var id: Int, var result: Boolean)
 
 data class NodeResponse(var jsonrpc: String, var id: Int, var result: JsonObject)
+data class NodeResponsePrimitive(var jsonrpc: String, var id: Int, var result: JsonPrimitive)
 
-data class ValidatedAddress(val address: String, val isValid: Boolean)
+data class ValidatedAddress(val address: String, val isvalid: Boolean)
 
 data class Script(val invocation: String, val verification: String)
 
@@ -50,4 +52,8 @@ data class AccountState(val version: Int,
                         val frozen: Boolean,
                         val votes: Array<Int>,
                         val balances: Array<Balance>)
+
+
+data class Node(val url: String, val blockcount: Int, val peercount: Int)
+data class NeoNetwork(val main: Array<Node>, val test: Array<Node>)
 

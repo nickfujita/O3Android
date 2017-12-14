@@ -36,6 +36,10 @@ class NeoNodeRPC {
         }
     }
 
+    constructor(url: String = "http://seed2.neo.org:10332") {
+        this.nodeURL = url
+    }
+
     enum class RPC() {
         GETBLOCKCOUNT,
         GETCONNECTIONCOUNT,
@@ -65,7 +69,7 @@ class NeoNodeRPC {
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val nodeResponse = gson.fromJson<NodeResponsePrimitive>(data!!)
                 val blockCount = gson.fromJson<Int>(nodeResponse.result)
                 completion(Pair<Int?, Error?>(blockCount, null))
             } else {
@@ -89,7 +93,7 @@ class NeoNodeRPC {
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val nodeResponse = gson.fromJson<NodeResponsePrimitive>(data!!)
                 val blockCount = gson.fromJson<Int>(nodeResponse.result)
                 completion(Pair<Int?, Error?>(blockCount, null))
             } else {
@@ -126,7 +130,7 @@ class NeoNodeRPC {
     fun validateAddress(address: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
         val dataJson = jsonObject(
                 "jsonrpc" to "2.0",
-                "method" to RPC.GETACCOUNTSTATE.methodName(),
+                "method" to RPC.VALIDATEADDRESS.methodName(),
                 "params" to jsonArray(address),
                 "id" to 1
         )
@@ -139,7 +143,7 @@ class NeoNodeRPC {
                 val gson = Gson()
                 val nodeResponse = gson.fromJson<NodeResponse>(data!!)
                 val validatedAddress = gson.fromJson<ValidatedAddress>(nodeResponse.result)
-                completion(Pair<Boolean?, Error?>(validatedAddress.isValid, null))
+                completion(Pair<Boolean?, Error?>(validatedAddress.isvalid, null))
             } else {
                 completion(Pair<Boolean?, Error?>(null, Error(error.localizedMessage)))
             }

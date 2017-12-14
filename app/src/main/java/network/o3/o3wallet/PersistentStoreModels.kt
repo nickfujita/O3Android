@@ -71,7 +71,7 @@ object PersistentStore {
         val jsonString = gson.toJson(currentWatchAddresses)
 
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putString("WatchAddress", jsonString)
+        settingPref.putString("WATCH_ADDRESSES", jsonString)
         settingPref.apply()
         return currentWatchAddresses
     }
@@ -102,5 +102,16 @@ object PersistentStore {
         val gson = Gson()
         val contacts = gson.fromJson<Array<Contact>>(jsonString)
         return contacts
+    }
+
+    fun setNodeURL(url: String) {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putString("NODE_URL", url)
+        settingPref.apply()
+    }
+
+    fun getNodeURL(): String {
+        return  PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("NODE_URL", "http://seed2.neo.org:10332")
     }
 }

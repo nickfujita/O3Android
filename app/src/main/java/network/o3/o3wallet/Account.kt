@@ -5,6 +5,7 @@ import neowallet.Wallet
 import network.o3.o3wallet.Crypto.Decryptor
 import network.o3.o3wallet.Crypto.Encryptor
 import network.o3.o3wallet.Crypto.EncryptedSettingsRepository
+import network.o3.o3wallet.Crypto.EncryptedSettingsRepository.setProperty
 import java.security.SecureRandom
 
 /**
@@ -21,7 +22,7 @@ object Account {
         val encryptedWIF = encryptor.encryptText(alias, wif)!!
 
         val iv = encryptor.getIv()!!
-        EncryptedSettingsRepository.setProperty(alias, encryptedWIF.toHex(), iv, O3Wallet.appContext!!)
+        setProperty(alias, encryptedWIF.toHex(), iv, O3Wallet.appContext!!)
     }
 
     fun restoreWalletFromDevice() {
@@ -42,6 +43,11 @@ object Account {
         storeEncryptedKeyOnDevice()
     }
 
+    fun deleteKeyFromDevice() {
+        val alias = "O3 Key"
+        setProperty(alias, "", kotlin.ByteArray(0), O3Wallet.appContext!!)
+    }
+    
     fun fromWIF(wif: String){
         wallet = Neowallet.generateFromWIF(wif)
         storeEncryptedKeyOnDevice()

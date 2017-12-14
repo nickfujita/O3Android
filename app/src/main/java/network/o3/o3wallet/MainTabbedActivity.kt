@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.MenuItem
 import network.o3.o3wallet.ui.Account.AccountFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
+import network.o3.o3wallet.Settings.SettingsFragment
 
 
 class MainTabbedActivity : AppCompatActivity() {
@@ -21,7 +22,11 @@ class MainTabbedActivity : AppCompatActivity() {
                 when (item.getItemId()) {
                     R.id.action_item1 -> selectedFragment = HomeFragment.newInstance()
                     R.id.action_item2 -> selectedFragment = AccountFragment.newInstance()
-                    R.id.action_item3 -> selectedFragment = SettingsFragment.newInstance()
+                    R.id.action_item3 -> {
+                        val settingsModal = SettingsFragment.newInstance()
+                        settingsModal.show(supportFragmentManager, settingsModal.tag)
+                        return true
+                    }
                 }
                 val transaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.frame_layout, selectedFragment)
