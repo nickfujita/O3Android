@@ -1,11 +1,13 @@
 package network.o3.o3wallet
 
+import neowallet.Neowallet
+import neowallet.Wallet
 import org.junit.Test
 
 import org.junit.Assert.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import NeoNodeRPC
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.O3.O3API
 
@@ -105,4 +107,28 @@ class APIUnitTests {
         }
         latch.await(20000, TimeUnit.MILLISECONDS)
     }
+
+    @Test
+    fun claim() {
+        //testnet
+        val wif = ""
+        val wallet = Neowallet.generateFromWIF(wif)
+        NeoNodeRPC().claimGAS(wallet) {
+            var error = it.second
+            assert(error == null)
+            print(it.first.toString())
+        }
+    }
+
+    @Test
+    fun sendTransaction() {
+        val wif = ""
+        val wallet = Neowallet.generateFromWIF(wif)
+        NeoNodeRPC().sendAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
+            var error = it.second
+            assert(error != null)
+            print(it.first.toString())
+        }
+    }
+
 }

@@ -2,7 +2,7 @@ package network.o3.o3wallet.Portfolio
 
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.API.O3.PriceData
-import NeoNodeRPC
+import network.o3.o3wallet.API.NEO.*
 import java.util.concurrent.CountDownLatch
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.LiveData

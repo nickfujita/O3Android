@@ -5,4 +5,5 @@
     <color name="colorLoss">#D0011B</color>
     <color name="colorGain">#7ED321</color>
     <color name="colorSubtitleGrey">#9B9B9B</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

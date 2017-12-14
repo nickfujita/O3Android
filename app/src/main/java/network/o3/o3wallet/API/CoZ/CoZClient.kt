@@ -6,6 +6,11 @@ import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
+import neowallet.Neowallet
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.hexStringToByteArray
+import network.o3.o3wallet.toHex
 
 /**
  * Created by drei on 11/24/17.
@@ -13,9 +18,11 @@ import com.google.gson.Gson
 
 class CoZClient {
     val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
+    //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
     enum class Route() {
         HISTORY,
-        CLAIMS;
+        CLAIMS,
+        BALANCE;
 
         fun routeName(): String {
             return this.name.toLowerCase() + "/"
@@ -23,7 +30,7 @@ class CoZClient {
     }
 
     fun getTransactionHistory(address: String, completion: (Pair<TransactionHistory?, Error?>) -> (Unit)) {
-        val url = "http://api.wallet.cityofzion.io/v2/address/history/AHa8Fk7Zyu2Vq3jYSuiHyCiNaibDiMsUMK"
+        val url = "http://api.wallet.cityofzion.io/v2/address/history/" + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
@@ -54,4 +61,21 @@ class CoZClient {
             }
         }
     }
+
+    fun getBalance(address: String, completion: (Pair<Assets?, Error?>) -> Unit) {
+        val url = baseAPIURL + Route.BALANCE.routeName() + address
+        var request = url.httpGet()
+        request.headers["User-Agent"] =  ""
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val assets = gson.fromJson<Assets>(data!!)
+                completion(Pair<Assets?, Error?>(assets, null))
+            } else {
+                completion(Pair<Assets?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+
 }

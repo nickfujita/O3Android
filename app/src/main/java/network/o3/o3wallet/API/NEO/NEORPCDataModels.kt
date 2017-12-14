@@ -1,6 +1,9 @@
+package network.o3.o3wallet.API.NEO
+
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
+data class SendRawTransactionResponse(var jsonrpc: String, var id: Int, var result: Boolean)
 
 data class NodeResponse(var jsonrpc: String, var id: Int, var result: JsonObject)
 

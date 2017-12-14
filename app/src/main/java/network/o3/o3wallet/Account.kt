@@ -40,7 +40,11 @@ object Account {
         val hex = bytes.toHex()
         wallet = Neowallet.generatePublicKeyFromPrivateKey(hex)
         storeEncryptedKeyOnDevice()
+    }
 
+    fun fromWIF(wif: String){
+        wallet = Neowallet.generateFromWIF(wif)
+        storeEncryptedKeyOnDevice()
     }
 
     fun getWallet(): Wallet? {
