@@ -4,6 +4,6 @@
     <color name="colorAccent">#F6A623</color>
     <color name="colorLoss">#D0011B</color>
     <color name="colorGain">#7ED321</color>
-    <color name="colorSubtitleGrey">#9B9B9B</color>
+    <color name="colorSubtitleGrey">#CDCDCD</color>
     <color name="colorWhite">#FFFFFF</color>
 </resources>

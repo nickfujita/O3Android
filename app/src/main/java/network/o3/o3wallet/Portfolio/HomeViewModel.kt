@@ -52,38 +52,42 @@ class HomeViewModel: ViewModel()  {
 
     fun getCurrentGasPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.price["gas"]?.averageUSD!!
+            portfolio?.value?.price?.get("gas")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.price["gas"]?.averageBTC!!
+            portfolio?.value?.price?.get("gas")?.averageBTC ?: 0.0
         }
     }
 
     fun getFirstGasPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.firstPrice["gas"]?.averageUSD!!
+            portfolio?.value?.firstPrice?.get("gas")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.firstPrice["gas"]?.averageBTC!!
+            portfolio?.value?.firstPrice?.get("gas")?.averageBTC ?: 0.0
         }
     }
 
     fun getCurrentNeoPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.price["neo"]?.averageUSD!!
+            portfolio?.value?.price?.get("neo")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.price["neo"]?.averageBTC!!
+            portfolio?.value?.price?.get("neo")?.averageBTC?: 0.0
         }
     }
 
     fun getFirstNeoPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.firstPrice["neo"]?.averageUSD!!
+            portfolio?.value?.firstPrice?.get("neo")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.firstPrice["neo"]?.averageBTC!!
+            portfolio?.value?.firstPrice?.get("neo")?.averageBTC ?: 0.0
         }
     }
 
     fun setDisplayType(displayType: DisplayType) {
         this.displayType = displayType
+    }
+
+    fun getDisplayType(): DisplayType {
+        return this.displayType
     }
 
     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
@@ -117,13 +121,16 @@ class HomeViewModel: ViewModel()  {
     }
 
     fun getPriceFloats(): FloatArray {
-        val data = when (currency) {
-            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
-            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
+        val data: Array<Double>? = when (currency) {
+            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()
+            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()
+        }
+        if (data == null) {
+            return FloatArray(0)
         }
 
-        var floats = FloatArray(data.count())
-        for (i in data.indices) {
+        var floats = FloatArray(data?.count())
+        for (i in data!!.indices) {
             floats[i] = data[i].toFloat()
         }
         return floats.reversedArray()

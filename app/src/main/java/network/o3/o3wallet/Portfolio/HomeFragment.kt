@@ -13,6 +13,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
+import kotlinx.android.synthetic.main.activity_main.view.*
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
 
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
     var homeModel: HomeViewModel? = null
     var viewPager: ViewPager? = null
     var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
+    var assetListAdapter: AssetListAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -29,6 +31,8 @@ class HomeFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
 
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        assetListAdapter = AssetListAdapter(this.context, this)
+        view.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
         initiateData(view)
@@ -88,7 +92,7 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-                initiateTableRows(view)
+              //  initiateTableRows(view)
             })
         })
     }
@@ -112,8 +116,8 @@ class HomeFragment : Fragment() {
     }
 
     fun tappedIntervalButton(button: Button) {
-        selectedButton?.setBackgroundResource(R.drawable.bottom_unselected)
-        button.setBackgroundResource(R.drawable.bottom_selected)
+        selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
+        button?.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
         homeModel?.setInterval(button.tag.toString().toInt())
         updatePortfolioAndTable(true)
@@ -124,7 +128,7 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-                updateTableData(false)
+               // updateTableData(false)
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
@@ -132,7 +136,7 @@ class HomeFragment : Fragment() {
             })
         })
     }
-
+    /*
     fun updateTableData(refresh: Boolean) {
         homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> {  data ->
             homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
@@ -203,7 +207,7 @@ class HomeFragment : Fragment() {
 
         updateTableData(false)
 
-    }
+    }*/
 
     companion object {
         fun newInstance(): HomeFragment {

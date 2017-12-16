@@ -25,7 +25,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun login() {
-
         Account.restoreWalletFromDevice()
         //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
       //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")
