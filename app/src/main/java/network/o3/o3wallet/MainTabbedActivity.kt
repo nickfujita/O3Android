@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
-import network.o3.o3wallet.ui.Account.AccountFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
+import network.o3.o3wallet.ui.Account.TabbedAccount
 
 
 class MainTabbedActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class MainTabbedActivity : AppCompatActivity() {
                 var selectedFragment: Fragment? = null
                 when (item.getItemId()) {
                     R.id.action_item1 -> selectedFragment = HomeFragment.newInstance()
-                    R.id.action_item2 -> selectedFragment = AccountFragment.newInstance()
+                    R.id.action_item2 -> selectedFragment = TabbedAccount.newInstance()
                     R.id.action_item3 -> {
                         val settingsModal = SettingsFragment.newInstance()
                         settingsModal.show(supportFragmentManager, settingsModal.tag)

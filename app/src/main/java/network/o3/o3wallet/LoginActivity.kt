@@ -25,6 +25,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun login() {
+
+        //Account.fromWIF(wifTextfield.text.toString())
+
         Account.restoreWalletFromDevice()
         //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
       //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")

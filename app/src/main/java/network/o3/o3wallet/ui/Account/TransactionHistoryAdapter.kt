@@ -2,6 +2,7 @@ package network.o3.o3wallet.ui.Account
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -44,23 +45,24 @@ class TransactionHistoryAdapter(context: Context, list: Array<TransactionHistory
             view = convertView
             vh = view.tag as TransactionHistoryRow
         }
+        vh.amountTextView.setTextColor(ContextCompat.getColor(view!!.context, R.color.colorSubtitleGrey))
         val t = transactions.get(position)
         if (t.NEO.toInt() == 0) {
             vh.assetTextView.text = "GAS"
             vh.amountTextView.text = "%.8f".format(t.GAS)
             if (t.GAS < 0) {
-                vh.amountTextView.setTextColor(Color.parseColor("#D0011B"))
+                vh.amountTextView.setTextColor(ContextCompat.getColor(view!!.context, R.color.colorLoss))
             } else  if (t.GAS > 0) {
-                vh.amountTextView.setTextColor(Color.parseColor("#7ED321"))
+                vh.amountTextView.setTextColor(ContextCompat.getColor(view!!.context, R.color.colorGain))
             }
         }
         if (t.GAS == 0.0) {
             vh.assetTextView.text = "NEO"
             vh.amountTextView.text = "%d".format(t.NEO.toInt())
             if (t.NEO.toInt() < 0) {
-                vh.amountTextView.setTextColor(Color.parseColor("#D0011B"))
+                vh.amountTextView.setTextColor(ContextCompat.getColor(view!!.context, R.color.colorLoss))
             } else if (t.NEO.toInt() > 0) {
-                vh.amountTextView.setTextColor(Color.parseColor("#7ED321"))
+                vh.amountTextView.setTextColor(ContextCompat.getColor(view!!.context, R.color.colorGain))
             }
 
         }

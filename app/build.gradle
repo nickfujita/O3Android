@@ -48,4 +48,5 @@ dependencies {
     compile 'com.google.guava:guava:23.3-android'
     annotationProcessor 'com.google.auto.value:auto-value:1.2'
     compileOnly 'com.google.auto.value:auto-value:1.2'
+    compile 'com.robinhood.ticker:ticker:1.2.2'
 }

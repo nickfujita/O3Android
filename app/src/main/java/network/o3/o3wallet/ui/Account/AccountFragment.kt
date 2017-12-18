@@ -26,7 +26,10 @@ import android.support.v4.app.ActivityOptionsCompat
 import network.o3.o3wallet.SendActivity
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
+import com.robinhood.ticker.TickerUtils
+import com.robinhood.ticker.TickerView
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
@@ -36,13 +39,12 @@ class AccountFragment : Fragment() {
     private lateinit var menuButton: FloatingActionButton
     private lateinit var neoAmountLabel: TextView
     private lateinit var gasAmountLabel: TextView
-    private lateinit var transactionListView: ListView
+    private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
     private lateinit var claims: Claims
     private lateinit var currentAccountState: AccountState
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
-    private lateinit var swipeContainer: SwipeRefreshLayout
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -55,41 +57,41 @@ class AccountFragment : Fragment() {
         menuButton = view!!.findViewById<FloatingActionButton>(R.id.menuActionButton)
         neoAmountLabel = view!!.findViewById<TextView>(R.id.neoAmountLabel)
         gasAmountLabel = view!!.findViewById<TextView>(R.id.gasAmountLabel)
-        transactionListView = view!!.findViewById<ListView>(R.id.transactionListView)
+
         claimButton = view!!.findViewById<Button>(R.id.claimButton)
-        swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
 
-        transactionListView.emptyView = view!!.findViewById<TextView>(R.id.emptyTransaction)
-        swipeContainer.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary)
+        unclaimedGASLabel = view!!.findViewById(R.id.unclaimedGASLabel)
+        unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
+        val muli = ResourcesCompat.getFont(view!!.context, R.font.muli_bold)
 
+        unclaimedGASLabel.typeface = muli
+        unclaimedGASLabel.text = "0.00000000"
         menuButton.setOnClickListener { menuButtonTapped() }
         claimButton.setOnClickListener { claimGasTapped() }
 
         menuButton.transitionName = "reveal"
 
-        swipeContainer.setOnRefreshListener {
-            swipeContainer.isRefreshing = true
-            this.refreshData()
-        }
-
-
         activity.title = "Account"
         loadAccountState()
         loadClaimableGAS()
-        loadTransactionHistory()
+
+        val handler = Handler()
+        val delay = 5000 //milliseconds
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                //do something
+                loadClaimableGAS()
+                handler.postDelayed(this, delay.toLong())
+            }
+        }, delay.toLong())
     }
 
     override fun onResume() {
         super.onResume()
         loadAccountState()
-        loadTransactionHistory()
     }
 
     fun refreshData() {
-        this.loadTransactionHistory()
         this.loadAccountState()
     }
 
@@ -101,9 +103,7 @@ class AccountFragment : Fragment() {
             val accountState = it.first
             if (error != null) {
                 //manage error here
-                activity.runOnUiThread {
-                    swipeContainer.isRefreshing = true
-                }
+
             } else {
                 this.currentAccountState = accountState!!
                 activity.runOnUiThread {
@@ -118,7 +118,7 @@ class AccountFragment : Fragment() {
                             this.gasBalance = balance
                         }
                     }
-                    swipeContainer.isRefreshing = false
+
                 }
             }
 
@@ -135,7 +135,7 @@ class AccountFragment : Fragment() {
                 this.claims = data!!
                 val amount = data!!.total_unspent_claim / 100000000.0
                 activity.runOnUiThread {
-                    claimButton.text = "Claim %.8f".format(amount)
+                    unclaimedGASLabel.text = "%.8f".format(amount)
                 }
             }
         }
@@ -190,22 +190,6 @@ class AccountFragment : Fragment() {
         }
     }
 
-    fun loadTransactionHistory() {
-        CoZClient().getTransactionHistory(address = Account.getWallet()!!.address) {
-            var error = it.second
-            var data = it.first
-            if (error != null) {
-
-            } else {
-                activity.runOnUiThread(Runnable {
-                    kotlin.run {
-                        val adapter = TransactionHistoryAdapter(activity as Context, data!!.history)
-                        transactionListView.adapter = adapter
-                    }
-                })
-            }
-        }
-    }
 
     private fun menuButtonTapped() {
         val intent: Intent = Intent(
