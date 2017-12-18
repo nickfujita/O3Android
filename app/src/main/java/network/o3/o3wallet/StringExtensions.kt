@@ -15,9 +15,8 @@ fun Double.formattedPercentString(): String {
     return  "%.2f".format(this) + "%"
 }
 
-fun Double.formattedGASString(): String {
-    return "%.2f".format(this)
-}
+fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+
 enum class CurrencyType {
     BTC, USD
 }

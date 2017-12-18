@@ -52,7 +52,7 @@
 
     <style name="IntervalButtonText">
         <item name="android:textSize">14dp</item>
-        <item name="android:fontFamily">@font/muli</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
     <style name="IntervalButtonText.Selected">
@@ -63,5 +63,24 @@
         <item name="android:textColor">@color/colorSubtitleGrey</item>
     </style>
 
+    <style name="Header">
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="Header.WalletType">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Header.PortfolioValue">
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Header.PercentChange">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/colorGain</item>
+    </style>
 
 </resources>

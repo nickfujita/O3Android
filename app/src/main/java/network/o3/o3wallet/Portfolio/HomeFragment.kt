@@ -32,6 +32,7 @@ class HomeFragment : Fragment() {
 
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         assetListAdapter = AssetListAdapter(this.context, this)
+        assetListAdapter?.homeModel = homeModel
         view.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
@@ -128,7 +129,8 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-               // updateTableData(false)
+                assetListAdapter?.notifyDataSetChanged()
+                // updateTableData(false)
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader

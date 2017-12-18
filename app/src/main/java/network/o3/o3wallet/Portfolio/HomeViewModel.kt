@@ -23,7 +23,7 @@ class HomeViewModel: ViewModel()  {
         HOT(0), COMBINED(1), COLD(2)
     }
 
-    enum class Asset(id: String) {
+    enum class Asset(val id: String) {
         NEO("0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"),
         GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
     }
@@ -165,7 +165,7 @@ class HomeViewModel: ViewModel()  {
             }
             var balances = it?.first?.balances!!
             for (balance in balances) {
-                if (balance.asset == Asset.NEO.name) {
+                if (balance.asset == Asset.NEO.id) {
                     runningNeoHot += balance.value.toInt()
                 } else {
                     runningGasHot += balance.value
@@ -182,7 +182,7 @@ class HomeViewModel: ViewModel()  {
                 }
                 var balances = it?.first?.balances!!
                 for (balance in balances) {
-                    if (balance.asset == Asset.NEO.name) {
+                    if (balance.asset == Asset.NEO.id) {
                         runningNeoCold += balance.value.toInt()
                     } else {
                         runningGasCold += balance.value
