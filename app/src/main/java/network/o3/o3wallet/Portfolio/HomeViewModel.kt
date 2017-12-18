@@ -37,6 +37,7 @@ class HomeViewModel: ViewModel()  {
     private var portfolio: MutableLiveData<Portfolio>? = null
 
     private var latestPrice: PriceData? = null
+    private var initialPrice: PriceData? = null
 
     fun setCurrency(currency: CurrencyType) {
         this.currency = currency
@@ -88,6 +89,24 @@ class HomeViewModel: ViewModel()  {
 
     fun getDisplayType(): DisplayType {
         return this.displayType
+    }
+
+    fun getInitialPortfolioValue(): Double  {
+        return when(currency) {
+            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getCurrentPortfolioValue(): Double {
+        return when(currency) {
+            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getPercentChange(): Double {
+        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
@@ -147,6 +166,7 @@ class HomeViewModel: ViewModel()  {
             if ( it?.second != null ) return@getPortfolio
             portfolio?.postValue(it?.first!!)
             latestPrice = portfolio?.value?.data?.first()!!
+            initialPrice = portfolio?.value?.data?.last()!!
         }
     }
 

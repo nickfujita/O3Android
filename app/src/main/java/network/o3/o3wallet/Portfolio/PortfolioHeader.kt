@@ -69,10 +69,12 @@ class PortfolioHeader:Fragment() {
                                              balance?.second!! * currentGasPrice)
                 val initialPortfolioValue  = (balance?.first!! * firstNeoPrice +
                                               balance?.second!! * firstGasPrice)
+
+
                 unscrubbedDisplayedAmount = currentPortfolioValue
                 fundAmountTextView?.text = currentPortfolioValue.formattedCurrencyString(homeModel.getCurrency())
 
-                val percentChange = ((currentPortfolioValue - initialPortfolioValue) / initialPortfolioValue* 100)
+                val percentChange = homeModel?.getPercentChange()
                 if (percentChange < 0) {
                     fundChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {

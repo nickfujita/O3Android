@@ -87,9 +87,9 @@ class AssetGraph : AppCompatActivity() {
         })
     }
 
-    private fun tappedIntervalButton(button: Button) {
-        selectedButton?.setBackgroundResource(R.drawable.bottom_unselected)
-        button.setBackgroundResource(R.drawable.bottom_selected)
+    fun tappedIntervalButton(button: Button) {
+        selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
+        button?.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
         assetGraphModel?.setInterval(button.tag.toString().toInt())
         loadGraph(true)
