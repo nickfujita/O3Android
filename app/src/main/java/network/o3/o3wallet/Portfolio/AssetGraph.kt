@@ -7,9 +7,11 @@ import android.widget.Button
 import android.widget.TextView
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
+import android.util.Log
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
+import org.w3c.dom.Text
 
 /**
  * Created by drei on 12/8/17.
@@ -32,19 +34,43 @@ class AssetGraph : AppCompatActivity() {
         initiatePriceView()
     }
 
+    fun setHeaderToInitialValues() {
+        val priceView = findViewById<TextView>(R.id.currentPriceTextView)
+        val percentView = findViewById<TextView>(R.id.percentChangeTextView)
+        priceView.text = assetGraphModel?.getLatestPriceFormattedString()
+        val percentChange = assetGraphModel?.getPercentChange()
+        if (percentChange!! < 0) {
+            percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+        } else {
+            percentView?.setTextColor(resources.getColor(R.color.colorGain))
+        }
+        percentView.text = percentChange.formattedPercentString()
+    }
+
     private fun initiateGraph() {
         val sparkView = findViewById<SparkView>(R.id.sparkview)
-        val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         sparkView.sparkAnimator = MorphSparkAnimator()
         sparkView.adapter = chartDataAdapter
         loadGraph(true)
 
         sparkView.scrubListener = SparkView.OnScrubListener { value ->
             if (value == null) { //return to original state
-                priceView.text = assetGraphModel?.getLatestPriceFormattedString()
+                setHeaderToInitialValues()
                 return@OnScrubListener
             } else {
-                priceView?.text = (value as Float).toDouble().formattedCurrencyString(assetGraphModel!!.getCurrency())
+                val priceView = findViewById<TextView>(R.id.currentPriceTextView)
+                val percentView = findViewById<TextView>(R.id.percentChangeTextView)
+                val price = (value as Float).toDouble()
+                val percentChange = ((price - assetGraphModel?.getInitialPrice()!!) /
+                        assetGraphModel?.getInitialPrice()!! * 100)
+
+                if (percentChange!! < 0) {
+                    percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+                } else {
+                    percentView?.setTextColor(resources.getColor(R.color.colorGain))
+                }
+                priceView.text = price.formattedCurrencyString(assetGraphModel!!.getCurrency())
+                percentView.text = percentChange.formattedPercentString()
             }
         }
     }
@@ -53,7 +79,7 @@ class AssetGraph : AppCompatActivity() {
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         priceView.setOnClickListener {
             if (assetGraphModel?.getCurrency() == CurrencyType.USD) {
-                assetGraphModel?.setCurrency(CurrencyType.USD)
+                assetGraphModel?.setCurrency(CurrencyType.BTC)
             } else {
                 assetGraphModel?.setCurrency(CurrencyType.USD)
             }
@@ -81,9 +107,18 @@ class AssetGraph : AppCompatActivity() {
 
     private fun loadGraph(refresh: Boolean) {
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
+        val percentView = findViewById<TextView>(R.id.percentChangeTextView)
         assetGraphModel?.getHistoryFromModel(refresh)?.observe(this, Observer<PriceHistory> { data ->
             chartDataAdapter.setData(assetGraphModel?.getPriceFloats())
             priceView.text = assetGraphModel?.getLatestPriceFormattedString()
+
+            val percentChange = assetGraphModel?.getPercentChange()
+            if (percentChange!! < 0) {
+                percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+            } else {
+                percentView?.setTextColor(resources.getColor(R.color.colorGain))
+            }
+            percentView.text = percentChange.formattedPercentString()
         })
     }
 
