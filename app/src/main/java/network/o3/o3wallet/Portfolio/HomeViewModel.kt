@@ -23,7 +23,7 @@ class HomeViewModel: ViewModel()  {
         HOT(0), COMBINED(1), COLD(2)
     }
 
-    enum class Asset(id: String) {
+    enum class Asset(val id: String) {
         NEO("0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"),
         GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
     }
@@ -37,6 +37,7 @@ class HomeViewModel: ViewModel()  {
     private var portfolio: MutableLiveData<Portfolio>? = null
 
     private var latestPrice: PriceData? = null
+    private var initialPrice: PriceData? = null
 
     fun setCurrency(currency: CurrencyType) {
         this.currency = currency
@@ -52,38 +53,60 @@ class HomeViewModel: ViewModel()  {
 
     fun getCurrentGasPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.price["gas"]?.averageUSD!!
+            portfolio?.value?.price?.get("gas")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.price["gas"]?.averageBTC!!
+            portfolio?.value?.price?.get("gas")?.averageBTC ?: 0.0
         }
     }
 
     fun getFirstGasPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.firstPrice["gas"]?.averageUSD!!
+            portfolio?.value?.firstPrice?.get("gas")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.firstPrice["gas"]?.averageBTC!!
+            portfolio?.value?.firstPrice?.get("gas")?.averageBTC ?: 0.0
         }
     }
 
     fun getCurrentNeoPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.price["neo"]?.averageUSD!!
+            portfolio?.value?.price?.get("neo")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.price["neo"]?.averageBTC!!
+            portfolio?.value?.price?.get("neo")?.averageBTC?: 0.0
         }
     }
 
     fun getFirstNeoPrice(): Double {
         return if (currency == CurrencyType.USD) {
-            portfolio!!.value!!.firstPrice["neo"]?.averageUSD!!
+            portfolio?.value?.firstPrice?.get("neo")?.averageUSD ?: 0.0
         } else {
-            portfolio!!.value!!.firstPrice["neo"]?.averageBTC!!
+            portfolio?.value?.firstPrice?.get("neo")?.averageBTC ?: 0.0
         }
     }
 
     fun setDisplayType(displayType: DisplayType) {
         this.displayType = displayType
+    }
+
+    fun getDisplayType(): DisplayType {
+        return this.displayType
+    }
+
+    fun getInitialPortfolioValue(): Double  {
+        return when(currency) {
+            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getCurrentPortfolioValue(): Double {
+        return when(currency) {
+            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getPercentChange(): Double {
+        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
@@ -117,13 +140,16 @@ class HomeViewModel: ViewModel()  {
     }
 
     fun getPriceFloats(): FloatArray {
-        val data = when (currency) {
-            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()!!
-            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()!!
+        val data: Array<Double>? = when (currency) {
+            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()
+            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()
+        }
+        if (data == null) {
+            return FloatArray(0)
         }
 
-        var floats = FloatArray(data.count())
-        for (i in data.indices) {
+        var floats = FloatArray(data?.count())
+        for (i in data!!.indices) {
             floats[i] = data[i].toFloat()
         }
         return floats.reversedArray()
@@ -140,6 +166,7 @@ class HomeViewModel: ViewModel()  {
             if ( it?.second != null ) return@getPortfolio
             portfolio?.postValue(it?.first!!)
             latestPrice = portfolio?.value?.data?.first()!!
+            initialPrice = portfolio?.value?.data?.last()!!
         }
     }
 
@@ -158,7 +185,7 @@ class HomeViewModel: ViewModel()  {
             }
             var balances = it?.first?.balances!!
             for (balance in balances) {
-                if (balance.asset == Asset.NEO.name) {
+                if (balance.asset == Asset.NEO.id) {
                     runningNeoHot += balance.value.toInt()
                 } else {
                     runningGasHot += balance.value
@@ -175,7 +202,7 @@ class HomeViewModel: ViewModel()  {
                 }
                 var balances = it?.first?.balances!!
                 for (balance in balances) {
-                    if (balance.asset == Asset.NEO.name) {
+                    if (balance.asset == Asset.NEO.id) {
                         runningNeoCold += balance.value.toInt()
                     } else {
                         runningGasCold += balance.value

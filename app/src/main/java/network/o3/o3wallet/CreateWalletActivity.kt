@@ -36,7 +36,5 @@ class CreateWalletActivity : AppCompatActivity() {
         wifTextView.text = Account.getWallet()?.wif
         val bitmap = QRCode.from(Account.getWallet()!!.wif).withSize(1000, 1000).bitmap()
         qrView.setImageBitmap(bitmap)
-
-
     }
 }

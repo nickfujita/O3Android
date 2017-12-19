@@ -43,6 +43,4 @@ class LandingFeatureScroll: Fragment() {
 
         return view
     }
-
-
 }

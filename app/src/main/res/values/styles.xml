@@ -24,4 +24,76 @@
         <item name="spark_animateChanges">true</item>
     </style>
 
+    <style name="BoldText">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="RegularText">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="RegularSubtitleText">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="RegularSubtitleText.Gain">
+        <item name="android:textColor">@color/colorGain</item>
+    </style>
+
+    <style name="RegularSubtitleText.Loss">
+        <item name="android:textColor">@color/colorLoss</item>
+    </style>
+
+    <style name="IntervalButtonText">
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="IntervalButtonText.Selected">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="IntervalButtonText.NotSelected">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+    </style>
+
+    <style name="PortfolioHeader">
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="PortfolioHeader.WalletType">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="PortfolioHeader.PortfolioValue">
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="PortfolioHeader.PercentChange">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/colorGain</item>
+    </style>
+
+    <style name="AssetGraphHeaderPercentChange">
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+        <item name="android:textColor">@color/colorGain</item>
+    </style>
+
+    <style name="AssetGraphPrice">
+        <item name="android:textSize">30dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
 </resources>
