@@ -52,17 +52,25 @@
     </style>
 
     <style name="AccentButton" parent="Base.Widget.AppCompat.Button">
-        <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:elevation">8dp</item>
     </style>
 
     <style name="BorderLessButton" parent="Base.Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">12dp</item>
-        <item name="android:fontFamily">@font/muli</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
 

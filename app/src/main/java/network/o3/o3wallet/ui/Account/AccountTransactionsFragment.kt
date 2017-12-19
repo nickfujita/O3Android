@@ -20,7 +20,6 @@ class AccountTransactionsFragment : android.support.v4.app.Fragment() {
     private lateinit var transactionListView: ListView
     private lateinit var swipeContainer: SwipeRefreshLayout
 
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return inflater!!.inflate(R.layout.fragment_account_transactions, container, false)

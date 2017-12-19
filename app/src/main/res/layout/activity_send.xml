@@ -7,38 +7,40 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:fitsSystemWindows="true"
-    android:padding="20dp"
     tools:context="network.o3.o3wallet.SendActivity">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView2">
+        android:clipToPadding="false"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:clipToPadding="false"
             android:orientation="vertical">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp">
+                android:layout_height="48dp">
 
                 <TextView
                     android:id="@+id/textView9"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="To"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/selectAddressButton"
-                    style="@style/Widget.AppCompat.Button.Small"
+                    style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Address"
@@ -47,7 +49,7 @@
 
                 <Button
                     android:id="@+id/scanAddressButton"
-                    style="@style/Widget.AppCompat.Button.Small"
+                    style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Scan"
@@ -56,7 +58,7 @@
 
                 <Button
                     android:id="@+id/pasteAddressButton"
-                    style="@style/Widget.AppCompat.Button.Small"
+                    style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Paste"
@@ -66,6 +68,7 @@
 
             <EditText
                 android:id="@+id/addressTextView"
+                style="@style/RegularText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -74,26 +77,26 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp">
+                android:layout_height="48dp">
 
                 <TextView
                     android:id="@+id/textView12"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Asset"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/selectedAssetTextView"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="NEO"
                     android:textAlignment="textEnd"
                     android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -102,19 +105,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView13"
+                    style="@style/BoldText"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Amount"
-                    android:textStyle="bold" />
+                    android:text="Amount" />
 
                 <EditText
                     android:id="@+id/amountTextView"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -126,14 +130,15 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp">
+                android:layout_height="48dp"
+                android:clipToPadding="false">
 
                 <TextView
                     android:id="@+id/textView15"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Note"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -141,6 +146,7 @@
 
             <EditText
                 android:id="@+id/noteTextView"
+                style="@style/RegularText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="Note"
@@ -150,9 +156,11 @@
 
             <Button
                 android:id="@+id/sendButton"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/AccentButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/accent_button_background"
                 android:text="Send" />
 
         </LinearLayout>
