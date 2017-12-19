@@ -13,7 +13,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.fragment_portfolio_header.*
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
 
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
 
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         assetListAdapter = AssetListAdapter(this.context, this)
+        assetListAdapter?.homeModel = homeModel
         view.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
@@ -47,12 +50,29 @@ class HomeFragment : Fragment() {
         sparkView?.scrubListener = SparkView.OnScrubListener { value ->
             val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
             val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
+
+            val amountView = header.view?.findViewById<TextView>(R.id.fundAmountTextView)
+            val percentView = header.view?.findViewById<TextView>(R.id.fundChangeTextView)
             if (value == null) { //return to original state
-                header.view?.findViewById<TextView>(R.id.fundAmountTextView)?.text =
-                        header.unscrubbedDisplayedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
+                amountView?.text = header.unscrubbedDisplayedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
+                percentView?.text = homeModel?.getPercentChange()?.formattedPercentString()
+                if (homeModel?.getPercentChange()!! < 0) {
+                    percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+                } else {
+                    percentView?.setTextColor(resources.getColor(R.color.colorGain))
+                }
                 return@OnScrubListener
             } else {
-                (value as Float).toDouble().formattedCurrencyString(homeModel?.getCurrency()!!)
+                val scrubbedAmount = (value as Float).toDouble()
+                val percentChange =  (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
+                        homeModel?.getInitialPortfolioValue()!! * 100
+                if (percentChange < 0) {
+                    percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+                } else {
+                    percentView?.setTextColor(resources.getColor(R.color.colorGain))
+                }
+                percentView?.text = percentChange.formattedPercentString()
+                amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
             }
         }
     }
@@ -92,7 +112,6 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-              //  initiateTableRows(view)
             })
         })
     }
@@ -128,86 +147,15 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-               // updateTableData(false)
+                assetListAdapter?.notifyDataSetChanged()
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
                 header.updateHeaderFunds()
+                assetListAdapter?.notifyDataSetChanged()
             })
         })
     }
-    /*
-    fun updateTableData(refresh: Boolean) {
-        homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> {  data ->
-            homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
-                val gasChangeTextView = view?.findViewById<TextView>(R.id.gasChange)
-                val neoChangeTextView = view?.findViewById<TextView>(R.id.neoChange)
-
-                val gasAmountTextView = view?.findViewById<TextView>(R.id.gasAmount)
-                val neoAmountTextView = view?.findViewById<TextView>(R.id.neoAmount)
-
-                val gasValueTextView = view?.findViewById<TextView>(R.id.gasValue)
-                val neoValueTextView = view?.findViewById<TextView>(R.id.neoValue)
-
-                val gasPriceTextView = view?.findViewById<TextView>(R.id.gasPrice)
-                val neoPriceTextView = view?.findViewById<TextView>(R.id.neoPrice)
-
-
-                neoAmountTextView?.text = balance?.first?.toString()
-                gasAmountTextView?.text = balance?.second?.formattedGASString()
-
-                val currentNeoPrice = homeModel!!.getCurrentNeoPrice()
-                val firstNeoPrice = homeModel!!.getFirstNeoPrice()
-                val currentGasPrice = homeModel!!.getCurrentGasPrice()
-                val firstGasPrice = homeModel!!.getFirstGasPrice()
-
-                neoValueTextView?.text = (balance?.first!! * currentNeoPrice).formattedCurrencyString(homeModel!!.getCurrency())
-                gasValueTextView?.text = (balance?.second!! * currentGasPrice).formattedCurrencyString(homeModel!!.getCurrency())
-                neoPriceTextView?.text = currentNeoPrice.formattedCurrencyString(homeModel!!.getCurrency())
-                gasPriceTextView?.text = currentGasPrice.formattedCurrencyString(homeModel!!.getCurrency())
-
-
-                val percentNeoChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
-                val percentGasChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
-
-
-                if (percentGasChange < 0) {
-                    gasChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
-                } else {
-                    gasChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
-                }
-
-                if (percentNeoChange < 0) {
-                    neoChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
-                } else {
-                    neoChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
-                }
-
-                neoChangeTextView?.text = percentNeoChange.formattedPercentString()
-                gasChangeTextView?.text = percentGasChange.formattedPercentString()
-            })
-        })
-    }
-
-    fun initiateTableRows(view: View) {
-        val neoRow = view?.findViewById<TableRow>(R.id.neoRow)
-        val gasRow = view?.findViewById<TableRow>(R.id.gasRow)
-
-        neoRow.setOnClickListener {
-            val intent = Intent(activity, AssetGraph::class.java)
-            intent.putExtra("SYMBOL", "NEO")
-            startActivity(intent)
-        }
-
-        gasRow.setOnClickListener {
-            val intent = Intent(activity, AssetGraph::class.java)
-            intent.putExtra("SYMBOL", "GAS")
-            startActivity(intent)
-        }
-
-        updateTableData(false)
-
-    }*/
 
     companion object {
         fun newInstance(): HomeFragment {

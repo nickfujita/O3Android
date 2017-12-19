@@ -18,14 +18,12 @@
 
         <TextView
             android:id="@+id/currentPriceTextView"
-            android:layout_width="344dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="$40.12"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/AssetGraphPrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +36,7 @@
             android:layout_marginTop="8dp"
             android:text="+ 11.01 (25%) Since Sept"
             android:textAlignment="center"
-            android:textColor="@color/colorGain"
+            android:textAppearance="@style/AssetGraphHeaderPercentChange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,10 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_unselected"
-            android:text="5m"
             android:tag="5"
-            android:textColor="@color/colorPrimary" />
+            android:text="5m"
+            android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
         <Button
             android:id="@+id/fifteenMinuteInterval"
@@ -73,10 +70,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_selected"
-            android:text="15m"
             android:tag="15"
-            android:textColor="@color/colorPrimary" />
+            android:text="15m"
+            android:textAppearance="@style/IntervalButtonText.Selected" />
 
         <Button
             android:id="@+id/thirtyMinuteInterval"
@@ -84,10 +80,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_unselected"
-            android:text="30m"
             android:tag="30"
-            android:textColor="@color/colorPrimary" />
+            android:text="30m"
+            android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
         <Button
             android:id="@+id/sixtyMinuteInterval"
@@ -95,10 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_unselected"
-            android:text="60m"
             android:tag="60"
-            android:textColor="@color/colorPrimary" />
+            android:text="60m"
+            android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
         <Button
             android:id="@+id/oneDayInterval"
@@ -106,10 +100,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_unselected"
-            android:text="1D"
             android:tag="1440"
-            android:textColor="@color/colorPrimary" />
+            android:text="1D"
+            android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
         <Button
             android:id="@+id/allInterval"
@@ -117,10 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bottom_unselected"
-            android:text="All"
             android:tag="1500"
-            android:textColor="@color/colorPrimary" />
+            android:text="All"
+            android:textAppearance="@style/IntervalButtonText.NotSelected" />
     </LinearLayout>
 
     <FrameLayout

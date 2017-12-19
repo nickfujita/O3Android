@@ -23,7 +23,7 @@ class HomeViewModel: ViewModel()  {
         HOT(0), COMBINED(1), COLD(2)
     }
 
-    enum class Asset(id: String) {
+    enum class Asset(val id: String) {
         NEO("0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"),
         GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
     }
@@ -37,6 +37,7 @@ class HomeViewModel: ViewModel()  {
     private var portfolio: MutableLiveData<Portfolio>? = null
 
     private var latestPrice: PriceData? = null
+    private var initialPrice: PriceData? = null
 
     fun setCurrency(currency: CurrencyType) {
         this.currency = currency
@@ -88,6 +89,24 @@ class HomeViewModel: ViewModel()  {
 
     fun getDisplayType(): DisplayType {
         return this.displayType
+    }
+
+    fun getInitialPortfolioValue(): Double  {
+        return when(currency) {
+            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getCurrentPortfolioValue(): Double {
+        return when(currency) {
+            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getPercentChange(): Double {
+        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
@@ -147,6 +166,7 @@ class HomeViewModel: ViewModel()  {
             if ( it?.second != null ) return@getPortfolio
             portfolio?.postValue(it?.first!!)
             latestPrice = portfolio?.value?.data?.first()!!
+            initialPrice = portfolio?.value?.data?.last()!!
         }
     }
 
@@ -165,7 +185,7 @@ class HomeViewModel: ViewModel()  {
             }
             var balances = it?.first?.balances!!
             for (balance in balances) {
-                if (balance.asset == Asset.NEO.name) {
+                if (balance.asset == Asset.NEO.id) {
                     runningNeoHot += balance.value.toInt()
                 } else {
                     runningGasHot += balance.value
@@ -182,7 +202,7 @@ class HomeViewModel: ViewModel()  {
                 }
                 var balances = it?.first?.balances!!
                 for (balance in balances) {
-                    if (balance.asset == Asset.NEO.name) {
+                    if (balance.asset == Asset.NEO.id) {
                         runningNeoCold += balance.value.toInt()
                     } else {
                         runningGasCold += balance.value

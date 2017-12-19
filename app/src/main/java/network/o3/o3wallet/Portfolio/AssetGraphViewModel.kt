@@ -20,6 +20,7 @@ class AssetGraphViewModel: ViewModel() {
     private var interval = 15
     private var currency = CurrencyType.USD
     private var latestPrice: PriceData? = null
+    private var initialPrice: PriceData? = null
 
 
     fun getCurrency(): CurrencyType {
@@ -36,6 +37,24 @@ class AssetGraphViewModel: ViewModel() {
         } else {
             latestPrice?.averageUSD?.formattedUSDString()!!
         }
+    }
+
+    fun getInitialPrice(): Double {
+        return when(currency) {
+            CurrencyType.USD -> initialPrice?.averageUSD!!
+            CurrencyType.BTC -> initialPrice?.averageBTC!!
+        }
+    }
+
+    fun getCurrentPrice(): Double {
+        return when(currency) {
+            CurrencyType.USD -> latestPrice?.averageUSD!!
+            CurrencyType.BTC -> latestPrice?.averageBTC!!
+        }
+    }
+
+    fun getPercentChange(): Double {
+        return ((getCurrentPrice() - getInitialPrice()) / getInitialPrice()* 100)
     }
 
     fun setInterval(interval: Int) {
@@ -67,6 +86,7 @@ class AssetGraphViewModel: ViewModel() {
         O3API().getPriceHistory(symbol, interval) {
             if (it?.second != null) return@getPriceHistory
             latestPrice = it?.first?.data?.first()!!
+            initialPrice = it?.first?.data?.last()!!
             history?.postValue(it.first!!)
         }
     }
