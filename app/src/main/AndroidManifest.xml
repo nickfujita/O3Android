@@ -28,7 +28,11 @@
         <activity android:name=".Settings.AddContact"></activity>
         <activity android:name=".Portfolio.AssetGraph" />
         <activity android:name=".SendActivity"></activity>
-
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:replace="screenOrientation" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
