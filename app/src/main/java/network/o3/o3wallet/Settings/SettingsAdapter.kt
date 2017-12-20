@@ -65,9 +65,9 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         val layoutInflater = LayoutInflater.from(mContext)
         val view = layoutInflater.inflate(R.layout.settings_row_layout, viewGroup, false)
         val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
-        val subtitleTextView = view.findViewById<TextView>(R.id.subTitleTextView)
+        //val subtitleTextView = view.findViewById<TextView>(R.id.subTitleTextView)
         titleTextView.text = getItem(position).first
-        subtitleTextView.text = ""
+        //subtitleTextView.text = ""
         view.findViewById<ImageView>(R.id.settingsIcon).setImageResource(getItem(position).second)
 
         view.setOnClickListener {

@@ -1,5 +1,8 @@
 package network.o3.o3wallet
 
+import java.text.NumberFormat
+import java.util.*
+
 /**
  * Created by drei on 12/7/17.
  */
@@ -8,7 +11,9 @@ fun Double.formattedBTCString() : String {
 }
 
 fun Double.formattedUSDString() : String {
-    return "%.2f".format(this) + "USD"
+    val fomatter = NumberFormat.getCurrencyInstance()
+    fomatter.currency = Currency.getInstance("USD")
+    return fomatter.format(this)
 }
 
 fun Double.formattedPercentString(): String {

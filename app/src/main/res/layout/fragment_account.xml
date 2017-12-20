@@ -163,7 +163,7 @@
 
                 <TextView
                     android:id="@+id/neoAmountLabel"
-                    style="@style/BoldText"
+                    style="@style/RegularText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
@@ -201,7 +201,7 @@
 
                 <TextView
                     android:id="@+id/gasAmountLabel"
-                    style="@style/BoldText"
+                    style="@style/RegularText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"

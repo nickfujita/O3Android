@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
-    android:layout_height="78dp"
-    android:minHeight="78dp">
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:minHeight="64dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
+        style="@style/CardViewStyle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="56dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
         card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardCornerRadius="4dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false">
 
             <TextView
                 android:id="@+id/assetNameTextView"
@@ -34,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
                 android:text="NEO"
+                android:textAlignment="textStart"
                 android:textAppearance="@style/BoldText"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
                 android:text="235"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/RegularText"
                 card_view:layout_constraintEnd_toStartOf="@+id/totalValueTextView"
                 card_view:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +61,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                android:minWidth="120dp"
                 android:text="11,183.76USD"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/RegularText"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
@@ -66,8 +74,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
                 android:text="47.59USD"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/RegularSubtitleText"
                 card_view:layout_constraintEnd_toStartOf="@+id/totalValueTextView"
                 card_view:layout_constraintTop_toBottomOf="@+id/assetAmountTextView" />
@@ -77,8 +87,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
+                android:includeFontPadding="false"
                 android:text="17.69%"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/RegularSubtitleText.Gain"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/totalValueTextView" />

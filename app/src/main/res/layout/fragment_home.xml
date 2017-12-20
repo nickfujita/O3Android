@@ -46,7 +46,7 @@
             <LinearLayout
                 android:id="@+id/intervalButtonLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="48dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -60,18 +60,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="5"
-                    android:text="5m"
+                    android:text="5M"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
                     android:id="@+id/fifteenMinuteInterval"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:textAppearance="@style/IntervalButtonText.Selected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="15"
-                    android:text="15m" />
+                    android:text="15M"
+                    android:textAppearance="@style/IntervalButtonText.Selected" />
 
                 <Button
                     android:id="@+id/thirtyMinuteInterval"
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="30"
-                    android:text="30m"
+                    android:text="30M"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="60"
-                    android:text="60m"
+                    android:text="60M"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1500"
-                    android:text="All"
+                    android:text="ALL"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
 
@@ -118,6 +118,9 @@
                 android:id="@+id/assetListView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:divider="@null"
                 android:dividerHeight="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
