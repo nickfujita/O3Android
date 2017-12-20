@@ -124,7 +124,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="0"
-                    android:inputType="number|numberDecimal"
+                    android:inputType="number"
                     android:textAlignment="textEnd" />
             </LinearLayout>
 

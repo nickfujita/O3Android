@@ -57,3 +57,10 @@ data class AccountState(val version: Int,
 data class Node(val url: String, val blockcount: Int, val peercount: Int)
 data class NeoNetwork(val main: Array<Node>, val test: Array<Node>)
 
+
+data class AccountAsset(val assetID: String,
+                        val name: String,
+                        val value: Double,
+                        val decimal: Int,
+                        val symbol: String)
+

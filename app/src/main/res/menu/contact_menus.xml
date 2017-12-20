@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/send_to_address"
+        android:contentDescription="Send to address"
+        android:title="Send" />
+    <item
+        android:id="@+id/copy_address"
+        android:title="Copy" />
+    <group />
+    <item
+        android:id="@+id/remove_address"
+        android:contentDescription="Remove address"
+        android:iconTintMode="screen"
+        android:title="Remove" />
+</menu>

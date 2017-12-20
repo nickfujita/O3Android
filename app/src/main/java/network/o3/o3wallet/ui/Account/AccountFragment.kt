@@ -29,14 +29,13 @@ import com.robinhood.ticker.TickerView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import android.support.design.widget.BottomSheetBehavior
 import network.o3.o3wallet.*
+import network.o3.o3wallet.API.NEO.AccountAsset
 
 
 class AccountFragment : Fragment() {
 
     private var fabExpanded = false
     private lateinit var menuButton: FloatingActionButton
-    private lateinit var neoAmountLabel: TextView
-    private lateinit var gasAmountLabel: TextView
     private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
     private lateinit var claims: Claims
@@ -45,6 +44,7 @@ class AccountFragment : Fragment() {
     private lateinit var gasBalance: Balance
     private lateinit var qrButton: ImageButton
     private lateinit var swipeContainer: SwipeRefreshLayout
+    private lateinit var assetListView: ListView
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -54,14 +54,13 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         menuButton = view!!.findViewById<FloatingActionButton>(R.id.menuActionButton)
-        neoAmountLabel = view!!.findViewById<TextView>(R.id.neoAmountLabel)
-        gasAmountLabel = view!!.findViewById<TextView>(R.id.gasAmountLabel)
-
         claimButton = view!!.findViewById<Button>(R.id.claimButton)
         qrButton = view!!.findViewById<ImageButton>(R.id.qrButton)
-
         unclaimedGASLabel = view!!.findViewById(R.id.unclaimedGASLabel)
+        assetListView = view!!.findViewById<ListView>(R.id.assetListView)
+
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
+
         val muli = ResourcesCompat.getFont(view!!.context, R.font.muli_bold)
 
         swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
@@ -122,18 +121,52 @@ class AccountFragment : Fragment() {
                 this.currentAccountState = accountState!!
                 activity.runOnUiThread {
                     swipeContainer.isRefreshing = false
+                    //construct array of AccountAsset
+                    var assets:ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
+
                     for (balance in accountState!!.balances.iterator()) {
                         //NEO
                         if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
                             this.neoBalance = balance
-                            neoAmountLabel.text = "%d".format(balance.value.toInt())
                             this.enableClaimGASButton(balance.value)
+                            var asset = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                                    name =  NeoNodeRPC.Asset.NEO.name,
+                                    symbol = NeoNodeRPC.Asset.NEO.name,
+                                    decimal = 0,
+                                    value = balance.value)
+                            assets.add(asset)
                         } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
-                            gasAmountLabel.text = "%.8f".format(balance.value)
                             this.gasBalance = balance
+                            var asset = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                                    name =  NeoNodeRPC.Asset.GAS.name,
+                                    symbol = NeoNodeRPC.Asset.GAS.name,
+                                    decimal = 0,
+                                    value = balance.value)
+                            assets.add(asset)
                         }
                     }
+                    var rpx = AccountAsset(assetID = "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
+                            name =  "Red Pulse Token",
+                            symbol = "RPX",
+                            decimal = 8,
+                            value = 300.56)
+                    assets.add(rpx)
 
+                    var dbc = AccountAsset(assetID = "b951ecbbc5fe37a9c280a76cb0ce0014827294cf",
+                            name =  "DeepBrain Coin",
+                            symbol = "DBC",
+                            decimal = 8,
+                            value = 1526.26)
+                    assets.add(dbc)
+
+                    var aph = AccountAsset(assetID = "b951ecbbc5fe37a9c280a76cb0ce0014827294cf",
+                            name =  "Aphelion",
+                            symbol = "APH",
+                            decimal = 8,
+                            value = 1346.161941)
+                    assets.add(aph)
+                    val adapter = AccountAssetsAdapter(context, assets.toTypedArray())
+                    assetListView.adapter = adapter
                 }
             }
 

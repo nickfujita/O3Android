@@ -41,13 +41,28 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation "android.arch.lifecycle:extensions:1.0.0"
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+    implementation 'com.google.firebase:firebase-messaging:11.0.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:gridlayout-v7:26.1.0'
     implementation project(':neowallet')
+    implementation project(':channel')
     compile 'com.google.guava:guava:23.3-android'
     annotationProcessor 'com.google.auto.value:auto-value:1.2'
     compileOnly 'com.google.auto.value:auto-value:1.2'
     compile 'com.robinhood.ticker:ticker:1.2.2'
+
+    compile project(':channel')
+    compile 'com.github.jkwiecien:EasyImage:1.3.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.2'
+    compile "com.google.android:flexbox:0.2.5"
+    compile "com.android.support:cardview-v7:26.0.0-alpha1"
+    compile "com.android.support:design:26.0.0-alpha1"
+    compile "com.github.siyamed:android-shape-imageview:0.9.3"
+    compile "me.relex:circleindicator:1.2.2@aar"
 }
+
+
+
+apply plugin: 'com.google.gms.google-services'

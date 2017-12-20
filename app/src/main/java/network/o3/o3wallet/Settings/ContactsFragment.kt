@@ -2,18 +2,23 @@ package network.o3.o3wallet.Settings
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import android.view.MenuInflater
+import network.o3.o3wallet.SendActivity
+
 
 /**
  * Created by drei on 12/11/17.
@@ -57,6 +62,27 @@ class ContactsFragment : BottomSheetDialogFragment() {
             dialogInterface, i ->
         })
         simpleAlert.show()
+    }
+
+    fun sendToAddress(contact: Contact) {
+        val intent: Intent = Intent(
+                context,
+                SendActivity::class.java
+        )
+        intent.putExtra("address",contact.address)
+        ActivityCompat.startActivity(context, intent, null)
+    }
+
+    val RELOAD_DATA = 1
+    fun addNewAddress() {
+        val intent = Intent(context, AddContact::class.java)
+        startActivityForResult(intent,RELOAD_DATA)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RELOAD_DATA) {
+            adapter!!.updateData()
+        }
     }
 
     companion object {

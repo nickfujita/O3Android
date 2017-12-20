@@ -5,18 +5,17 @@ package network.o3.o3wallet.Settings
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
-import network.o3.o3wallet.Contact
-import network.o3.o3wallet.PersistentStore
-import network.o3.o3wallet.R
-import network.o3.o3wallet.WatchAddress
+import network.o3.o3wallet.*
 
 
 /**
@@ -61,6 +60,27 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
             dialogInterface, i ->
         })
         simpleAlert.show()
+    }
+
+    fun sendToAddress(address: WatchAddress) {
+        val intent: Intent = Intent(
+                context,
+                SendActivity::class.java
+        )
+        intent.putExtra("address",address.address)
+        ActivityCompat.startActivity(context, intent, null)
+    }
+
+    val RELOAD_DATA = 1
+    fun addNewAddress() {
+        val intent = Intent(context, AddWatchAddress::class.java)
+        startActivityForResult(intent,RELOAD_DATA)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RELOAD_DATA) {
+            adapter!!.updateData()
+        }
     }
 
     companion object {
