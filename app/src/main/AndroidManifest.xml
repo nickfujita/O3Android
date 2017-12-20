@@ -12,25 +12,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".CreateWalletActivity" />
-        <activity android:name=".MainTabbedActivity" />
-        <activity android:name=".Settings.AddWatchAddress" />
-        <activity android:name=".Settings.AddContact"></activity>
-        <activity android:name=".Portfolio.AssetGraph" />
-        <activity android:name=".SendActivity"></activity>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateWalletActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainTabbedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/noTitle"/>
+        <activity android:name=".Settings.AddWatchAddress"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Settings.AddContact"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Portfolio.AssetGraph"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SendActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             xmlns:tools="http://schemas.android.com/tools"
             tools:replace="screenOrientation" />
         <meta-data
