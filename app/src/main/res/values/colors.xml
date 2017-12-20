@@ -8,7 +8,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#0F1017</color>
     <color name="colorSubtleGrey">#FAFAFA</color>
-    <color name="colorDisabledButton">#4F4F4F26</color>
+    <color name="colorDisabledButton">#1a4f4f4f</color>
 
 </resources>
 

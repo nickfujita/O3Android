@@ -6,6 +6,7 @@ import android.app.Fragment
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -15,19 +16,18 @@ import android.support.v7.app.ActionBar
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.DigitsKeyListener
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toolbar
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.ui.toast
 import network.o3.o3wallet.ui.toastUntilCancel
 import android.transition.*
+import android.widget.*
+import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : AppCompatActivity() {
@@ -51,17 +51,20 @@ class SendActivity : AppCompatActivity() {
 
         this.title = "Send"
         //default asset
-        selectedAsset = NeoNodeRPC.Asset.NEO
+
+
         view = findViewById<View>(R.id.root_layout)
-        addressTextView = findViewById<TextView>(R.id.addressTextView)
-        amountTextView = findViewById<TextView>(R.id.amountTextView)
-        noteTextView = findViewById<TextView>(R.id.noteTextView)
+        addressTextView = findViewById<EditText>(R.id.addressTextView)
+        amountTextView = findViewById<EditText>(R.id.amountTextView)
+        noteTextView = findViewById<EditText>(R.id.noteTextView)
         sendButton = findViewById<Button>(R.id.sendButton)
         pasteAddressButton = findViewById<Button>(R.id.pasteAddressButton)
         scanAddressButton = findViewById<Button>(R.id.scanAddressButton)
         selectAddressButton = findViewById<Button>(R.id.selectAddressButton)
         selectedAssetTextView = findViewById<TextView>(R.id.selectedAssetTextView)
 
+        selectedAsset = NeoNodeRPC.Asset.NEO
+        amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789")
         selectedAssetTextView.text = selectedAsset.name.toUpperCase()
         addressTextView.afterTextChanged { checkEnableSendButton() }
         amountTextView.afterTextChanged { checkEnableSendButton() }
@@ -98,12 +101,14 @@ class SendActivity : AppCompatActivity() {
         if (selectedAsset == NeoNodeRPC.Asset.NEO) {
             selectedAsset = NeoNodeRPC.Asset.GAS
             amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
+            amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789.")
         } else {
             selectedAsset = NeoNodeRPC.Asset.NEO
-            amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED)
-            var amount = amountTextView.text.trim().toString().toDouble()
-            if (amount < 1) {
-                amountTextView.text = "1"
+            amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER)
+            amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789")
+            if (amountTextView.text.trim().count() > 0) {
+                var amount = amountTextView.text.trim().toString().toDouble()
+                amountTextView.text = Math.round(amount).toString()
             }
         }
         selectedAssetTextView.text = selectedAsset.name.toUpperCase()
@@ -155,19 +160,38 @@ class SendActivity : AppCompatActivity() {
             return
         }
 
-        val message = "Are you sure you want to send %s %s to %s?".format(amount.toString(), this.selectedAsset.name.toUpperCase(), address)
-        val simpleAlert = AlertDialog.Builder(this).create()
-        simpleAlert.setTitle("Confirmation")
-        simpleAlert.setMessage(message)
+        val errorAlert = android.support.v7.app.AlertDialog.Builder(this).create()
+        errorAlert.setTitle("Error")
+        errorAlert.setMessage("You provided an invalid NEO address, please double check it.")
+        errorAlert.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+            addressTextView.requestFocus()
+        }
 
-        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Send", { _, _ ->
-            send()
-        })
+        NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(address) {
+            if (it.second != null || it?.first == false) {
+                runOnUiThread {
+                    errorAlert.show()
+                }
+            } else {
+                runOnUiThread {
+                    val message = "Are you sure you want to send %s %s to %s?".format(amount.toString(), this.selectedAsset.name.toUpperCase(), address)
+                    val simpleAlert = AlertDialog.Builder(this).create()
+                    simpleAlert.setTitle("Confirmation")
+                    simpleAlert.setMessage(message)
 
-        simpleAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel", { _, _ ->
-        })
+                    simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Send", { _, _ ->
+                        send()
+                    })
 
-        simpleAlert.show()
+                    simpleAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel", { _, _ ->
+                    })
+
+                    simpleAlert.show()
+                }
+            }
+        }
+
+
     }
 
     private fun pasteAddressTapped() {
@@ -181,11 +205,26 @@ class SendActivity : AppCompatActivity() {
 
 
     fun scanAddressTapped() {
-
+        val integrator = IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+        integrator.setPrompt("Scan the QR code of the address you want to save")
+        integrator.setOrientationLocked(false)
+        integrator.initiateScan()
     }
 
     fun selectAddressTapped() {
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            } else {
+                addressTextView.setText(result.contents)
+            }
+        }
     }
 }
 
