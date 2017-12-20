@@ -5,6 +5,7 @@ package network.o3.o3wallet.Settings
 
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
@@ -68,6 +69,7 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment): BaseAdapter
             return view
         } else {
             val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
+            view.findViewById<TextView>(R.id.footerTextView).text = ""
             view.findViewById<Button>(R.id.AddButton).setOnClickListener {
                 val intent = Intent(mContext, AddContact::class.java)
                 mContext.startActivity(intent)
