@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="spark_SparkViewStyle">@style/MySparkViewStyle</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="actionBarStyle">@style/NoShadowActionBar</item>
+    </style>
+    <style name="NoShadowActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="elevation">0dp</item>
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
     <style name="noTitle" parent="Theme.AppCompat.Light.NoActionBar">
@@ -30,15 +41,60 @@
 
         <item name="spark_animateChanges">true</item>
     </style>
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <style name="HeaderText">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="SubtitleText">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="AccentButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="BorderLessButton" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
 
     <style name="BoldText">
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">16dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
+    <style name="TabLayoutAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
     <style name="RegularText">
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">16dp</item>
         <item name="android:fontFamily">@font/muli</item>
     </style>
@@ -103,5 +159,23 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
+
+
+    <style name="TableRowSubtitleText">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="TableRowTitleText">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="TableRowNumberText">
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
 
 </resources>

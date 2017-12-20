@@ -25,6 +25,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun login() {
+
+        //Account.fromWIF(wifTextfield.text.toString())
+
         Account.restoreWalletFromDevice()
         //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
         //Account.fromWIF("L4Ns4Uh4WegsHxgDG49hohAYxuhj41hhxG6owjjTWg95GSrRRbLL")

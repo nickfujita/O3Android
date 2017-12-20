@@ -9,14 +9,16 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="48dp">
 
         <TextView
             android:id="@+id/assetTextView"
+            style="@style/TableRowTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:includeFontPadding="false"
             android:text="TextView"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,12 +26,14 @@
 
         <TextView
             android:id="@+id/transactionIDTextView"
+            style="@style/TableRowSubtitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginEnd="100dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="16dp"
             android:ellipsize="middle"
+            android:includeFontPadding="false"
             android:singleLine="true"
             android:text="TextView"
             android:textSize="11sp"
@@ -39,10 +43,12 @@
 
         <TextView
             android:id="@+id/amountTextView"
+            style="@style/TableRowNumberText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:includeFontPadding="false"
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     tools:context="network.o3.o3wallet.Settings.ContactsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,6 +11,6 @@
         android:id="@+id/contactsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:drawable/divider_horizontal_bright"
+        android:divider="@color/colorSubtleGrey"
         android:dividerHeight="1dp" />
 </FrameLayout>

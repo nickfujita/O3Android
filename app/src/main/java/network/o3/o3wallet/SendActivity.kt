@@ -1,6 +1,7 @@
 package network.o3.o3wallet
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Fragment
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -42,7 +43,7 @@ class SendActivity : AppCompatActivity() {
     lateinit var selectAddressButton: Button
     lateinit var view: View
 
-    public val ARG_REVEAL_SETTINGS:String = "arg_reveal_settings"
+    public val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +77,7 @@ class SendActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == R.id.home){
+        if (item!!.itemId == R.id.home) {
             NavUtils.navigateUpFromSameTask(this)
             return true
         }
@@ -87,7 +88,6 @@ class SendActivity : AppCompatActivity() {
 
 
     }
-
 
 
     private fun checkEnableSendButton() {
@@ -109,9 +109,7 @@ class SendActivity : AppCompatActivity() {
         selectedAssetTextView.text = selectedAsset.name.toUpperCase()
     }
 
-    private fun sendTapped() {
-        this.hideKeyboard()
-
+    private fun send() {
         //validate field
         val address = addressTextView.text.trim().toString()
         var amount = amountTextView.text.trim().toString().toDouble()
@@ -144,6 +142,32 @@ class SendActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun sendTapped() {
+        this.hideKeyboard()
+        //validate field
+        val address = addressTextView.text.trim().toString()
+        var amount = amountTextView.text.trim().toString().toDouble()
+
+        if (amount == 0.0) {
+            baseContext.toast("Amount cannot be zero")
+            return
+        }
+
+        val message = "Are you sure you want to send %s %s to %s?".format(amount.toString(), this.selectedAsset.name.toUpperCase(), address)
+        val simpleAlert = AlertDialog.Builder(this).create()
+        simpleAlert.setTitle("Confirmation")
+        simpleAlert.setMessage(message)
+
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Send", { _, _ ->
+            send()
+        })
+
+        simpleAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel", { _, _ ->
+        })
+
+        simpleAlert.show()
     }
 
     private fun pasteAddressTapped() {
