@@ -19,6 +19,13 @@
         <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
+    <style name="noTitle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimary</item>
+        <item name="spark_SparkViewStyle">@style/MySparkViewStyle</item>
+    </style>
+
     <style name="MySparkViewStyle" parent="@style/spark_SparkView">
         <item name="spark_lineColor">@color/colorPrimary</item>
         <item name="spark_lineWidth">@dimen/line_width</item>
@@ -121,6 +128,7 @@
 
     <style name="PortfolioHeader">
         <item name="android:fontFamily">@font/muli</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="PortfolioHeader.WalletType">

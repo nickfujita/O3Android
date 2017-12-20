@@ -1,5 +1,6 @@
 package network.o3.o3wallet.Portfolio
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
@@ -10,7 +11,9 @@ import android.support.v4.view.ViewPager
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.os.Handler
 import android.support.v4.view.ViewPager.*
+import android.view.Window
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,7 +32,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
         val view = inflater!!.inflate(R.layout.fragment_home, container, false)
 
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
@@ -89,21 +91,12 @@ class HomeFragment : Fragment() {
                     position == 2 -> HomeViewModel.DisplayType.COLD
                     else -> return
                 }
-                homeModel?.setDisplayType(displayType)
-                updatePortfolioAndTable(true)
-            }
-        })
 
-        viewPager?.addOnPageChangeListener(object: SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                val displayType = when {
-                    position == 0 -> HomeViewModel.DisplayType.HOT
-                    position == 1 -> HomeViewModel.DisplayType.COMBINED
-                    position == 2 -> HomeViewModel.DisplayType.COLD
-                    else -> return
-                }
-                homeModel?.setDisplayType(displayType)
-                updatePortfolioAndTable(true)
+                // This delay allows for the scroll to complete before the UI thread gets blocked
+                Handler().postDelayed( {
+                    homeModel?.setDisplayType(displayType)
+                    updatePortfolioAndTable(true)
+                }, 200)
             }
         })
     }
@@ -143,11 +136,13 @@ class HomeFragment : Fragment() {
     }
 
     fun updatePortfolioAndTable(refresh: Boolean) {
+        val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
+        progress?.visibility = View.VISIBLE
         val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
         homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
+                progress?.visibility = View.GONE
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
-                assetListAdapter?.notifyDataSetChanged()
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader

@@ -8,6 +8,8 @@ import android.widget.TextView
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
@@ -108,7 +110,10 @@ class AssetGraph : AppCompatActivity() {
     private fun loadGraph(refresh: Boolean) {
         val priceView = findViewById<TextView>(R.id.currentPriceTextView)
         val percentView = findViewById<TextView>(R.id.percentChangeTextView)
+        val progress = findViewById<ProgressBar>(R.id.progressBar)
+        progress?.visibility = View.VISIBLE
         assetGraphModel?.getHistoryFromModel(refresh)?.observe(this, Observer<PriceHistory> { data ->
+            progress?.visibility = View.GONE
             chartDataAdapter.setData(assetGraphModel?.getPriceFloats())
             priceView.text = assetGraphModel?.getLatestPriceFormattedString()
 
