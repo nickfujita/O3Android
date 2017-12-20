@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "153708571967",
+    "firebase_url": "https://o3-wallet.firebaseio.com",
+    "project_id": "o3-wallet",
+    "storage_bucket": "o3-wallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153708571967:android:3c0d04c16aa25061",
+        "android_client_info": {
+          "package_name": "network.o3.o3wallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153708571967-bv3vjqkrv7nft3gshrg7gqt0890ts0ja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "network.o3.o3wallet",
+            "certificate_hash": "27d1f9123fc4e561726e728c3968c8c80218d686"
+          }
+        },
+        {
+          "client_id": "153708571967-4kngs46ne46sdlgq5bl5l6i5arejupa0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJDbsFQLC1PA-LGPx21d8CLpEz1JXZ4MI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153708571967-4kngs46ne46sdlgq5bl5l6i5arejupa0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
