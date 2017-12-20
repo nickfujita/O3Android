@@ -1,6 +1,8 @@
 package network.o3.o3wallet.Settings
 
 import android.app.Fragment
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import android.widget.*
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.WatchAddress
+import network.o3.o3wallet.ui.toast
 
 
 class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): BaseAdapter() {
@@ -49,17 +52,34 @@ class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): Bas
             val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
             titleTextView.text = getItem(position).nickname
             subtitleTextView.text = getItem(position).address
+            val optionButton = view.findViewById<ImageButton>(R.id.contact_option_button)
 
-            view.setOnClickListener {
-                mFragment.showRemoveAlert(getItem(position))
+            optionButton.setOnClickListener {
+                val popup = PopupMenu(mContext,optionButton)
+                popup.menuInflater.inflate(R.menu.contact_menus,popup.menu)
+                popup.setOnMenuItemClickListener {
+                    val itemId = it.itemId
+
+                    if (itemId == R.id.send_to_address) {
+                        mFragment.sendToAddress(getItem(position))
+                    } else if (itemId == R.id.remove_address) {
+                        mFragment.showRemoveAlert(getItem(position))
+                    } else if (itemId == R.id.copy_address) {
+                        val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val contact = getItem(position)
+                        val clip = ClipData.newPlainText("address",contact.address)
+                        clipboard.primaryClip = clip
+                        mContext.toast("Copied Address")
+                    }
+                    true
+                }
+                popup.show()
             }
-
             return view
         } else {
             val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
             view.findViewById<Button>(R.id.AddButton).setOnClickListener {
-                val intent = Intent(mContext, AddWatchAddress::class.java)
-                mContext.startActivity(intent)
+               mFragment.addNewAddress()
             }
             return view
         }

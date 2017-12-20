@@ -50,9 +50,6 @@ class SendActivity : AppCompatActivity() {
         setContentView(R.layout.activity_send)
 
         this.title = "Send"
-        //default asset
-
-
         view = findViewById<View>(R.id.root_layout)
         addressTextView = findViewById<EditText>(R.id.addressTextView)
         amountTextView = findViewById<EditText>(R.id.amountTextView)
@@ -77,6 +74,14 @@ class SendActivity : AppCompatActivity() {
         scanAddressButton.setOnClickListener { scanAddressTapped() }
         selectAddressButton.setOnClickListener { selectAddressTapped() }
 
+
+        val extras = intent.extras
+        if (extras != null) {
+            val address = extras.getString("address")
+            addressTextView.text = address
+            amountTextView.requestFocus()
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -88,7 +93,6 @@ class SendActivity : AppCompatActivity() {
     }
 
     private fun setupEnterAnimation() {
-
 
     }
 

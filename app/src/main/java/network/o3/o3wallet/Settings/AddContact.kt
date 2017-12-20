@@ -70,6 +70,8 @@ class AddContact : AppCompatActivity() {
                     }
                 } else {
                     PersistentStore.addContact(addressField.text.trim().toString(), nickNameField.text.trim().toString())
+                    //RELOAD_DATA = 1
+                    setResult(1)
                     finish()
                 }
             }

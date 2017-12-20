@@ -14,6 +14,7 @@ data class WatchAddress(val address: String, val nickname: String)
 data class Contact(val address: String, val nickname: String)
 
 object PersistentStore {
+
     fun addWatchAddress(address: String, nickname: String): ArrayList<WatchAddress> {
         val currentAddresses = getWatchAddresses().toCollection(ArrayList<WatchAddress>())
         val toInsert = WatchAddress(address, nickname)
@@ -30,7 +31,6 @@ object PersistentStore {
         settingPref.apply()
 
         return currentAddresses
-
     }
 
     fun addContact(address: String, nickname: String): ArrayList<Contact> {
