@@ -36,7 +36,7 @@ class NeoNodeRPC {
         }
     }
 
-    constructor(url: String = "http://seed2.neo.org:10332") {
+    constructor(url: String = "http://node1.o3.network:10332") {
         this.nodeURL = url
     }
 

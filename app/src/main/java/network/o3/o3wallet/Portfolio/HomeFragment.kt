@@ -19,8 +19,13 @@ import com.robinhood.spark.animation.MorphSparkAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_portfolio_header.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.Portfolio
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.support.v4.onUiThread
 
 
 class HomeFragment : Fragment() {
@@ -32,17 +37,20 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val view = inflater!!.inflate(R.layout.fragment_home, container, false)
+        return inflater!!.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
         assetListAdapter = AssetListAdapter(this.context, this)
         assetListAdapter?.homeModel = homeModel
-        view.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
-        initiateGraph(view)
-        initiateViewPager(view)
-        initiateData(view)
-        initiateIntervalButtons(view)
-        return view
+        view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
+        initiateGraph(view!!)
+        initiateViewPager(view!!)
+        initiateData(view!!)
+        initiateIntervalButtons(view!!)
     }
 
     fun initiateGraph(view: View) {
@@ -66,7 +74,7 @@ class HomeFragment : Fragment() {
                 return@OnScrubListener
             } else {
                 val scrubbedAmount = (value as Float).toDouble()
-                val percentChange =  (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
+                val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
                         homeModel?.getInitialPortfolioValue()!! * 100
                 if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
@@ -83,7 +91,7 @@ class HomeFragment : Fragment() {
         viewPager = view.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
         val portfolioHeaderAdapter = PortfolioHeaderPagerAdapter(childFragmentManager)
         viewPager?.adapter = portfolioHeaderAdapter
-        viewPager?.addOnPageChangeListener(object: SimpleOnPageChangeListener() {
+        viewPager?.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 val displayType = when {
                     position == 0 -> HomeViewModel.DisplayType.HOT
@@ -93,7 +101,7 @@ class HomeFragment : Fragment() {
                 }
 
                 // This delay allows for the scroll to complete before the UI thread gets blocked
-                Handler().postDelayed( {
+                Handler().postDelayed({
                     homeModel?.setDisplayType(displayType)
                     updatePortfolioAndTable(true)
                 }, 200)
@@ -102,8 +110,8 @@ class HomeFragment : Fragment() {
     }
 
     fun initiateData(view: View) {
-        homeModel?.getAccountState(refresh = true)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
-            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> {  data ->
+        homeModel?.getAccountState(refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
+            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
             })
         })
@@ -139,7 +147,7 @@ class HomeFragment : Fragment() {
         val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
         progress?.visibility = View.VISIBLE
         val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
-        homeModel?.getAccountState(refresh = refresh)?.observe(this,  Observer<Pair<Int, Double>> { balance ->
+        homeModel?.getAccountState(refresh = refresh)?.observe(this, Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 progress?.visibility = View.GONE
                 chartDataAdapter.setData(homeModel?.getPriceFloats())

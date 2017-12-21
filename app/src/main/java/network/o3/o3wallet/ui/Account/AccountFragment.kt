@@ -28,11 +28,21 @@ import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import android.support.design.widget.BottomSheetBehavior
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.onUiThread
+import java.util.concurrent.Executors
 
+interface TokenListProtocol {
+    fun reloadTokenList()
+}
 
-class AccountFragment : Fragment() {
+class AccountFragment : Fragment(),TokenListProtocol {
 
     private var fabExpanded = false
     private lateinit var menuButton: FloatingActionButton
@@ -43,6 +53,7 @@ class AccountFragment : Fragment() {
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
     private lateinit var qrButton: ImageButton
+    private lateinit var addNEP5TokenButton: Button
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
 
@@ -58,7 +69,7 @@ class AccountFragment : Fragment() {
         qrButton = view!!.findViewById<ImageButton>(R.id.qrButton)
         unclaimedGASLabel = view!!.findViewById(R.id.unclaimedGASLabel)
         assetListView = view!!.findViewById<ListView>(R.id.assetListView)
-
+        addNEP5TokenButton = view!!.findViewById<Button>(R.id.addNEP5TokenButton)
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
 
         val muli = ResourcesCompat.getFont(view!!.context, R.font.muli_bold)
@@ -80,6 +91,7 @@ class AccountFragment : Fragment() {
         menuButton.setOnClickListener { menuButtonTapped() }
         claimButton.setOnClickListener { claimGasTapped() }
         qrButton.setOnClickListener { showMyAddress() }
+        addNEP5TokenButton.setOnClickListener{addNewNEP5Token()}
 
         menuButton.transitionName = "reveal"
         claimButton.isEnabled = false
@@ -106,70 +118,81 @@ class AccountFragment : Fragment() {
         addressBottomSheet.show(activity!!.supportFragmentManager, "myaddress")
     }
 
+    override fun reloadTokenList() {
+        loadAccountState()
+    }
+
+    private fun addNewNEP5Token() {
+        val bottomSheet = NEP5ListFragment()
+        bottomSheet.delegate = this
+        bottomSheet.show(activity!!.supportFragmentManager, "nep5list")
+    }
+
+    private fun showAccountState(data: Pair<AccountState?, Error?>): Unit {
+
+        val error = data.second
+        val accountState = data.first
+
+        if (error != null) {
+            swipeContainer.isRefreshing = false
+            context!!.toast(error.message!!)
+            return
+        }
+
+        this.currentAccountState = accountState!!
+        swipeContainer.isRefreshing = false
+        //construct array of AccountAsset
+        var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
+
+        for (balance in accountState!!.balances.iterator()) {
+            //NEO
+            if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+                this.neoBalance = balance
+                this.enableClaimGASButton(balance.value)
+                var asset = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                        name = NeoNodeRPC.Asset.NEO.name,
+                        symbol = NeoNodeRPC.Asset.NEO.name,
+                        decimal = 0,
+                        value = balance.value)
+                assets.add(asset)
+            } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
+                this.gasBalance = balance
+                var asset = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                        name = NeoNodeRPC.Asset.GAS.name,
+                        symbol = NeoNodeRPC.Asset.GAS.name,
+                        decimal = 0,
+                        value = balance.value)
+                assets.add(asset)
+            }
+        }
+
+        val selectedToken = PersistentStore.getSelectedNEP5Tokens()
+
+        selectedToken.all { t ->
+            var token = t.value
+            var asset =  AccountAsset(assetID = token.assetID,
+                    name = token.name,
+                    symbol = token.symbol,
+                    decimal = token.decimal,
+                    value = 0.0)
+            assets.add(asset)
+        }
+
+        val adapter = AccountAssetsAdapter(context, assets.toTypedArray())
+        assetListView.adapter = adapter
+    }
+
+
     private fun loadAccountState() {
         claimButton.isEnabled = false
-        NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
-            val error = it.second
-            val accountState = it.first
-            if (error != null) {
-                //manage error here
-                activity.runOnUiThread {
-                    swipeContainer.isRefreshing = false
-                    context!!.toast(error.message!!)
-                }
-            } else {
-                this.currentAccountState = accountState!!
-                activity.runOnUiThread {
-                    swipeContainer.isRefreshing = false
-                    //construct array of AccountAsset
-                    var assets:ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
-
-                    for (balance in accountState!!.balances.iterator()) {
-                        //NEO
-                        if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
-                            this.neoBalance = balance
-                            this.enableClaimGASButton(balance.value)
-                            var asset = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                                    name =  NeoNodeRPC.Asset.NEO.name,
-                                    symbol = NeoNodeRPC.Asset.NEO.name,
-                                    decimal = 0,
-                                    value = balance.value)
-                            assets.add(asset)
-                        } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
-                            this.gasBalance = balance
-                            var asset = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                                    name =  NeoNodeRPC.Asset.GAS.name,
-                                    symbol = NeoNodeRPC.Asset.GAS.name,
-                                    decimal = 0,
-                                    value = balance.value)
-                            assets.add(asset)
-                        }
+        async(UI) {
+            bg {
+                 NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
+                    onUiThread {
+                        showAccountState(it)
                     }
-                    var rpx = AccountAsset(assetID = "ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",
-                            name =  "Red Pulse Token",
-                            symbol = "RPX",
-                            decimal = 8,
-                            value = 300.56)
-                    assets.add(rpx)
-
-                    var dbc = AccountAsset(assetID = "b951ecbbc5fe37a9c280a76cb0ce0014827294cf",
-                            name =  "DeepBrain Coin",
-                            symbol = "DBC",
-                            decimal = 8,
-                            value = 1526.26)
-                    assets.add(dbc)
-
-                    var aph = AccountAsset(assetID = "b951ecbbc5fe37a9c280a76cb0ce0014827294cf",
-                            name =  "Aphelion",
-                            symbol = "APH",
-                            decimal = 8,
-                            value = 1346.161941)
-                    assets.add(aph)
-                    val adapter = AccountAssetsAdapter(context, assets.toTypedArray())
-                    assetListView.adapter = adapter
                 }
             }
-
         }
     }
 

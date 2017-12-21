@@ -4,6 +4,8 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import com.google.gson.annotations.SerializedName
 
+
+
 data class SendRawTransactionResponse(var jsonrpc: String, var id: Int, var result: Boolean)
 
 data class NodeResponse(var jsonrpc: String, var id: Int, var result: JsonObject)
@@ -61,6 +63,12 @@ data class NeoNetwork(val main: Array<Node>, val test: Array<Node>)
 data class AccountAsset(val assetID: String,
                         val name: String,
                         val value: Double,
+                        val decimal: Int,
+                        val symbol: String)
+
+data class NEP5Token(val assetID: String,
+                        val name: String,
+                        val totalSupply: Int,
                         val decimal: Int,
                         val symbol: String)
 
