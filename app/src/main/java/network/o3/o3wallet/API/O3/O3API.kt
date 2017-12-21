@@ -16,7 +16,8 @@ class O3API {
     val baseURL = "http://staging-api.o3.network/v1/"
     enum class Route() {
         HISTORY,
-        PORTFOLIO;
+        PORTFOLIO,
+        FEED;
 
         fun routeName(): String {
             return this.name.toLowerCase()
@@ -55,6 +56,21 @@ class O3API {
                 completion(Pair<Portfolio?, Error?>(history, null))
             } else {
                 completion(Pair<Portfolio?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+
+    fun getNewsFeed(completion: (Pair<FeedData?, Error?>) -> Unit) {
+        val url = "https://staging-api.o3.network/v1/feed/"/*baseURL + Route.FEED.routeName()*/
+        url.httpGet().responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val o3Response = gson.fromJson<O3Response>(data!!)
+                val feed = gson.fromJson<FeedData>(o3Response.result["data"])
+                completion(Pair(feed, null))
+            } else {
+                completion(Pair(null, Error(error.localizedMessage)))
             }
         }
     }

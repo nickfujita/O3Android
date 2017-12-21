@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.MenuItem
 import co.getchannel.channel.Channel
 import com.google.firebase.iid.FirebaseInstanceId
+import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
 import network.o3.o3wallet.ui.Account.TabbedAccount
@@ -14,6 +15,7 @@ import java.lang.ref.WeakReference
 
 
 class MainTabbedActivity : AppCompatActivity() {
+    var savedNewsFragment: NewsFeedFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,15 @@ class MainTabbedActivity : AppCompatActivity() {
                         selectedFragment = TabbedAccount.newInstance()
                     }
                     R.id.action_item3 -> {
+                        if (savedNewsFragment == null) {
+                            selectedFragment = NewsFeedFragment.newInstance()
+                            savedNewsFragment = selectedFragment
+                        }  else {
+                            selectedFragment = savedNewsFragment
+                        }
+
+                    }
+                    R.id.action_item4 -> {
                         val settingsModal = SettingsFragment.newInstance()
                         settingsModal.show(supportFragmentManager, settingsModal.tag)
                         return true

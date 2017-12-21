@@ -28,9 +28,9 @@ class PortfolioHeader:Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_portfolio_header, container, false)
-        position = arguments.getInt("position")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_portfolio_header, container, false)
+        position = arguments!!.getInt("position")
         val fundSourceTextView = view?.findViewById<TextView>(R.id.fundSourceTextView)
         fundSourceTextView?.text = titles[position]
 
@@ -41,7 +41,7 @@ class PortfolioHeader:Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateHeaderFunds()
     }
@@ -54,7 +54,7 @@ class PortfolioHeader:Fragment() {
             else -> return
         }
 
-        var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
         val percentChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
 
@@ -86,11 +86,11 @@ class PortfolioHeader:Fragment() {
     }
 
     private fun configureArrows(view: View?) {
-        val pager = activity.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
+        val pager = activity?.findViewById<ViewPager>(R.id.portfolioHeaderFragment)
         val leftArrow = view?.findViewById<ImageView>(R.id.leftArrowImageView)
         val rightArrow = view?.findViewById<ImageView>(R.id.rightArrowImageView)
 
-        var homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
+        var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         view?.findViewById<TextView>(R.id.fundAmountTextView)!!.setOnClickListener {
             if (homeModel.getCurrency() == CurrencyType.USD) {
                 homeModel.setCurrency(CurrencyType.BTC)

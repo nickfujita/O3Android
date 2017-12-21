@@ -13,6 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -52,6 +53,8 @@ dependencies {
     annotationProcessor 'com.google.auto.value:auto-value:1.2'
     compileOnly 'com.google.auto.value:auto-value:1.2'
     compile 'com.robinhood.ticker:ticker:1.2.2'
+    implementation 'com.github.bumptech.glide:glide:4.3.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
 
     compile project(':channel')
     compile 'com.github.jkwiecien:EasyImage:1.3.1'

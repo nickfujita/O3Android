@@ -20,18 +20,18 @@ class AccountTransactionsFragment : android.support.v4.app.Fragment() {
     private lateinit var transactionListView: ListView
     private lateinit var swipeContainer: SwipeRefreshLayout
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_account_transactions, container, false)
+        return inflater.inflate(R.layout.fragment_account_transactions, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //view here
-        transactionListView = view!!.findViewById<ListView>(R.id.transactionListView)
-        swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
-        transactionListView.emptyView = view!!.findViewById<TextView>(R.id.emptyTransaction)
+        transactionListView = view.findViewById<ListView>(R.id.transactionListView)
+        swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        transactionListView.emptyView = view.findViewById<TextView>(R.id.emptyTransaction)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary,
@@ -49,11 +49,11 @@ class AccountTransactionsFragment : android.support.v4.app.Fragment() {
             var error = it.second
             var data = it.first
             if (error != null) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     swipeContainer.isRefreshing = false
                 }
             } else {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     val adapter = TransactionHistoryAdapter(activity as Context, data!!.history)
                     transactionListView.adapter = adapter
                     swipeContainer.isRefreshing = false
