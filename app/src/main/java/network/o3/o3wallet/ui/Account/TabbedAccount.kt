@@ -22,7 +22,11 @@ class TabbedAccount : Fragment() {
         val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
         val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
 
-        viewPager.adapter = AccountFragmentPagerAdapter(childFragmentManager, context!!)
+        viewPager.adapter = AccountFragmentPagerAdapter(childFragmentManager, context)
+        //android keeps one fragment on either side so if you select the third tab and select first tab again.
+        //fragment will be created causing to load the data again.
+        //use this offScreenPageLimit to tell it to keep 2 fragments instead
+        viewPager.offscreenPageLimit = 2
         tabLayout.setupWithViewPager(viewPager)
     }
 

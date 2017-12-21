@@ -4,6 +4,7 @@ import android.preference.PreferenceManager
 import android.util.Base64
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
+import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.O3.O3Response
 
 /**
@@ -104,6 +105,8 @@ object PersistentStore {
         return contacts
     }
 
+
+
     fun setNodeURL(url: String) {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
         settingPref.putString("NODE_URL", url)
@@ -113,5 +116,49 @@ object PersistentStore {
     fun getNodeURL(): String {
         return  PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
                 .getString("NODE_URL", "http://seed2.neo.org:10332")
+    }
+
+
+    fun getSelectedNEP5Tokens(): HashMap<String,NEP5Token> {
+        var jsonString = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("SELECTED_NEP5_TOKENS", null)
+
+        if (jsonString == null) {
+            return HashMap<String,NEP5Token>()
+        }
+
+        val gson = Gson()
+        val list = gson.fromJson<HashMap<String,NEP5Token>>(jsonString)
+        return list
+    }
+
+    fun addToken(token: NEP5Token): HashMap<String,NEP5Token> {
+        val currentList = getSelectedNEP5Tokens()
+        if (currentList[token.assetID] != null) {
+            return currentList
+        }
+
+        currentList[token.assetID] = token
+        val gson = Gson()
+        val jsonString = gson.toJson(currentList)
+
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putString("SELECTED_NEP5_TOKENS", jsonString)
+        settingPref.apply()
+
+        return currentList
+    }
+
+    fun removeToken(token: NEP5Token): HashMap<String,NEP5Token> {
+        val currentList = getSelectedNEP5Tokens()
+        currentList.remove(token.assetID)
+        val gson = Gson()
+        val jsonString = gson.toJson(currentList)
+
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putString("SELECTED_NEP5_TOKENS", jsonString)
+        settingPref.apply()
+
+        return currentList
     }
 }

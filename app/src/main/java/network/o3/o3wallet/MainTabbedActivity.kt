@@ -17,6 +17,7 @@ import java.lang.ref.WeakReference
 class MainTabbedActivity : AppCompatActivity() {
     var savedNewsFragment: NewsFeedFragment? = null
 
+    var activeTab: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_tabbed)
@@ -28,12 +29,17 @@ class MainTabbedActivity : AppCompatActivity() {
         transaction.commit()
         setupChannel()
 
+        activeTab = selectedFragment.id
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 var selectedFragment: Fragment? = null
+                //avoid loading the data again when tap at the same tab
+                if (activeTab == item.itemId) {
+                    return false
+                }
+                activeTab = item.itemId
                 when (item.getItemId()) {
-
                     R.id.action_item1 -> {
                         selectedFragment = HomeFragment.newInstance()
                     }

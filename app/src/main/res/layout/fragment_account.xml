@@ -157,7 +157,7 @@
                 android:visibility="visible">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/addNEP5TokenButton"
                     style="@style/BorderLessButton"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
