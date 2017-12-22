@@ -1,25 +1,27 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import network.o3.o3wallet.API.CoZ.TransactionHistoryEntry
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.NEO.AssetType
+import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import org.jetbrains.anko.runOnUiThread
 import java.text.NumberFormat
-import java.util.*
 
 /**
  * Created by apisit on 12/20/17.
  */
-class AccountAssetsAdapter(context: Context, assets: Array<AccountAsset>) : BaseAdapter() {
+class AccountAssetsAdapter(context: Context, address: String, assets: Array<AccountAsset>) : BaseAdapter() {
 
-    private var assets = assets
+    private var arrayOfAccountAssets = assets
+    private var address = address
+    private var mContext = context
     private val inflator: LayoutInflater
 
     init {
@@ -27,15 +29,30 @@ class AccountAssetsAdapter(context: Context, assets: Array<AccountAsset>) : Base
     }
 
     override fun getCount(): Int {
-        return assets.count()
+        return arrayOfAccountAssets.count()
     }
 
     override fun getItem(p0: Int): AccountAsset {
-        return assets[p0]
+        return arrayOfAccountAssets[p0]
     }
 
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
+    }
+
+    private fun loadTokenBalance(position: Int) {
+        val asset = getItem(position)
+        NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(asset.assetID, address = address) {
+            var amountInt = it.first
+            var error = it.second
+            if (error == null) {
+                mContext.runOnUiThread {
+                    val amountDecimal:Double= (amountInt!!.toDouble() / (Math.pow(10.0,asset.decimal.toDouble())))
+                    arrayOfAccountAssets[position].value = amountDecimal
+                    notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -50,7 +67,7 @@ class AccountAssetsAdapter(context: Context, assets: Array<AccountAsset>) : Base
             vh = view.tag as AccountAssetRow
         }
 
-        val asset = assets[position]
+        val asset = arrayOfAccountAssets[position]
         if (asset.assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
             vh.assetNameTextView.text = NeoNodeRPC.Asset.NEO.name
             vh.assetAmountTextView.text = "%d".format(asset.value.toInt())
@@ -64,14 +81,18 @@ class AccountAssetsAdapter(context: Context, assets: Array<AccountAsset>) : Base
             vh.assetAmountTextView.text = formatter.format(asset.value)
         }
 
+        if (asset.type == AssetType.NEP5TOKEN) {
+            loadTokenBalance(position)
+        }
         return view!!
     }
 
     public fun updateAdapter(assets: Array<AccountAsset>) {
-        this.assets = assets
+        this.arrayOfAccountAssets = assets
         notifyDataSetChanged()
     }
 }
+
 private class AccountAssetRow(row: View?) {
     val assetNameTextView: TextView
     val assetAmountTextView: TextView

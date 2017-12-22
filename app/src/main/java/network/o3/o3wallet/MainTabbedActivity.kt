@@ -10,8 +10,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
-import network.o3.o3wallet.ui.Account.AccountFragment
-import network.o3.o3wallet.ui.Account.TabbedAccount
+import network.o3.o3wallet.Wallet.TabbedAccount
 import java.lang.ref.WeakReference
 
 

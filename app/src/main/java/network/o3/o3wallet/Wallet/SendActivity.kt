@@ -1,9 +1,8 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Wallet
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Fragment
-import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -12,23 +11,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v4.app.NavUtils
-import android.support.v7.app.ActionBar
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
-import android.transition.Transition
-import android.transition.TransitionInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
-import network.o3.o3wallet.ui.toast
-import network.o3.o3wallet.ui.toastUntilCancel
-import android.transition.*
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
-import kotlinx.android.synthetic.main.activity_send.*
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.PersistentStore
+import network.o3.o3wallet.R
 
 class SendActivity : AppCompatActivity() {
 

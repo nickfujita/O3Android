@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:padding="16dp"
-    tools:context="network.o3.o3wallet.MyAddressFragment">
+    tools:context="network.o3.o3wallet.Wallet.MyAddressFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -40,7 +40,17 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/copyMyAddressButton"
+            style="@style/BorderLessButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Copy Address" />
     </LinearLayout>
 
 </FrameLayout>

@@ -4,10 +4,6 @@
 package network.o3.o3wallet.Settings
 
 import android.content.Context
-import android.content.Intent
-import android.opengl.Visibility
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +11,9 @@ import android.widget.*
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.Contact
 import network.o3.o3wallet.R
-import android.R.attr.label
 import android.content.ClipData
 import android.content.ClipboardManager
-import network.o3.o3wallet.ui.toast
+import network.o3.o3wallet.Wallet.toast
 
 
 /**

@@ -1,4 +1,4 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Services
 
 import android.app.IntentService
 import android.content.Intent

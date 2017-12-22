@@ -1,18 +1,16 @@
 package network.o3.o3wallet.Settings
 
-import android.app.Fragment
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.content.Context
-import android.content.Intent
 import android.widget.*
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.WatchAddress
-import network.o3.o3wallet.ui.toast
+import network.o3.o3wallet.Wallet.toast
 
 
 class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): BaseAdapter() {

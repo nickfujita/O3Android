@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    tools:context="network.o3.o3wallet.NEP5ListFragment">
+    tools:context="network.o3.o3wallet.Wallet.NEP5ListFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

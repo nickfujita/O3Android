@@ -66,8 +66,8 @@ class NetworkAdapter(context: Context): BaseAdapter() {
         val blockCountView = view.findViewById<TextView>(R.id.blockCountTextView)
 
         urlView.text = node.url
-        peerCountView.text = node.peercount.toString()
-        blockCountView.text = node.blockcount.toString()
+        peerCountView.text = "Peer count: %s".format(node.peercount.toString())
+        blockCountView.text = "Block count: %s".format(node.blockcount.toString())
         if (getHighestBlockCount() - node.blockcount >= 10) {
             urlView.setTextColor(mContext.getColor(R.color.colorLoss))
             peerCountView.setTextColor(mContext.getColor(R.color.colorLoss))

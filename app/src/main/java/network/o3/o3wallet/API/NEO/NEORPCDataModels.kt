@@ -60,10 +60,16 @@ data class Node(val url: String, val blockcount: Int, val peercount: Int)
 data class NeoNetwork(val main: Array<Node>, val test: Array<Node>)
 
 
+enum class AssetType {
+	NATIVE,
+	NEP5TOKEN;
+}
+
 data class AccountAsset(val assetID: String,
                         val name: String,
-                        val value: Double,
+                        var value: Double,
                         val decimal: Int,
+						var type: AssetType,
                         val symbol: String)
 
 data class NEP5Token(val assetID: String,
@@ -72,3 +78,15 @@ data class NEP5Token(val assetID: String,
                         val decimal: Int,
                         val symbol: String)
 
+
+
+data class InvokeFunctionResponse(
+		val state: String, //HALT, BREAK
+		val gas_consumed: String, //0.338
+		val stack: List<Stack>
+)
+
+data class Stack(
+		@SerializedName("type")	val type: String, //ByteArray
+		@SerializedName("value") val value: String //00ab510d //little endian
+)

@@ -1,4 +1,4 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.os.Bundle
 import android.view.ViewGroup
@@ -7,42 +7,29 @@ import android.view.View
 import android.support.v4.app.Fragment
 import android.support.design.widget.FloatingActionButton
 import android.widget.*
-import android.content.Context
 import android.os.Handler
 import network.o3.o3wallet.API.CoZ.Claims
-import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
-import network.o3.o3wallet.API.NEO.AccountState
-import network.o3.o3wallet.API.NEO.Balance
-import network.o3.o3wallet.ui.toast
-import network.o3.o3wallet.ui.toastUntilCancel
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
-import kotlinx.android.synthetic.main.fragment_settings.*
-import android.support.design.widget.BottomSheetBehavior
-import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
-import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.NEO.*
 import org.jetbrains.anko.coroutines.experimental.bg
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.onUiThread
-import java.util.concurrent.Executors
 
 interface TokenListProtocol {
     fun reloadTokenList()
 }
 
-class AccountFragment : Fragment(),TokenListProtocol {
+class AccountFragment : Fragment(), TokenListProtocol {
 
     private var fabExpanded = false
     private lateinit var menuButton: FloatingActionButton
@@ -97,6 +84,12 @@ class AccountFragment : Fragment(),TokenListProtocol {
         claimButton.isEnabled = false
 
         activity?.title = "Account"
+
+        //Account state doesn't return balance array if account has zero NEO and GAS
+        //we must init balance with 0
+        neoBalance = Balance( NeoNodeRPC.Asset.NEO.assetID(),0.0)
+        gasBalance= Balance( NeoNodeRPC.Asset.GAS.assetID(),0.0)
+
         loadAccountState()
         loadClaimableGAS()
     }
@@ -149,22 +142,27 @@ class AccountFragment : Fragment(),TokenListProtocol {
             if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
                 this.neoBalance = balance
                 this.enableClaimGASButton(balance.value)
-                var asset = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                        name = NeoNodeRPC.Asset.NEO.name,
-                        symbol = NeoNodeRPC.Asset.NEO.name,
-                        decimal = 0,
-                        value = balance.value)
-                assets.add(asset)
+
             } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
                 this.gasBalance = balance
-                var asset = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                        name = NeoNodeRPC.Asset.GAS.name,
-                        symbol = NeoNodeRPC.Asset.GAS.name,
-                        decimal = 0,
-                        value = balance.value)
-                assets.add(asset)
             }
         }
+
+        var neo = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                name = NeoNodeRPC.Asset.NEO.name,
+                symbol = NeoNodeRPC.Asset.NEO.name,
+                decimal = 0,
+                type = AssetType.NATIVE,
+                value = neoBalance.value)
+        assets.add(neo)
+
+        var gas = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                name = NeoNodeRPC.Asset.GAS.name,
+                symbol = NeoNodeRPC.Asset.GAS.name,
+                decimal = 0,
+                type = AssetType.NATIVE,
+                value = gasBalance.value)
+        assets.add(gas)
 
         val selectedToken = PersistentStore.getSelectedNEP5Tokens()
 
@@ -174,11 +172,12 @@ class AccountFragment : Fragment(),TokenListProtocol {
                     name = token.name,
                     symbol = token.symbol,
                     decimal = token.decimal,
+                    type = AssetType.NEP5TOKEN,
                     value = 0.0)
             assets.add(asset)
         }
 
-        val adapter = AccountAssetsAdapter(context, assets.toTypedArray())
+        val adapter = AccountAssetsAdapter(context,Account.getWallet()!!.address, assets.toTypedArray())
         assetListView.adapter = adapter
     }
 

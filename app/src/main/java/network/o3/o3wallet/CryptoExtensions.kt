@@ -5,6 +5,7 @@ package network.o3.o3wallet
  */
 import java.security.MessageDigest
 import network.o3.o3wallet.core.*
+import java.nio.ByteBuffer
 
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
@@ -33,8 +34,20 @@ fun String.hexStringToByteArray() : ByteArray {
     return data
 }
 
+fun String.littleEndianHexStringToInt(): Int {
+    var b = this.hexStringToByteArray().reversedArray()
+    return ByteBuffer.wrap(b).getInt()
+}
+
 fun String.hashFromAddress(): String {
     val bytes = Base58.decodeChecked(this)
     val shortened = bytes.sliceArray(IntRange(0,20))
     return shortened.sliceArray(IntRange(1,shortened.count() - 1)).toHex()
+}
+
+
+fun String.hash160(): String {
+    val bytes = Base58.decodeChecked(this)
+    val shortened = bytes.sliceArray(IntRange(1,bytes.count() - 1))
+    return shortened.reversedArray().toHex()
 }

@@ -3,15 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="250dp"
     tools:context="network.o3.o3wallet.LandingFeatureScroll">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
         android:id="@+id/featureImage"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
         android:src="@drawable/chart_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,13 +22,16 @@
 
     <TextView
         android:id="@+id/featureText"
+        style="@style/RegularText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
         android:text="Some awesome feature that is very interesting and you sohuld use this app for sure"
         android:textAlignment="center"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

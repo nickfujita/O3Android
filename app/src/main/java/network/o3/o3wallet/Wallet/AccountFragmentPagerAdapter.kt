@@ -1,7 +1,5 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
-import android.app.Fragment
-import android.app.FragmentManager
 import android.content.Context
 import android.support.v4.app.FragmentPagerAdapter
 import network.o3.o3wallet.Settings.ContactsFragment

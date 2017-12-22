@@ -1,9 +1,7 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View

@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.O3.O3API
+import java.nio.ByteBuffer
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -141,4 +142,21 @@ class APIUnitTests {
         }
     }
 
+    @Test
+    fun testGetTokenBalance() {
+        var latch = CountDownLatch(1)
+        NeoNodeRPC().getTokenBalanceOf("ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9",address = "AJShjraX4iMJjwVt8WYYzZyGvDMxw6Xfbe") {
+            print(it.first)
+            latch.countDown()
+        }
+        latch.await(2000000000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun testConvertHexStringByteArrayToInt() {
+        var v = "00ab510d" //hex little endian
+        var b = v.hexStringToByteArray().reversedArray()
+        var amount = ByteBuffer.wrap(b).getInt()
+        print(amount)
+    }
 }

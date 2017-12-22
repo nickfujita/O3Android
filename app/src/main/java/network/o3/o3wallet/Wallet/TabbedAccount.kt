@@ -1,4 +1,4 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager

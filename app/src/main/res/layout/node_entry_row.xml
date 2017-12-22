@@ -5,14 +5,17 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:maxHeight="76dp">
+    android:maxHeight="64dp"
+    android:minHeight="64dp">
 
     <TextView
         android:id="@+id/urlTextView"
+        style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
         android:text="seed4.neo.org"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,19 +23,21 @@
 
     <TextView
         android:id="@+id/blockCountTextView"
+        style="@style/SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:includeFontPadding="false"
         android:text="Peers: 125"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/urlTextView"
         app:layout_constraintTop_toBottomOf="@+id/peerCountTextView" />
 
     <TextView
         android:id="@+id/peerCountTextView"
+        style="@style/SubtitleText"
         android:layout_width="wrap_content"
-        android:layout_height="21dp"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
         android:text="Block: 125611"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="@+id/blockCountTextView"

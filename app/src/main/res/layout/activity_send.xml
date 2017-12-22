@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:fitsSystemWindows="true"
-    tools:context="network.o3.o3wallet.SendActivity">
+    tools:context="network.o3.o3wallet.Wallet.SendActivity">
 
     <ScrollView
         android:id="@+id/scrollView2"

@@ -9,13 +9,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import neowallet.Wallet
 import network.o3.o3wallet.API.CoZ.*
-import network.o3.o3wallet.hexStringToByteArray
-import network.o3.o3wallet.toHex
 import neowallet.Neowallet
 import java.math.BigInteger
 import android.R.array
 import android.util.Size
-import network.o3.o3wallet.hashFromAddress
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import network.o3.o3wallet.*
+import org.json.JSONArray
 import java.nio.*
 
 
@@ -36,7 +37,7 @@ class NeoNodeRPC {
         }
     }
 
-    constructor(url: String = "http://node1.o3.network:10332") {
+    constructor(url: String = "http://seed3.neo.org:10332") {
         this.nodeURL = url
     }
 
@@ -45,7 +46,8 @@ class NeoNodeRPC {
         GETCONNECTIONCOUNT,
         VALIDATEADDRESS,
         GETACCOUNTSTATE,
-        SENDRAWTRANSACTION;
+        SENDRAWTRANSACTION,
+        INVOKEFUNCTION;
 
         fun methodName(): String {
             return this.name.toLowerCase()
@@ -439,6 +441,48 @@ class NeoNodeRPC {
         val signature = Neowallet.sign(rawClaim, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawClaim, signature)
         return finalPayload
+    }
+
+
+    fun getTokenBalanceOf(tokenHash: String, address: String, completion: (Pair<Int?, Error?>) -> Unit) {
+
+        var params: ArrayList<Any> = arrayListOf<Any>()
+        params.add(tokenHash)
+        params.add("balanceOf")
+        var invokeFunctionParams:ArrayList<Any> = arrayListOf()
+        //var stack = Stack(type = "Hash160",value = address.hash160().toString())
+        var stack = JsonObject()
+        stack.set("type","Hash160")
+        stack.set("value",address.hash160().toString())
+        invokeFunctionParams.add(stack)
+        params.add(jsonArray(invokeFunctionParams))
+
+        val dataJson = jsonObject(
+                "jsonrpc" to "2.0",
+                "method" to RPC.INVOKEFUNCTION.methodName(),
+                "params" to jsonArray(params),
+                "id" to 1
+        )
+
+        var request = nodeURL.httpPost().body(dataJson.toString())
+        request.headers["Content-Type"] = "application/json"
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
+                if (invokeResponse.stack.count() > 0) {
+                    val stack = invokeResponse.stack[0]
+                    val amount = stack.value.littleEndianHexStringToInt()
+                    completion(Pair<Int?, Error?>(amount, null))
+                }else {
+                    completion(Pair<Int?, Error?>(0, null))
+                }
+            } else {
+                completion(Pair<Int?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
     }
 
 }
