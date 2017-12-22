@@ -11,9 +11,9 @@ fun Double.formattedBTCString() : String {
 }
 
 fun Double.formattedUSDString() : String {
-    val fomatter = NumberFormat.getCurrencyInstance()
-    fomatter.currency = Currency.getInstance("USD")
-    return fomatter.format(this)
+    val formatter = NumberFormat.getCurrencyInstance()
+    formatter.currency = Currency.getInstance("USD")
+    return formatter.format(this)
 }
 
 fun Double.formattedPercentString(): String {

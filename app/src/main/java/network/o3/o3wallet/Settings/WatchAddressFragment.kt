@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
 import network.o3.o3wallet.*
+import network.o3.o3wallet.Wallet.SendActivity
 
 
 /**

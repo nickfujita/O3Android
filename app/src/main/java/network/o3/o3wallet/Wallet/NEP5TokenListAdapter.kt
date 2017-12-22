@@ -1,20 +1,15 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.TextView
-import network.o3.o3wallet.API.CoZ.TransactionHistoryEntry
 import network.o3.o3wallet.API.NEO.NEP5Token
-import network.o3.o3wallet.ui.Account.AccountFragment
-import org.jetbrains.anko.sdk15.coroutines.onCheckedChange
-import org.jetbrains.anko.sdk15.coroutines.onClick
+import network.o3.o3wallet.PersistentStore
+import network.o3.o3wallet.R
 
 /**
  * Created by apisit on 12/21/17.

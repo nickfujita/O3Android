@@ -1,4 +1,4 @@
-package network.o3.o3wallet.ui
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
 import android.widget.Toast

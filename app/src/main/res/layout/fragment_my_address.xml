@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:padding="16dp"
-    tools:context="network.o3.o3wallet.MyAddressFragment">
+    tools:context="network.o3.o3wallet.Wallet.MyAddressFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

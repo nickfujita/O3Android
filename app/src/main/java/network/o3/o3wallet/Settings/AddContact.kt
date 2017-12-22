@@ -5,18 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.widget.Button
 import android.widget.EditText
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
-import net.glxn.qrgen.android.QRCode
-import network.o3.o3wallet.afterTextChanged
+import network.o3.o3wallet.Wallet.afterTextChanged
 
 class AddContact : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

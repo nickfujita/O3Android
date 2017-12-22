@@ -1,23 +1,16 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Wallet
 
 import android.app.Dialog
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.app.Fragment
 import android.content.DialogInterface
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ListView
-import android.widget.TextView
-import net.glxn.qrgen.android.QRCode
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.NEP5Token
-import network.o3.o3wallet.ui.Account.AccountFragment
-import network.o3.o3wallet.ui.Account.TokenListProtocol
+import network.o3.o3wallet.R
 
 
 class NEP5ListFragment() : BottomSheetDialogFragment() {
@@ -26,7 +19,7 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
     private lateinit var listView: ListView
     override fun setupDialog(dialog: Dialog?, style: Int) {
         super.setupDialog(dialog, style)
-        val contentView = View.inflate(context,R.layout.fragment_nep5_list,null)
+        val contentView = View.inflate(context, R.layout.fragment_nep5_list,null)
         dialog!!.setContentView(contentView)
     }
 
@@ -56,7 +49,7 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
                 totalSupply = 242629235)
         list.add(aph)
 
-        listView.adapter = NEP5TokenListAdapter(context,list)
+        listView.adapter = NEP5TokenListAdapter(context, list)
         return view
     }
 

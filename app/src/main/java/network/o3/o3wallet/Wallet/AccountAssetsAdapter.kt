@@ -1,18 +1,15 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import network.o3.o3wallet.API.CoZ.TransactionHistoryEntry
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.R
 import java.text.NumberFormat
-import java.util.*
 
 /**
  * Created by apisit on 12/20/17.

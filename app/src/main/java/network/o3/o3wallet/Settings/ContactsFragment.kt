@@ -6,18 +6,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
-import android.view.MenuInflater
-import network.o3.o3wallet.SendActivity
+import network.o3.o3wallet.Wallet.SendActivity
 
 
 /**

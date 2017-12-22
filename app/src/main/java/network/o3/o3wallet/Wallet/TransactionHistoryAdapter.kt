@@ -1,7 +1,6 @@
-package network.o3.o3wallet.ui.Account
+package network.o3.o3wallet.Wallet
 
 import android.content.Context
-import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.LayoutInflater

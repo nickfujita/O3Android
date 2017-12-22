@@ -1,10 +1,8 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Services
 
-import android.app.Service
-import android.content.Intent
-import android.os.IBinder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import network.o3.o3wallet.ChannelMessageNotification
 
 class MessagingService : FirebaseMessagingService() {
 
@@ -15,7 +13,7 @@ class MessagingService : FirebaseMessagingService() {
         }
 
         if (message.notification != null) {
-            ChannelMessageNotification.notify(baseContext,message!!.notification.title.toString(),0)
+            ChannelMessageNotification.notify(baseContext, message!!.notification.title.toString(), 0)
         }
     }
 }
