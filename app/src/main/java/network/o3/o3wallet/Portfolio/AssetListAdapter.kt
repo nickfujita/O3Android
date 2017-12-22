@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,12 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
                neoData.assetAmount = balance?.first?.toDouble()!!
                neoData.assetPrice = homeModel?.getCurrentNeoPrice()!!
                neoData.totalValue = balance?.first!! * currentNeoPrice
-               neoData.percentChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
+               if (firstNeoPrice == 0.0 || neoData.assetAmount == 0.0) {
+                   neoData.percentChange = 0.0
+               } else {
+                   neoData.percentChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
+               }
+
                notifyDataSetChanged()
            })
            neoData.assetName = "NEO"
@@ -55,7 +61,11 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
                gasData.assetAmount = balance?.second?.toDouble()!!
                gasData.assetPrice = homeModel?.getCurrentGasPrice()!!
                gasData.totalValue = (balance?.second!! * currentGasPrice)
-               gasData.percentChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
+               if (firstGasPrice == 0.0 || gasData.assetAmount == 0.0) {
+                   gasData.percentChange = 0.0
+               } else {
+                   gasData.percentChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
+               }
 
                notifyDataSetChanged()
            })
@@ -86,6 +96,12 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
         assetPriceView.text = asset.assetPrice.formattedCurrencyString(homeModel?.getCurrency()!!)
         assetTotalValueView.text = asset.totalValue.formattedCurrencyString(homeModel?.getCurrency()!!)
         assetPercentChangeView.text = asset.percentChange.formattedPercentString()
+
+        if (asset.percentChange < 0) {
+            assetPercentChangeView.setTextColor(ContextCompat.getColor(mContext, R.color.colorLoss))
+        } else {
+            assetPercentChangeView.setTextColor(ContextCompat.getColor(mContext, R.color.colorGain))
+        }
 
         if (asset.assetName == "NEO") {
             assetAmountView.text = asset.assetAmount.format(0)

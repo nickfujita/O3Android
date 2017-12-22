@@ -59,7 +59,7 @@ class PortfolioHeader:Fragment() {
         val percentChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
 
         homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
-            homeModel?.getAccountState(displayType, refresh = false)?.observe(this, Observer<Pair<Int, Double>> { balance ->
+            homeModel?.getAccountState(displayType, refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
                 val currentNeoPrice = homeModel.getCurrentNeoPrice()
                 val firstNeoPrice = homeModel.getFirstNeoPrice()
                 val currentGasPrice = homeModel.getCurrentGasPrice()
