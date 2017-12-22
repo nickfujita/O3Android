@@ -8,10 +8,12 @@
 
     <TextView
         android:id="@+id/textView4"
+        style="@style/BoldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
         android:text="Your Public Address"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,10 +21,12 @@
 
     <TextView
         android:id="@+id/addressTextView"
+        style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
         android:text="AJs38kijktEuM22sjfXqfjZ734RqR4H6JW"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,10 +34,12 @@
 
     <TextView
         android:id="@+id/textView6"
+        style="@style/BoldText"
         android:layout_width="wrap_content"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:includeFontPadding="false"
         android:text="Your private key (WIF)"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,22 +47,27 @@
 
     <TextView
         android:id="@+id/textView7"
+        style="@style/SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:includeFontPadding="false"
         android:text="Never Lose your private key"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/colorLoss"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/wifTextView" />
 
     <TextView
         android:id="@+id/wifTextView"
+        style="@style/RegularText"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
         android:text="L4Ns4Uh4WegsHxgDG49hohAYxuhj41hhxG6owjjTWg95GSrRRbLL"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,12 +76,13 @@
 
     <Button
         android:id="@+id/StartButton"
+        style="@style/PrimaryButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/primary_button_background"
         android:text="Start"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +93,7 @@
         android:id="@+id/qrView"
         android:layout_width="150px"
         android:layout_height="150px"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
