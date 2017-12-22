@@ -18,6 +18,10 @@ import java.net.URI
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import com.bumptech.glide.request.RequestOptions
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 /**
@@ -57,7 +61,11 @@ class NewsFeedAdapter(context: Context, fragment: NewsFeedFragment): BaseAdapter
         val view = layoutInflater.inflate(R.layout.feed_row, parent, false)
         val feedItem = getItem(position)
         view.findViewById<TextView>(R.id.titleTextView).text = feedItem.title
-        view.findViewById<TextView>(R.id.dateTextView).text = feedItem.published
+
+        val pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        val date = SimpleDateFormat(pattern).parse(feedItem.published)
+
+        view.findViewById<TextView>(R.id.dateTextView).text = SimpleDateFormat("yyyy-MM-dd").format(date)
         val imageView = view.findViewById<ImageView>(R.id.newImageView)
         Glide.with(mContext).load(feedItem?.images[0].url).apply(RequestOptions().centerCrop()).into(imageView)
 
