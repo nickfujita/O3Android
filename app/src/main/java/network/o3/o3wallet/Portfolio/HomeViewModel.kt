@@ -106,6 +106,7 @@ class HomeViewModel: ViewModel()  {
     }
 
     fun getPercentChange(): Double {
+        if (getInitialPortfolioValue() == 0.0) return 0.0
         return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
@@ -164,9 +165,9 @@ class HomeViewModel: ViewModel()  {
 
         O3API().getPortfolio(balance.first, balance.second, interval) {
             if ( it?.second != null ) return@getPortfolio
+            latestPrice = it?.first!!.data?.first()!!
+            initialPrice = it?.first!!.data?.last()!!
             portfolio?.postValue(it?.first!!)
-            latestPrice = portfolio?.value?.data?.first()!!
-            initialPrice = portfolio?.value?.data?.last()!!
         }
     }
 

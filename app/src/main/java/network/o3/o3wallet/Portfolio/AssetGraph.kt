@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -119,9 +120,9 @@ class AssetGraph : AppCompatActivity() {
 
             val percentChange = assetGraphModel?.getPercentChange()
             if (percentChange!! < 0) {
-                percentView?.setTextColor(resources.getColor(R.color.colorLoss))
+                percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorLoss))
             } else {
-                percentView?.setTextColor(resources.getColor(R.color.colorGain))
+                percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorGain))
             }
             percentView.text = percentChange.formattedPercentString()
         })
