@@ -9,10 +9,7 @@ import android.support.design.widget.FloatingActionButton
 import android.widget.*
 import android.os.Handler
 import network.o3.o3wallet.API.CoZ.Claims
-import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.CoZ.CoZClient
-import network.o3.o3wallet.API.NEO.AccountState
-import network.o3.o3wallet.API.NEO.Balance
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
@@ -24,7 +21,7 @@ import com.robinhood.ticker.TickerView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
-import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.NEO.*
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
 
@@ -155,6 +152,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 name = NeoNodeRPC.Asset.NEO.name,
                 symbol = NeoNodeRPC.Asset.NEO.name,
                 decimal = 0,
+                type = AssetType.NATIVE,
                 value = neoBalance.value)
         assets.add(neo)
 
@@ -162,6 +160,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 name = NeoNodeRPC.Asset.GAS.name,
                 symbol = NeoNodeRPC.Asset.GAS.name,
                 decimal = 0,
+                type = AssetType.NATIVE,
                 value = gasBalance.value)
         assets.add(gas)
 
@@ -173,11 +172,12 @@ class AccountFragment : Fragment(), TokenListProtocol {
                     name = token.name,
                     symbol = token.symbol,
                     decimal = token.decimal,
+                    type = AssetType.NEP5TOKEN,
                     value = 0.0)
             assets.add(asset)
         }
 
-        val adapter = AccountAssetsAdapter(context, assets.toTypedArray())
+        val adapter = AccountAssetsAdapter(context,Account.getWallet()!!.address, assets.toTypedArray())
         assetListView.adapter = adapter
     }
 
