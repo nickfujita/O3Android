@@ -58,15 +58,11 @@ class MainTabbedActivity : AppCompatActivity() {
                         activeTabPosition = 2
                     }
                     R.id.action_item4 -> {
-                        //activeTabPosition = 3
                         val settingsModal = fragments!!.get(3) as SettingsFragment
                         settingsModal.show(supportFragmentManager, settingsModal.tag)
                         return true
                     }
                 }
-                //val transaction = supportFragmentManager.beginTransaction()
-                //transaction.replace(R.id.frame_layout, selectedFragment)
-               // transaction.commit()
                 return true
             }
         })
