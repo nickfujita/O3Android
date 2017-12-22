@@ -24,120 +24,124 @@
         app:backgroundTint="@color/colorAccent"
         app:elevation="2dp" />
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipeContainer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:clipToPadding="false">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    style="@style/HeaderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:includeFontPadding="false"
+                    android:text="My O3 Wallet"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/qrButton"
+                    style="@android:style/Widget.Material.ImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/white"
+                    android:contentDescription="My Address"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_qrcode"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:clipToPadding="false">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    style="@style/SubtitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:includeFontPadding="false"
+                    android:text="UNCLAIMED GAS"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/unclaimedGASLabel"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+                <Button
+                    android:id="@+id/claimButton"
+                    style="@style/AccentButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/accent_button_background"
+                    android:drawablePadding="0dp"
+                    android:elevation="8dp"
+                    android:enabled="false"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="0dp"
+                    android:paddingVertical="0dp"
+                    android:shadowColor="@color/cardview_shadow_end_color"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:text="CLAIM"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:clipToPadding="false">
 
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:clipToPadding="false">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false">
-
-                    <TextView
-                        android:id="@+id/textView14"
-                        style="@style/HeaderText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:includeFontPadding="false"
-                        android:text="My O3 Wallet"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/qrButton"
-                        style="@android:style/Widget.Material.ImageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:adjustViewBounds="true"
-                        android:background="@android:color/white"
-                        android:contentDescription="My Address"
-                        android:cropToPadding="false"
-                        android:src="@drawable/ic_qrcode"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
-
-            </FrameLayout>
-
-            <android.support.v7.widget.CardView
-                style="@style/CardViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:clipToPadding="false">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
-
-                    <TextView
-                        android:id="@+id/textView19"
-                        style="@style/SubtitleText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:includeFontPadding="false"
-                        android:text="UNCLAIMED GAS"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.robinhood.ticker.TickerView
-                        android:id="@+id/unclaimedGASLabel"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
-                    <Button
-                        android:id="@+id/claimButton"
-                        style="@style/AccentButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/accent_button_background"
-                        android:drawablePadding="0dp"
-                        android:elevation="8dp"
-                        android:enabled="false"
-                        android:includeFontPadding="false"
-                        android:paddingHorizontal="0dp"
-                        android:paddingVertical="0dp"
-                        android:shadowColor="@color/cardview_shadow_end_color"
-                        android:shadowDy="2"
-                        android:shadowRadius="2"
-                        android:text="CLAIM"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.CardView>
 
             <ListView
                 android:id="@+id/assetListView"
@@ -150,28 +154,28 @@
                 android:dividerHeight="0dp"
                 android:footerDividersEnabled="false"
                 android:headerDividersEnabled="false" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clipToPadding="false"
+            android:visibility="visible">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:clipToPadding="false"
-                android:visibility="visible">
+            <Button
+                android:id="@+id/addNEP5TokenButton"
+                style="@style/BorderLessButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="0dp"
+                android:paddingVertical="0dp"
+                android:text="+ ADD NEP5 TOKEN"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-                <Button
-                    android:id="@+id/addNEP5TokenButton"
-                    style="@style/BorderLessButton"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:includeFontPadding="false"
-                    android:paddingHorizontal="0dp"
-                    android:paddingVertical="0dp"
-                    android:text="+ ADD NEP5 TOKEN"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-        </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>
