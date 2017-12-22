@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:clipToPadding="false"
-    tools:context=".ui.Account.AccountFragment">
+    tools:context=".ui.Account.AccountFragment"
+    android:tag="accountFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

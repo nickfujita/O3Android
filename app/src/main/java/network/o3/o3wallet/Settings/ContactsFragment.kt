@@ -34,21 +34,21 @@ class ContactsFragment : BottomSheetDialogFragment() {
         dialog.setContentView(contentView)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_contacts, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_contacts, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
         headerView.findViewById<TextView>(R.id.headerTextView).text = "Contacts"
 
         val listView = view.findViewById<ListView>(R.id.contactsListView)
         listView.addHeaderView(headerView)
 
-        adapter = ContactsAdapter(this.context, this)
+        adapter = ContactsAdapter(this.context!!, this)
         listView?.adapter = adapter
         return view
     }
 
     fun showRemoveAlert(contact: Contact) {
-        val simpleAlert = AlertDialog.Builder(this.activity).create()
+        val simpleAlert = AlertDialog.Builder(this.activity!!).create()
         simpleAlert.setTitle("Remove Contact")
         simpleAlert.setMessage("Are you sure you want to remove this contact?")
 
@@ -70,7 +70,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
                 SendActivity::class.java
         )
         intent.putExtra("address",contact.address)
-        ActivityCompat.startActivity(context, intent, null)
+        ActivityCompat.startActivity(context!!, intent, null)
     }
 
     val RELOAD_DATA = 1

@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
     var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
     var assetListAdapter: AssetListAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return inflater!!.inflate(R.layout.fragment_home, container, false)
     }
@@ -43,14 +43,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeModel = ViewModelProviders.of(activity).get(HomeViewModel::class.java)
-        assetListAdapter = AssetListAdapter(this.context, this)
+        homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
+        assetListAdapter = AssetListAdapter(this.context!!, this)
         assetListAdapter?.homeModel = homeModel
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
-        initiateGraph(view!!)
-        initiateViewPager(view!!)
-        initiateData(view!!)
-        initiateIntervalButtons(view!!)
+        initiateGraph(view)
+        initiateViewPager(view)
+        initiateData(view)
+        initiateIntervalButtons(view)
     }
 
     fun initiateGraph(view: View) {

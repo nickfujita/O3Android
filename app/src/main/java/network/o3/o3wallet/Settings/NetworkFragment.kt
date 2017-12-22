@@ -27,7 +27,7 @@ class NetworkFragment: BottomSheetDialogFragment() {
         dialog.setContentView(contentView)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         networkModel = NetworkViewModel()
         val view = inflater!!.inflate(R.layout.fragment_network, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
@@ -36,7 +36,7 @@ class NetworkFragment: BottomSheetDialogFragment() {
         val listView = view.findViewById<ListView>(R.id.nodeListView)
         listView.addHeaderView(headerView)
 
-        val networkAdapter = NetworkAdapter(this.context)
+        val networkAdapter = NetworkAdapter(this.context!!)
         listView.adapter = networkAdapter
 
         networkModel?.getNodesFromModel(refresh = true)?.observe(this,  Observer<Array<Node>> { nodes ->

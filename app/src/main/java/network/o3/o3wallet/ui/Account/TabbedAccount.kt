@@ -11,16 +11,16 @@ import android.support.v4.app.Fragment
 
 class TabbedAccount : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_tabbed_account, container, false)
+        return inflater.inflate(R.layout.fragment_tabbed_account, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewPager = view!!.findViewById<ViewPager>(R.id.viewPager)
-        val tabLayout = view!!.findViewById<TabLayout>(R.id.tabLayout)
+        val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
 
         viewPager.adapter = AccountFragmentPagerAdapter(childFragmentManager, context)
         //android keeps one fragment on either side so if you select the third tab and select first tab again.

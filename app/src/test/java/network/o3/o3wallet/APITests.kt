@@ -109,6 +109,16 @@ class APIUnitTests {
     }
 
     @Test
+    fun getFeed() {
+        var latch = CountDownLatch(1)
+        O3API().getNewsFeed {
+            assert(it.first != null)
+            print (it.first!!.toString())
+        }
+        latch.await(2000000000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
     fun claim() {
         //testnet
         val wif = ""

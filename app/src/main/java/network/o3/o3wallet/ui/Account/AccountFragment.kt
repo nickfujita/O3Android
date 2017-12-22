@@ -57,22 +57,22 @@ class AccountFragment : Fragment(),TokenListProtocol {
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.fragment_account, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        menuButton = view!!.findViewById<FloatingActionButton>(R.id.menuActionButton)
-        claimButton = view!!.findViewById<Button>(R.id.claimButton)
-        qrButton = view!!.findViewById<ImageButton>(R.id.qrButton)
-        unclaimedGASLabel = view!!.findViewById(R.id.unclaimedGASLabel)
-        assetListView = view!!.findViewById<ListView>(R.id.assetListView)
+        menuButton = view.findViewById<FloatingActionButton>(R.id.menuActionButton)
+        claimButton = view.findViewById<Button>(R.id.claimButton)
+        qrButton = view.findViewById<ImageButton>(R.id.qrButton)
+        unclaimedGASLabel = view.findViewById(R.id.unclaimedGASLabel)
+        assetListView = view.findViewById<ListView>(R.id.assetListView)
         addNEP5TokenButton = view!!.findViewById<Button>(R.id.addNEP5TokenButton)
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
 
-        val muli = ResourcesCompat.getFont(view!!.context, R.font.muli_bold)
+        val muli = ResourcesCompat.getFont(view.context, R.font.muli_bold)
 
         swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
@@ -96,7 +96,7 @@ class AccountFragment : Fragment(),TokenListProtocol {
         menuButton.transitionName = "reveal"
         claimButton.isEnabled = false
 
-        activity.title = "Account"
+        activity?.title = "Account"
         loadAccountState()
         loadClaimableGAS()
     }
@@ -182,12 +182,11 @@ class AccountFragment : Fragment(),TokenListProtocol {
         assetListView.adapter = adapter
     }
 
-
     private fun loadAccountState() {
         claimButton.isEnabled = false
         async(UI) {
             bg {
-                 NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
+                NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
                     onUiThread {
                         showAccountState(it)
                     }
@@ -205,7 +204,7 @@ class AccountFragment : Fragment(),TokenListProtocol {
             } else {
                 this.claims = data!!
                 val amount = data!!.total_unspent_claim / 100000000.0
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     unclaimedGASLabel.text = "%.8f".format(amount)
                     this.claimButton.isEnabled = if (amount == 0.0) false else true
                 }
@@ -233,15 +232,15 @@ class AccountFragment : Fragment(),TokenListProtocol {
             val claims = it.first
             val error = it.second
             if (error != null) {
-                activity.runOnUiThread {
-                    context.toast(error!!.message!!)
+                activity?.runOnUiThread {
+                    context?.toast(error!!.message!!)
                     claimButton.isEnabled = true
                 }
             } else if (error == null && claims!!.claims.count() > 0) {
                 //able to claim now
                 activity.run {
                     NeoNodeRPC().claimGAS(wallet) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             var success = it.first
                             var error = it.second
                             if (success == true) {
@@ -260,8 +259,8 @@ class AccountFragment : Fragment(),TokenListProtocol {
                         var error = it.second
                         var success = it.first
                         if (error != null) {
-                            activity.runOnUiThread {
-                                context.toast(error!!.message!!)
+                            activity?.runOnUiThread {
+                                context?.toast(error!!.message!!)
                                 claimButton.isEnabled = true
                             }
                         } else {
@@ -271,13 +270,13 @@ class AccountFragment : Fragment(),TokenListProtocol {
                                 val delay = 5000 //milliseconds
                                 handler.postDelayed(object : Runnable {
                                     override fun run() {
-                                        activity.runOnUiThread {
+                                        activity?.runOnUiThread {
                                             claimGasTapped()
                                         }
                                     }
                                 }, delay.toLong())
                             } else {
-                                activity.runOnUiThread {
+                                activity?.runOnUiThread {
                                     claimButton.isEnabled = true
                                 }
                             }
@@ -295,8 +294,8 @@ class AccountFragment : Fragment(),TokenListProtocol {
                 context,
                 SendActivity::class.java
         )
-        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity, menuButton, ViewCompat.getTransitionName(menuButton))
-        ActivityCompat.startActivity(context, intent, option.toBundle())
+        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity!!, menuButton, ViewCompat.getTransitionName(menuButton))
+        ActivityCompat.startActivity(context!!, intent, option.toBundle())
     }
 
     companion object {

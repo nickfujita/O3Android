@@ -97,7 +97,7 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
         view.setOnClickListener {
             val intent = Intent(mfragment.activity, AssetGraph::class.java)
             intent.putExtra("SYMBOL", asset.assetName.capitalize())
-            mfragment.activity.startActivity(intent)
+            mfragment.activity?.startActivity(intent)
         }
 
         return view

@@ -32,21 +32,21 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
         dialog.setContentView(contentView)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_watch_address, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_watch_address, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
         headerView.findViewById<TextView>(R.id.headerTextView).text = "Watch Addresses"
 
         val listView = view.findViewById<ListView>(R.id.watchAddressListView)
         listView.addHeaderView(headerView)
 
-        adapter = WatchAddressAdapter(this.context, this)
+        adapter = WatchAddressAdapter(this.context!!, this)
         listView.adapter = adapter
         return view
     }
 
     fun showRemoveAlert(watchAddress: WatchAddress) {
-        val simpleAlert = AlertDialog.Builder(this.activity).create()
+        val simpleAlert = AlertDialog.Builder(this.activity!!).create()
         simpleAlert.setTitle("Remove address")
         simpleAlert.setMessage("Are you sure you want to remove this watch address?")
 
@@ -68,7 +68,7 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
                 SendActivity::class.java
         )
         intent.putExtra("address",address.address)
-        ActivityCompat.startActivity(context, intent, null)
+        ActivityCompat.startActivity(context!!, intent, null)
     }
 
     val RELOAD_DATA = 1

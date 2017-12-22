@@ -1,5 +1,6 @@
 package network.o3.o3wallet.API.O3
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
 /**
@@ -22,3 +23,14 @@ data class PriceHistory(val symbol: String,
 data class Portfolio(val price: Map<String, PriceData>,
                           val firstPrice: Map<String, PriceData>,
                           val data: Array<PriceData>)
+
+data class FeedData(val features: JsonArray, val items: Array<FeedItem>)
+
+data class NewsImage(val title: String, val url: String)
+
+data class FeedItem(val title: String,
+                    val description: String,
+                    val link: String,
+                    val published: String,
+                    val source: String,
+                    val images: Array<NewsImage>)

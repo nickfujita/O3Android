@@ -32,9 +32,9 @@ class LandingFeatureScroll: Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_landing_feature_scroll, container, false)
-        val position = arguments.getInt("position")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_landing_feature_scroll, container, false)
+        val position = arguments!!.getInt("position")
         val featureImageView = view.findViewById<ImageView>(R.id.featureImage)
         val featureTextView = view.findViewById<TextView>(R.id.featureText)
 
