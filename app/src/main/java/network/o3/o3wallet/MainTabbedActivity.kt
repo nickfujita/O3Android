@@ -43,24 +43,27 @@ class MainTabbedActivity : AppCompatActivity() {
                 if (activeTabID == item.itemId) {
                     return false
                 }
-                activeTabID = item.itemId
+
                 when (item.getItemId()) {
                     R.id.action_item1 -> {
                         switchFragment(0)
+                        activeTabID = item.itemId
                         activeTabPosition = 0
                     }
                     R.id.action_item2 -> {
                         switchFragment(1)
+                        activeTabID = item.itemId
                         activeTabPosition = 1
                     }
                     R.id.action_item3 -> {
                         switchFragment(2)
+                        activeTabID = item.itemId
                         activeTabPosition = 2
                     }
                     R.id.action_item4 -> {
                         val settingsModal = fragments!!.get(3) as SettingsFragment
                         settingsModal.show(supportFragmentManager, settingsModal.tag)
-                        return true
+                        return false
                     }
                 }
                 return true
