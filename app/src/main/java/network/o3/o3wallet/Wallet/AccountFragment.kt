@@ -40,7 +40,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
     private lateinit var qrButton: ImageButton
-    private lateinit var addNEP5TokenButton: Button
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
 
@@ -56,7 +55,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         qrButton = view.findViewById<ImageButton>(R.id.qrButton)
         unclaimedGASLabel = view.findViewById(R.id.unclaimedGASLabel)
         assetListView = view.findViewById<ListView>(R.id.assetListView)
-        addNEP5TokenButton = view!!.findViewById<Button>(R.id.addNEP5TokenButton)
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
 
         val muli = ResourcesCompat.getFont(view.context, R.font.muli_bold)
@@ -78,7 +76,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         menuButton.setOnClickListener { menuButtonTapped() }
         claimButton.setOnClickListener { claimGasTapped() }
         qrButton.setOnClickListener { showMyAddress() }
-        addNEP5TokenButton.setOnClickListener{addNewNEP5Token()}
 
         menuButton.transitionName = "reveal"
         claimButton.isEnabled = false
@@ -115,7 +112,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         loadAccountState()
     }
 
-    private fun addNewNEP5Token() {
+    public fun addNewNEP5Token() {
         val bottomSheet = NEP5ListFragment()
         bottomSheet.delegate = this
         bottomSheet.show(activity!!.supportFragmentManager, "nep5list")
@@ -177,7 +174,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             assets.add(asset)
         }
 
-        val adapter = AccountAssetsAdapter(context,Account.getWallet()!!.address, assets.toTypedArray())
+        val adapter = AccountAssetsAdapter(this,context,Account.getWallet()!!.address, assets.toTypedArray())
         assetListView.adapter = adapter
     }
 
