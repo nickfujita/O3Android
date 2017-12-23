@@ -49,6 +49,13 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
                 totalSupply = 242629235)
         list.add(aph)
 
+        var qlc = NEP5Token(assetID = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5",
+                name = "Qlink Token",
+                symbol = "QLC",
+                decimal = 8,
+                totalSupply = 600000000)
+        list.add(qlc)
+
         listView.adapter = NEP5TokenListAdapter(context, list)
         return view
     }
