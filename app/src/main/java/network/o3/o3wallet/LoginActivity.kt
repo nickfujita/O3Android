@@ -37,7 +37,8 @@ class LoginActivity : AppCompatActivity() {
         PersistentStore.addWatchAddress("ARHusFqxqX4vvkLMzjz2GgPbdeJuXyYrFb", "Test 1")
         PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
         //PersistentStore.addContact("ARHusFqxqX4vvkLMzjz2GgPbdeJuXyYrFb", "Test 1")
-        val intent = Intent(this, MainTabbedActivity::class.java)
+        //showing node selecting modal
+        val intent = Intent(this, SelectingBestNode::class.java)
         startActivity(intent)
     }
 }

@@ -23,7 +23,7 @@ class CreateWalletActivity : AppCompatActivity() {
     }
 
     fun startButtonTapped() {
-        val intent = Intent(this, MainTabbedActivity::class.java)
+        val intent = Intent(this, SelectingBestNode::class.java)
         startActivity(intent)
     }
 
