@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import com.google.gson.Gson
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
 import com.github.salomonbrys.kotson.*
+import com.google.zxing.integration.android.IntentIntegrator
 import neowallet.Wallet
 
 class LoginActivity : AppCompatActivity() {
@@ -22,10 +25,18 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             login()
         }
+
+        val scanButton = findViewById<Button>(R.id.ScanButton)
+        scanButton.setOnClickListener {
+            val integrator = IntentIntegrator(this)
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+            integrator.setPrompt("Scan the QR code of the address you want to save")
+            integrator.setOrientationLocked(false)
+            integrator.initiateScan()
+        }
     }
 
     fun login() {
-
         if (wifTextfield.text.trim().count() > 0) {
             Account.fromWIF(wifTextfield.text.toString())
         } else {
@@ -40,5 +51,16 @@ class LoginActivity : AppCompatActivity() {
         //showing node selecting modal
         val intent = Intent(this, SelectingBestNode::class.java)
         startActivity(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null ) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            } else {
+                findViewById<EditText>(R.id.wipTextView).setText(result.contents)
+            }
+        }
     }
 }
