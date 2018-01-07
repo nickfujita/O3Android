@@ -8,6 +8,10 @@ import android.support.v4.view.ViewPager
 import android.widget.Button
 import co.getchannel.channel.Channel
 import neowallet.Neowallet
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
@@ -15,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
 
         val loginButton = findViewById<Button>(R.id.loginButton)
