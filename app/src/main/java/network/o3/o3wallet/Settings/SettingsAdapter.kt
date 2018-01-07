@@ -11,15 +11,14 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Toast
-import network.o3.o3wallet.R
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
-import network.o3.o3wallet.Account
-import network.o3.o3wallet.PersistentStore
 import android.support.v4.app.ActivityCompat.startActivityForResult
-
-
+import network.o3.o3wallet.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.yesButton
 
 
 /**
@@ -30,10 +29,10 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     private val mContext: Context
     private var mFragment: SettingsFragment
     var settingsTitles = listOf<String>("My Private Key", "Address Book", "Watch-Only-Address",
-            "Network", "Share", "Contact", "Log out", "Version")
+            "Network", "Contact", "Log out", "Version")
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon,
-            R.drawable.ic_settingsshareicon, R.drawable.ic_settingscontacticon,
+            R.drawable.ic_settingscontacticon,
             R.drawable.ic_settingscontacticon, R.drawable.ic_settingscontacticon)
     init {
         mContext = context
@@ -43,7 +42,6 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     enum class CellType {
         PRIVATEKEY, CONTACTS,
         WATCHADRESS, NETWORK,
-        THEME, SHARE,
         CONTACT, LOGOUT,
         VERSION
 
@@ -65,9 +63,12 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         val layoutInflater = LayoutInflater.from(mContext)
         val view = layoutInflater.inflate(R.layout.settings_row_layout, viewGroup, false)
         val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
-        //val subtitleTextView = view.findViewById<TextView>(R.id.subTitleTextView)
         titleTextView.text = getItem(position).first
-        //subtitleTextView.text = ""
+        if (position == CellType.VERSION.ordinal) {
+            titleTextView.text = "Version: " + mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
+
+        }
+
         view.findViewById<ImageView>(R.id.settingsIcon).setImageResource(getItem(position).second)
 
         view.setOnClickListener {
@@ -91,12 +92,22 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             return
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
-            val data = Uri.parse("mailto:o3walletapp@gmail.com")
+            val data = Uri.parse("mailto:hello@o3.network")
             intent.data = data
             startActivity(mContext, intent, null)
             return
         } else if (position == CellType.LOGOUT.ordinal) {
-            Account.deleteKeyFromDevice()
+            mContext.alert("Are you sure you want to remove your private key from this device?") {
+                yesButton {
+                    Account.deleteKeyFromDevice()
+                    val intent = Intent(mContext, MainActivity::class.java)
+                    startActivity(mContext, intent, null)
+                }
+                noButton {
+
+                }
+            }.show()
+
         } else if (position == CellType.PRIVATEKEY.ordinal) {
             val mKeyguardManager =  mContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
             if (!mKeyguardManager.isKeyguardSecure) {

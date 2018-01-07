@@ -1,4 +1,6 @@
 package network.o3.o3wallet
+import android.app.KeyguardManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
@@ -13,9 +15,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 import com.github.salomonbrys.kotson.*
 import com.google.zxing.integration.android.IntentIntegrator
 import neowallet.Wallet
+import network.o3.o3wallet.API.NEO.ValidatedAddress
+import org.jetbrains.anko.doAsync
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var wifTextfield: TextView
+    var isFirstActivityLoad = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -36,28 +41,55 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (Account.isEncryptedWalletPresent() && isFirstActivityLoad) {
+            isFirstActivityLoad = false
+            authenticateEncryptedWallet()
+        }
+    }
+
+    fun authenticateEncryptedWallet() {
+        val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (!mKeyguardManager.isKeyguardSecure) {
+            // Show a message that the user hasn't set up a lock screen.
+            Toast.makeText(this,
+                        "Secure lock screen hasn't set up.\n"
+                                + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                    Toast.LENGTH_LONG).show()
+                return
+        } else {
+            val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(null, null)
+            if (intent != null) {
+                startActivityForResult(intent, 1)
+            }
+        }
+    }
+
+    /* Can insert these line for testing purposes if necessary
+    * Account.fromWIF("L4Ns4Uh4WegsHxgDG49hohAYxuhj41hhxG6owjjTWg95GSrRRbLL") <- This is a testnet WIF
+    * PersistentStore.addWatchAddress("ARHusFqxqX4vvkLMzjz2GgPbdeJuXyYrFb", "Test 1")
+    * PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
+    */
+
     fun login() {
         if (wifTextfield.text.trim().count() > 0) {
+            //TODO: VALIDATE ADDRESS
             Account.fromWIF(wifTextfield.text.toString())
-        } else {
-            Account.restoreWalletFromDevice()
         }
-        //TODO: REMOVE HARDCODED ADDRESS AND CONTACTS
-        //Account.fromWIF("L4Ns4Uh4WegsHxgDG49hohAYxuhj41hhxG6owjjTWg95GSrRRbLL")
-      //  PersistentStore.removeWatchAddress("abaceadadfsfadfa", "Hellllllo")
-        PersistentStore.addWatchAddress("ARHusFqxqX4vvkLMzjz2GgPbdeJuXyYrFb", "Test 1")
-        PersistentStore.addWatchAddress("AdrfqqSb9SkBucXu99ZGBtb6YAVu5bJzpu", "Test 2")
-        //PersistentStore.addContact("ARHusFqxqX4vvkLMzjz2GgPbdeJuXyYrFb", "Test 1")
-        //showing node selecting modal
         val intent = Intent(this, SelectingBestNode::class.java)
         startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null ) {
-            if (result.contents == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+        if (result != null && result.contents == null) {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+        } else {
+            if (requestCode == 1) {
+                Account.restoreWalletFromDevice()
+                val intent = Intent(this, SelectingBestNode::class.java)
+                startActivity(intent)
             } else {
                 findViewById<EditText>(R.id.wipTextView).setText(result.contents)
             }
