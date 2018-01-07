@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         pagerAdapter = LandingPagerAdapter(supportFragmentManager)
         viewPager.adapter = pagerAdapter
+
+        Channel.setupApplicationContextWithApplicationKey(baseContext,"app_gUHDmimXT8oXRSpJvCxrz5DZvUisko_mliB61uda9iY")
     }
 
     fun createWalletTapped() {

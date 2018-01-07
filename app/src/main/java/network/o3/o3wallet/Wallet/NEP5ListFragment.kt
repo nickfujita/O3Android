@@ -42,12 +42,12 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
                 totalSupply = 9580000000.toInt())
         list.add(dbc)
 
-        var aph = NEP5Token(assetID = "a0777c3ce2b169d4a23bcba4565e3225a0122d95",
-                name = "Aphelion",
-                symbol = "APH",
-                decimal = 8,
-                totalSupply = 242629235)
-        list.add(aph)
+        var rht = NEP5Token(assetID = "2328008e6f6c7bd157a342e789389eb034d9cbc4",
+                name = "Redeemable HashPuppy Token",
+                symbol = "RHT",
+                decimal = 0,
+                totalSupply = 60000)
+        list.add(rht)
 
         var qlc = NEP5Token(assetID = "0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5",
                 name = "Qlink Token",
