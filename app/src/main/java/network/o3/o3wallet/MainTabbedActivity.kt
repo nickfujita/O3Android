@@ -85,8 +85,7 @@ class MainTabbedActivity : AppCompatActivity() {
     }
 
     fun setupChannel() {
-        Channel.setupActivityWithApplicationKey(WeakReference(this),"app_gUHDmimXT8oXRSpJvCxrz5DZvUisko_mliB61uda9iY",Account.getWallet()!!.address.toString(),null)
-        // Get updated InstanceID token.
+        Channel.subscribeToTopic(Account.getWallet()!!.address.toString())
         val refreshedToken = FirebaseInstanceId.getInstance().token
         Channel.saveDeviceToken(refreshedToken)
     }
