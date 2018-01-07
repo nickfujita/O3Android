@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.Toast
 import co.getchannel.channel.Channel
 import neowallet.Neowallet
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
 
         val loginButton = findViewById<Button>(R.id.loginButton)
