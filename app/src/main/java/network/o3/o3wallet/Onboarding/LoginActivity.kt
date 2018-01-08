@@ -1,22 +1,17 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import com.google.gson.Gson
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_login.*
-import com.github.salomonbrys.kotson.*
 import com.google.zxing.integration.android.IntentIntegrator
-import neowallet.Wallet
-import network.o3.o3wallet.API.NEO.ValidatedAddress
-import org.jetbrains.anko.doAsync
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.R
+import network.o3.o3wallet.SelectingBestNode
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var wifTextfield: TextView

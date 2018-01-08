@@ -1,4 +1,4 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -11,6 +11,8 @@ import android.widget.Toast
 import co.getchannel.channel.Channel
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.R
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton

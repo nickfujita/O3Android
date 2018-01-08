@@ -1,4 +1,4 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

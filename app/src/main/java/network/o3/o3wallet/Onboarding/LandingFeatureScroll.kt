@@ -1,13 +1,13 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import network.o3.o3wallet.R
 
 
 /**

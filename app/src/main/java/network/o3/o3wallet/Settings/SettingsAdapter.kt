@@ -1,6 +1,5 @@
 package network.o3.o3wallet.Settings
 
-import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
@@ -14,8 +13,8 @@ import android.widget.Toast
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.app.ActivityCompat.startActivityForResult
 import network.o3.o3wallet.*
+import network.o3.o3wallet.Onboarding.MainActivity
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton

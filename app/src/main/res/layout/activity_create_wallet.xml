@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    tools:context="network.o3.o3wallet.CreateWalletActivity">
+    tools:context="network.o3.o3wallet.Onboarding.CreateWalletActivity">
 
     <TextView
         android:id="@+id/textView8"

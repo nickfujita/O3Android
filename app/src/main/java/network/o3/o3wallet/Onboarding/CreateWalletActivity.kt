@@ -1,14 +1,15 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.content.Intent
-import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import net.glxn.qrgen.android.QRCode
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.R
+import network.o3.o3wallet.SelectingBestNode
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
