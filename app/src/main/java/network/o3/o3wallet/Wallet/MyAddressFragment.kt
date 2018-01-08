@@ -43,9 +43,9 @@ class MyAddressFragment : BottomSheetDialogFragment() {
 
         copyButton.setOnClickListener{
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Copied Address",Account.getWallet()!!.address)
+            val clip = ClipData.newPlainText(resources.getString(R.string.copied_address),Account.getWallet()!!.address)
             clipboard.primaryClip = clip
-            context.toast("Copied Address")
+            context.toast(resources.getString(R.string.copied_address))
         }
         return view
     }

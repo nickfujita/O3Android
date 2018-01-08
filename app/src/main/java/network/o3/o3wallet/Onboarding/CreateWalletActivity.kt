@@ -1,14 +1,15 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.content.Intent
-import android.content.res.Resources
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import net.glxn.qrgen.android.QRCode
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.R
+import network.o3.o3wallet.SelectingBestNode
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
@@ -25,12 +26,9 @@ class CreateWalletActivity : AppCompatActivity() {
     }
 
     fun startButtonTapped() {
-        alert ( "Your private key is the most important piece of information in cryptocurrency applications.\n We " +
-                "will save an encrypted version on your device, but please make sure to write down this " +
-                "private key in another secure location so that you may retrieve your funds in case something " +
-                "happens to your device." ) {
+        alert (resources.getString(R.string.alert_warning)) {
             yesButton {
-                alert("I confirm that I have backed up my private key in another secure location") {
+                alert(resources.getString(R.string.warning_confirmation)) {
                     yesButton {
                         val intent = Intent(this@CreateWalletActivity, SelectingBestNode::class.java)
                         startActivity(intent)

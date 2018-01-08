@@ -1,13 +1,14 @@
-package network.o3.o3wallet
+package network.o3.o3wallet.Onboarding
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import network.o3.o3wallet.O3Wallet
+import network.o3.o3wallet.R
 
 
 /**
@@ -21,7 +22,8 @@ import android.widget.TextView
 
 class LandingFeatureScroll: Fragment() {
     val imageIds: List<Int> = listOf(R.drawable.chart_line, R.drawable.exchange, R.drawable.lock)
-    val titles: List<String> = listOf("Add Watch Only Address", "Login using a private key", "Send, Claim, and Recieve")
+    var titles = O3Wallet.appContext!!.resources.getStringArray(R.array.onboarding_image_titles)
+
     companion object {
         fun newInstance(position: Int): LandingFeatureScroll {
             val args = Bundle()

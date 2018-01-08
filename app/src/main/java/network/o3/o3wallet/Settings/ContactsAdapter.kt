@@ -73,9 +73,9 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment): BaseAdapter
                     } else if (itemId == R.id.copy_address) {
                         val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val contact = getItem(position)
-                        val clip = ClipData.newPlainText("Copied Address",contact.address)
+                        val clip = ClipData.newPlainText(mContext.resources.getString(R.string.copied_address),contact.address)
                         clipboard.primaryClip = clip
-                        mContext.toast("Copied Address")
+                        mContext.toast(mContext.resources.getString(R.string.copied_address))
                     }
                     true
                 }

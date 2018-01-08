@@ -14,6 +14,8 @@ import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.Wallet.SendActivity
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
 
 
 /**
@@ -33,7 +35,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_contacts, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = "Contacts"
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.contact)
 
         val listView = view.findViewById<ListView>(R.id.contactsListView)
         listView.addHeaderView(headerView)
@@ -44,20 +46,12 @@ class ContactsFragment : BottomSheetDialogFragment() {
     }
 
     fun showRemoveAlert(contact: Contact) {
-        val simpleAlert = AlertDialog.Builder(this.activity!!).create()
-        simpleAlert.setTitle("Remove Contact")
-        simpleAlert.setMessage("Are you sure you want to remove this contact?")
-
-        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
-            dialogInterface, i ->
-            PersistentStore.removeContact(contact.address, contact.nickname)
-            adapter?.updateData()
-        })
-
-        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", {
-            dialogInterface, i ->
-        })
-        simpleAlert.show()
+        alert(resources.getString(R.string.remove_contact_warning),resources.getString(R.string.remove_contact)) {
+            yesButton {
+                PersistentStore.removeContact(contact.address, contact.nickname)
+                adapter?.updateData()
+            }
+        }.show()
     }
 
     fun sendToAddress(contact: Contact) {
@@ -65,7 +59,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
                 context,
                 SendActivity::class.java
         )
-        intent.putExtra("address",contact.address)
+        intent.putExtra("address", contact.address)
         ActivityCompat.startActivity(context!!, intent, null)
     }
 

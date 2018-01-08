@@ -221,7 +221,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             return
         }
         this.claimButton.isEnabled = false
-        val toast = context!!.toastUntilCancel("Claiming GAS")
+        val toast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
         toast.show()
         val wallet = Account.getWallet()!!
         CoZClient().getClaims(wallet.address) {
@@ -241,7 +241,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                             var error = it.second
                             if (success == true) {
                                 toast.cancel()
-                                context!!.toast("Claimed GAS successfully")
+                                context!!.toast(resources.getString(R.string.claimed_gas_successfully))
                                 loadAccountState()
                                 loadClaimableGAS()
                             }

@@ -3,17 +3,17 @@
     <item
         android:id="@+id/action_item1"
         android:icon="@drawable/ic_tab_portfolio"
-        android:title="Portfolio" />
+        android:title="@string/portfolio" />
     <item
         android:id="@+id/action_item2"
         android:icon="@drawable/ic_tab_account"
-        android:title="Account" />
+        android:title="@string/account" />
     <item
         android:id="@+id/action_item3"
         android:icon="@drawable/ic_tab_news"
-        android:title="News Feed" />
+        android:title="@string/news_feed" />
     <item
         android:id="@+id/action_item4"
         android:icon="@drawable/ic_tab_settings"
-        android:title="Settings" />
+        android:title="@string/settings" />
 </menu>
