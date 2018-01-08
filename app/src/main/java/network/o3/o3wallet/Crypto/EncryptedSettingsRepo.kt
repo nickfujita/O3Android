@@ -23,8 +23,9 @@ object EncryptedSettingsRepository {
         val iv = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("${key}_iv", null)
 
-        info.iv = Base64.decode(iv, Base64.DEFAULT)
-
+        if (iv != null) {
+            info.iv = Base64.decode(iv, Base64.DEFAULT)
+        }
         return info
     }
 

@@ -12,6 +12,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.R
 import network.o3.o3wallet.SelectingBestNode
+import network.o3.o3wallet.Wallet.toast
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var wifTextfield: TextView
@@ -69,8 +70,11 @@ class LoginActivity : AppCompatActivity() {
 
     fun login() {
         if (wifTextfield.text.trim().count() > 0) {
-            //TODO: VALIDATE ADDRESS
-            Account.fromWIF(wifTextfield.text.toString())
+            val valid = Account.fromWIF(wifTextfield.text.toString())
+            if (valid == false) {
+                baseContext.toast("Invalid WIF")
+                return
+            }
         }
         val intent = Intent(this, SelectingBestNode::class.java)
         startActivity(intent)
