@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager
 import android.widget.Button
 import android.widget.Toast
 import co.getchannel.channel.Channel
+import co.getchannel.channel.callback.ChannelCallback
+import co.getchannel.channel.callback.ChannelProcessComplete
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import network.o3.o3wallet.Account
@@ -36,7 +38,17 @@ class MainActivity : AppCompatActivity() {
         pagerAdapter = LandingPagerAdapter(supportFragmentManager)
         viewPager.adapter = pagerAdapter
 
-        Channel.setupApplicationContextWithApplicationKey(baseContext,"app_gUHDmimXT8oXRSpJvCxrz5DZvUisko_mliB61uda9iY")
+        Channel.setupApplicationContextWithApplicationKey(baseContext,"app_gUHDmimXT8oXRSpJvCxrz5DZvUisko_mliB61uda9iY", object : ChannelCallback {
+            override fun onSuccess() {
+
+            }
+
+            override fun onFail(message: String) {
+
+            }
+        })
+
+
     }
 
     fun createWalletTapped() {
