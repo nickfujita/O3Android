@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import network.o3.o3wallet.O3Wallet
 import network.o3.o3wallet.R
 
 
@@ -21,7 +22,7 @@ import network.o3.o3wallet.R
 
 class LandingFeatureScroll: Fragment() {
     val imageIds: List<Int> = listOf(R.drawable.chart_line, R.drawable.exchange, R.drawable.lock)
-    var titles = resources.getStringArray(R.array.onboarding_image_titles)
+    var titles = O3Wallet.appContext!!.resources.getStringArray(R.array.onboarding_image_titles)
 
     companion object {
         fun newInstance(position: Int): LandingFeatureScroll {
