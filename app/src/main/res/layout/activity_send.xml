@@ -29,7 +29,7 @@
                 android:layout_height="48dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/sendToLabel"
                     style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -39,22 +39,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/selectAddressButton"
-                    style="@style/BorderLessButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="0dp" />
-
-                <Button
                     android:id="@+id/scanAddressButton"
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/scan_send"
-                    app:layout_constraintEnd_toStartOf="@+id/selectAddressButton"
-                    tools:layout_editor_absoluteY="0dp" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                        tools:layout_editor_absoluteY="0dp" />
 
                 <Button
                     android:id="@+id/pasteAddressButton"
@@ -128,6 +119,15 @@
                     android:textAlignment="textEnd" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/sendButton"
+                style="@style/AccentButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/accent_button_background"
+                 android:text="@string/send"  />
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -139,6 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Note"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -152,16 +153,10 @@
                 android:contentDescription="Note"
                 android:ems="10"
                 android:hint="Note to receiver"
-                android:inputType="textPersonName" />
 
-            <Button
-                android:id="@+id/sendButton"
-                style="@style/AccentButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/accent_button_background"
-                android:text="@string/send" />
+                android:inputType="textPersonName"
+                android:visibility="invisible" />
+
 
         </LinearLayout>
 

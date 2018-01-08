@@ -43,7 +43,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
         return p0.toLong()
     }
 
-    private fun loadTokenBalance(position: Int) {
+    private fun loadTokenBalance(position: Int,v: AccountAssetRow) {
         val asset = getItem(position)
         NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(asset.assetID, address = address) {
             var amountInt = it.first
@@ -52,9 +52,24 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
                 mContext.runOnUiThread {
                     val amountDecimal:Double= (amountInt!!.toDouble() / (Math.pow(10.0,asset.decimal.toDouble())))
                     arrayOfAccountAssets[position].value = amountDecimal
-                    notifyDataSetChanged()
+                    configureRow(position,v)
                 }
             }
+        }
+    }
+    fun configureRow(position: Int, vh: AccountAssetRow) {
+        val asset = arrayOfAccountAssets[position]
+        if (asset.assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+            vh.assetNameTextView.text = NeoNodeRPC.Asset.NEO.name
+            vh.assetAmountTextView.text = "%d".format(asset.value.toInt())
+        } else if (asset.assetID.contains(NeoNodeRPC.Asset.GAS.assetID())) {
+            vh.assetNameTextView.text = NeoNodeRPC.Asset.GAS.name
+            vh.assetAmountTextView.text = "%.8f".format(asset.value)
+        } else {
+            vh.assetNameTextView.text = asset.symbol
+            var formatter = NumberFormat.getNumberInstance()
+            formatter.maximumFractionDigits = asset.decimal
+            vh.assetAmountTextView.text = formatter.format(asset.value)
         }
     }
 
@@ -72,22 +87,11 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
                 vh = view.tag as AccountAssetRow
             }
 
-            val asset = arrayOfAccountAssets[position]
-            if (asset.assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
-                vh.assetNameTextView.text = NeoNodeRPC.Asset.NEO.name
-                vh.assetAmountTextView.text = "%d".format(asset.value.toInt())
-            } else if (asset.assetID.contains(NeoNodeRPC.Asset.GAS.assetID())) {
-                vh.assetNameTextView.text = NeoNodeRPC.Asset.GAS.name
-                vh.assetAmountTextView.text = "%.8f".format(asset.value)
-            } else {
-                vh.assetNameTextView.text = asset.symbol
-                var formatter = NumberFormat.getNumberInstance()
-                formatter.maximumFractionDigits = asset.decimal
-                vh.assetAmountTextView.text = formatter.format(asset.value)
-            }
+            configureRow(position,vh)
 
+            val asset = arrayOfAccountAssets[position]
             if (asset.type == AssetType.NEP5TOKEN) {
-                loadTokenBalance(position)
+                loadTokenBalance(position,vh)
             }
             return view!!
 
@@ -107,7 +111,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
     }
 }
 
-private class AccountAssetRow(row: View?) {
+public class AccountAssetRow(row: View?) {
     val assetNameTextView: TextView
     val assetAmountTextView: TextView
 

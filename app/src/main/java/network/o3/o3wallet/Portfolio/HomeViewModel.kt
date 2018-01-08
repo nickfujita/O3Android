@@ -189,7 +189,7 @@ class HomeViewModel: ViewModel()  {
                 if (balance.asset == Asset.NEO.id) {
                     runningNeoHot += balance.value.toInt()
                 } else {
-                    runningGasHot += balance.value
+                    runningGasHot += balance.value.toDouble()
                 }
             }
             latch.countDown()
@@ -206,7 +206,7 @@ class HomeViewModel: ViewModel()  {
                     if (balance.asset == Asset.NEO.id) {
                         runningNeoCold += balance.value.toInt()
                     } else {
-                        runningGasCold += balance.value
+                        runningGasCold += balance.value.toDouble()
                     }
                 }
                 latch.countDown()
