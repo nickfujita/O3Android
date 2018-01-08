@@ -35,7 +35,6 @@ class SendActivity : AppCompatActivity() {
     lateinit var sendButton: Button
     lateinit var pasteAddressButton: Button
     lateinit var scanAddressButton: Button
-    lateinit var selectAddressButton: Button
     lateinit var view: View
 
     public val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
@@ -52,7 +51,6 @@ class SendActivity : AppCompatActivity() {
         sendButton = findViewById<Button>(R.id.sendButton)
         pasteAddressButton = findViewById<Button>(R.id.pasteAddressButton)
         scanAddressButton = findViewById<Button>(R.id.scanAddressButton)
-        selectAddressButton = findViewById<Button>(R.id.selectAddressButton)
         selectedAssetTextView = findViewById<TextView>(R.id.selectedAssetTextView)
 
         selectedAsset = NeoNodeRPC.Asset.NEO
@@ -67,16 +65,25 @@ class SendActivity : AppCompatActivity() {
 
         pasteAddressButton.setOnClickListener { pasteAddressTapped() }
         scanAddressButton.setOnClickListener { scanAddressTapped() }
-        selectAddressButton.setOnClickListener { selectAddressTapped() }
-
 
         val extras = intent.extras
         if (extras != null) {
             val address = extras.getString("address")
             addressTextView.text = address
             amountTextView.requestFocus()
+            showFoundContact(address)
         }
+    }
 
+    fun showFoundContact(address:String) {
+        val contacts = PersistentStore.getContacts()
+        val foundContact = contacts.find { it.address == address }
+        val toLabel = findViewById<TextView>(R.id.sendToLabel)
+        if (foundContact != null) {
+            toLabel.text = "To: %s".format(foundContact.nickname)
+        } else {
+            toLabel.text = "To"
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -87,12 +94,9 @@ class SendActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupEnterAnimation() {
-
-    }
-
 
     private fun checkEnableSendButton() {
+        showFoundContact(addressTextView.text.trim().toString())
         sendButton.isEnabled = (addressTextView.text.trim().count() > 0 && amountTextView.text.count() > 0)
     }
 
@@ -211,9 +215,6 @@ class SendActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
-    fun selectAddressTapped() {
-
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)

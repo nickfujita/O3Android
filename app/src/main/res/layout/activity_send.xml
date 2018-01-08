@@ -29,7 +29,7 @@
                 android:layout_height="48dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/sendToLabel"
                     style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -39,21 +39,12 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/selectAddressButton"
-                    style="@style/BorderLessButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="0dp" />
-
-                <Button
                     android:id="@+id/scanAddressButton"
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Scan"
-                    app:layout_constraintEnd_toStartOf="@+id/selectAddressButton"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:layout_editor_absoluteY="0dp" />
 
                 <Button
