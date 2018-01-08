@@ -27,8 +27,7 @@ import org.jetbrains.anko.yesButton
 class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter() {
     private val mContext: Context
     private var mFragment: SettingsFragment
-    var settingsTitles = listOf<String>("My Private Key", "Address Book", "Watch-Only-Address",
-            "Network", "Contact", "Log out", "Version")
+    var settingsTitles = context.resources.getStringArray(R.array.settings_menu_titles)
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
@@ -64,8 +63,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
         titleTextView.text = getItem(position).first
         if (position == CellType.VERSION.ordinal) {
-            titleTextView.text = "Version: " + mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
-
+            val version = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
+            titleTextView.text = mContext.resources.getString(R.string.version, version)
         }
 
         view.findViewById<ImageView>(R.id.settingsIcon).setImageResource(getItem(position).second)

@@ -14,6 +14,8 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.*
 import network.o3.o3wallet.Wallet.afterTextChanged
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.yesButton
 
 class AddWatchAddress : AppCompatActivity() {
 
@@ -21,7 +23,7 @@ class AddWatchAddress : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_watch_address)
 
-        this.title = "Watch address"
+        this.title = resources.getString(R.string.watch_address)
         val nickNameField = findViewById<EditText>(R.id.NickNameField)
         val addressField = findViewById<EditText>(R.id.AddressField)
         val saveButton = findViewById<Button>(R.id.AddButton)
@@ -29,7 +31,7 @@ class AddWatchAddress : AppCompatActivity() {
         scanAddressButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt("Scan the QR code of the address you want to save")
+            integrator.setPrompt(resources.getString(R.string.scan_prompt_watch_address))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -52,17 +54,12 @@ class AddWatchAddress : AppCompatActivity() {
         }
         saveButton.isEnabled = false
         saveButton.setOnClickListener {
-            val errorAlert = AlertDialog.Builder(this).create()
-            errorAlert.setTitle("Error")
-            errorAlert.setMessage("You provided an invalid NEO address, please double check it.")
-            errorAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK") {
-                _, _ ->
-            }
-
             NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(addressField.text.trim().toString()) {
                 if (it.second != null || it?.first == false) {
                     runOnUiThread {
-                        errorAlert.show()
+                        alert (resources.getString(R.string.invalid_neo_address), resources.getString(R.string.error)) {
+                            yesButton {  }
+                        }.show()
                     }
                 } else {
                     PersistentStore.addWatchAddress(addressField.text.trim().toString(), nickNameField.text.trim().toString())
@@ -76,7 +73,7 @@ class AddWatchAddress : AppCompatActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null ) {
             if (result.contents == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
             } else {
                 findViewById<EditText>(R.id.AddressField).setText(result.contents)
             }

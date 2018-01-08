@@ -31,7 +31,7 @@ class NetworkFragment: BottomSheetDialogFragment() {
         networkModel = NetworkViewModel()
         val view = inflater!!.inflate(R.layout.fragment_network, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = "Available Nodes"
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.available_nodes)
 
         val listView = view.findViewById<ListView>(R.id.nodeListView)
         listView.addHeaderView(headerView)

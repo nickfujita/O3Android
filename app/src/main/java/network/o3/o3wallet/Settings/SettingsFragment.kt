@@ -39,7 +39,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = "Settings"
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.settings)
 
         val listView = view.findViewById<ListView>(R.id.settingsListView)
         listView.addHeaderView(headerView)

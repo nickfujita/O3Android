@@ -31,9 +31,71 @@
     <string name="footnote_login">This private key will be stored on your device after logging in.</string>
     <string name="login_login">LOGIN</string>
 
+    <!-- Settings: Menu -->
+    <string name="settings">Settings</string>
+    <string-array name="settings_menu_titles">
+        <item>My Private Key</item>
+        <item>Address Book</item>
+        <item>Watch Only Address</item>
+        <item>Network</item>
+        <item>Contact</item>
+        <item>Logout</item>
+        <item>Version</item>
+    </string-array>
+    <!-- This string exists in order to allow for proper formatting-->
+    <string name="version">Version: %1$s</string>
+
+
+    <!-- Settings: Private Key -->
+    <string name="private_key">Private Key</string>
+
+    <!-- Settings: Address Book -->
+    <string name="address_book">Address Book</string>
+    <string name="add_address_address_book">+ ADD ADDRESS</string>
+    <string name="contact">Contact</string>
+    <string name="address_address_book">Address</string>
+    <string name="paste_address_book">PASTE</string>
+    <string name="scan_address_book">SCAN</string>
+    <string name="name_address_book">Name</string>
+    <string name="add_contact">ADD CONTACT</string>
+    <string name="scan_prompt_address_book">Scan the QR code of the address you want to save</string>
+    <string name="copied_address">Copied Address</string>
+    <string name="remove_contact">Remove Contact</string>
+    <string name="remove_contact_warning">Are you sure you want to remove this contact?</string>
+
+    <!-- Settings: Watch Addresses -->
+    <string name="watch_addresses">Watch Addresses</string>
+    <string name="add_address_watch_addresses">+ ADD ADDRESS</string>
+    <string name="watch_address_explanation">Watch only addresses let you monitor your portfolio in an
+    isolated environment. Although you won\'t be able to send funds frm these addresses, you will be able to check
+    the balance</string>
+    <string name="watch_address">Watch Address</string>
+    <string name="address_watch_addresses">Address</string>
+    <string name="paste_watch_addresses">PASTE</string>
+    <string name="scan_watch_addresses">SCAN</string>
+    <string name="name_watch_addresses">Name</string>
+    <string name="add_watch_address">ADD WATCH ADDRESS</string>
+    <string name="scan_prompt_watch_address">Scan the QR code of the address you want to save</string>
+    <string name="remove_watch_address">Remove Watch Address</string>
+    <string name="remove_watch_address_warning">Are you sure you want to remove this watch address?</string>
+
+
+    <!-- Settings: Network -->
+    <string name="available_nodes">Available Nodes</string>
+    <string name="peer_count">Peer Count: %1$d</string>
+    <string name="block_count">Block Count: %1$d</string>
+
+    <!-- Settings: Logout -->
+    <string name = "logout_warning">Are you sure you want to remove your private key from this device?</string>
+
+
+
     <!-- Common Alerts -->
     <string name="no_passcode_setup">Secure lock screen hasn\'t set up.\n Go to \'Settings -> Security ->
         Screenlock\' to set up a lock screen</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="invalid_neo_address">Your provided an invalid NEO address, please check it again.</string>
+    <string name="error">Error</string>
 
 
 
