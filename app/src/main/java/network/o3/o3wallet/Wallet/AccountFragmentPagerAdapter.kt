@@ -2,6 +2,7 @@ package network.o3.o3wallet.Wallet
 
 import android.content.Context
 import android.support.v4.app.FragmentPagerAdapter
+import network.o3.o3wallet.R
 import network.o3.o3wallet.Settings.ContactsFragment
 
 /**
@@ -10,7 +11,8 @@ import network.o3.o3wallet.Settings.ContactsFragment
 class AccountFragmentPagerAdapter(fm: android.support.v4.app.FragmentManager, context: Context) : FragmentPagerAdapter(fm){
 
     private val PAGE_COUNT = 3
-    private val tabTitles = arrayOf("Assets", "Transactions", "Contacts")
+    private val tabTitles = arrayOf(context.resources.getString(R.string.assets),
+            context.resources.getString(R.string.transactions), context.resources.getString(R.string.contacts))
     private val context: Context = context
 
 
