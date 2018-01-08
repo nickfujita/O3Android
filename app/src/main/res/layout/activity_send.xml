@@ -119,6 +119,15 @@
                     android:textAlignment="textEnd" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/sendButton"
+                style="@style/AccentButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/accent_button_background"
+                android:text="Send" />
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -130,6 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Note"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -143,16 +153,8 @@
                 android:contentDescription="Note"
                 android:ems="10"
                 android:hint="Note to receiver"
-                android:inputType="textPersonName" />
-
-            <Button
-                android:id="@+id/sendButton"
-                style="@style/AccentButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/accent_button_background"
-                android:text="Send" />
+                android:inputType="textPersonName"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
