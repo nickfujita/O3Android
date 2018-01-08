@@ -17,6 +17,8 @@ import android.widget.ListView
 import android.widget.TextView
 import network.o3.o3wallet.*
 import network.o3.o3wallet.Wallet.SendActivity
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
 
 
 /**
@@ -36,7 +38,7 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_watch_address, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = "Watch Addresses"
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.watch_addresses)
 
         val listView = view.findViewById<ListView>(R.id.watchAddressListView)
         listView.addHeaderView(headerView)
@@ -47,20 +49,12 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
     }
 
     fun showRemoveAlert(watchAddress: WatchAddress) {
-        val simpleAlert = AlertDialog.Builder(this.activity!!).create()
-        simpleAlert.setTitle("Remove address")
-        simpleAlert.setMessage("Are you sure you want to remove this watch address?")
-
-        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
-            dialogInterface, i ->
-            PersistentStore.removeWatchAddress(watchAddress.address, watchAddress.nickname)
-            adapter?.updateData()
-        })
-
-        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", {
-            dialogInterface, i ->
-        })
-        simpleAlert.show()
+        alert (resources.getString(R.string.remove_watch_address_warning), resources.getString(R.string.remove_watch_address)) {
+            yesButton {
+                PersistentStore.removeWatchAddress(watchAddress.address, watchAddress.nickname)
+                adapter?.updateData()
+            }
+        }
     }
 
     fun sendToAddress(address: WatchAddress) {

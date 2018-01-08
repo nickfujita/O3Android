@@ -12,7 +12,7 @@
         android:includeFontPadding="false"
         android:paddingHorizontal="0dp"
         android:paddingVertical="0dp"
-        android:text="+ ADD NEP5 TOKEN"
+        android:text="@string/add_nep_5_token"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

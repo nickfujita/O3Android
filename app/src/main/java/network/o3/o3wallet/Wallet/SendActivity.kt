@@ -1,7 +1,6 @@
 package network.o3.o3wallet.Wallet
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Fragment
 import android.content.ClipboardManager
 import android.content.Context
@@ -24,6 +23,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.yesButton
 
 class SendActivity : AppCompatActivity() {
 
@@ -43,7 +44,7 @@ class SendActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
 
-        this.title = "Send"
+        this.title = resources.getString(R.string.send)
         view = findViewById<View>(R.id.root_layout)
         addressTextView = findViewById<EditText>(R.id.addressTextView)
         amountTextView = findViewById<EditText>(R.id.amountTextView)
@@ -123,11 +124,11 @@ class SendActivity : AppCompatActivity() {
         var amount = amountTextView.text.trim().toString().toDouble()
 
         if (amount == 0.0) {
-            baseContext.toast("Amount cannot be zero")
+            baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
             return
         }
         val wallet = Account.getWallet()
-        val toast = baseContext.toastUntilCancel("Sending...")
+        val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
         sendButton.isEnabled = false
         NeoNodeRPC().sendAssetTransaction(wallet!!, this.selectedAsset, amount, address, null) {
             runOnUiThread {
@@ -135,13 +136,13 @@ class SendActivity : AppCompatActivity() {
                 val error = it.second
                 val success = it.first
                 if (success == true) {
-                    baseContext!!.toast("Sent Successfully")
+                    baseContext!!.toast(resources.getString(R.string.sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()
                     }, 1000)
                 } else {
                     this.checkEnableSendButton()
-                    val message = "Error while sending. Please check your network"
+                    val message = resources.getString(R.string.send_error)
                     val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                     snack.setAction("Close") {
                         finish()
@@ -159,42 +160,33 @@ class SendActivity : AppCompatActivity() {
         var amount = amountTextView.text.trim().toString().toDouble()
 
         if (amount == 0.0) {
-            baseContext.toast("Amount cannot be zero")
+            baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
             return
-        }
-
-        val errorAlert = android.support.v7.app.AlertDialog.Builder(this).create()
-        errorAlert.setTitle("Error")
-        errorAlert.setMessage("You provided an invalid NEO address, please double check it.")
-        errorAlert.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
-            addressTextView.requestFocus()
         }
 
         NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(address) {
             if (it.second != null || it?.first == false) {
                 runOnUiThread {
-                    errorAlert.show()
+                    alert(resources.getString(R.string.invalid_neo_address), resources.getString(R.string.error)) {
+                        yesButton {
+                            addressTextView.requestFocus()
+                        }
+                    }.show()
                 }
             } else {
                 runOnUiThread {
-                    val message = "Are you sure you want to send %s %s to %s?".format(amount.toString(), this.selectedAsset.name.toUpperCase(), address)
-                    val simpleAlert = AlertDialog.Builder(this).create()
-                    simpleAlert.setTitle("Confirmation")
-                    simpleAlert.setMessage(message)
+                    alert(resources.getString(R.string.send_confirmation, amount.toString(),
+                            this.selectedAsset.name.toUpperCase(), address)) {
+                        positiveButton(resources.getString(R.string.send)) {
+                            send()
+                        }
+                        negativeButton(resources.getString(R.string.cancel)) {
 
-                    simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Send", { _, _ ->
-                        send()
-                    })
-
-                    simpleAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel", { _, _ ->
-                    })
-
-                    simpleAlert.show()
+                        }
+                    }.show()
                 }
             }
         }
-
-
     }
 
     private fun pasteAddressTapped() {
@@ -210,7 +202,7 @@ class SendActivity : AppCompatActivity() {
     fun scanAddressTapped() {
         val integrator = IntentIntegrator(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-        integrator.setPrompt("Scan the QR code of the address you want to save")
+        integrator.setPrompt(resources.getString(R.string.scan_prompt_qr_send))
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
     }
@@ -220,7 +212,7 @@ class SendActivity : AppCompatActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
             } else {
                 addressTextView.setText(result.contents)
             }
