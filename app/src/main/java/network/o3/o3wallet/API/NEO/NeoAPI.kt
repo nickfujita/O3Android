@@ -447,7 +447,7 @@ class NeoNodeRPC {
     }
 
 
-    fun getTokenBalanceOf(tokenHash: String, address: String, completion: (Pair<Int?, Error?>) -> Unit) {
+    fun getTokenBalanceOf(tokenHash: String, address: String, completion: (Pair<Long?, Error?>) -> Unit) {
 
         var params: ArrayList<Any> = arrayListOf<Any>()
         params.add(tokenHash)
@@ -477,13 +477,17 @@ class NeoNodeRPC {
                 val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
                 if (invokeResponse.stack.count() > 0) {
                     val stack = invokeResponse.stack[0]
-                    val amount = stack.value.littleEndianHexStringToInt()
-                    completion(Pair<Int?, Error?>(amount, null))
+                    var amount: Long = 0
+                    if (stack.value.isNotEmpty()) {
+                        amount = stack.value.littleEndianHexStringToInt64()
+                    }
+
+                    completion(Pair<Long?, Error?>(amount, null))
                 }else {
-                    completion(Pair<Int?, Error?>(0, null))
+                    completion(Pair<Long?, Error?>(0, null))
                 }
             } else {
-                completion(Pair<Int?, Error?>(null, Error(error.localizedMessage)))
+                completion(Pair<Long?, Error?>(null, Error(error.localizedMessage)))
             }
         }
     }

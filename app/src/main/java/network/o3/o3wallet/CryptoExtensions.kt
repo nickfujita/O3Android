@@ -34,9 +34,17 @@ fun String.hexStringToByteArray() : ByteArray {
     return data
 }
 
-fun String.littleEndianHexStringToInt(): Int {
-    var b = this.hexStringToByteArray().reversedArray()
-    return ByteBuffer.wrap(b).getInt()
+fun String.littleEndianHexStringToInt64(): Long {
+    var b = this.hexStringToByteArray()
+    val len = b.size
+    var i = 0
+    //we need to pad to match whatever type we need. If the number of bytes is less than target type, Java returns BufferUnderFlow exception.
+    while (i < 8) { //long 8 bytes
+        b += 0.toByte()
+        i += 1
+    }
+    val x = java.nio.ByteBuffer.wrap(b).order(java.nio.ByteOrder.LITTLE_ENDIAN).long
+    return x
 }
 
 fun String.hashFromAddress(): String {
