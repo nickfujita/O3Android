@@ -61,8 +61,9 @@ class AssetGraphViewModel: ViewModel() {
         this.interval = interval
     }
 
-    fun getHistoryFromModel(refresh: Boolean): LiveData<PriceHistory> {
+    fun getHistoryFromModel(s:String, refresh: Boolean): LiveData<PriceHistory> {
         if (history == null || refresh) {
+            symbol = s
             history = MutableLiveData()
             loadHistory()
         }

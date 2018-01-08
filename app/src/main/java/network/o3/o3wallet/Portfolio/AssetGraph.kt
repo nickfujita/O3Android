@@ -114,7 +114,7 @@ class AssetGraph : AppCompatActivity() {
         val percentView = findViewById<TextView>(R.id.percentChangeTextView)
         val progress = findViewById<ProgressBar>(R.id.progressBar)
         progress?.visibility = View.VISIBLE
-        assetGraphModel?.getHistoryFromModel(refresh)?.observe(this, Observer<PriceHistory> { data ->
+        assetGraphModel?.getHistoryFromModel(symbol!!, refresh)?.observe(this, Observer<PriceHistory> { data ->
             progress?.visibility = View.GONE
             chartDataAdapter.setData(assetGraphModel?.getPriceFloats())
             priceView.text = assetGraphModel?.getLatestPriceFormattedString()
