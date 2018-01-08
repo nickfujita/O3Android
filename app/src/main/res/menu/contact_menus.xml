@@ -4,14 +4,14 @@
     <item
         android:id="@+id/send_to_address"
         android:contentDescription="Send to address"
-        android:title="Send" />
+        android:title="@string/send_contact_menu" />
     <item
         android:id="@+id/copy_address"
-        android:title="Copy" />
+        android:title="@string/copy_contact_menu" />
     <group />
     <item
         android:id="@+id/remove_address"
         android:contentDescription="Remove address"
         android:iconTintMode="screen"
-        android:title="Remove" />
+        android:title="@string/remove_contact_menu" />
 </menu>

@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1500"
-                    android:text="@string/all"
+                    android:text="ALL"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
 

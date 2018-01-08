@@ -134,6 +134,15 @@
     <string name="one_day">1D</string>
     <string name="all">ALL</string>
 
+    <!-- Tab Titles -->
+    <string name="portfolio">portfolio</string>
+    <string name="account">Account</string>
+    <string name="news_feed">News Feed</string>
+
+    <!-- Contact Menu -->
+    <string name="send_contact_menu">Send</string>
+    <string name="copy_contact_menu">Copy</string>
+    <string name="remove_contact_menu">Remove</string>
 
     <!-- Common Alerts -->
     <string name="no_passcode_setup">Secure lock screen hasn\'t set up.\n Go to \'Settings -> Security ->
