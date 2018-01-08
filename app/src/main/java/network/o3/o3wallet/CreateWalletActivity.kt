@@ -25,12 +25,9 @@ class CreateWalletActivity : AppCompatActivity() {
     }
 
     fun startButtonTapped() {
-        alert ( "Your private key is the most important piece of information in cryptocurrency applications.\n We " +
-                "will save an encrypted version on your device, but please make sure to write down this " +
-                "private key in another secure location so that you may retrieve your funds in case something " +
-                "happens to your device." ) {
+        alert (resources.getString(R.string.alert_warning)) {
             yesButton {
-                alert("I confirm that I have backed up my private key in another secure location") {
+                alert(resources.getString(R.string.warning_confirmation)) {
                     yesButton {
                         val intent = Intent(this@CreateWalletActivity, SelectingBestNode::class.java)
                         startActivity(intent)

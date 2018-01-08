@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager
 import android.widget.Button
 import android.widget.Toast
 import co.getchannel.channel.Channel
-import neowallet.Neowallet
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import org.jetbrains.anko.alert
@@ -40,8 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     fun createWalletTapped() {
         if (Account.isEncryptedWalletPresent()) {
-            alert ("We've detected that there is already a private key on this device, are you sure you want to replace " +
-                    "the current private key with a new one?") {
+            alert (resources.getString(R.string.existing_key_detected)) {
                 yesButton {
                     authenticateReplaceWallet()
                 }
@@ -60,14 +58,11 @@ class MainActivity : AppCompatActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
-                    Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
             val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(null, null)
-            if (intent == null) {
+            if (intent != null) {
                 startActivityForResult(intent, 0)
             }
         }

@@ -21,7 +21,8 @@ import android.widget.TextView
 
 class LandingFeatureScroll: Fragment() {
     val imageIds: List<Int> = listOf(R.drawable.chart_line, R.drawable.exchange, R.drawable.lock)
-    val titles: List<String> = listOf("Add Watch Only Address", "Login using a private key", "Send, Claim, and Recieve")
+    var titles = resources.getStringArray(R.array.onboarding_image_titles)
+
     companion object {
         fun newInstance(position: Int): LandingFeatureScroll {
             val args = Bundle()

@@ -1,6 +1,43 @@
 <resources>
     <string name="app_name">O3Wallet</string>
 
+    <!-- Landing Page -->
+    <string-array name="onboarding_image_titles">
+        <item>Add Watch Only Address</item>
+        <item>Send, Claim, and Recieve</item>
+        <item>Add Watch Only Address</item>
+    </string-array>
+    <string name="login_landing">LOGIN</string>
+    <string name="new_wallet_question">New to O3?</string>
+    <string name="create_new_wallet">CREATE A NEW WALLET</string>
+    <string name="existing_key_detected">We\'ve detected that there is already a private key on
+        this device, are you sure yo want to replace the current private key with a new one?</string>
+
+    <!-- Create Wallet Page -->
+    <string name="create_welcome">Welcome!</string>
+    <string name="your_public_address">Your Public Address</string>
+    <string name="your_private_key_create">Your Private Key (WIF)</string>
+    <string name="private_key_warning">Never lose or share your private key with anyone, doing so will comprimise
+        the security of your funds.</string>
+    <string name="start">START</string>
+    <string name="alert_warning">Your private key is the most important piece of information in the NEO Economy.\n\n
+    We will save an encrypted version on your device, but please make sure to write down the private key in another secure
+        location so that you may retrieve your funds in case something happens to your device.</string>
+    <string name="warning_confirmation">I confirm that I have backed up my private key in another secure location</string>
+
+    <!-- Login Page -->
+    <string name="your_private_key_login">Your Private Key (WIF)</string>
+    <string name="scan">SCAN</string>
+    <string name="footnote_login">This private key will be stored on your device after logging in.</string>
+    <string name="login_login">LOGIN</string>
+
+    <!-- Common Alerts -->
+    <string name="no_passcode_setup">Secure lock screen hasn\'t set up.\n Go to \'Settings -> Security ->
+        Screenlock\' to set up a lock screen</string>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>

@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="Welcome!"
+        android:text="@string/create_welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="Your Public Address"
+        android:text="@string/your_public_address"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrView" />
@@ -42,7 +42,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="AJs38kijktEuM22sjfXqfjZ734RqR4H6JW"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -55,7 +54,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="Your private key (WIF)"
+        android:text="@string/your_private_key_create"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
@@ -68,7 +67,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:includeFontPadding="false"
-        android:text="Never Lose your private key"
+        android:text="@string/private_key_warning"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:textColor="@color/colorLoss"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +82,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="L4Ns4Uh4WegsHxgDG49hohAYxuhj41hhxG6owjjTWg95GSrRRbLL"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
