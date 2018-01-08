@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="5"
-                    android:text="5M"
+                    android:text="@string/five_minutes"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="15"
-                    android:text="15M"
+                    android:text="@string/fifteen_minutes"
                     android:textAppearance="@style/IntervalButtonText.Selected" />
 
                 <Button
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="30"
-                    android:text="30M"
+                    android:text="@string/thirty_minutes"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="60"
-                    android:text="60M"
+                    android:text="@string/sixty_minutes"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1440"
-                    android:text="1D"
+                    android:text="@string/one_day"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1500"
-                    android:text="ALL"
+                    android:text="@string/all"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
 

@@ -30,7 +30,7 @@ class AssetGraph : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asset_graph)
         symbol = intent.getStringExtra("SYMBOL")
-        title = symbol!! + " Price History"
+        title = resources.getString(R.string.price_history, symbol!!)
         assetGraphModel = ViewModelProviders.of(this).get(AssetGraphViewModel::class.java)
 
         initiateGraph()

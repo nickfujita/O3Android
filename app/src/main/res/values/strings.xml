@@ -118,6 +118,23 @@
     <string name="send_confirmation">"Are you sure you want to send %1$s %2$s to %3$s?</string>
     <string name="scan_prompt_qr_send">Scan the qr code of the recipient address</string>
 
+    <!-- Portfolio -->
+    <string name="price_history">%1$s Price History</string>
+
+    <string-array name="portfolio_headers">
+        <item>OZONE WALLET</item>
+        <item>COMBINED</item>
+        <item>COLD STORAGE</item>
+    </string-array>
+
+    <string name="five_minutes">5M</string>
+    <string name="fifteen_minutes">15M</string>
+    <string name="thirty_minutes">30M</string>
+    <string name="sixty_minutes">60M</string>
+    <string name="one_day">1D</string>
+    <string name="all">ALL</string>
+
+
     <!-- Common Alerts -->
     <string name="no_passcode_setup">Secure lock screen hasn\'t set up.\n Go to \'Settings -> Security ->
         Screenlock\' to set up a lock screen</string>
