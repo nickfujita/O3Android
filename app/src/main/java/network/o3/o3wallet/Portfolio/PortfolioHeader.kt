@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_portfolio_header.*
 import network.o3.o3wallet.*
 
 class PortfolioHeader:Fragment() {
-    private val titles: List<String> = resources.getStringArray(R.array.portfolio_headers)
+    private val titles = resources.getStringArray(R.array.portfolio_headers)
     var position: Int = 0
     var unscrubbedDisplayedAmount = 0.0
     companion object {
