@@ -29,7 +29,10 @@ object Account {
         val alias = "O3 Key"
         val storedVal = EncryptedSettingsRepository.getProperty(alias, O3Wallet.appContext!!)
         val storedEncryptedWIF = storedVal?.data?.hexStringToByteArray()
-        return storedEncryptedWIF != null
+        if (storedEncryptedWIF == null || storedEncryptedWIF.size == 0) {
+            return false
+        }
+        return true
     }
 
     fun restoreWalletFromDevice() {

@@ -46,103 +46,109 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currentPriceTextView" />
     </android.support.constraint.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/graphLayout"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@+id/intervalButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/graphHeader"
-        tools:background="@android:color/white">
+        android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
-        <com.robinhood.spark.SparkView
-            android:id="@+id/sparkview"
+        <FrameLayout
+            android:id="@+id/graphLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toTopOf="@+id/intervalButtonLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:background="@android:color/white">
 
-    </FrameLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/intervalButtonLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+            <com.robinhood.spark.SparkView
+                android:id="@+id/sparkview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <Button
-            android:id="@+id/fiveMinInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/intervalButtonLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="5"
-            android:text="5M"
-            android:textAppearance="@style/IntervalButtonText.NotSelected" />
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/fifteenMinuteInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="15"
-            android:text="15M"
-            android:textAppearance="@style/IntervalButtonText.Selected" />
+            <Button
+                android:id="@+id/fiveMinInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="5"
+                android:text="5M"
+                android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
-        <Button
-            android:id="@+id/thirtyMinuteInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="30"
-            android:text="30M"
-            android:textAppearance="@style/IntervalButtonText.NotSelected" />
+            <Button
+                android:id="@+id/fifteenMinuteInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="15"
+                android:text="15M"
+                android:textAppearance="@style/IntervalButtonText.Selected" />
 
-        <Button
-            android:id="@+id/sixtyMinuteInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="60"
-            android:text="60M"
-            android:textAppearance="@style/IntervalButtonText.NotSelected" />
+            <Button
+                android:id="@+id/thirtyMinuteInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="30"
+                android:text="30M"
+                android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
-        <Button
-            android:id="@+id/oneDayInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="1440"
-            android:text="1D"
-            android:textAppearance="@style/IntervalButtonText.NotSelected" />
+            <Button
+                android:id="@+id/sixtyMinuteInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="60"
+                android:text="60M"
+                android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
-        <Button
-            android:id="@+id/allInterval"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:tag="1500"
-            android:text="ALL"
-            android:textAppearance="@style/IntervalButtonText.NotSelected" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/oneDayInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="1440"
+                android:text="1D"
+                android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
+            <Button
+                android:id="@+id/allInterval"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="1500"
+                android:text="ALL"
+                android:textAppearance="@style/IntervalButtonText.NotSelected" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </LinearLayout>
 
