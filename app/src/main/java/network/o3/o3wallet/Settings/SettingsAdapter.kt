@@ -31,7 +31,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
-            R.drawable.ic_settingscontacticon, R.drawable.ic_settingscontacticon)
+            R.drawable.ic_settings_logout, R.drawable.ic_mobile_android)
     init {
         mContext = context
         mFragment = fragment
