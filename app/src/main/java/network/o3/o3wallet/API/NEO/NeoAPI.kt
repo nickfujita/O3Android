@@ -132,27 +132,6 @@ class NeoNodeRPC {
     fun validateAddress(address: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
         val valid = neowallet.Neowallet.validateNEOAddress(address)
         completion(kotlin.Pair<kotlin.Boolean?, Error?>(valid, null))
-        //validate the NEO address locally.
-//        val dataJson = jsonObject(
-//                "jsonrpc" to "2.0",
-//                "method" to RPC.VALIDATEADDRESS.methodName(),
-//                "params" to jsonArray(address),
-//                "id" to 1
-//        )
-//
-//        var request = nodeURL.httpPost().body(dataJson.toString())
-//        request.headers["Content-Type"] = "application/json"
-//        request.responseString { request, response, result ->
-//            val (data, error) = result
-//            if (error == null) {
-//                val gson = Gson()
-//                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-//                val validatedAddress = gson.fromJson<ValidatedAddress>(nodeResponse.result)
-//                completion(Pair<Boolean?, Error?>(validatedAddress.isvalid, null))
-//            } else {
-//                completion(Pair<Boolean?, Error?>(null, Error(error.localizedMessage)))
-//            }
-//        }
     }
 
     private fun sendRawTransaction(data: ByteArray, completion: (Pair<Boolean?, Error?>) -> Unit) {

@@ -102,7 +102,8 @@
     <string name="copy_address_my_address">COPY ADDRESS</string>
     <string name="no_transactions">No Transactions</string>
     <string name="claiming_gas">Claiming Gas</string>
-    <string name="claimed_gas_successfully">Claimed Gas Successfully</string>
+    <string name="claimed_gas_successfully">Claimed Gas Successfully, Please Wait several minutes before claiming again</string>
+    <string name="please_wait_for_claim">Claim Pending...Please Wait</string>
 
     <!-- Wallet Send -->
     <string name="send">Send</string>
