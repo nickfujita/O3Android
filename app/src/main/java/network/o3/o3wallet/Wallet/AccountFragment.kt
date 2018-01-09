@@ -18,6 +18,7 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
+import kotlinx.android.synthetic.main.fragment_account.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
@@ -42,6 +43,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var qrButton: ImageButton
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
+    private lateinit var claimToast: Toast
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -50,6 +52,8 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        claimProgress.visibility = View.INVISIBLE
+
         menuButton = view.findViewById<FloatingActionButton>(R.id.menuActionButton)
         claimButton = view.findViewById<Button>(R.id.claimButton)
         qrButton = view.findViewById<ImageButton>(R.id.qrButton)
@@ -182,12 +186,28 @@ class AccountFragment : Fragment(), TokenListProtocol {
         claimButton.isEnabled = false
         async(UI) {
             bg {
-                NeoNodeRPC().getAccountState(address = Account.getWallet()!!.address) {
+                NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address = Account.getWallet()!!.address) {
                     onUiThread {
                         showAccountState(it)
                     }
                 }
             }
+        }
+    }
+
+    private fun disableGasInfo() {
+        if (waitingForClaimTextView != null) {
+            claimButton.isEnabled = false
+            unclaimedGASLabel.visibility = View.GONE
+            waitingForClaimTextView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun enableGasInfo() {
+        if (waitingForClaimTextView != null) {
+            claimButton.isEnabled = true
+            unclaimedGASLabel.visibility = View.VISIBLE
+            waitingForClaimTextView.visibility = View.GONE
         }
     }
 
@@ -202,88 +222,77 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 val amount = data!!.total_unspent_claim / 100000000.0
                 activity?.runOnUiThread {
                     unclaimedGASLabel.text = "%.8f".format(amount)
-                    this.claimButton.isEnabled = if (amount == 0.0) false else true
+                    this.claimButton.isEnabled = if (amount == 0.0 || unclaimedGASLabel.visibility == View.GONE) false else true
                 }
             }
         }
     }
 
     private fun enableClaimGASButton(neoAmount: Double) {
-        claimButton.isEnabled = if (neoAmount == 0.0) false else true
+        claimButton.isEnabled = if (neoAmount == 0.0  || unclaimedGASLabel.visibility == View.GONE) false else true
         if (claimButton.isEnabled == true) {
             loadClaimableGasEvery5Seconds()
         }
     }
 
-    fun claimGasTapped() {
-        if (this.currentAccountState == null) {
-            //manage error here
-            return
-        }
-        this.claimButton.isEnabled = false
-        val toast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
-        toast.show()
-        val wallet = Account.getWallet()!!
-        CoZClient().getClaims(wallet.address) {
+    fun performClaim() {
+        CoZClient().getClaims(Account.getWallet()!!.address) {
             val claims = it.first
             val error = it.second
             if (error != null) {
-                activity?.runOnUiThread {
+                onUiThread {
                     context?.toast(error!!.message!!)
                     claimButton.isEnabled = true
+                    claimProgress.visibility = View.INVISIBLE
+                    claimToast.cancel()
                 }
-            } else if (error == null && claims!!.claims.count() > 0) {
-                //able to claim now
-                activity.run {
-                    NeoNodeRPC().claimGAS(wallet) {
-                        activity?.runOnUiThread {
-                            var success = it.first
-                            var error = it.second
-                            if (success == true) {
-                                toast.cancel()
-                                context!!.toast(resources.getString(R.string.claimed_gas_successfully))
-                                loadAccountState()
-                                loadClaimableGAS()
-                            }
-                        }
-                    }
-                }
-            } else if (error == null && claims!!.claims.count() == 0) {
-                activity.run {
-                    //claims array is empty. user needs to send all NEO to itself
-                    NeoNodeRPC().sendAssetTransaction(wallet, NeoNodeRPC.Asset.NEO, neoBalance.value, wallet.address, null) {
-                        var error = it.second
+            } else if (claims?.claims?.size == 0) {
+                Handler().postDelayed({ performClaim() }, 5000)
+            } else {
+                NeoNodeRPC(PersistentStore.getNodeURL()).claimGAS(Account.getWallet()!!) {
+                    onUiThread {
                         var success = it.first
-                        if (error != null) {
-                            activity?.runOnUiThread {
-                                context?.toast(error!!.message!!)
-                                claimButton.isEnabled = true
-                            }
-                        } else {
-                            if (success == true) {
-                                //try to fetch it again after about 5 seconds to avoid sending repeatedly
-                                val handler = Handler()
-                                val delay = 5000 //milliseconds
-                                handler.postDelayed(object : Runnable {
-                                    override fun run() {
-                                        activity?.runOnUiThread {
-                                            claimGasTapped()
-                                        }
-                                    }
-                                }, delay.toLong())
-                            } else {
-                                activity?.runOnUiThread {
-                                    claimButton.isEnabled = true
-                                }
-                            }
+                        var error = it.second
+                        if (success == true) {
+                            claimToast.cancel()
+                            claimButton.isEnabled = false
+                            claimProgress.visibility = View.INVISIBLE
+                            context!!.toast(resources.getString(R.string.claimed_gas_successfully))
+                            disableGasInfo()
+                            Handler().postDelayed({ enableGasInfo() }, 180000)
+                            loadAccountState()
+                            loadClaimableGAS()
                         }
-
                     }
                 }
             }
         }
     }
 
+    fun claimGasTapped() {
+        claimToast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
+        if (this.currentAccountState == null) {
+            return
+        }
+        claimProgress.visibility = View.VISIBLE
+        claimButton.isEnabled = false
+        claimToast.show()
+
+        NeoNodeRPC(PersistentStore.getNodeURL()).sendAssetTransaction(Account.getWallet()!!, NeoNodeRPC.Asset.NEO, neoBalance.value, Account.getWallet()!!.address, null) {
+            var error = it.second
+            var success = it.first
+            if (error != null) {
+                onUiThread {
+                    claimButton.isEnabled = true
+                    claimToast.cancel()
+                    claimProgress.visibility = View.INVISIBLE
+                    context?.toast(error!!.message!!)
+                }
+            } else if (success == true) {
+                performClaim()
+            }
+        }
+    }
 
     private fun menuButtonTapped() {
         val intent: Intent = Intent(

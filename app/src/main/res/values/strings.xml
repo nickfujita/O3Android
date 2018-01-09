@@ -30,6 +30,7 @@
     <string name="scan">SCAN</string>
     <string name="footnote_login">This private key will be stored on your device after logging in.</string>
     <string name="login_login">LOGIN</string>
+    <string name="scan_prompt_login">Scan the QR code of your private key</string>>
 
     <!-- Settings: Menu -->
     <string name="settings">Settings</string>
@@ -101,7 +102,8 @@
     <string name="copy_address_my_address">COPY ADDRESS</string>
     <string name="no_transactions">No Transactions</string>
     <string name="claiming_gas">Claiming Gas</string>
-    <string name="claimed_gas_successfully">Claimed Gas Successfully</string>
+    <string name="claimed_gas_successfully">Claimed Gas Successfully, Please Wait several minutes before claiming again</string>
+    <string name="please_wait_for_claim">Claim Pending...Please Wait</string>
 
     <!-- Wallet Send -->
     <string name="send">Send</string>
@@ -127,11 +129,11 @@
         <item>COLD STORAGE</item>
     </string-array>
 
-    <string name="five_minutes">5M</string>
-    <string name="fifteen_minutes">15M</string>
-    <string name="thirty_minutes">30M</string>
-    <string name="sixty_minutes">60M</string>
-    <string name="one_day">1D</string>
+    <string name="six_hours">6H</string>
+    <string name="one_day">24H</string>
+    <string name="one_week">1W</string>
+    <string name="one_month">1M</string>
+    <string name="three_month">3M</string>
     <string name="all">ALL</string>
 
     <!-- Tab Titles -->
@@ -151,6 +153,7 @@
     <string name="cancel">Cancel</string>
     <string name="invalid_neo_address">Your provided an invalid NEO address, please check it again.</string>
     <string name="error">Error</string>
+    <string name="invalid_wif">Invalid WIF</string>
 
 
 

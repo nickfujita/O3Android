@@ -130,7 +130,7 @@ class SendActivity : AppCompatActivity() {
         val wallet = Account.getWallet()
         val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
         sendButton.isEnabled = false
-        NeoNodeRPC().sendAssetTransaction(wallet!!, this.selectedAsset, amount, address, null) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).sendAssetTransaction(wallet!!, this.selectedAsset, amount, address, null) {
             runOnUiThread {
                 toast.cancel()
                 val error = it.second

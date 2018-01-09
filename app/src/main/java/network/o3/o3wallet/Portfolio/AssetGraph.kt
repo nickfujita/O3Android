@@ -8,13 +8,11 @@ import android.widget.TextView
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
-import org.w3c.dom.Text
 
 /**
  * Created by drei on 12/8/17.
@@ -92,20 +90,20 @@ class AssetGraph : AppCompatActivity() {
     }
 
     private fun initiateIntervalButtons() {
-        val fiveMinButton = findViewById<Button>(R.id.fiveMinInterval)
-        val fifteenMinButton = findViewById<Button>(R.id.fifteenMinuteInterval)
-        val thirtyMinButton = findViewById<Button>(R.id.thirtyMinuteInterval)
-        val sixtyMinButton = findViewById<Button>(R.id.sixtyMinuteInterval)
+        val sixHourButton = findViewById<Button>(R.id.sixHourInterval)
         val oneDayButton = findViewById<Button>(R.id.oneDayInterval)
+        val oneWeekButton = findViewById<Button>(R.id.oneWeekInterval)
+        val oneMonthButton = findViewById<Button>(R.id.oneMonthInterval)
+        val threeMonthButton = findViewById<Button>(R.id.threeMonthInterval)
         val allButton = findViewById<Button>(R.id.allInterval)
 
-        selectedButton = fifteenMinButton
+        selectedButton = oneDayButton
 
-        fiveMinButton.setOnClickListener { tappedIntervalButton(fiveMinButton) }
-        fifteenMinButton.setOnClickListener { tappedIntervalButton(fifteenMinButton) }
-        thirtyMinButton.setOnClickListener { tappedIntervalButton(thirtyMinButton) }
-        sixtyMinButton.setOnClickListener { tappedIntervalButton(sixtyMinButton) }
+        sixHourButton.setOnClickListener { tappedIntervalButton(sixHourButton) }
         oneDayButton.setOnClickListener { tappedIntervalButton(oneDayButton) }
+        oneWeekButton.setOnClickListener { tappedIntervalButton(oneWeekButton) }
+        oneMonthButton.setOnClickListener { tappedIntervalButton(oneMonthButton) }
+        threeMonthButton.setOnClickListener { tappedIntervalButton(threeMonthButton) }
         allButton.setOnClickListener { tappedIntervalButton(allButton) }
     }
 

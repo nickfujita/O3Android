@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         scanButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt("Scan the QR code of the address you want to save")
+            integrator.setPrompt(resources.getString(R.string.scan_prompt_watch_address))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -50,8 +50,7 @@ class LoginActivity : AppCompatActivity() {
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
             Toast.makeText(this,
-                        "Secure lock screen hasn't set up.\n"
-                                + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                    resources.getString(R.string.no_passcode_setup),
                     Toast.LENGTH_LONG).show()
                 return
         } else {
@@ -72,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         if (wifTextfield.text.trim().count() > 0) {
             val valid = Account.fromWIF(wifTextfield.text.toString())
             if (valid == false) {
-                baseContext.toast("Invalid WIF")
+                baseContext.toast(resources.getString(R.string.invalid_wif))
                 return
             }
         }
@@ -83,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents == null) {
-            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
         } else {
             if (requestCode == 1) {
                 Account.restoreWalletFromDevice()
