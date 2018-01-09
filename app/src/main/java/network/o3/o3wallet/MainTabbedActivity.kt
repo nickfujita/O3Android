@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import co.getchannel.channel.Channel
+import co.getchannel.channel.callback.ChannelCallback
 import com.google.firebase.iid.FirebaseInstanceId
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
@@ -85,8 +86,24 @@ class MainTabbedActivity : AppCompatActivity() {
     }
 
     fun setupChannel() {
-        Channel.subscribeToTopic(Account.getWallet()!!.address.toString())
+
         val refreshedToken = FirebaseInstanceId.getInstance().token
-        Channel.saveDeviceToken(refreshedToken)
+        Channel.saveDeviceToken(refreshedToken,object : ChannelCallback {
+            override fun onSuccess() {
+                Channel.subscribeToTopic(Account.getWallet()!!.address.toString(),object : ChannelCallback {
+                    override fun onSuccess() {
+
+                    }
+
+                    override fun onFail(message: String) {
+
+                    }
+                })
+            }
+
+            override fun onFail(message: String) {
+
+            }
+        })
     }
 }
