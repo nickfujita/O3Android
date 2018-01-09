@@ -1,7 +1,5 @@
 package network.o3.o3wallet.Portfolio
 
-import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -13,19 +11,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Handler
 import android.support.v4.view.ViewPager.*
-import android.view.Window
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.fragment_portfolio_header.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
-import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.Portfolio
-import org.jetbrains.anko.coroutines.experimental.bg
-import org.jetbrains.anko.support.v4.onUiThread
 
 
 class HomeFragment : Fragment() {
@@ -113,25 +102,26 @@ class HomeFragment : Fragment() {
         homeModel?.getAccountState(refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
             homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
                 chartDataAdapter.setData(homeModel?.getPriceFloats())
+                assetListAdapter?.notifyDataSetChanged()
             })
         })
     }
 
     fun initiateIntervalButtons(view: View) {
-        val fiveMinButton = view.findViewById<Button>(R.id.fiveMinInterval)
-        val fifteenMinButton = view.findViewById<Button>(R.id.fifteenMinuteInterval)
-        val thirtyMinButton = view.findViewById<Button>(R.id.thirtyMinuteInterval)
-        val sixtyMinButton = view.findViewById<Button>(R.id.sixtyMinuteInterval)
+        val sixHourButton = view.findViewById<Button>(R.id.sixHourInterval)
         val oneDayButton = view.findViewById<Button>(R.id.oneDayInterval)
+        val oneWeekButton = view.findViewById<Button>(R.id.oneWeekInterval)
+        val oneMonthButton = view.findViewById<Button>(R.id.oneMonthInterval)
+        val threeMonthButton = view.findViewById<Button>(R.id.threeMonthInterval)
         val allButton = view.findViewById<Button>(R.id.allInterval)
 
-        selectedButton = fifteenMinButton
+        selectedButton = oneDayButton
 
-        fiveMinButton.setOnClickListener { tappedIntervalButton(fiveMinButton) }
-        fifteenMinButton.setOnClickListener { tappedIntervalButton(fifteenMinButton) }
-        thirtyMinButton.setOnClickListener { tappedIntervalButton(thirtyMinButton) }
-        sixtyMinButton.setOnClickListener { tappedIntervalButton(sixtyMinButton) }
+        sixHourButton.setOnClickListener { tappedIntervalButton(sixHourButton) }
         oneDayButton.setOnClickListener { tappedIntervalButton(oneDayButton) }
+        oneWeekButton.setOnClickListener { tappedIntervalButton(oneWeekButton) }
+        oneMonthButton.setOnClickListener { tappedIntervalButton(oneMonthButton) }
+        threeMonthButton.setOnClickListener { tappedIntervalButton(threeMonthButton) }
         allButton.setOnClickListener { tappedIntervalButton(allButton) }
     }
 
