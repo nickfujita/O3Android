@@ -105,6 +105,10 @@
     <string name="claimed_gas_successfully">Claimed Gas Successfully, Please Wait several minutes before claiming again</string>
     <string name="please_wait_for_claim">Claim Pending...Please Wait</string>
 
+    <string name="my_address_action_label">My NEO address</string>
+    <string name="topup_cold_storage_action_label">Cold Storage</string>
+    <string name="send_action_label">Send</string>
+
     <!-- Wallet Send -->
     <string name="send">Send</string>
     <string name="to">To</string>
