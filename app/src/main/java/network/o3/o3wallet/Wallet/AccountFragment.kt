@@ -19,14 +19,12 @@ import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
-import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.wallet_fragment_account.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
 import org.jetbrains.anko.coroutines.experimental.bg
-import org.jetbrains.anko.find
-import org.jetbrains.anko.sdk15.coroutines.onClick
 import org.jetbrains.anko.support.v4.onUiThread
 
 interface TokenListProtocol {
@@ -52,7 +50,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.wallet_fragment_account, container, false)
     }
 
     fun setupActionButton(view: View) {

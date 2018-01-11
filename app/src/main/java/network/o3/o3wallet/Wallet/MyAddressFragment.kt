@@ -24,13 +24,13 @@ class MyAddressFragment : BottomSheetDialogFragment() {
     private  lateinit var qrImageView: ImageView
 
     override fun setupDialog(dialog: Dialog?, style: Int) {
-        val contentView = View.inflate(context, R.layout.fragment_my_address,null)
+        val contentView = View.inflate(context, R.layout.wallet_fragment_my_address,null)
         dialog!!.setContentView(contentView)
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_my_address, container, false)
+        val view = inflater.inflate(R.layout.wallet_fragment_my_address, container, false)
         addressLabel = view.findViewById<TextView>(R.id.addressLabel)
         qrImageView = view.findViewById<ImageView>(R.id.addressQRCodeImageView)
         val copyButton = view.findViewById<Button>(R.id.copyMyAddressButton)

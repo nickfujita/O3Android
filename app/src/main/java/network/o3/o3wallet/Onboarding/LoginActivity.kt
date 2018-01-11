@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     var isFirstActivityLoad = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.onboarding_activity_login)
 
         val loginButton = findViewById<Button>(R.id.LoginButton)
         wifTextfield = findViewById<TextView>(R.id.wipTextView)

@@ -1,6 +1,5 @@
 package network.o3.o3wallet.Feed
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
@@ -14,14 +13,10 @@ import network.o3.o3wallet.API.O3.FeedData
 import network.o3.o3wallet.API.O3.FeedItem
 import network.o3.o3wallet.API.O3.NewsImage
 import network.o3.o3wallet.R
-import java.net.URI
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 /**
@@ -58,7 +53,7 @@ class NewsFeedAdapter(context: Context, fragment: NewsFeedFragment): BaseAdapter
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(mContext)
-        val view = layoutInflater.inflate(R.layout.feed_row, parent, false)
+        val view = layoutInflater.inflate(R.layout.news_feed_row, parent, false)
         val feedItem = getItem(position)
         view.findViewById<TextView>(R.id.titleTextView).text = feedItem.title
 

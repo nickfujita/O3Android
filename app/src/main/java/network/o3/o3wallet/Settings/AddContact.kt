@@ -19,7 +19,7 @@ import org.jetbrains.anko.yesButton
 class AddContact : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_contact)
+        setContentView(R.layout.settings_activity_add_contact)
         this.title = resources.getString(R.string.contact)
         val nickNameField = findViewById<EditText>(R.id.NickNameField)
         val addressField = findViewById<EditText>(R.id.AddressField)

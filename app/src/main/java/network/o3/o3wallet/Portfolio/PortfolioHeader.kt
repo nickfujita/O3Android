@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import network.o3.o3wallet.API.O3.Portfolio
 import android.arch.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_portfolio_header.*
+import kotlinx.android.synthetic.main.portfolio_fragment_portfolio_header.*
 import network.o3.o3wallet.*
 
 class PortfolioHeader:Fragment() {
@@ -29,7 +29,7 @@ class PortfolioHeader:Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_portfolio_header, container, false)
+        val view = inflater.inflate(R.layout.portfolio_fragment_portfolio_header, container, false)
         position = arguments!!.getInt("position")
         val fundSourceTextView = view?.findViewById<TextView>(R.id.fundSourceTextView)
         fundSourceTextView?.text = titles[position]
