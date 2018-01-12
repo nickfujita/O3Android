@@ -25,6 +25,7 @@ import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
 import network.o3.o3wallet.Topup.TopupSendAmountActivity
+import network.o3.o3wallet.Topup.TopupTutorial
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
 
@@ -138,7 +139,8 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     private fun showTopup() {
-        val topupIntent = Intent(context, TopupSendAmountActivity::class.java)
+        //TODO: ADJUST THIS LOGIC
+        val topupIntent = Intent(context, TopupTutorial::class.java)
         startActivity(topupIntent)
     }
 

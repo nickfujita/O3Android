@@ -132,6 +132,29 @@
     <string name="topup_footnote">Please have your QR code ready to scan</string>
     <string name="confirm">CONFIRM</string>
 
+    <string name="get_started">GET STARTED</string>
+
+    <string-array name="topup_tutorial_titles">
+        <item>O3 Simple Transfer</item>
+        <item>Security</item>
+        <item>Convenience</item>
+    </string-array>
+
+    <string-array name="topup_tutorial_subtitles">
+        <item>Introducing</item>
+        <item>O3 Simple Transfer</item>
+        <item>O3 Simple Transfer</item>
+    </string-array>
+
+    <string-array name="topup_tutorial_explanations">
+        <item>Secure and Convenient way to transfer
+            NEO or GAS from any one of your NEO addresses to O3 Mobile Wallet.</item>
+        <item>Two pieces of information will be genereated from your private key. One part is securely stored on this device.
+            Another part you can choose to store it anywhere. </item>
+        <item>Simply scan the given QR code and enter NEO or GAS amount you would like to transfer to your O3 Wallet.
+            You’re all set!</item>
+    </string-array>
+
     <!-- Portfolio -->
     <string name="price_history">%1$s Price History</string>
 
