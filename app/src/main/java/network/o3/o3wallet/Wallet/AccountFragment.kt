@@ -24,6 +24,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
+import network.o3.o3wallet.Topup.TopupSendAmountActivity
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
 
@@ -61,10 +62,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
         topupButton.colorNormal = resources.getColor(R.color.colorAccent)
         topupButton.colorPressed = resources.getColor(R.color.colorAccentLight)
+        topupButton.setOnClickListener { showTopup() }
 
         myQrButton.colorNormal = resources.getColor(R.color.colorAccent)
         myQrButton.colorPressed = resources.getColor(R.color.colorAccentLight)
-
         myQrButton.setOnClickListener { showMyAddress() }
 
         sendButton.colorNormal = resources.getColor(R.color.colorAccent)
@@ -134,6 +135,11 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private fun showMyAddress() {
         val addressBottomSheet = MyAddressFragment()
         addressBottomSheet.show(activity!!.supportFragmentManager, "myaddress")
+    }
+
+    private fun showTopup() {
+        val topupIntent = Intent(context, TopupSendAmountActivity::class.java)
+        startActivity(topupIntent)
     }
 
     override fun reloadTokenList() {

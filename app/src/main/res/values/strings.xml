@@ -86,7 +86,7 @@
     <string name="block_count">Block Count: %1$d</string>
 
     <!-- Settings: Logout -->
-    <string name = "logout_warning">Are you sure you want to remove your private key from this device?</string>
+    <string name="logout_warning">Are you sure you want to remove your private key from this device?</string>
 
 
     <!-- Wallet -->
@@ -124,6 +124,14 @@
     <string name="send_confirmation">"Are you sure you want to send %1$s %2$s to %3$s?</string>
     <string name="scan_prompt_qr_send">Scan the qr code of the recipient address</string>
 
+    <!-- Wallet Topup -->
+    <string name="from_cold_storage">From: Cold Storage Address</string>
+    <string name="asset_topup">Asset</string>
+    <string name="amount_topup">Amount</string>
+    <string name="scan_qr_code">SCAN QR CODE</string>
+    <string name="topup_footnote">Please have your QR code ready to scan</string>
+    <string name="confirm">CONFIRM</string>
+
     <!-- Portfolio -->
     <string name="price_history">%1$s Price History</string>
 
@@ -158,8 +166,6 @@
     <string name="invalid_neo_address">Your provided an invalid NEO address, please check it again.</string>
     <string name="error">Error</string>
     <string name="invalid_wif">Invalid WIF</string>
-
-
 
 
     <!-- TODO: Remove or change this placeholder text -->

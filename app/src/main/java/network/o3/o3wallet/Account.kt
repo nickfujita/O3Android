@@ -1,5 +1,6 @@
 package network.o3.o3wallet
 
+import android.preference.PreferenceManager
 import neowallet.Neowallet
 import neowallet.Wallet
 import network.o3.o3wallet.Crypto.Decryptor
@@ -15,6 +16,7 @@ import java.security.SecureRandom
 
 object Account {
     private var wallet: Wallet? = null
+    private var sharedSecretPieceOne: String? = null
 
     private fun storeEncryptedKeyOnDevice() {
         val wif = wallet!!.wif

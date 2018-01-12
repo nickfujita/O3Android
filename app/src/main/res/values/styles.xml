@@ -59,7 +59,7 @@
     </style>
 
     <style name="AccentButton" parent="Base.Widget.AppCompat.Button">
-        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:background">@color/colorAccent</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
@@ -67,7 +67,7 @@
     </style>
 
     <style name="PrimaryButton" parent="Base.Widget.AppCompat.Button">
-        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
@@ -79,7 +79,6 @@
         <item name="android:textSize">12dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
     </style>
-
 
     <style name="BoldText">
         <item name="android:textColor">@color/colorBlack</item>
