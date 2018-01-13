@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NEO"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@+id/coldStoageKeyTitle"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/coldStoageKeyTitle" />
 
     <TextView
         android:id="@+id/textView5"
@@ -53,8 +53,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/amount_topup"
         android:textAppearance="@style/BoldText"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="@+id/coldStoageKeyTitle"
+        app:layout_constraintTop_toBottomOf="@+id/coldStoageKeyTitle" />
 
     <Button
         android:id="@+id/scanButton"
@@ -81,7 +81,7 @@
         tools:text="@string/from_cold_storage" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/coldStoageKeyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

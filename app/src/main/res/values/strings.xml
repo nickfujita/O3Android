@@ -134,6 +134,16 @@
 
     <string name="get_started">GET STARTED</string>
 
+    <string name="cold_storage_private_key">Your Cold Storage Private Key (WIF)</string>
+    <string name="cold_storage_private_key_explanation">Your cold storage private key will never be stored on this device.
+    Instead it will be encrypted into two seperate fragments. You will need both pieces in order to withdraw from cold storage. This
+    is made possible from some math magic called "Shamir's Secret Sharing Algorithm."</string>
+    <string name="cold_storage_scan">Scan</string>
+    <string name="cold_storage_read_more">Read More</string>
+    <string name="generate_encrypted_key_fragments">Encrypt Into Key Fragments</string>
+    <string name="scan_prompt_cold_storage">Scan the private key of cold storage</string>
+    <string name="encryption_in_progress">Encryption in Progress...</string>
+
     <string-array name="topup_tutorial_titles">
         <item>O3 Simple Transfer</item>
         <item>Security</item>

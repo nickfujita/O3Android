@@ -21,13 +21,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity_login)
 
-        val loginButton = findViewById<Button>(R.id.LoginButton)
+        val loginButton = findViewById<Button>(R.id.loginButton)
         wifTextfield = findViewById<TextView>(R.id.wipTextView)
         loginButton.setOnClickListener {
             login()
         }
 
-        val scanButton = findViewById<Button>(R.id.ScanButton)
+        val scanButton = findViewById<Button>(R.id.loginScanButton)
         scanButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
