@@ -143,6 +143,10 @@
     <string name="generate_encrypted_key_fragments">Encrypt Into Key Fragments</string>
     <string name="scan_prompt_cold_storage">Scan the private key of cold storage</string>
     <string name="encryption_in_progress">Encryption in Progress...</string>
+    <string name="first_fragment_secure">Two pieces of encrypted data is generated.
+        One is securely stored on your device and You will be given another one in the next screen.</string>
+    <string name="continue_button">Continue</string>
+    <string name="encryption_done">First Fragment Stored on Device</string>
 
     <string-array name="topup_tutorial_titles">
         <item>O3 Simple Transfer</item>
