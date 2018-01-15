@@ -66,7 +66,7 @@ class CoZClient {
         val url = baseAPIURL + Route.BALANCE.routeName() + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
-        request.responseString { request, response, result ->
+        request.timeout(600000).responseString { request, response, result ->
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()

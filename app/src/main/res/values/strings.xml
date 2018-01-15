@@ -86,7 +86,7 @@
     <string name="block_count">Block Count: %1$d</string>
 
     <!-- Settings: Logout -->
-    <string name = "logout_warning">Are you sure you want to remove your private key from this device?</string>
+    <string name="logout_warning">Are you sure you want to remove your private key from this device?</string>
 
 
     <!-- Wallet -->
@@ -105,6 +105,10 @@
     <string name="claimed_gas_successfully">Claimed Gas Successfully, Please Wait several minutes before claiming again</string>
     <string name="please_wait_for_claim">Claim Pending...Please Wait</string>
 
+    <string name="my_address_action_label">My NEO address</string>
+    <string name="topup_cold_storage_action_label">Cold Storage</string>
+    <string name="send_action_label">Send</string>
+
     <!-- Wallet Send -->
     <string name="send">Send</string>
     <string name="to">To</string>
@@ -119,6 +123,65 @@
     <string name="send_error">Error while sending, please check your network</string>
     <string name="send_confirmation">"Are you sure you want to send %1$s %2$s to %3$s?</string>
     <string name="scan_prompt_qr_send">Scan the qr code of the recipient address</string>
+
+    <!-- Wallet Topup -->
+    <string name="from_cold_storage">From: Cold Storage Address</string>
+    <string name="asset_topup">Asset</string>
+    <string name="amount_topup">Amount</string>
+    <string name="scan_qr_code">SCAN QR CODE</string>
+    <string name="topup_footnote">Please have your QR code ready to scan</string>
+    <string name="confirm">CONFIRM</string>
+
+    <string name="get_started">GET STARTED</string>
+
+    <string name="cold_storage_private_key">Your Cold Storage Private Key (WIF)</string>
+    <string name="cold_storage_private_key_explanation">Your cold storage private key will never be stored on this device.
+    Instead it will be encrypted into two seperate fragments. You will need both pieces in order to withdraw from cold storage. This
+    is made possible from some math magic called "Shamir's Secret Sharing Algorithm."</string>
+    <string name="cold_storage_scan">Scan</string>
+    <string name="cold_storage_read_more">Read More</string>
+    <string name="generate_encrypted_key_fragments">Encrypt Into Key Fragments</string>
+    <string name="scan_prompt_cold_storage">Scan the private key of cold storage</string>
+    <string name="encryption_in_progress">Encryption in Progress...</string>
+    <string name="first_fragment_secure">Two pieces of encrypted data is generated.
+        One is securely stored on your device and You will be given another one in the next screen.</string>
+    <string name="continue_button">Continue</string>
+    <string name="encryption_done">First Fragment Stored on Device</string>
+
+    <string name="second_key_fragment">Second Key Fragment</string>
+    <string name="save">Save</string>
+    <string name="second_key_fragment_explanation">You can choose to print this or email it to yourself.
+        You will scan this QR code with your O3 wallet inorder to topup from your cold storage account.
+        Anyone who gets a hold of this data alone is not able to do anything with your NEO.</string>
+    <string name="done">Done</string>
+    <string name="save_fragment_confirm">I have saved this QR Code</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="cold_storage_vault">Cold Storage Vault</string>
+    <string name="remove_cold_storage">Remove Cold Storage</string>
+
+
+
+
+    <string-array name="topup_tutorial_titles">
+        <item>O3 Simple Transfer</item>
+        <item>Security</item>
+        <item>Convenience</item>
+    </string-array>
+
+    <string-array name="topup_tutorial_subtitles">
+        <item>Introducing</item>
+        <item>O3 Simple Transfer</item>
+        <item>O3 Simple Transfer</item>
+    </string-array>
+
+    <string-array name="topup_tutorial_explanations">
+        <item>Secure and Convenient way to transfer
+            NEO or GAS from any one of your NEO addresses to O3 Mobile Wallet.</item>
+        <item>Two pieces of information will be genereated from your private key. One part is securely stored on this device.
+            Another part you can choose to store it anywhere. </item>
+        <item>Simply scan the given QR code and enter NEO or GAS amount you would like to transfer to your O3 Wallet.
+            You’re all set!</item>
+    </string-array>
 
     <!-- Portfolio -->
     <string name="price_history">%1$s Price History</string>
@@ -154,8 +217,6 @@
     <string name="invalid_neo_address">Your provided an invalid NEO address, please check it again.</string>
     <string name="error">Error</string>
     <string name="invalid_wif">Invalid WIF</string>
-
-
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AlertDialog
 import android.view.*
 import android.widget.ListView
 import android.widget.TextView
@@ -28,13 +27,13 @@ class ContactsFragment : BottomSheetDialogFragment() {
     @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
-        val contentView = View.inflate(context, R.layout.fragment_contacts, null)
+        val contentView = View.inflate(context, R.layout.settings_fragment_contacts, null)
         dialog.setContentView(contentView)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_contacts, container, false)
-        val headerView = layoutInflater.inflate(R.layout.settings_header, null)
+        val view = inflater.inflate(R.layout.settings_fragment_contacts, container, false)
+        val headerView = layoutInflater.inflate(R.layout.settings_header_row, null)
         headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.contact)
 
         val listView = view.findViewById<ListView>(R.id.contactsListView)

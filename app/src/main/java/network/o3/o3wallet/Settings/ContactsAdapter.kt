@@ -52,7 +52,7 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment): BaseAdapter
         val layoutInflater = LayoutInflater.from(mContext)
 
         if (position != getCount() - 1) {
-            val view = layoutInflater.inflate(R.layout.address_entry_row, viewGroup, false)
+            val view = layoutInflater.inflate(R.layout.settings_address_entry_row, viewGroup, false)
             val titleTextView = view.findViewById<TextView>(R.id.addressNickNameTextView)
             val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
             val optionButton = view.findViewById<ImageButton>(R.id.contact_option_button)
@@ -84,7 +84,7 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment): BaseAdapter
 
             return view
         } else {
-            val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
+            val view = layoutInflater.inflate(R.layout.settings_add_address_row, viewGroup, false)
             view.findViewById<TextView>(R.id.footerTextView).text = ""
             view.findViewById<Button>(R.id.AddButton).setOnClickListener {
                mFragment.addNewAddress()

@@ -7,20 +7,17 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.annotation.SuppressLint
-import android.app.VoiceInteractor
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.*
 import network.o3.o3wallet.R
-import javax.xml.transform.Result
 
 
 class SettingsFragment : BottomSheetDialogFragment() {
     @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
-        val contentView = View.inflate(context, R.layout.fragment_settings, null)
+        val contentView = View.inflate(context, R.layout.settings_fragment_menu, null)
         dialog.setContentView(contentView)
     }
 
@@ -37,8 +34,8 @@ class SettingsFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
-        val headerView = layoutInflater.inflate(R.layout.settings_header, null)
+        val view = inflater.inflate(R.layout.settings_fragment_menu, container, false)
+        val headerView = layoutInflater.inflate(R.layout.settings_header_row, null)
         headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.settings)
 
         val listView = view.findViewById<ListView>(R.id.settingsListView)

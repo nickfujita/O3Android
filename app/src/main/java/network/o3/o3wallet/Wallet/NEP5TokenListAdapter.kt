@@ -40,7 +40,7 @@ class NEP5TokenListAdapter(context: Context, list: ArrayList<NEP5Token>) : BaseA
         val view: View?
         val vh: NEP5TokenRow
         if (convertView == null) {
-            view = this.inflator.inflate(R.layout.nep5_token_row, parent, false)
+            view = this.inflator.inflate(R.layout.wallet_nep5_token_row, parent, false)
             vh = NEP5TokenRow(view)
             view.tag = vh
         } else {

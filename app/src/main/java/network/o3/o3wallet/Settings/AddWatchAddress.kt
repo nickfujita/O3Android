@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -21,7 +20,7 @@ class AddWatchAddress : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_watch_address)
+        setContentView(R.layout.settings_activity_add_watch_address)
 
         this.title = resources.getString(R.string.watch_address)
         val nickNameField = findViewById<EditText>(R.id.NickNameField)

@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import co.getchannel.channel.Channel
 import co.getchannel.channel.callback.ChannelCallback
-import co.getchannel.channel.callback.ChannelProcessComplete
 import com.crashlytics.android.Crashlytics
 import com.google.zxing.integration.android.IntentIntegrator
 import io.fabric.sdk.android.Fabric
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.onboarding_activity_main)
 
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener { loginTapped() }

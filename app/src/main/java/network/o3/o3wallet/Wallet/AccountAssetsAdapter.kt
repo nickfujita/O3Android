@@ -79,7 +79,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
             val view: View?
             val vh: AccountAssetRow
             if (convertView == null) {
-                view = this.inflator.inflate(R.layout.account_asset_row, parent, false)
+                view = this.inflator.inflate(R.layout.wallet_account_asset_row, parent, false)
                 vh = AccountAssetRow(view)
                 view.tag = vh
             } else {
@@ -96,7 +96,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
             return view!!
 
         } else {
-            val view = this.inflator.inflate(R.layout.add_nep5_token_row, parent, false)
+            val view = this.inflator.inflate(R.layout.wallet_add_nep5_token_row, parent, false)
             view.findViewById<Button>(R.id.addNEP5TokenButton).setOnClickListener {
                 mFragment.addNewNEP5Token()
             }
