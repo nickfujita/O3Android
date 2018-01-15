@@ -90,22 +90,5 @@ class TopupSecondFragmentInfo : AppCompatActivity() {
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(sendIntent)
-
-
-
-
-        /*
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        val qrStream = QRCode.from(intent.getStringExtra("SecretPieceTwo")).withSize(1000, 1000).stream()
-        val f = File(Environment.getExternalStorageDirectory().path + File.separator + "temp_qr.jpg")
-        f.createNewFile()
-        val fo = FileOutputStream(f)
-        fo.write(qrStream.toByteArray())
-        fo.close()
-
-        sendIntent.type = "image/jpeg"
-             val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND*/
     }
 }
