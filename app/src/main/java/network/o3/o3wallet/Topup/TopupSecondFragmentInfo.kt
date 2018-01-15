@@ -21,8 +21,8 @@ import android.support.v4.content.FileProvider
 import network.o3.o3wallet.*
 import java.net.URI
 import android.support.v4.app.ShareCompat
-
-
+import android.util.Log
+import net.glxn.qrgen.core.image.ImageType
 
 
 class TopupSecondFragmentInfo : AppCompatActivity() {
@@ -79,14 +79,19 @@ class TopupSecondFragmentInfo : AppCompatActivity() {
     }
 
     fun sendImage() {
-        val qrFile = QRCode.from(intent.getStringExtra("SecretPieceTwo")).withSize(1000, 1000).stream()
-        val fo = FileOutputStream(U)
-        fo.write(qrFile.toByteArray())
+        val qrFile = QRCode.from(intent.getStringExtra("SecretPieceTwo")).
+                withSize(1000, 1000).to(ImageType.JPG).file()
+        Log.d("Hello", qrFile.absolutePath)
         val uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID,
-                File("content://network.o3.o3wallet.fileprovider/images/temp.jpg"))
-        val intentBuilder = ShareCompat.IntentBuilder.from(this).addStream(uri)
-        val chooserIntent = intentBuilder.createChooserIntent()
-        startActivity(chooserIntent)
+                qrFile)
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.setType("images/jpeg")
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        startActivity(sendIntent)
+
+
 
 
         /*
@@ -100,8 +105,7 @@ class TopupSecondFragmentInfo : AppCompatActivity() {
         fo.close()
 
         sendIntent.type = "image/jpeg"
-        sendIntent.putExtra(Intent.EXTRA_STREAM,
-                Uri.fromFile(f))
-        startActivity(sendIntent)*/
+             val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND*/
     }
 }
