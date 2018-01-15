@@ -1,6 +1,7 @@
 package network.o3.o3wallet.Topup
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +32,10 @@ class TutorialPrivateKey : AppCompatActivity() {
         }
 
         generateFragmentsButton.setOnClickListener { encryptButtonTapped() }
+        readMoreButton.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing"))
+            startActivity(browserIntent)
+        }
     }
 
     fun encryptButtonTapped() {

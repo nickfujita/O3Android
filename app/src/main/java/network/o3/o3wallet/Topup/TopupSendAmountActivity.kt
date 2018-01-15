@@ -20,6 +20,7 @@ import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.Wallet.toast
 import network.o3.o3wallet.Wallet.toastUntilCancel
 import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.image
 
 
 class TopupSendAmountActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class TopupSendAmountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.topup_activity_send_amount)
         val scanButton = findViewById<Button>(R.id.scanButton)
+        coldStorageAddressView.text = PersistentStore.getColdStorageVaultAddress()
         assetTextView.setOnClickListener { toggleAsset() }
         scanButton.setOnClickListener {scanButtonTapped()}
     }
@@ -51,11 +53,9 @@ class TopupSendAmountActivity : AppCompatActivity() {
             baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
             return
         }
-
-        val wallet = Neowallet.generateFromWIF(coldStorageWIF)
         scanButton.isEnabled = false
+        val wallet = Neowallet.generateFromWIF(coldStorageWIF)
         scanButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
-        Log.d("NODEURL", PersistentStore.getNodeURL())
         NeoNodeRPC(PersistentStore.getNodeURL()).sendAssetTransaction(wallet!!, this.selectedAsset, amount, Account.getWallet()?.address!!, null) {
             runOnUiThread {
                 val error = it.second
@@ -98,6 +98,7 @@ class TopupSendAmountActivity : AppCompatActivity() {
             try {
                 coldStorageWIF = Neowallet.recoverFromSharedSecret(sharedSecretPieceOne.hexStringToByteArray(), sharedSecretPieceTwo.hexStringToByteArray())
                 scanButton.text = resources.getString(R.string.confirm)
+                lockImageView.image = resources.getDrawable(R.drawable.ic_lock_open_alt)
                 scanButton.setOnClickListener { finishTransaction() }
             } catch (error: Error) {
 

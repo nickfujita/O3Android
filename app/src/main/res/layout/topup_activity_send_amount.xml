@@ -11,12 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NEO"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/coldStoageKeyTitle"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/lockImageView"
         app:layout_constraintTop_toTopOf="@+id/coldStoageKeyTitle" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/coldStorageAddressView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="gsdfgfsgfsgfsgfsd"
@@ -28,8 +30,7 @@
         android:id="@+id/topupAmountTextView"
         android:layout_width="160dp"
         android:layout_height="43dp"
-        android:hint="Hello"
-        android:text="0"
+        android:hint="0"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="@+id/assetTextView"
@@ -87,15 +88,15 @@
         android:layout_marginTop="16dp"
         android:text="@string/asset_topup"
         android:textAppearance="@style/BoldText"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintStart_toStartOf="@+id/coldStorageAddressView"
+        app:layout_constraintTop_toBottomOf="@+id/coldStorageAddressView" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/lockImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@android:drawable/ic_lock_lock"
+        android:src="@drawable/ic_lock_alt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView" />
 </android.support.constraint.ConstraintLayout>
