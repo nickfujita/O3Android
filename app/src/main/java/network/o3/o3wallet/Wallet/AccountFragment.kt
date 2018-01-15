@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.support.v4.app.Fragment
-import android.support.design.widget.FloatingActionButton
 import android.widget.*
 import android.os.Handler
 import network.o3.o3wallet.API.CoZ.Claims
@@ -16,9 +15,11 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
+import com.github.clans.fab.FloatingActionButton
+import com.github.clans.fab.FloatingActionMenu
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
-import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.wallet_fragment_account.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
@@ -38,14 +39,16 @@ interface TokenListProtocol {
 class AccountFragment : Fragment(), TokenListProtocol {
 
     private var fabExpanded = false
-    private lateinit var menuButton: FloatingActionButton
+    private lateinit var menuButton: FloatingActionMenu
+    private lateinit var topupButton: FloatingActionButton
+    private lateinit var myQrButton: FloatingActionButton
+    private lateinit var sendButton: FloatingActionButton
     private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
     private lateinit var claims: Claims
     private lateinit var currentAccountState: AccountState
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
-    private lateinit var qrButton: ImageButton
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
     private lateinit var claimToast: Toast
@@ -66,16 +69,37 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.wallet_fragment_account, container, false)
+    }
+
+    fun setupActionButton(view: View) {
+        menuButton = view.findViewById<FloatingActionMenu>(R.id.menuActionButton)
+        topupButton = view.findViewById<FloatingActionButton>(R.id.fab_cold_storage)
+        myQrButton = view.findViewById<FloatingActionButton>(R.id.fab_my_address)
+        sendButton = view.findViewById<FloatingActionButton>(R.id.fab_send)
+
+        topupButton.colorNormal = resources.getColor(R.color.colorAccent)
+        topupButton.colorPressed = resources.getColor(R.color.colorAccentLight)
+        topupButton.setOnClickListener { showTopup() }
+
+        myQrButton.colorNormal = resources.getColor(R.color.colorAccent)
+        myQrButton.colorPressed = resources.getColor(R.color.colorAccentLight)
+        myQrButton.setOnClickListener { showMyAddress() }
+
+        sendButton.colorNormal = resources.getColor(R.color.colorAccent)
+        sendButton.colorPressed = resources.getColor(R.color.colorAccentLight)
+        sendButton.setOnClickListener { menuButtonTapped() }
+
+        menuButton.menuButtonColorNormal = resources.getColor(R.color.colorAccent)
+        menuButton.menuButtonColorPressed = resources.getColor(R.color.colorAccentLight)
+        menuButton.transitionName = "reveal"
+        menuButton.bringToFront()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         claimProgress.visibility = View.INVISIBLE
-
-        menuButton = view.findViewById<FloatingActionButton>(R.id.menuActionButton)
         claimButton = view.findViewById<Button>(R.id.claimButton)
-        qrButton = view.findViewById<ImageButton>(R.id.qrButton)
         unclaimedGASLabel = view.findViewById(R.id.unclaimedGASLabel)
         assetListView = view.findViewById<ListView>(R.id.assetListView)
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
@@ -94,13 +118,13 @@ class AccountFragment : Fragment(), TokenListProtocol {
             this.loadClaimableGAS()
         }
 
+        setupActionButton(view)
+
         unclaimedGASLabel.typeface = muli
         unclaimedGASLabel.text = "0.00000000"
-        menuButton.setOnClickListener { menuButtonTapped() }
         claimButton.setOnClickListener { claimGasTapped() }
-        qrButton.setOnClickListener { showMyAddress() }
 
-        menuButton.transitionName = "reveal"
+        //menuButton.transitionName = "reveal"
         claimButton.isEnabled = false
 
         activity?.title = "Account"
@@ -129,6 +153,17 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private fun showMyAddress() {
         val addressBottomSheet = MyAddressFragment()
         addressBottomSheet.show(activity!!.supportFragmentManager, "myaddress")
+    }
+
+    private fun showTopup() {
+        //TODO: ADJUST THIS LOGIC
+        if (PersistentStore.getColdStorageEnabledStatus() == false) {
+            val topupIntent = Intent(context, TopupTutorial::class.java)
+            startActivity(topupIntent)
+        } else {
+            val topupIntent = Intent(context, TopupColdStorageBalanceActivity::class.java)
+            startActivity(topupIntent)
+        }
     }
 
     override fun reloadTokenList() {

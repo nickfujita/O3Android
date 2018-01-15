@@ -45,7 +45,7 @@ class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): Bas
         val layoutInflater = LayoutInflater.from(mContext)
 
         if (position != count - 1) {
-            val view = layoutInflater.inflate(R.layout.address_entry_row, viewGroup, false)
+            val view = layoutInflater.inflate(R.layout.settings_address_entry_row, viewGroup, false)
             val titleTextView = view.findViewById<TextView>(R.id.addressNickNameTextView)
             val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
             titleTextView.text = getItem(position).nickname
@@ -75,7 +75,7 @@ class WatchAddressAdapter(context: Context, fragment: WatchAddressFragment): Bas
             }
             return view
         } else {
-            val view = layoutInflater.inflate(R.layout.add_address_row, viewGroup, false)
+            val view = layoutInflater.inflate(R.layout.settings_add_address_row, viewGroup, false)
             view.findViewById<Button>(R.id.AddButton).setOnClickListener {
                mFragment.addNewAddress()
             }

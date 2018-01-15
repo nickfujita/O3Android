@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +30,13 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
     @SuppressLint("RestrictedApi")
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
-        val contentView = View.inflate(context, R.layout.fragment_watch_address, null)
+        val contentView = View.inflate(context, R.layout.settings_fragment_watch_address, null)
         dialog.setContentView(contentView)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_watch_address, container, false)
-        val headerView = layoutInflater.inflate(R.layout.settings_header, null)
+        val view = inflater.inflate(R.layout.settings_fragment_watch_address, container, false)
+        val headerView = layoutInflater.inflate(R.layout.settings_header_row, null)
         headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.watch_addresses)
 
         val listView = view.findViewById<ListView>(R.id.watchAddressListView)

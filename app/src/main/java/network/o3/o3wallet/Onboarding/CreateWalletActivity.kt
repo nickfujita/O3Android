@@ -19,7 +19,7 @@ class CreateWalletActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_wallet)
+        setContentView(R.layout.onboarding_activity_create_wallet)
         val startButton = findViewById<Button>(R.id.StartButton)
         startButton.setOnClickListener { startButtonTapped() }
         initTextViews()

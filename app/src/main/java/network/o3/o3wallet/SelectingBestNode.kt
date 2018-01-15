@@ -3,23 +3,18 @@ package network.o3.o3wallet
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import neowallet.Neowallet
 import neowallet.SeedNodeResponse
-import network.o3.o3wallet.API.NEO.NeoNetwork
-import network.o3.o3wallet.API.NEO.Node
-import network.o3.o3wallet.Settings.NetworkViewModel
 import org.jetbrains.anko.coroutines.experimental.bg
 
 class SelectingBestNode : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_selecting_best_node)
+        setContentView(R.layout.portfolio_activity_selecting_best_node)
         getBestNode()
     }
 

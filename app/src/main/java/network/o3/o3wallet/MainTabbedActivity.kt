@@ -12,7 +12,6 @@ import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
 import network.o3.o3wallet.Wallet.TabbedAccount
-import java.lang.ref.WeakReference
 
 
 class MainTabbedActivity : AppCompatActivity() {
@@ -25,7 +24,7 @@ class MainTabbedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_tabbed)
+        setContentView(R.layout.tabbar_activity_main_tabbed)
 
 
         val selectedFragment = fragments!!.get(0)

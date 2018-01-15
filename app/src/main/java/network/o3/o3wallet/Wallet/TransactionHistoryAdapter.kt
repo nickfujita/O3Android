@@ -37,7 +37,7 @@ class TransactionHistoryAdapter(context: Context, list: Array<TransactionHistory
         val view: View?
         val vh: TransactionHistoryRow
         if (convertView == null) {
-            view = this.inflator.inflate(R.layout.transaction_history_row_layout, parent, false)
+            view = this.inflator.inflate(R.layout.wallet_transaction_history_row_layout, parent, false)
             vh = TransactionHistoryRow(view)
             view.tag = vh
         } else {

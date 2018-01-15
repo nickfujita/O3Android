@@ -1,5 +1,6 @@
 package network.o3.o3wallet
 
+import android.preference.PreferenceManager
 import neowallet.Neowallet
 import neowallet.Wallet
 import network.o3.o3wallet.Crypto.Decryptor
@@ -15,6 +16,7 @@ import java.security.SecureRandom
 
 object Account {
     private var wallet: Wallet? = null
+    private var sharedSecretPieceOne: String? = null
 
     private fun storeEncryptedKeyOnDevice() {
         val wif = wallet!!.wif
@@ -24,6 +26,33 @@ object Account {
 
         val iv = encryptor.getIv()!!
         setProperty(alias, encryptedWIF.toHex(), iv, O3Wallet.appContext!!)
+    }
+
+    fun storeColdStorageKeyFragmentOnDevice(keyFragment: String) {
+        val alias = "Cold Storage Key Fragment"
+        val encryptor = Encryptor()
+        val encryptedFragment = encryptor.encryptText(alias, keyFragment)!!
+        val iv = encryptor.getIv()!!
+        setProperty(alias, encryptedFragment.toHex(), iv, O3Wallet.appContext!!)
+    }
+
+    fun getColdStorageKeyFragmentOnDevice(): String {
+        val alias = "Cold Storage Key Fragment"
+        val storedVal = EncryptedSettingsRepository.getProperty(alias, O3Wallet.appContext!!)
+        if (storedVal?.data == null) {
+            return ""
+        }
+        val storedEncryptedFragment = storedVal?.data?.hexStringToByteArray()
+        if (storedEncryptedFragment == null || storedEncryptedFragment.size == 0) {
+            return ""
+        }
+        val storedIv = storedVal?.iv!!
+        val decrypted = Decryptor().decrypt(alias, storedEncryptedFragment, storedIv)
+        return decrypted
+    }
+
+    fun removeColdStorageKeyFragment() {
+        storeColdStorageKeyFragmentOnDevice("")
     }
 
     fun isEncryptedWalletPresent(): Boolean {

@@ -42,7 +42,7 @@ class SendActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_send)
+        setContentView(R.layout.wallet_activity_send)
 
         this.title = resources.getString(R.string.send)
         view = findViewById<View>(R.id.root_layout)

@@ -142,7 +142,7 @@ class NeoNodeRPC {
                 "id" to 3
         )
 
-        var request = nodeURL.httpPost().body(dataJson.toString())
+        var request = nodeURL.httpPost().body(dataJson.toString()).timeout(600000)
         request.headers["Content-Type"] = "application/json"
         request.responseString { request, response, result ->
             val (data, error) = result
@@ -264,7 +264,7 @@ class NeoNodeRPC {
     }
 
     fun sendAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
-        CoZClient().getBalance(wallet.address) {
+        CoZClient().getBalance(wallet.address){
             var assets = it.first
             var error = it.second
             if (error != null) {

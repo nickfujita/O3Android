@@ -59,7 +59,7 @@
     </style>
 
     <style name="AccentButton" parent="Base.Widget.AppCompat.Button">
-        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:background">@color/colorAccent</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
@@ -67,7 +67,7 @@
     </style>
 
     <style name="PrimaryButton" parent="Base.Widget.AppCompat.Button">
-        <item name="android:colorButtonNormal">@color/colorSubtitleGrey</item>
+        <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
@@ -76,6 +76,12 @@
 
     <style name="BorderLessButton" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="BorderLessButton.Accent" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">12dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
     </style>
@@ -102,6 +108,24 @@
     <style name="RegularSubtitleText">
         <item name="android:textColor">@color/colorSubtitleGrey</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="TutorialSubtitle">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="TutorialInfoText">
+        <item name="android:textColor">@color/colorDarkGrey</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="TutorialTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">22dp</item>
         <item name="android:fontFamily">@font/muli</item>
     </style>
 
@@ -137,6 +161,12 @@
     </style>
 
     <style name="PortfolioHeader.PortfolioValue">
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="PrimaryTitle">
         <item name="android:textSize">20dp</item>
         <item name="android:fontFamily">@font/muli_bold</item>
         <item name="android:textColor">@color/colorPrimary</item>

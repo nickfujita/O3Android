@@ -20,7 +20,7 @@ class AccountTransactionsFragment : android.support.v4.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_account_transactions, container, false)
+        return inflater.inflate(R.layout.wallet_fragment_account_transactions, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
