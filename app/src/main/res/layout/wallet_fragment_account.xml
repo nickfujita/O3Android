@@ -38,7 +38,7 @@
             android:id="@+id/fab_cold_storage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_edit"
+            android:src="@drawable/ic_fab_lock"
             fab:fab_label="@string/topup_cold_storage_action_label"
             fab:fab_size="mini" />
 
@@ -46,7 +46,7 @@
             android:id="@+id/fab_my_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_qrcode"
+            android:src="@drawable/ic_fab_qrcode"
             fab:fab_label="@string/my_address_action_label"
             fab:fab_size="mini" />
 
@@ -54,7 +54,7 @@
             android:id="@+id/fab_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send"
+            android:src="@drawable/ic_fab_send"
             fab:fab_label="@string/send_action_label"
             fab:fab_size="mini" />
 
