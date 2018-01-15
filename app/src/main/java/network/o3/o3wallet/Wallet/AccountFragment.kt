@@ -24,6 +24,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
+import network.o3.o3wallet.Topup.TopupColdStorageBalanceActivity
 import network.o3.o3wallet.Topup.TopupSendAmountActivity
 import network.o3.o3wallet.Topup.TopupTutorial
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -140,8 +141,13 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     private fun showTopup() {
         //TODO: ADJUST THIS LOGIC
-        val topupIntent = Intent(context, TopupTutorial::class.java)
-        startActivity(topupIntent)
+        if (PersistentStore.getColdStorageEnabledStatus() == false) {
+            val topupIntent = Intent(context, TopupTutorial::class.java)
+            startActivity(topupIntent)
+        } else {
+            val topupIntent = Intent(context, TopupColdStorageBalanceActivity::class.java)
+            startActivity(topupIntent)
+        }
     }
 
     override fun reloadTokenList() {

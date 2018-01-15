@@ -148,6 +148,20 @@
     <string name="continue_button">Continue</string>
     <string name="encryption_done">First Fragment Stored on Device</string>
 
+    <string name="second_key_fragment">Second Key Fragment</string>
+    <string name="save">Save</string>
+    <string name="second_key_fragment_explanation">You can choose to print this or email it to yourself.
+        You will scan this QR code with your O3 wallet inorder to topup from your cold storage account.
+        Anyone who gets a hold of this data alone is not able to do anything with your NEO.</string>
+    <string name="done">Done</string>
+    <string name="save_fragment_confirm">I have saved this QR Code</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="cold_storage_vault">Cold Storage Vault</string>
+    <string name="remove_cold_storage">Remove Cold Storage</string>
+
+
+
+
     <string-array name="topup_tutorial_titles">
         <item>O3 Simple Transfer</item>
         <item>Security</item>

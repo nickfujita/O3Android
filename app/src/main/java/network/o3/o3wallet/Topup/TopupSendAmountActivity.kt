@@ -19,10 +19,10 @@ import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.Wallet.toast
 import network.o3.o3wallet.Wallet.toastUntilCancel
+import org.jetbrains.anko.backgroundColor
+
 
 class TopupSendAmountActivity : AppCompatActivity() {
-    val sharedSecretPartOne = "7760D0E4220CAED8D89106"
-    var secretPieceTwo: String? = null
     var coldStorageWIF: String? = null
     private var selectedAsset = NeoNodeRPC.Asset.NEO
 
@@ -51,12 +51,13 @@ class TopupSendAmountActivity : AppCompatActivity() {
             baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
             return
         }
+
         val wallet = Neowallet.generateFromWIF(coldStorageWIF)
-        val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
-        sendButton.isEnabled = false
+        scanButton.isEnabled = false
+        scanButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
+        Log.d("NODEURL", PersistentStore.getNodeURL())
         NeoNodeRPC(PersistentStore.getNodeURL()).sendAssetTransaction(wallet!!, this.selectedAsset, amount, Account.getWallet()?.address!!, null) {
             runOnUiThread {
-                toast.cancel()
                 val error = it.second
                 val success = it.first
                 if (success == true) {
@@ -65,7 +66,6 @@ class TopupSendAmountActivity : AppCompatActivity() {
                         finish()
                     }, 1000)
                 } else {
-
                 }
             }
         }
@@ -85,7 +85,7 @@ class TopupSendAmountActivity : AppCompatActivity() {
                 topupAmountTextView.setText(Math.round(amount).toString())
             }
         }
-        selectedAssetTextView.text = selectedAsset.name.toUpperCase()
+        assetTextView.text = selectedAsset.name.toUpperCase()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,10 +93,7 @@ class TopupSendAmountActivity : AppCompatActivity() {
         if (result != null && result.contents == null) {
             Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
         } else {
-            //TODO: READD THUS
-            /*val sharedSecretPieceOne = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
-                    .getString("ShamirSecretPieceOne", null)*/
-            val sharedSecretPieceOne = sharedSecretPartOne
+            val sharedSecretPieceOne = Account.getColdStorageKeyFragmentOnDevice()
             val sharedSecretPieceTwo = result.contents
             try {
                 coldStorageWIF = Neowallet.recoverFromSharedSecret(sharedSecretPieceOne.hexStringToByteArray(), sharedSecretPieceTwo.hexStringToByteArray())

@@ -105,6 +105,21 @@ object PersistentStore {
         return contacts
     }
 
+    fun setColdStorageVaultAddress(address: String) {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putString("COLD_STORAGE_VAULT_ADDRESS", address)
+        settingPref.apply()
+    }
+
+    fun getColdStorageVaultAddress(): String {
+        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("COLD_STORAGE_VAULT_ADDRESS", "")
+    }
+
+    fun removeColdStorageVaultAddress() {
+        setColdStorageVaultAddress("")
+    }
+
 
 
     fun setNodeURL(url: String) {
@@ -160,5 +175,16 @@ object PersistentStore {
         settingPref.apply()
 
         return currentList
+    }
+
+    fun setColdStorageEnabledStatus(status: Boolean) {
+        var settingsPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingsPref.putBoolean("COLD_STORAGE_STATUS", status)
+        settingsPref.apply()
+    }
+
+    fun getColdStorageEnabledStatus(): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).
+                getBoolean("COLD_STORAGE_STATUS", false)
     }
 }
