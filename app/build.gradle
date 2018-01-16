@@ -16,8 +16,8 @@ android {
         applicationId "network.o3.o3wallet"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -91,7 +91,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-sdk15-coroutines:$anko_version"
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
     compile "org.jetbrains.anko:anko-design-coroutines:$anko_version"
-
+    compile 'com.google.code.gson:gson:2.8.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }

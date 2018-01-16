@@ -179,6 +179,11 @@ class HomeViewModel: ViewModel()  {
         var runningNeoHot = 0
         var runningGasCold = 0.0
         var runningNeoCold = 0
+
+        if (Account.getWallet() == null) {
+            return
+        }
+
         NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(Account.getWallet()?.address!!) {
             if (it.second != null) {
                 latch.countDown()
