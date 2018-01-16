@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
-import co.getchannel.channel.Channel
-import co.getchannel.channel.callback.ChannelCallback
-import com.google.firebase.iid.FirebaseInstanceId
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
@@ -31,7 +28,6 @@ class MainTabbedActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout, selectedFragment, 0.toString())
         transaction.commit()
-        setupChannel()
 
         activeTabID = selectedFragment.id
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -84,16 +80,4 @@ class MainTabbedActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun setupChannel() {
-
-        Channel.subscribeToTopic(Account.getWallet()!!.address.toString(),object : ChannelCallback {
-            override fun onSuccess() {
-
-            }
-
-            override fun onFail(message: String) {
-
-            }
-        })
-    }
 }

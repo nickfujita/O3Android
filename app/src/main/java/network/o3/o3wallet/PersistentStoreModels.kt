@@ -154,7 +154,7 @@ object PersistentStore {
         }
 
         currentList[token.assetID] = token
-        val gson = Gson()
+        val gson = com.google.gson.Gson()
         val jsonString = gson.toJson(currentList)
 
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()

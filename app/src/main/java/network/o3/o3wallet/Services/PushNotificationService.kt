@@ -14,16 +14,16 @@ import com.google.firebase.iid.FirebaseInstanceId
 class PushNotificationService : FirebaseInstanceIdService() {
 
     override fun onTokenRefresh() {
-        val refreshedToken = FirebaseInstanceId.getInstance().token
-        if (refreshedToken != null) {
-            Channel.saveDeviceToken(refreshedToken,object : ChannelCallback {
-                override fun onSuccess() {
-
-                }
-                override fun onFail(message: String) {
-
-                }
-            })
-        }
+//        val refreshedToken = FirebaseInstanceId.getInstance().token
+//        if (refreshedToken != null) {
+//            Channel.saveDeviceToken(refreshedToken,object : ChannelCallback {
+//                override fun onSuccess() {
+//
+//                }
+//                override fun onFail(message: String) {
+//
+//                }
+//            })
+//        }
     }
 }
