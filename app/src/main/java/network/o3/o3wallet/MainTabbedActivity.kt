@@ -86,18 +86,9 @@ class MainTabbedActivity : AppCompatActivity() {
 
     fun setupChannel() {
 
-        val refreshedToken = FirebaseInstanceId.getInstance().token
-        Channel.saveDeviceToken(refreshedToken,object : ChannelCallback {
+        Channel.subscribeToTopic(Account.getWallet()!!.address.toString(),object : ChannelCallback {
             override fun onSuccess() {
-                Channel.subscribeToTopic(Account.getWallet()!!.address.toString(),object : ChannelCallback {
-                    override fun onSuccess() {
 
-                    }
-
-                    override fun onFail(message: String) {
-
-                    }
-                })
             }
 
             override fun onFail(message: String) {
