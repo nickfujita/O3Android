@@ -33,23 +33,23 @@ class AssetGraphViewModel: ViewModel() {
 
     fun getLatestPriceFormattedString(): String {
         return if (currency == CurrencyType.BTC) {
-            latestPrice?.averageBTC?.formattedBTCString()!!
+            latestPrice?.averageBTC?.formattedBTCString() ?: "0 BTC"
         } else {
-            latestPrice?.averageUSD?.formattedUSDString()!!
+            latestPrice?.averageUSD?.formattedUSDString() ?: "0 USD"
         }
     }
 
     fun getInitialPrice(): Double {
         return when(currency) {
-            CurrencyType.USD -> initialPrice?.averageUSD!!
-            CurrencyType.BTC -> initialPrice?.averageBTC!!
+            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
+            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
         }
     }
 
     fun getCurrentPrice(): Double {
         return when(currency) {
-            CurrencyType.USD -> latestPrice?.averageUSD!!
-            CurrencyType.BTC -> latestPrice?.averageBTC!!
+            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
+            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
         }
     }
 
