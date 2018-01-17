@@ -11,7 +11,7 @@
     <string name="new_wallet_question">New to O3?</string>
     <string name="create_new_wallet">CREATE A NEW WALLET</string>
     <string name="existing_key_detected">We\'ve detected that there is already a private key on
-        this device, are you sure yo want to replace the current private key with a new one?</string>
+        this device, are you sure you want to replace the current private key with a new one?</string>
 
     <!-- Create Wallet Page -->
     <string name="create_welcome">Welcome!</string>

@@ -68,6 +68,10 @@ class LoginActivity : AppCompatActivity() {
     */
 
     fun login() {
+        if (wifTextfield.text.trim().count() == 0) {
+            return
+        }
+
         if (wifTextfield.text.trim().count() > 0) {
             val valid = Account.fromWIF(wifTextfield.text.toString())
             if (valid == false) {
