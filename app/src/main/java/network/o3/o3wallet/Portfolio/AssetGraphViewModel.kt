@@ -54,7 +54,9 @@ class AssetGraphViewModel: ViewModel() {
     }
 
     fun getPercentChange(): Double {
-        return ((getCurrentPrice() - getInitialPrice()) / getInitialPrice()* 100)
+        val currentPrice = getCurrentPrice()
+        val initialPrice = getInitialPrice()
+        return ((currentPrice - initialPrice) / initialPrice * 100.0)
     }
 
     fun setInterval(interval: Int) {
