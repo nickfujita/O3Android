@@ -38,7 +38,7 @@ class MyAddressFragment : BottomSheetDialogFragment() {
         val wallet = Account.getWallet()!!
         addressLabel.text = wallet.address
 
-        val bitmap = QRCode.from(wallet.wif).withSize(1000, 1000).bitmap()
+        val bitmap = QRCode.from(wallet.address).withSize(1000, 1000).bitmap()
         qrImageView.setImageBitmap(bitmap)
 
         copyButton.setOnClickListener{
