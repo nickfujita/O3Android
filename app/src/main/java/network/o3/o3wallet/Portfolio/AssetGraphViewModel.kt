@@ -33,9 +33,9 @@ class AssetGraphViewModel: ViewModel() {
 
     fun getLatestPriceFormattedString(): String {
         return if (currency == CurrencyType.BTC) {
-            latestPrice?.averageBTC?.formattedBTCString() ?: "0 BTC"
+            latestPrice?.averageBTC?.formattedBTCString() ?: "$0.00"
         } else {
-            latestPrice?.averageUSD?.formattedUSDString() ?: "0 USD"
+            latestPrice?.averageUSD?.formattedUSDString() ?: "0.0BTC"
         }
     }
 
