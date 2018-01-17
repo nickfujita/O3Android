@@ -19,10 +19,6 @@ import network.o3.o3wallet.SelectingBestNode
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
-import android.provider.Settings.Secure
-import android.content.ContentResolver
-
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
