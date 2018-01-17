@@ -158,9 +158,9 @@ class HomeViewModel: ViewModel()  {
 
     private fun loadPortfolio() {
         val balance = when (displayType) {
-            DisplayType.HOT -> neoGasHotWallet?.value!!
-            DisplayType.COLD ->  neoGasColdStorage?.value!!
-            DisplayType.COMBINED ->  neoGasCombined?.value!!
+            DisplayType.HOT -> neoGasHotWallet?.value ?: Pair(0, 0.0)
+            DisplayType.COLD ->  neoGasColdStorage?.value ?: Pair(0, 0.0)
+            DisplayType.COMBINED ->  neoGasCombined?.value ?: Pair(0, 0.0)
         }
 
         O3API().getPortfolio(balance.first, balance.second, interval) {
