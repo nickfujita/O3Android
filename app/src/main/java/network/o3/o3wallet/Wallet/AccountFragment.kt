@@ -17,6 +17,9 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
+import com.github.salomonbrys.kotson.jsonObject
+import com.github.salomonbrys.kotson.toJson
+import com.google.gson.JsonObject
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
 import kotlinx.android.synthetic.main.wallet_fragment_account.*
@@ -24,13 +27,11 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
-import org.jetbrains.anko.coroutines.experimental.Ref
-import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
-import android.os.Looper
 import network.o3.o3wallet.Topup.TopupColdStorageBalanceActivity
 import network.o3.o3wallet.Topup.TopupTutorial
+import network.o3.o3wallet.Wallet.Send.SendActivity
 
 
 interface TokenListProtocol {
@@ -53,6 +54,8 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
     private lateinit var claimToast: Toast
+    var assets: ArrayList<AccountAsset> = arrayListOf()
+
     private var isClaiming = false
     fun setClaiming(claiming:Boolean) {
         isClaiming = claiming
@@ -191,7 +194,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         this.currentAccountState = accountState!!
         swipeContainer.isRefreshing = false
         //construct array of AccountAsset
-        var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
 
         for (balance in accountState!!.balances.iterator()) {
             //NEO
@@ -403,6 +405,9 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 context,
                 SendActivity::class.java
         )
+
+
+        intent.putExtra("assets", assets)
         val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity!!, menuButton, ViewCompat.getTransitionName(menuButton))
         ActivityCompat.startActivity(context!!, intent, option.toBundle())
     }

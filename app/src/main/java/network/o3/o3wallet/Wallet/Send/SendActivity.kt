@@ -1,4 +1,4 @@
-package network.o3.o3wallet.Wallet
+package network.o3.o3wallet.Wallet.Send
 
 import android.app.Activity
 import android.app.Fragment
@@ -20,9 +20,12 @@ import android.view.inputmethod.InputMethodManager
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
+import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import network.o3.o3wallet.Wallet.toast
+import network.o3.o3wallet.Wallet.toastUntilCancel
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
@@ -59,7 +62,7 @@ class SendActivity : AppCompatActivity() {
         selectedAssetTextView.text = selectedAsset.name.toUpperCase()
         addressTextView.afterTextChanged { checkEnableSendButton() }
         amountTextView.afterTextChanged { checkEnableSendButton() }
-        selectedAssetTextView.setOnClickListener { toggleAsset() }
+        selectedAssetTextView.setOnClickListener { displayAssets() }
 
         sendButton.isEnabled = false
         sendButton.setOnClickListener { sendTapped() }
@@ -68,8 +71,9 @@ class SendActivity : AppCompatActivity() {
         scanAddressButton.setOnClickListener { scanAddressTapped() }
 
         val extras = intent.extras
-        if (extras != null) {
-            val address = extras.getString("address")
+        val address = extras.getString("address")
+
+        if (address != null) {
             addressTextView.text = address
             amountTextView.requestFocus()
             showFoundContact(address)
@@ -101,8 +105,12 @@ class SendActivity : AppCompatActivity() {
         sendButton.isEnabled = (addressTextView.text.trim().count() > 0 && amountTextView.text.count() > 0)
     }
 
-    private fun toggleAsset() {
-        if (selectedAsset == NeoNodeRPC.Asset.NEO) {
+    private fun displayAssets() {
+        val assetSelectorSheet = AssetSelectorDialog()
+        val assets = intent.extras.getSerializable("assets")
+        assetSelectorSheet.assets = assets as ArrayList<AccountAsset>
+        assetSelectorSheet.show(this.supportFragmentManager, assetSelectorSheet.tag)
+       /* if (selectedAsset == NeoNodeRPC.Asset.NEO) {
             selectedAsset = NeoNodeRPC.Asset.GAS
             amountTextView.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
             amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789.")
@@ -115,7 +123,7 @@ class SendActivity : AppCompatActivity() {
                 amountTextView.text = Math.round(amount).toString()
             }
         }
-        selectedAssetTextView.text = selectedAsset.name.toUpperCase()
+        selectedAssetTextView.text = selectedAsset.name.toUpperCase()*/
     }
 
     private fun send() {

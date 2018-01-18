@@ -12,7 +12,7 @@ import android.widget.TextView
 import network.o3.o3wallet.Contact
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
-import network.o3.o3wallet.Wallet.SendActivity
+import network.o3.o3wallet.Wallet.Send.SendActivity
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
 

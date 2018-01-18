@@ -12,7 +12,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.*
-import network.o3.o3wallet.Wallet.afterTextChanged
+import network.o3.o3wallet.Wallet.Send.afterTextChanged
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
