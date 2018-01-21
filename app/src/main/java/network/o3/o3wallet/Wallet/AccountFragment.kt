@@ -24,13 +24,11 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
-import org.jetbrains.anko.coroutines.experimental.Ref
-import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
-import android.os.Looper
 import network.o3.o3wallet.Topup.TopupColdStorageBalanceActivity
 import network.o3.o3wallet.Topup.TopupTutorial
+import network.o3.o3wallet.Wallet.Send.SendActivity
 
 
 interface TokenListProtocol {
@@ -54,6 +52,9 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var assetListView: ListView
     private lateinit var claimToast: Toast
     private var isClaiming = false
+    var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
+
+
     fun setClaiming(claiming:Boolean) {
         isClaiming = claiming
         this.claimButton.isEnabled = !claiming
@@ -191,7 +192,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         this.currentAccountState = accountState!!
         swipeContainer.isRefreshing = false
         //construct array of AccountAsset
-        var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
 
         for (balance in accountState!!.balances.iterator()) {
             //NEO
@@ -347,7 +347,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     fun sendNEOToOneSelf(){
-        NeoNodeRPC(PersistentStore.getNodeURL()).sendAssetTransaction(Account.getWallet()!!, NeoNodeRPC.Asset.NEO, neoBalance.value, Account.getWallet()!!.address, null) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).sendNativeAssetTransaction(Account.getWallet()!!, NeoNodeRPC.Asset.NEO, neoBalance.value, Account.getWallet()!!.address, null) {
             var error = it.second
             var success = it.first
             if (error != null) {
@@ -403,6 +403,8 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 context,
                 SendActivity::class.java
         )
+        intent.putExtra("assets", assets)
+        intent.putExtra("address", "")
         val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity!!, menuButton, ViewCompat.getTransitionName(menuButton))
         ActivityCompat.startActivity(context!!, intent, option.toBundle())
     }

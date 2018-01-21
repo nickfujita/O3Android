@@ -263,7 +263,7 @@ class NeoNodeRPC {
         }
     }
 
-    fun sendAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
+    fun sendNativeAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
         CoZClient().getBalance(wallet.address){
             var assets = it.first
             var error = it.second

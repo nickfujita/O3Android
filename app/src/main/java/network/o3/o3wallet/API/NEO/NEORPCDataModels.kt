@@ -3,7 +3,7 @@ package network.o3.o3wallet.API.NEO
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import com.google.gson.annotations.SerializedName
-
+import java.io.Serializable
 
 
 data class SendRawTransactionResponse(var jsonrpc: String, var id: Int, var result: Boolean)
@@ -70,7 +70,7 @@ data class AccountAsset(val assetID: String,
                         var value: Double,
                         val decimal: Int,
 						var type: AssetType,
-                        val symbol: String)
+                        val symbol: String): Serializable
 
 data class NEP5Token(val assetID: String,
                         val name: String,
