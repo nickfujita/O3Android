@@ -17,11 +17,13 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import network.o3.o3wallet.*
 import org.json.JSONArray
+import unsigned.toUByte
 import java.nio.*
 
 
 class NeoNodeRPC {
     var nodeURL = "http://node1.o3.network:10332"
+
     //var nodeURL = "http://seed3.neo.org:20332" //TESTNET
     enum class Asset() {
         NEO,
@@ -264,7 +266,7 @@ class NeoNodeRPC {
     }
 
     fun sendNativeAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
-        CoZClient().getBalance(wallet.address){
+        CoZClient().getBalance(wallet.address) {
             var assets = it.first
             var error = it.second
             if (error != null) {
@@ -317,7 +319,7 @@ class NeoNodeRPC {
             count += 1
         }
         var inputData: ByteArray = byteArrayOf(count.toByte())
-        for ( t: Unspent in neededForTransaction) {
+        for (t: Unspent in neededForTransaction) {
             val data = hexStringToByteArray(t.txid)
             val reversedBytes = data.reversedArray()
             inputData = inputData + reversedBytes + ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(t.index.toShort()).array()
@@ -325,7 +327,9 @@ class NeoNodeRPC {
         return SendAssetReturn(runningAmount, inputData, null)
     }
 
-    private fun packRawTransactionBytes(wallet: Wallet, asset: Asset, inputData: ByteArray, runningAmount: Double, toSendAmount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?): ByteArray {
+    private fun packRawTransactionBytes(payloadPrefix: ByteArray, wallet: Wallet, asset: Asset, inputData: ByteArray,
+                                        runningAmount: Double, toSendAmount: Double, toAddress: String,
+                                        attributes: Array<TransactionAttritbute>?): ByteArray {
         var inputDataBytes = inputData
         val needsTwoOutputTransactions = runningAmount != toSendAmount
 
@@ -341,7 +345,7 @@ class NeoNodeRPC {
 //        }
 //        }
 
-        var payload: ByteArray = byteArrayOf(0x80.toByte()) + byteArrayOf(0x00.toByte()) + numberOfAttributes
+        var payload: ByteArray = payloadPrefix + numberOfAttributes
         payload = payload + attributesPayload + inputDataBytes
         if (needsTwoOutputTransactions) {
             //Transaction To Reciever
@@ -368,11 +372,39 @@ class NeoNodeRPC {
     private fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, assets: Assets, attributes: Array<TransactionAttritbute>?): ByteArray {
         var error: Error?
         val inputData = getInputsNecessaryToSendAsset(asset, amount, assets)
-        val rawTransaction = packRawTransactionBytes(wallet, asset, inputData.payload!!, inputData.totalAmount!!,
+        val payloadPrefix = byteArrayOf(0x80.toUByte(), 0x00.toByte())
+        val rawTransaction = packRawTransactionBytes(payloadPrefix, wallet,
+                asset, inputData.payload!!, inputData.totalAmount!!,
                 amount, toAddress, attributes)
         val privateKeyHex = wallet.privateKey.toHex()
         val signatureData = Neowallet.sign(rawTransaction, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawTransaction, signatureData)
+        return finalPayload
+    }
+
+    /*
+    private fun genereateInvokeInputData(wallet: Wallet, assets: Assets): ByteArray {
+       /* var payload: ByteArray = byteArrayOf(0xd1.toUByte()) //Invoke Transaction Type
+        payload += byteArrayOf(0x00.toUByte()) // Version
+        // TODO: Im making this a one input with absolute minimum gas cost since I only care about NEP-5 Transfer
+        // TODO: In the future this needs to be expanded to allow for more generic smart contracts
+        val inputCount = 0x01.toUByte()
+        payload += byteArrayOf(inputCount)
+        for (unspent in assets.GAS.unspent)*/
+    }*/
+
+
+    private fun generateInvokeTransactionPayload(wallet: Wallet, assets: Assets, script: String, contractAddress: String): ByteArray {
+        val inputData = getInputsNecessaryToSendAsset(NeoNodeRPC.Asset.GAS, 0.00000001, assets)
+        val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
+        var rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, Asset.GAS,
+                inputData.payload!!, inputData.totalAmount!!, 0.00000001,
+                Account?.getWallet()?.address!!, null)
+
+        val privateKeyHex = wallet.privateKey.toHex()
+        val signature = Neowallet.sign(rawTransaction, privateKeyHex)
+        var finalPayload = concatenatePayloadData(wallet, rawTransaction, signature)
+        finalPayload = finalPayload + contractAddress.hexStringToByteArray()
         return finalPayload
 
     }
@@ -431,11 +463,11 @@ class NeoNodeRPC {
         var params: ArrayList<Any> = arrayListOf<Any>()
         params.add(tokenHash)
         params.add("balanceOf")
-        var invokeFunctionParams:ArrayList<Any> = arrayListOf()
+        var invokeFunctionParams: ArrayList<Any> = arrayListOf()
         //var stack = Stack(type = "Hash160",value = address.hash160().toString())
         var stack = JsonObject()
-        stack.set("type","Hash160")
-        stack.set("value",address.hash160().toString())
+        stack.set("type", "Hash160")
+        stack.set("value", address.hash160().toString())
         invokeFunctionParams.add(stack)
         params.add(jsonArray(invokeFunctionParams))
 
@@ -462,7 +494,7 @@ class NeoNodeRPC {
                     }
 
                     completion(Pair<Long?, Error?>(amount, null))
-                }else {
+                } else {
                     completion(Pair<Long?, Error?>(0, null))
                 }
             } else {
@@ -471,4 +503,41 @@ class NeoNodeRPC {
         }
     }
 
+    fun buildNEP5TransferScript(scriptHash: String, fromAddress: String, toAddress: String, amount: Double): ByteArray {
+        val amountToSendInMemory: Int = (amount * 100000000).toInt()
+        val fromAddressHash = fromAddress.hashFromAddress()
+        val toAddressHash = toAddress.hashFromAddress()
+        val scriptBuilder = ScriptBuilder()
+        scriptBuilder.pushContractInvoke(scriptHash, operation = "transfer",
+                args = arrayOf(amountToSendInMemory, toAddressHash, fromAddressHash)
+        )
+        var script = scriptBuilder.getScriptHexString()
+        return byteArrayOf((script.length / 2).toUByte()) + script.hexStringToByteArray()
+    }
+
+    // Args: scriptHash -> Contract Address of NEP-5 Token to Transfer
+    // fromAddress -> Address of Sender
+    // toAddress -> Address of Recipient
+    // transfer amount *
+    fun sendNEP5Token(wallet: Wallet, tokenContractHash: String, fromAddress: String, toAddress: String, amount: Double,
+                          completion: (Pair<Boolean?, Error?>) -> Unit) {
+        CoZClient().getBalance(wallet.address) {
+            var assets = it.first
+            var error = it.second
+            if (error != null) {
+                completion(Pair<Boolean?, Error?>(false, error))
+                return@getBalance
+            } else {
+                val scriptBytes = buildNEP5TransferScript(tokenContractHash, fromAddress, toAddress, amount)
+                val scriptBytesString = scriptBytes.toHex()
+                val finalPayload = generateInvokeTransactionPayload(wallet, assets!!, scriptBytes.toHex(), tokenContractHash)
+                val finalPayloadString = finalPayload.toHex()
+                sendRawTransaction(finalPayload) {
+                    var success = it.first
+                    var error = it.second
+                    completion(Pair<Boolean?, Error?>(success, error))
+                }
+            }
+        }
+    }
 }

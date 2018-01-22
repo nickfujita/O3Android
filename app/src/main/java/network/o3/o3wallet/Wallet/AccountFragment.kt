@@ -192,7 +192,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         this.currentAccountState = accountState!!
         swipeContainer.isRefreshing = false
         //construct array of AccountAsset
-
         for (balance in accountState!!.balances.iterator()) {
             //NEO
             if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
@@ -204,6 +203,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             }
         }
 
+        assets.clear()
         var neo = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
                 name = NeoNodeRPC.Asset.NEO.name,
                 symbol = NeoNodeRPC.Asset.NEO.name,

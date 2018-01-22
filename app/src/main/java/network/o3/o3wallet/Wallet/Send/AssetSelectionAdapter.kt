@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.R
+import org.jetbrains.anko.find
 
 /**
  * Created by drei on 1/18/18.
@@ -65,9 +66,10 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
                 return view
             } else -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_token_row, parent, false)
-                view.findViewById<TextView>(R.id.assetShortNameTextView).text = item!!.name
+                view.findViewById<TextView>(R.id.assetShortNameTextView).text = item!!.symbol
+                view.findViewById<TextView>(R.id.assetLongNameTextView).text = item!!.name
                 view.findViewById<TextView>(R.id.assetAmountTextView).text = item!!.value.toString()
-            setListenerForRow(view, item.assetID, false, item.symbol)
+                setListenerForRow(view, item.assetID, false, item.symbol)
                 return view
             }
         }
@@ -80,6 +82,7 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
             sendScreen.assetID = assetID
             sendScreen.shortName = shortName
             sendScreen.updateSelectedAsset()
+            mFragment.dismiss()
         }
     }
 }

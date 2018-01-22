@@ -4,6 +4,7 @@ import network.o3.o3wallet.hexStringToByteArray
 import network.o3.o3wallet.to8BytesArray
 import network.o3.o3wallet.toHex
 import network.o3.o3wallet.toMinimumByteArray
+import java.nio.ByteOrder
 
 /**
  * Created by drei on 1/19/18.
@@ -47,7 +48,7 @@ class ScriptBuilder {
             14 -> pushOpCode(OPCODE.PUSH14)
             15 -> pushOpCode(OPCODE.PUSH15)
             16 -> pushOpCode(OPCODE.PUSH16)
-            else -> pushData(toMinimumByteArray(value).reversedArray().toHex())
+            else -> pushData(to8BytesArray(value).toHex())
         }
     }
 

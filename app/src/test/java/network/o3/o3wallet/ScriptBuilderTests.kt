@@ -69,12 +69,35 @@ class ScriptBuilderTests {
                 0 to "00",
                 13 to "5d",
                 500 to "02f401",
-                65536 to "03000001")
+                65536 to "0300000100000000")
         val neoScript = ScriptBuilder()
         for (key in testCases.keys) {
             neoScript.pushInt(key)
             if (neoScript.getScriptHexString().toLowerCase() != testCases[key]) {
                 throw Exception("Test not passed: ${neoScript.getScriptHexString().toLowerCase()} != $testCases[key]")
+            }
+            neoScript.resetScript()
+        }
+    }
+
+    @Test
+    fun testNEP5TransferScriptBuilder() {
+        val testCases = arrayOf(hashMapOf("script" to "530800e1f505000000001458218b796504d6bde39ba805f92dcda64eae2d8c1458218b796504d6bde39ba805f92dcda64eae2d8c53c1087472616e7366657267cf9472821400ceb06ca780c2a937fec5bbec51b9",
+                "scriptHash" to "b951ecbbc5fe37a9c280a76cb0ce0014827294cf",
+                "operation" to  "transfer",
+                "args" to  arrayOf(100000000,"58218b796504d6bde39ba805f92dcda64eae2d8c", "58218b796504d6bde39ba805f92dcda64eae2d8c")
+        ))
+
+        val neoScript = ScriptBuilder()
+        for (testCase in testCases) {
+            val script = testCase["script"] as String
+            val scriptHash = testCase["scriptHash"] as String
+            val operation = testCase["operation"] as String?
+            val args = testCase["args"]
+            neoScript.pushContractInvoke(scriptHash, operation, args)
+            val neoScriptString = neoScript.getScriptHexString()
+            if (neoScriptString.toLowerCase() != script) {
+                throw Exception("Test not passed: ${neoScriptString.toLowerCase()} != $script")
             }
             neoScript.resetScript()
         }

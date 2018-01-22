@@ -39,7 +39,7 @@
         lateinit var scanAddressButton: Button
         lateinit var view: View
 
-        var isNativeAsset = false
+        var isNativeAsset = true
         //if native asset this refers to assetid, otherwise tokenhash
         var assetID = NeoNodeRPC.Asset.NEO.assetID()
         var shortName = "NEO"
@@ -117,6 +117,11 @@
 
         fun updateSelectedAsset() {
             selectedAssetTextView.text = shortName
+            if (shortName != "NEO") {
+                amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789.")
+            } else {
+                amountTextView.keyListener = DigitsKeyListener.getInstance("0123456789")
+            }
         }
 
         private fun send() {
@@ -133,7 +138,7 @@
             if (isNativeAsset) {
                 sendNativeAsset(address, amount)
             } else {
-                sendTokenAsset()
+                sendTokenAsset(address, amount)
             }
 
         }
@@ -171,8 +176,31 @@
             }
         }
 
-        private fun sendTokenAsset() {
+        private fun sendTokenAsset(address: String, amount: Double) {
+            val wallet = Account.getWallet()
+            val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
 
+            NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet!!.address, address, amount) {
+                runOnUiThread {
+                    toast.cancel()
+                    val error = it.second
+                    val success = it.first
+                    if (success == true) {
+                        baseContext!!.toast(resources.getString(R.string.sent_successfully))
+                        Handler().postDelayed(Runnable {
+                            finish()
+                        }, 1000)
+                    } else {
+                        this.checkEnableSendButton()
+                        val message = resources.getString(R.string.send_error)
+                        val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                        snack.setAction("Close") {
+                            finish()
+                        }
+                        snack.show()
+                    }
+                }
+            }
         }
 
         private fun sendTapped() {
