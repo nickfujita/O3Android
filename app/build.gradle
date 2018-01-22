@@ -92,6 +92,9 @@ dependencies {
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
     compile "org.jetbrains.anko:anko-design-coroutines:$anko_version"
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.github.kotlin-graphics:kotlin-unsigned:v2.1'
+
+
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }

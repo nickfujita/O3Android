@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
 import network.o3.o3wallet.*
-import network.o3.o3wallet.Wallet.SendActivity
+import network.o3.o3wallet.Wallet.Send.SendActivity
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
 

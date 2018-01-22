@@ -124,6 +124,9 @@
     <string name="send_confirmation">"Are you sure you want to send %1$s %2$s to %3$s?</string>
     <string name="scan_prompt_qr_send">Scan the qr code of the recipient address</string>
 
+    <string name="native_assets_header">Native Assets</string>
+    <string name="token_assets_header">Tokens</string>
+
     <!-- Wallet Topup -->
     <string name="from_cold_storage">From: Cold Storage Address</string>
     <string name="asset_topup">Asset</string>
@@ -158,8 +161,6 @@
     <string name="withdraw">Withdraw</string>
     <string name="cold_storage_vault">Cold Storage Vault</string>
     <string name="remove_cold_storage">Remove Cold Storage</string>
-
-
 
 
     <string-array name="topup_tutorial_titles">

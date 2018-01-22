@@ -1,10 +1,8 @@
 package network.o3.o3wallet
 
 import neowallet.Neowallet
-import neowallet.Wallet
 import org.junit.Test
 
-import org.junit.Assert.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
@@ -135,7 +133,7 @@ class APIUnitTests {
     fun sendTransaction() {
         val wif = ""
         val wallet = Neowallet.generateFromWIF(wif)
-        NeoNodeRPC().sendAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
+        NeoNodeRPC().sendNativeAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
             var error = it.second
             assert(error != null)
             print(it.first.toString())

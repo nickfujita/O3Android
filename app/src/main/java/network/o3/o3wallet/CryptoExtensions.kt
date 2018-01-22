@@ -6,6 +6,7 @@ package network.o3.o3wallet
 import java.security.MessageDigest
 import network.o3.o3wallet.core.*
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
@@ -59,3 +60,29 @@ fun String.hash160(): String {
     val shortened = bytes.sliceArray(IntRange(1,bytes.count() - 1))
     return shortened.reversedArray().toHex()
 }
+
+fun to8BytesArray(value: Int, byteOrder: ByteOrder = ByteOrder.LITTLE_ENDIAN): ByteArray {
+    return ByteBuffer.allocate(8).order(byteOrder).putInt(value).array()
+}
+
+
+fun to8BytesArray(value: Long): ByteArray {
+    return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(value).array()
+}
+
+fun toMinimumByteArray(value: Int): ByteArray {
+    val bytes = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array()
+    var minBytes = byteArrayOf()
+    var foundFirstNonZero = false
+    for (byte in bytes.reversed()) {
+        if(byte == 0x00.toByte() && !foundFirstNonZero) {
+            continue
+        }
+        foundFirstNonZero = true
+        minBytes += byteArrayOf(byte)
+    }
+    return minBytes
+}
+
+fun Byte.toPositiveInt() = toInt() and 0xFF
+
