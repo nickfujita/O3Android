@@ -3,10 +3,14 @@ package network.o3.o3wallet.API.O3
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.toJson
 import com.google.gson.Gson
 import network.o3.o3wallet.API.CoZ.Claims
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.CoZ.TransactionHistory
+import network.o3.o3wallet.API.NEO.NEP5Token
+import network.o3.o3wallet.API.NEO.NEP5Tokens
 
 /**
  * Created by drei on 11/24/17.
@@ -69,6 +73,20 @@ class O3API {
                 val o3Response = gson.fromJson<O3Response>(data!!)
                 val feed = gson.fromJson<FeedData>(o3Response.result["data"])
                 completion(Pair(feed, null))
+            } else {
+                completion(Pair(null, Error(error.localizedMessage)))
+            }
+        }
+    }
+
+    fun getAvailableNEP5Tokens(completion: (Pair<Array<NEP5Token>?, Error?>) -> Unit) {
+        val url = "https://o3.network/settings/nep5.json"
+        url.httpGet().responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val tokens = gson.fromJson<NEP5Tokens>(data!!)
+                completion(Pair(tokens.nep5tokens, null))
             } else {
                 completion(Pair(null, Error(error.localizedMessage)))
             }

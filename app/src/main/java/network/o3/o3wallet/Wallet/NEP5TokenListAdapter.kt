@@ -8,39 +8,48 @@ import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 import network.o3.o3wallet.API.NEO.NEP5Token
+import network.o3.o3wallet.API.NEO.Node
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import org.jetbrains.anko.layoutInflater
 
 /**
  * Created by apisit on 12/21/17.
  */
 
-class NEP5TokenListAdapter(context: Context, list: ArrayList<NEP5Token>) : BaseAdapter() {
-    private val list = list
-    private val inflator: LayoutInflater
+class NEP5TokenListAdapter(context: Context) : BaseAdapter() {
+
     private val selectedList = PersistentStore.getSelectedNEP5Tokens()
+    private var tokens: Array<NEP5Token>? = null
+    private val mContext: Context
 
     init {
-        this.inflator = LayoutInflater.from(context)
+        mContext = context
     }
 
     override fun getCount(): Int {
-        return list.count()
+        return tokens?.count() ?: 0
     }
 
     override fun getItem(p0: Int): NEP5Token {
-        return list[p0]
+        return tokens!![p0]
     }
 
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
     }
 
+    fun setData(data: Array<NEP5Token>) {
+        tokens = data
+        notifyDataSetChanged()
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View?
         val vh: NEP5TokenRow
+        val layoutInflater = LayoutInflater.from(mContext)
         if (convertView == null) {
-            view = this.inflator.inflate(R.layout.wallet_nep5_token_row, parent, false)
+            view = layoutInflater.inflate(R.layout.wallet_nep5_token_row, parent, false)
             vh = NEP5TokenRow(view)
             view.tag = vh
         } else {
@@ -51,7 +60,7 @@ class NEP5TokenListAdapter(context: Context, list: ArrayList<NEP5Token>) : BaseA
         vh.tokenNameTextView.text = getItem(position).name
         vh.tokenSymbolTextView.text = getItem(position).symbol
 
-        vh.checkbox.isChecked = selectedList.get(getItem(position).assetID) != null
+        vh.checkbox.isChecked = selectedList.get(getItem(position).tokenHash) != null
         vh.checkbox.setOnClickListener {
             if (vh.checkbox.isChecked == true) {
                 PersistentStore.addToken(getItem(position))

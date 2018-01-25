@@ -224,7 +224,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
         selectedToken.all { t ->
             var token = t.value
-            var asset =  AccountAsset(assetID = token.assetID,
+            var asset =  AccountAsset(assetID = token.tokenHash,
                     name = token.name,
                     symbol = token.symbol,
                     decimal = token.decimal,

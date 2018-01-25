@@ -72,11 +72,13 @@ data class AccountAsset(val assetID: String,
 						var type: AssetType,
                         val symbol: String): Serializable
 
-data class NEP5Token(val assetID: String,
+data class NEP5Token(val tokenHash: String,
                         val name: String,
-                        val totalSupply: Int,
+                        val totalSupply: Double,
                         val decimal: Int,
                         val symbol: String)
+
+data class NEP5Tokens(val nep5tokens: Array<NEP5Token>)
 
 
 
