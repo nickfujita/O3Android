@@ -149,11 +149,11 @@ object PersistentStore {
 
     fun addToken(token: NEP5Token): HashMap<String,NEP5Token> {
         val currentList = getSelectedNEP5Tokens()
-        if (currentList[token.assetID] != null) {
+        if (currentList[token.tokenHash] != null) {
             return currentList
         }
 
-        currentList[token.assetID] = token
+        currentList[token.tokenHash] = token
         val gson = com.google.gson.Gson()
         val jsonString = gson.toJson(currentList)
 
@@ -166,7 +166,7 @@ object PersistentStore {
 
     fun removeToken(token: NEP5Token): HashMap<String,NEP5Token> {
         val currentList = getSelectedNEP5Tokens()
-        currentList.remove(token.assetID)
+        currentList.remove(token.tokenHash)
         val gson = Gson()
         val jsonString = gson.toJson(currentList)
 
