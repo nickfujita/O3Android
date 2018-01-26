@@ -177,6 +177,23 @@ object PersistentStore {
         return currentList
     }
 
+    fun removeAllTokens() {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putString("SELECTED_NEP5_TOKENS", "")
+        settingPref.apply()
+    }
+
+    fun getNeedClearTokens(): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).
+                getBoolean("NEED_CLEAR_TOKENS", true)
+    }
+
+    fun setNeedClearTokens(value: Boolean) {
+        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingPref.putBoolean("NEED_CLEAR_TOKENS", value)
+        settingPref.apply()
+    }
+
     fun setColdStorageEnabledStatus(status: Boolean) {
         var settingsPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
         settingsPref.putBoolean("COLD_STORAGE_STATUS", status)

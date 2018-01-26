@@ -169,6 +169,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     override fun reloadTokenList() {
+        if (PersistentStore.getNeedClearTokens() == true) {
+            PersistentStore.removeAllTokens()
+            PersistentStore.setNeedClearTokens(false)
+        }
         loadAccountState()
     }
 
