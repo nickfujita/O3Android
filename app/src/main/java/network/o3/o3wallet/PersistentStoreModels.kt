@@ -179,7 +179,7 @@ object PersistentStore {
 
     fun removeAllTokens() {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putString("SELECTED_NEP5_TOKENS", "")
+        settingPref.putString("SELECTED_NEP5_TOKENS", null)
         settingPref.apply()
     }
 
