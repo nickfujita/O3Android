@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">"O3"</string>
+
+<!-- Landing Page -->
+<string name="login_landing">"เข้าสู่ระบบ"</string>
+<string name="new_wallet_question">"ผู้ใช้ใหม่?"</string>
+<string name="create_new_wallet">"สร้างกระเป๋าใหม่"</string>
+<string name="existing_key_detected">"เราเจอว่าคุณมีกุญแจส่วนตัวบันทึกอยู่ในเครื่องนี้อยู่แล้ว คุณแน่ใจว่าคุณต้องการลบและบันทึกข้อมูลด้วยข้อมูลกุญแจส่วนตัวอันใหม่?"</string>
+
+<!-- Create Wallet Page -->
+<string name="create_welcome">"ยินดีต้อนรับ"</string>
+<string name="your_public_address">"Address ของคุณ"</string>
+<string name="your_private_key_create">"กุญแจส่วนตัวของคุณ"</string>
+<string name="private_key_warning">"กรุณารักษากุญแจส่วนตัวของคุณ ถ้าทำหายอาจเป็นสาเหตุที่ทำให้คุณสูญเสียเหรียญได้"</string>
+<string name="start">"เริ่มต้น"</string>
+<string name="alert_warning">"กุญแจส่วนตัวเป็นข้อมูลที่สำคัญที่สุดสำหรับ NEO เราจะทำการบันทึกข้อมูลเข้ารหัสบนเครื่องนี้ โปรดตรวจสอบให้แน่ใจว่าคุณได้ทำการเขียนหรือบันทึกข้อมูลกุญแจส่วนตัว เพื่อให้แน่ใจว่าคุณสามารถเข้าถึงข้อมูลของคุณได้เมื่อเครื่องๆนี้สูญหายไป"</string>
+<string name="warning_confirmation">"ฉันยืนยันว่าได้ทำการสำรองข้อมูลกุญแจส่วนตัวไปยังที่ปลอดภัย"</string>
+
+<!-- Login Page -->
+<string name="your_private_key_login">"กุญแจส่วนตัวของคุณ"</string>
+<string name="scan">"แสกน"</string>
+<string name="footnote_login">"กุญแจส่วนตัวนี้จะถูกบันทึกลงไปยังเครื่องของคุณหลังจากการเข้าระบบ"</string>
+<string name="login_login">"เข้าสู่ระบบ"</string>
+<string name="scan_prompt_login">"แสกน QR Code ของกุญแจส่วนตัว"</string>
+
+<!-- Settings: Menu -->
+<string name="settings">"ตั้งค่า"</string>
+ <string-array name="settings_menu_titles">
+  <item>กุญแจส่วนตัว</item>
+  <item>สมุดที่อยู่</item>
+  <item>ที่อยู่สำหรับดูอย่างเดียว</item>
+  <item>เครือข่าย</item>
+  <item>ภาษา</item>
+  <item>เพื่อติดต่อ</item>
+  <item>ออกจากระบบ</item>
+  <item>เวอร์ชั่น</item>
+ </string-array>
+
+
+<!-- This string exists in order to allow for proper formatting -->
+<string name="version">"เวอร์ชั่น %1$s"</string>
+
+<!-- Settings: Private Key -->
+<string name="private_key">"กุญแจส่วนตัว"</string>
+
+<!-- Settings: Address Book -->
+<string name="address_book">"สมุดที่อยู่"</string>
+<string name="add_address_address_book">"เพิ่มที่อยู่"</string>
+<string name="contact">"ที่อยู่"</string>
+<string name="address_address_book">"ที่อยู่"</string>
+<string name="paste_address_book">"วาง"</string>
+<string name="scan_address_book">"แสกน"</string>
+<string name="name_address_book">"ชื่อ"</string>
+<string name="add_contact">"เพิ่มที่อยู่"</string>
+<string name="scan_prompt_address_book">"แสกน QR Code ของที่อยู่ที่ต้องการบันทึก"</string>
+<string name="copied_address">"คัดลอกที่อยู่"</string>
+<string name="remove_contact">"ลบที่อยู่"</string>
+<string name="remove_contact_warning">"คุณแน่ใจที่จะลบที่อยู่นี้?"</string>
+
+<!-- Settings: Watch Addresses -->
+<string name="watch_addresses">"ที่อยู่สำหรับดูอย่างเดียว"</string>
+<string name="add_address_watch_addresses">"เพิ่มที่อยู่"</string>
+<string name="watch_address_explanation">"ที่อยู่สำหรับการดูอย่างเดียวสามารถทำให้คุณสามารถรับรู้ข้อมูลสินทรัพย์ของคุณ แต่คุณไม่สามารถส่งข้อมูลจากที่อยู่นี้ "</string>
+<string name="watch_address">"ที่อยู่สำหรับดูอย่างเดียว"</string>
+<string name="address_watch_addresses">"ที่อยู่"</string>
+<string name="paste_watch_addresses">"วาง"</string>
+<string name="scan_watch_addresses">"แสกน"</string>
+<string name="name_watch_addresses">"ชื่อ"</string>
+<string name="add_watch_address">"เพิ่มที่อยู่สำหรับดูอย่างเดียว"</string>
+<string name="scan_prompt_watch_address">"แสกน QR code ที่อยู่ที่คุณต้องการบันทึก"</string>
+<string name="remove_watch_address">"ลบที่อยู่"</string>
+<string name="remove_watch_address_warning">"คุณแน่ใจที่จะลบที่อยู่นี้?"</string>
+
+<!-- Settings: Network -->
+<string name="available_nodes">"เครื่องที่สามารถต่อได้"</string>
+<string name="peer_count">"จำนวนเครื่อง"</string>
+<string name="block_count">"จำนวนบลอค"</string>
+
+<!-- Settings: Logout -->
+<string name="logout_warning">"คุณแน่ใจที่จะลบกุญแจส่วนตัวออกจากเครื่องของคุณ?"</string>
+
+<!-- Wallet -->
+<string name="my_o3_wallet">"กระเป๋า O3 "</string>
+<string name="assets">"สินทรัพย์"</string>
+<string name="transactions">"รายการ"</string>
+<string name="contacts">"ที่อยู่สำหรับติดต่อ"</string>
+<string name="unclaimed_gas">"GAS ที่ยังไม่ได้เคลม"</string>
+<string name="add_nep_5_token">"เพิ่มเหรียญ"</string>
+<string name="claim">"เคลม"</string>
+<string name="nep_5_tokens">"เหรียญ NEP5"</string>
+<string name="my_address">"ที่อยู่ของฉัน"</string>
+<string name="copy_address_my_address">"คัดลอก"</string>
+<string name="no_transactions">"ไม่มีรายการ"</string>
+<string name="claiming_gas">"กำลังเคลม GAS"</string>
+<string name="claimed_gas_successfully">"เคลมสำเร็จ โปรดรอสองสามนาทีก่อนที่จะทำการเคลมอีกครั้ง"</string>
+<string name="please_wait_for_claim">"กำลังเคลม...โปรดรอ"</string>
+<string name="my_address_action_label">"ที่อยู่ NEO ของฉัน"</string>
+<string name="topup_cold_storage_action_label">"ตู้เซฟ"</string>
+<string name="send_action_label">"ส่ง"</string>
+
+<!-- Wallet Send -->
+<string name="send">"ส่ง"</string>
+<string name="to">"ถึง"</string>
+<string name="paste_send">"วาง"</string>
+<string name="scan_send">"แสกน"</string>
+<string name="neo_address_placeholder">"ที่อยู่ NEO"</string>
+<string name="asset">"สินทรัพย์"</string>
+<string name="amount">"จำนวน"</string>
+<string name="amount_must_be_nonzero">"จำนวนต้องไม่เป็นศูนย์"</string>
+<string name="sending_in_progress">"กำลังส่ง..."</string>
+<string name="sent_successfully">"ทำรายการสำเร็จ"</string>
+<string name="send_error">"ส่งข้อมูลผิดพลาดโปรดตรวจสอบอินเตอร์เน็ตของคุณ"</string>
+<string name="send_confirmation">"คุณแน่ใจว่าคุณจะส่ง %1$s %2$s ไปยัง %3$s?"</string>
+<string name="scan_prompt_qr_send">"แสกน QR code ของผู้รับ"</string>
+<string name="native_assets_header">"สินทรัพย์"</string>
+<string name="token_assets_header">"เหรียญ"</string>
+
+<!-- Wallet Topup -->
+<string name="from_cold_storage">"จากที่อยู่ในตู้เซฟ"</string>
+<string name="asset_topup">"สินทรัพย์"</string>
+<string name="amount_topup">"จำนวน"</string>
+<string name="scan_qr_code">"แสกน QR code"</string>
+<string name="topup_footnote">"โปรดเตรียม QR Code เพื่อแสกน"</string>
+<string name="confirm">"ยืนยัน"</string>
+<string name="get_started">"เริ่มต้น"</string>
+<string name="cold_storage_private_key">"กุญแจส่วนตัวเข้าถึงตู้เซฟของคุณ"</string>
+<string name="cold_storage_private_key_explanation">"กุญแจส่วนตัวเข้าถึง cold storage จะไม่ถูกบันทึกลงในเครื่องนี้ แต่แอพฯจะทำการเข้ารหัสและแยกกุญแจนี้ออกเป็นสองส่วน คุณจะได้รับหนึ่งส่วนและส่วนที่เหลือจะถูกบันทึกลงในเครื่องนี้ ในกรณีทำการถอนจากตู้เซฟ คุณจำเป็นต้องมีทั้งสองส่วน แอพฯใช้ Shamirs Secret Sharing Algorithm ในขั้นตอนนี้"</string>
+<string name="cold_storage_scan">"แสกน"</string>
+<string name="cold_storage_read_more">"อ่านเพิ่มเติม"</string>
+<string name="generate_encrypted_key_fragments">"เข้ารหัสไปสู่กุญแจสองส่วน"</string>
+<string name="scan_prompt_cold_storage">"แสกนกุญแจส่วนตัวสำหรับ cold storage"</string>
+<string name="encryption_in_progress">"กำลังเข้ารหัส..."</string>
+<string name="first_fragment_secure">"ข้อมูลเข้ารหัสทั้งสองส่วนถูกสร้างแล้ว ส่วนนึงถูกบันทึกลงในเครื่อง คุณจะได้รับกุญแจอีกส่วนในหน้าถัดไป"</string>
+<string name="continue_button">"ต่อไป"</string>
+<string name="encryption_done">"ส่วนแรกของกุญแจในเครื่อง"</string>
+<string name="second_key_fragment">"ส่วนที่เหลือของกุญแจ"</string>
+<string name="save">"บันทึก"</string>
+<string name="second_key_fragment_explanation">"คุณสามารถเลือกที่จะพิมพ์หรือส่งอีเมล์ไปหาตัวเอง เมื่อคุณต้องการที่จะถอนจาก cold storage คุณต้องการที่จะแสกน QR code นี้ ข้อมูลนี้ไม่เปิดเผยข้อมูลเกี่ยวกับกุญแจส่วนตัวของคุณ หากใครได้ QR Code ชิ้นนี้ไปก็ไม่สามารถทำอะไรได้"</string>
+<string name="done">"เสร็จสิ้น"</string>
+<string name="save_fragment_confirm">"บันทึก QR code นี้แล้ว"</string>
+<string name="withdraw">"ถอน"</string>
+<string name="cold_storage_vault">"ตู้เซฟ"</string>
+<string name="remove_cold_storage">"ลบ"</string>
+
+<!-- Portfolio -->
+<string name="price_history">"%1$s ราคาที่ผ่านมา"</string>
+<string name="six_hours">"6ชม"</string>
+<string name="one_day">"24ชม"</string>
+<string name="one_week">"1อาทิตย์"</string>
+<string name="one_month">"1นาที"</string>
+<string name="three_month">"3เดือน"</string>
+<string name="all">"ทั้งหมด"</string>
+
+<!-- Tab Titles -->
+<string name="portfolio">"พอร์ต"</string>
+<string name="account">"บัญชี"</string>
+<string name="news_feed">"ข่าวสาร"</string>
+
+<!-- Contact Menu -->
+<string name="send_contact_menu">"ส่ง"</string>
+<string name="copy_contact_menu">"คัดลอก"</string>
+<string name="remove_contact_menu">"ลบ"</string>
+
+<!-- Common Alerts -->
+<string name="no_passcode_setup">"ความปลอดภัยของเครื่องไม่ได้ถูกตั้งค่า ไปที่ ตั้งค่า &gt; ความปลอดภัย เพื่อตั้งค่า"</string>
+<string name="cancelled">"ยกเลิก"</string>
+<string name="cancel">"ยกเลิก"</string>
+<string name="invalid_neo_address">"ที่อยู่ NEO ผิดพลาด โปรดตรวจสอบอีกครั้ง"</string>
+<string name="error">"ผิดพลาด"</string>
+<string name="invalid_wif">"กุญแจผิด"</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">"Hello blank fragment"</string>
+<string name="neo_asset_id">"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"</string>
+<string name="gas_asset_id">"0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+<string name="add_address_watch_address_description">"ที่อยู่สำหรับดูอย่างเดียวทำให้คุณสามารถดูความเคลื่อนไหวของพอร์ตของคุณ แต่คุณจะไม่สามารถทำรายการจากที่อยู่นี้ได้"</string>
+<string name="add_address_contact_description">"สมุดที่อยู่ทำให้คุณไม่จำเป็นต้องจำที่อยู่ยาวๆอีกต่อไป"</string>
+<string name="channel_message_notification_title_template">"
+ Channel message: %1$s"</string>
+
+<!-- TODO: remove this placeholder text -->
+<string name="channel_message_notification_placeholder_text_template">"-"</string>
+<string name="action_share">"แชร์"</string>
+<string name="action_reply">"ตอบ"</string>
+</resources>

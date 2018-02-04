@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">"O3 portemonnee "</string>
+
+<!-- Landing Page -->
+<string name="login_landing">"Aanmelden"</string>
+<string name="new_wallet_question">"Nieuw bij O3?"</string>
+<string name="create_new_wallet">"Creëer een nieuwe portemonnee"</string>
+<string name="existing_key_detected">"We hebben vastgesteld dat er al een privé sleutel op dit toestel aanwezig is. Weet je zeker dat je huidige privé sleutel wilt vervangen door een nieuwe?"</string>
+
+<!-- Create Wallet Page -->
+<string name="create_welcome">"Welkom!"</string>
+<string name="your_public_address">"Nieuwe publieke sleutel"</string>
+<string name="your_private_key_create">"Jouw privé sleutel (WIF)"</string>
+<string name="private_key_warning">"Verlies of deel jouw privé sleutel niet. Je kan hierdoor je fondsen verliezen!"</string>
+<string name="start">"Start"</string>
+<string name="alert_warning">"Je privé sleutel is het belangrijkste stukje informatie in de NEO economie.
+
+We zullen een versleutelde versie bewaren op jouw toestel maar bewaar je privé sleutel ook nog op een andere beveiligde locatie. Hiermee kan je jouw fondsen terugvinden in het geval dat er iets met je toestel zou gebeuren."</string>
+<string name="warning_confirmation">"Ik bevestig hiermee dat ik mijn privé sleutel op een andere locatie heb bewaard"</string>
+
+<!-- Login Page -->
+<string name="your_private_key_login">"Jouw privé sleutel (WIF)"</string>
+<string name="scan">"Scan"</string>
+<string name="footnote_login">"Deze privé sleutel zal op jouw toestel worden bewaard na het inloggen"</string>
+<string name="login_login">"Inloggen"</string>
+<string name="scan_prompt_login">"Scan de QR code van je privé sleutel"</string>
+
+<!-- Settings: Menu -->
+<string name="settings">"Instellingen"</string>
+<string-array name="settings_menu_titles">
+        <item>Privé sleutel</item>
+        <item>Adressenboek</item>
+        <item>Bekijk enkel adres</item>
+        <item>Netwerk</item>
+        <item>Taal</item>
+        <item>Kontakt</item>
+        <item>Uitloggen</item>
+        <item>versie</item>
+</string-array>
+
+<!-- This string exists in order to allow for proper formatting -->
+<string name="version">"Versie: %1$s"</string>
+
+<!-- Settings: Private Key -->
+<string name="private_key">"Privé sleutel"</string>
+
+<!-- Settings: Address Book -->
+<string name="address_book">"Adressenboek"</string>
+<string name="add_address_address_book">"Adres toevoegen"</string>
+<string name="contact">"Contact"</string>
+<string name="address_address_book">"Adres"</string>
+<string name="paste_address_book">"Plakken"</string>
+<string name="scan_address_book">"Scan"</string>
+<string name="name_address_book">"Naam"</string>
+<string name="add_contact">"Contact toevoegen"</string>
+<string name="scan_prompt_address_book">"Scan de QR code van het adres dat je wenst toe te voegen"</string>
+<string name="copied_address">"Gekopieerd adres"</string>
+<string name="remove_contact">"Verwijder contact"</string>
+<string name="remove_contact_warning">"Weet je zeker dat je dit contact wenst te verwijderen?"</string>
+
+<!-- Settings: Watch Addresses -->
+<string name="watch_addresses">"Bekijk alleen adressen"</string>
+<string name="add_address_watch_addresses">"Adres toevoegen"</string>
+<string name="watch_address_explanation">"\"Bekijk alleen adressen\" laat jouw je portfolio volgen in een geïsoleerde omgeving. Alhoewel je geen fondsen van deze adressen kunt versturen laat het je toe om de balans op te vragen"</string>
+<string name="watch_address">"Bekijk enkel adres"</string>
+<string name="address_watch_addresses">"Adres"</string>
+<string name="paste_watch_addresses">"Plak"</string>
+<string name="scan_watch_addresses">"Scan"</string>
+<string name="name_watch_addresses">"Naam"</string>
+<string name="add_watch_address">"Voeg \"alleen bekijk\" adres toe"</string>
+<string name="scan_prompt_watch_address">"Scan de QR code van het adres dat je wenst op te slaan"</string>
+<string name="remove_watch_address">"Verwijder \"alleen bekijk\" adres"</string>
+<string name="remove_watch_address_warning">"Weet je zeker dat je dit \"alleen bekijk\" adres wenst te verwijderen?"</string>
+
+<!-- Settings: Network -->
+<string name="available_nodes">"Beschikbare nodes"</string>
+<string name="peer_count">"Aantal peers: %1$d"</string>
+<string name="block_count">"Aantal blokken; %1$d"</string>
+
+<!-- Settings: Logout -->
+<string name="logout_warning">"Weet je zeker dat je jouw privé sleutel wilt verwijderen van dit toestel?"</string>
+
+<!-- Wallet -->
+<string name="my_o3_wallet">"Mijn O3 portemonnee"</string>
+<string name="assets">"Activa"</string>
+<string name="transactions">"Transacties"</string>
+<string name="contacts">"Contacten"</string>
+<string name="unclaimed_gas">"GAS nog niet geclaimd"</string>
+<string name="add_nep_5_token">"NEP5 token toevoegen"</string>
+<string name="claim">"Claimen"</string>
+<string name="nep_5_tokens">"NEP5 tokens"</string>
+<string name="my_address">"Mijn adres"</string>
+<string name="copy_address_my_address">"Kopieer adres"</string>
+<string name="no_transactions">"Geen transacties"</string>
+<string name="claiming_gas">"GAS claimen"</string>
+<string name="claimed_gas_successfully">"GAS claimen succesvol. Wacht een paar minuten voordat je weer claimt"</string>
+<string name="please_wait_for_claim">"Bezig met claimen... even geduld"</string>
+<string name="my_address_action_label">"Mijn NEO adres"</string>
+<string name="topup_cold_storage_action_label">"Privé opslag"</string>
+<string name="send_action_label">"Versturen"</string>
+
+<!-- Wallet Send -->
+<string name="send">"Verstuurd"</string>
+<string name="to">"Naar"</string>
+<string name="paste_send">"Plak"</string>
+<string name="scan_send">"Scan"</string>
+<string name="neo_address_placeholder">"NEO adres"</string>
+<string name="asset">"Activa"</string>
+<string name="amount">"Aantal"</string>
+<string name="amount_must_be_nonzero">"Aantal mag niet nul zijn"</string>
+<string name="sending_in_progress">"Versturen..."</string>
+<string name="sent_successfully">"Succesvol verstuurd"</string>
+<string name="send_error">"Fout tijdens het versturen, controleer uw netwerkverbinding"</string>
+<string name="send_confirmation">"Weet je zeker dat je %1$s %2$s wenst te versturen naar %3$s?"</string>
+<string name="scan_prompt_qr_send">"Scan de QR code van het adres van de bestemming"</string>
+<string name="native_assets_header">"Eigen activa"</string>
+<string name="token_assets_header">"Tokens"</string>
+
+<!-- Wallet Topup -->
+<string name="from_cold_storage">"Van: Privé opslag adres"</string>
+<string name="asset_topup">"Activa"</string>
+<string name="amount_topup">"Aantal"</string>
+<string name="scan_qr_code">"Scan QR code"</string>
+<string name="topup_footnote">"Houd je QR code klaar om te scannen"</string>
+<string name="confirm">"Bevestig"</string>
+<string name="get_started">"Begin eraan"</string>
+<string name="cold_storage_private_key">"Uw privé opslag privé sleutel (WIF)"</string>
+<string name="cold_storage_private_key_explanation">"Uw privé opslag privé sleutel zal nooit op dit toestel worden bewaard.
+In plaats daarvan zal deze versleuteld worden in twee fragmenten. Je zult beide fragmenten nodig hebben om uit jouw privé opslag activa op te halen. Dit word mogelijk gemaakt met wat wiskundige magie genaamd Shamirs Secret Sharing Algorithm"</string>
+<string name="cold_storage_scan">"Scan"</string>
+<string name="cold_storage_read_more">"Lees verder"</string>
+<string name="generate_encrypted_key_fragments">"Versleutel in sleutel fragmenten"</string>
+<string name="scan_prompt_cold_storage">"Scan de privé sleutel van uw privé opslag"</string>
+<string name="encryption_in_progress">"Versleuteling bezig..."</string>
+<string name="first_fragment_secure">"Twee fragmenten van de versleutelde gegevens zijn gegenereerd. 
+Één wordt bewaard op jouw toestel. De andere wordt op het volgende scherm getoond."</string>
+<string name="continue_button">"Verder"</string>
+<string name="encryption_done">"Eerste fragment bewaard op jouw toestel"</string>
+<string name="second_key_fragment">"Tweede sleutel fragment"</string>
+<string name="save">"Opslaan"</string>
+<string name="second_key_fragment_explanation">"Je kan ervoor kiezen om dit af te drukken of om naar jezelf te sturen per e-mail.
+Je zal deze QR code scannen met jouw O3 portemonnee om op te waarderen uit jouw privé opslag. Als iemand toegang krijgt tot alleen deze data zal hij op geen enkele manier toegang krijgen tot jouw NEO"</string>
+<string name="done">"Klaar"</string>
+<string name="save_fragment_confirm">"Ik heb deze QR code bewaard"</string>
+<string name="withdraw">"Opnemen"</string>
+<string name="cold_storage_vault">"Privé opslag kluis"</string>
+<string name="remove_cold_storage">"Verwijder privé opslag"</string>
+
+<!-- Portfolio -->
+<string name="price_history">"%1$s prijs historie"</string>
+<string name="six_hours">"6U"</string>
+<string name="one_day">"24U"</string>
+<string name="one_week">"1W"</string>
+<string name="one_month">"1M"</string>
+<string name="three_month">"3M"</string>
+<string name="all">"Alles"</string>
+
+<!-- Tab Titles -->
+<string name="portfolio">"portfolio"</string>
+<string name="account">"Account"</string>
+<string name="news_feed">"Nieuwsberichten"</string>
+
+<!-- Contact Menu -->
+<string name="send_contact_menu">"Verzend"</string>
+<string name="copy_contact_menu">"Kopieer"</string>
+<string name="remove_contact_menu">"Verwijder"</string>
+
+<!-- Common Alerts -->
+<!-- Fuzzy -->
+<string name="no_passcode_setup">"Beveiligd schermslot is niet ingesteld.
+Ga naar ‘instellingen -&gt; beveiliging -&gt; schermslot’ om in te stellen"</string>
+<string name="cancelled">"Afgebroken"</string>
+<string name="cancel">"Afbreken"</string>
+<string name="invalid_neo_address">"U hebt een ongeldig NEO adres opgegeven, controleer deze opnieuw."</string>
+<string name="error">"Fout"</string>
+<string name="invalid_wif">"Ongeldige WIF"</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">"Hello blanco fragment"</string>
+<string name="neo_asset_id">"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"</string>
+<string name="gas_asset_id">"0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+<string name="add_address_watch_address_description">"Enkel bekijken laat u toe om uw portfolio op te volgen in een geïsoleerde omgeving. Hoewel je geen fondsen naar deze adressen kunt sturen, het laat je toe om je balans op te vragen"</string>
+<string name="add_address_contact_description">"Uw adressenboek laat je toe om wereldwijd fondsen te versturen zonder het adres te memoriseren"</string>
+<string name="channel_message_notification_title_template">"Kanaalbericht: %1$s"</string>
+
+<!-- TODO: remove this placeholder text -->
+<string name="channel_message_notification_placeholder_text_template">"Je zei %1$s en lorem
+        ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit
+        vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor."</string>
+<string name="action_share">"Delen"</string>
+<string name="action_reply">"Beantwoorden"</string>
+</resources>

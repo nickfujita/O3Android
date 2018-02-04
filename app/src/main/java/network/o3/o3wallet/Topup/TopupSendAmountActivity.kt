@@ -8,6 +8,7 @@ import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.widget.Button
 import android.widget.Toast
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.topup_activity_send_amount.*
 import neowallet.Neowallet
@@ -18,7 +19,7 @@ import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.image
 
 
-class TopupSendAmountActivity : AppCompatActivity() {
+class TopupSendAmountActivity : LocalizationActivity() {
     var coldStorageWIF: String? = null
     private var selectedAsset = NeoNodeRPC.Asset.NEO
 

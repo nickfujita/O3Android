@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
@@ -16,7 +17,7 @@ import network.o3.o3wallet.Wallet.Send.afterTextChanged
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
-class AddWatchAddress : AppCompatActivity() {
+class AddWatchAddress : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.Toast
 import co.getchannel.channel.Channel
 import co.getchannel.channel.callback.ChannelCallback
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.crashlytics.android.Crashlytics
 import com.google.zxing.integration.android.IntentIntegrator
 import io.fabric.sdk.android.Fabric
@@ -20,7 +21,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LocalizationActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var pagerAdapter: LandingPagerAdapter
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import net.glxn.qrgen.android.QRCode
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.R
@@ -15,7 +16,7 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
 
-class CreateWalletActivity : AppCompatActivity() {
+class CreateWalletActivity : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
