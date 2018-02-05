@@ -238,6 +238,11 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     private fun loadAccountState() {
+        //TODO: PHASE THIS OUT EVENTUALLY, NEEDED FOR DATA MODEL FIX
+        if (PersistentStore.getNeedClearTokens() == true) {
+            PersistentStore.removeAllTokens()
+            PersistentStore.setNeedClearTokens(false)
+        }
         claimButton.isEnabled = false
         async(UI) {
             bg {
