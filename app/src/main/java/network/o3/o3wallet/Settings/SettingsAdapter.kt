@@ -12,12 +12,19 @@ import android.widget.ImageView
 import android.widget.Toast
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import network.o3.o3wallet.*
 import network.o3.o3wallet.Onboarding.MainActivity
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
+import android.os.Build
+import android.util.DisplayMetrics
+import com.akexorcist.localizationactivity.core.LanguageSetting.getLanguage
+import com.akexorcist.localizationactivity.core.LanguageSetting.setLanguage
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
+import java.util.*
 
 
 /**
@@ -29,7 +36,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     private var mFragment: SettingsFragment
     var settingsTitles = context.resources.getStringArray(R.array.settings_menu_titles)
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
-            R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon,
+            R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
             R.drawable.ic_settings_logout, R.drawable.ic_mobile_android)
     init {
@@ -39,7 +46,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
 
     enum class CellType {
         PRIVATEKEY, CONTACTS,
-        WATCHADRESS, NETWORK,
+        WATCHADRESS, NETWORK, LANGUAGE,
         CONTACT, LOGOUT,
         VERSION
 
@@ -75,19 +82,47 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         return view
     }
 
+    private fun setLocale(locale: Locale) {
+        val resources = mContext.resources
+        val configuration = resources.getConfiguration()
+        val displayMetrics = resources.getDisplayMetrics()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale)
+        } else {
+            configuration.locale = locale
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mContext.applicationContext.createConfigurationContext(configuration)
+        } else {
+            resources.updateConfiguration(configuration, displayMetrics)
+        }
+    }
+
     fun getClickListenerForPosition(position: Int) {
         if (position == CellType.CONTACTS.ordinal  ) {
             val contactsModal = ContactsFragment.newInstance()
-            contactsModal.show((mContext as AppCompatActivity).supportFragmentManager, contactsModal.tag)
+            contactsModal.show((mContext as LocalizationActivity).supportFragmentManager, contactsModal.tag)
             return
         } else if (position == CellType.WATCHADRESS.ordinal) {
             val watchAddressModal = WatchAddressFragment.newInstance()
-            watchAddressModal.show((mContext as AppCompatActivity).supportFragmentManager, watchAddressModal.tag)
+            watchAddressModal.show((mContext as LocalizationActivity).supportFragmentManager, watchAddressModal.tag)
             return
         } else if (position == CellType.NETWORK.ordinal) {
             val networkModal = NetworkFragment.newInstance()
-            networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
+            networkModal.show((mContext as LocalizationActivity).supportFragmentManager, networkModal.tag)
             return
+        } else if (position == CellType.LANGUAGE.ordinal) {
+            if (getLanguage(mContext) == Locale.ENGLISH) {
+                setLanguage(mContext as LocalizationActivity, Resources.getSystem().configuration.locale)
+                mFragment.dismiss()
+                mContext.finish()
+                mContext.startActivity(mContext.intent)
+            } else {
+                setLanguage(mContext as LocalizationActivity, Locale.ENGLISH)
+                mFragment.dismiss()
+                mContext.finish()
+                mContext.startActivity(mContext.intent)
+            }
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
             val data = Uri.parse("mailto:hello@o3.network")

@@ -3,6 +3,7 @@ package network.o3.o3wallet
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -10,7 +11,7 @@ import neowallet.Neowallet
 import neowallet.SeedNodeResponse
 import org.jetbrains.anko.coroutines.experimental.bg
 
-class SelectingBestNode : AppCompatActivity() {
+class SelectingBestNode : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

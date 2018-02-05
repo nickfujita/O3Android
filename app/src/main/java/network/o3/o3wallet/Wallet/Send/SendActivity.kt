@@ -18,6 +18,7 @@
     import android.view.inputmethod.InputMethodManager
     import network.o3.o3wallet.API.NEO.NeoNodeRPC
     import android.widget.*
+    import com.akexorcist.localizationactivity.ui.LocalizationActivity
     import com.google.zxing.integration.android.IntentIntegrator
     import network.o3.o3wallet.API.NEO.AccountAsset
     import network.o3.o3wallet.Account
@@ -28,7 +29,7 @@
     import org.jetbrains.anko.alert
     import org.jetbrains.anko.yesButton
 
-    class SendActivity : AppCompatActivity() {
+    class SendActivity: LocalizationActivity() {
 
         lateinit var addressTextView: TextView
         lateinit var amountTextView: TextView

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">"O3Wallet"</string>
+
+<!-- Landing Page -->
+<string name="login_landing">"LOGIN"</string>
+<string name="new_wallet_question">"Nuevo en O3?"</string>
+<string name="create_new_wallet">"CREAR UN NUEVO MONEDERO"</string>
+<string name="existing_key_detected">"Se ha detectado ya hay una clave privada en este dispositivo, ¿está seguro de que desea reemplazar la clave privada actual por una nueva?"</string>
+
+<!-- Create Wallet Page -->
+<string name="create_welcome">"Bienvenido!"</string>
+<string name="your_public_address">"Tu dirección pública"</string>
+<string name="your_private_key_create">"Tu clave privada (WIF)"</string>
+<string name="private_key_warning">"Nunca pierda ni comparta su clave privada con nadie, al hacerlo comprometerá la seguridad de tus activos."</string>
+<string name="start">"COMENZAR"</string>
+<string name="alert_warning">"Su clave privada es la información más importante en la Economía NEO. Guardaremos una versión encriptada en tu dispositivo, pero asegúrate de anotar la clave privada en otra ubicación segura para que puedas recuperar tus activos en caso de que algo le suceda al dispositivo."</string>
+<string name="warning_confirmation">"Confirmo que realicé una copia de seguridad de mi clave privada en otra ubicación segura"</string>
+
+<!-- Login Page -->
+<string name="your_private_key_login">"Tu Clave Privada (WIF)"</string>
+<string name="scan">"SCANEAR"</string>
+<string name="footnote_login">"Esta clave privada se almacenará en su dispositivo después de iniciar sesión."</string>
+<string name="login_login">"LOGIN"</string>
+<string name="scan_prompt_login">"Escanea el código QR de tu clave privada"</string>
+
+<!-- Settings: Menu -->
+<string name="settings">"Configuraciones"</string>
+<string-array name="settings_menu_titles">
+    <item>Mi Clave privada</item>
+    <item>Dirección</item>
+    <item>Direcciones Solo Lectura</item>
+    <item>Red</item>
+    <item>Lengua</item>
+    <item>Contactar</item>
+    <item>Cerrar sesión</item>
+    <item>Versión</item>
+</string-array>
+
+<!-- This string exists in order to allow for proper formatting -->
+<string name="version">"Versión: %1$s"</string>
+
+<!-- Settings: Private Key -->
+<string name="private_key">"Clave privada"</string>
+
+<!-- Settings: Address Book -->
+<string name="address_book">"Libreta de direcciones"</string>
+<string name="add_address_address_book">"+ AÑADIR DIRECCIÓN"</string>
+<string name="contact">"Contacto"</string>
+<string name="address_address_book">"Dirección"</string>
+<string name="paste_address_book">"PEGAR"</string>
+<string name="scan_address_book">"ESCANEAR"</string>
+<string name="name_address_book">"Nombre"</string>
+<string name="add_contact">"AÑADIR CONTACTO"</string>
+<string name="scan_prompt_address_book">"Escanee el código QR de la dirección que desea guardar"</string>
+<string name="copied_address">"Dirección copiada"</string>
+<string name="remove_contact">"Eliminar contacto"</string>
+<string name="remove_contact_warning">"¿Está seguro que quiere eliminar este contacto?"</string>
+
+<!-- Settings: Watch Addresses -->
+<string name="watch_addresses">"Direcciones solo lectura"</string>
+<string name="add_address_watch_addresses">"+ AÑADIR DIRECCIÓN"</string>
+<string name="watch_address_explanation">"Direcciones de solo lectura te permite ver tu portfolio en un entorno aislado. Aunque no podrás enviar activos desde estas direcciones te permite ver el balance"</string>
+<string name="watch_address">"Dirección solo lectura"</string>
+<string name="address_watch_addresses">"Dirección"</string>
+<string name="paste_watch_addresses">"PEGAR"</string>
+<string name="scan_watch_addresses">"ESCANEAR"</string>
+<string name="name_watch_addresses">"Nombre"</string>
+<string name="add_watch_address">"AÑADIR DIRECCIÓN DE LECTURA"</string>
+<string name="scan_prompt_watch_address">"Escanee el código QR de la dirección que desea guardar"</string>
+<string name="remove_watch_address">"Eliminar dirección de solo lectura"</string>
+<string name="remove_watch_address_warning">"¿Seguro que quieres eliminar esta dirección de solo lectura?"</string>
+
+<!-- Settings: Network -->
+<string name="available_nodes">"Nodos disponibles"</string>
+<string name="peer_count">"Numnero de Pares: %1$d"</string>
+<string name="block_count">"Número de Bloque: %1$d"</string>
+
+<!-- Settings: Logout -->
+<string name="logout_warning">"¿Seguro que quieres eliminar tu clave privada de este dispositivo?"</string>
+
+<!-- Wallet -->
+<string name="my_o3_wallet">"Mi Monedero O3"</string>
+<string name="assets">"ACTIVOS"</string>
+<string name="transactions">"TRANSACCIONES"</string>
+<string name="contacts">"CONTACTOS"</string>
+<string name="unclaimed_gas">"GAS SIN RECLAMAR"</string>
+<string name="add_nep_5_token">"+ AÑADIR TOKEN NEP5"</string>
+<string name="claim">"RECLAMAR"</string>
+<string name="nep_5_tokens">"Token NEP5"</string>
+<string name="my_address">"Mi dirección"</string>
+<string name="copy_address_my_address">"COPIAR DIRECCIÓN"</string>
+<string name="no_transactions">"No Transacciones"</string>
+<string name="claiming_gas">"Reclamando Gas"</string>
+<string name="claimed_gas_successfully">"Reclamo de gas con éxito, por favor espere varios minutos antes de reclamar otra vez"</string>
+<string name="please_wait_for_claim">"Reclamo pendiente... por favor espere"</string>
+<string name="my_address_action_label">"Mi dirección NEO"</string>
+<string name="topup_cold_storage_action_label">"Almacenamiento Frio"</string>
+<string name="send_action_label">"Enviar"</string>
+
+<!-- Wallet Send -->
+<string name="send">"Enviar"</string>
+<string name="to">"A"</string>
+<string name="paste_send">"PEGAR"</string>
+<string name="scan_send">"ESCANEAR"</string>
+<string name="neo_address_placeholder">"Dirección NEO"</string>
+<string name="asset">"Actvo"</string>
+<string name="amount">"Cantidad"</string>
+<string name="amount_must_be_nonzero">"La cantidad no puede ser zero"</string>
+<string name="sending_in_progress">"Enviando..."</string>
+<string name="sent_successfully">"Envío satisfactorio"</string>
+<string name="send_error">"Error mientras se enviaba, por favor revisa la red"</string>
+<string name="send_confirmation">"¿Estas seguro que quieres enviar %1$s %2$s to %3$s?"</string>
+<string name="scan_prompt_qr_send">"Escanee el código QR de la dirección del destinatario"</string>
+<string name="native_assets_header">"Activos nativo"</string>
+<string name="token_assets_header">"Tokens"</string>
+
+<!-- Wallet Topup -->
+<string name="from_cold_storage">"De: Dirección Alcemaniento en Frio"</string>
+<string name="asset_topup">"Activo"</string>
+<string name="amount_topup">"Cantidad"</string>
+<string name="scan_qr_code">"SCANEAR CODIGO QR"</string>
+<string name="topup_footnote">"Por favor tenga su código QR preparado para escanear"</string>
+<string name="confirm">"CONFIRMAR"</string>
+<string name="get_started">"EMPEZAR"</string>
+<string name="cold_storage_private_key">"Tu clave privada del almacenamiento en frio (WIF)"</string>
+<string name="cold_storage_private_key_explanation">"Su clave privada de almacenamiento en frío nunca se almacenará en este dispositivo. En cambio, se cifrará en dos fragmentos separados. Necesitará ambas piezas para retirar del almacenamiento en frío. Esto es posible gracias a una magia matemática llamada Shamirs Secret Sharing Algorithm."</string>
+<string name="cold_storage_scan">"Escanear"</string>
+<string name="cold_storage_read_more">"Leer más"</string>
+<string name="generate_encrypted_key_fragments">"Encriptar en fragmentos clave"</string>
+<string name="scan_prompt_cold_storage">"Escanee la clave privada de almacenamiento en frío"</string>
+<string name="encryption_in_progress">"Encriptación en Progreso..."</string>
+<string name="first_fragment_secure">"Se generan dos piezas de datos cifrados. Uno está almacenado de forma segura en su dispositivo y el otro se le dará en la siguiente pantalla."</string>
+<string name="continue_button">"Continuar"</string>
+<string name="encryption_done">"Primer fragmento almacenado en el dispositivo"</string>
+<string name="second_key_fragment">"Segundo fragmento clave"</string>
+<string name="save">"Guardar"</string>
+<string name="second_key_fragment_explanation">"Puede elegir imprimir esto o enviartelo por correo electrónico a ti mismo. Escanearás este código QR con tu monedero O3 para completar tu cuenta de almacenamiento en frío. Cualquiera que consiga estos datos por sí solo no podrá hacer nada con sus NEO."</string>
+<string name="done">"Hecho"</string>
+<string name="save_fragment_confirm">"He guardado este código QR"</string>
+<string name="withdraw">"Retirar"</string>
+<string name="cold_storage_vault">"Almacenamiento en frio"</string>
+<string name="remove_cold_storage">"Eliminar almacenamiento en frio"</string>
+
+<!-- Portfolio -->
+<string name="price_history">"%1$s Precio histórico"</string>
+<string name="six_hours">"6H"</string>
+<string name="one_day">"24H"</string>
+<string name="one_week">"1W"</string>
+<string name="one_month">"1M"</string>
+<string name="three_month">"3M"</string>
+<string name="all">"TODO"</string>
+
+<!-- Tab Titles -->
+<string name="portfolio">"porfolio"</string>
+<string name="account">"Cuenta"</string>
+<string name="news_feed">"Nuevas noticias"</string>
+
+<!-- Contact Menu -->
+<string name="send_contact_menu">"Enviar"</string>
+<string name="copy_contact_menu">"Copiar"</string>
+<string name="remove_contact_menu">"Eliminar"</string>
+
+<!-- Common Alerts -->
+<string name="no_passcode_setup">"El bloqueo de pantalla seguro no se ha configurado.
+ Ir a 'Settings -&gt; Security -&gt;
+        Screenlock' para configurar el bloqueo de pantalla"</string>
+<string name="cancelled">"Cancelado"</string>
+<string name="cancel">"Cancelar"</string>
+<string name="invalid_neo_address">"La dirección NEO es inválida, por favor revísela."</string>
+<string name="error">"Error"</string>
+<string name="invalid_wif">"WIF Inválida"</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">"Hola framento en blanco"</string>
+<string name="neo_asset_id">"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"</string>
+<string name="gas_asset_id">"0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+<string name="add_address_watch_address_description">"Direcciones de solo lectura te permite ver tu portfolio en un entorno aislado. Aunque no podrás enviar activos desde estas direcciones te permite ver el balance"</string>
+<string name="add_address_contact_description">"Su libreta de direcciones te permitirá enviar activos en todo el mundo sin necesidad de recordar tu dirección"</string>
+<string name="channel_message_notification_title_template">"Mensaje de canal: %1$s"</string>
+
+<!-- TODO: remove this placeholder text -->
+<string name="channel_message_notification_placeholder_text_template">"Tu dijiste %1$s and lorem
+        ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit
+        vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor"</string>
+<string name="action_share">"Compartir"</string>
+<string name="action_reply">"Responder"</string>
+</resources>

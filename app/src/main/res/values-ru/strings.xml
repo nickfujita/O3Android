@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">"О3 Кошелёк"</string>
+
+<!-- Landing Page -->
+<string name="login_landing">"вход"</string>
+<string name="new_wallet_question">"Новый пользователь?"</string>
+<string name="create_new_wallet">"создать новый кошелёк"</string>
+<string name="existing_key_detected">"Мы обнаружили что на этом телефоне уже установлен секретный ключ, вы уверены что хотите заменить имеющийся секретный ключ на новый?"</string>
+
+<!-- Create Wallet Page -->
+<string name="create_welcome">"Добро пожаловать"</string>
+<string name="your_public_address">"Your Public Address"</string>
+<string name="your_private_key_create">"Ваш секретный ключ"</string>
+<string name="private_key_warning">"Никогда не теряйте и никому не сообщайте ваш секретный ключ, в противном случае сохранность ваших фондов подвержена риску"</string>
+<string name="start">"Старт"</string>
+<string name="alert_warning">"Ваш секретный ключ является наиболее важной информацией в NEO Экономике.
+
+Мы сохраним зашифрованную версию вашего серетного ключа на вашем телефоне, но обязательно запишите секретный ключ в безопасном месте для доступа к фондам в случае потери или поломки вашего телефона."</string>
+<string name="warning_confirmation">"Я подтверждаю что мой секретный ключ, помимо телефона, записан в дополнительном безопасном месте"</string>
+
+<!-- Login Page -->
+<string name="your_private_key_login">"Ваш секретный ключ"</string>
+<string name="scan">"Сканировать"</string>
+<string name="footnote_login">"Секретный ключ будет сохранен на вашем телефоне после входа"</string>
+<string name="login_login">"Вход"</string>
+<string name="scan_prompt_login">"Сканируй QR код вашего секретного ключа"</string>
+
+<!-- Settings: Menu -->
+<string name="settings">"Настройки"</string>
+<string-array name="settings_menu_titles">
+    <item>Секретный ключ</item>
+    <item>Адресная книга</item>
+    <item>Адреса только для просмотра</item>
+    <item>сеть</item>
+    <item>язык</item>
+    <item>связаться</item>
+    <item>Выйти</item>
+    <item>Версия</item>
+</string-array>
+
+<!-- This string exists in order to allow for proper formatting -->
+<string name="version">"Версия: %1$s"</string>
+
+<!-- Settings: Private Key -->
+<string name="private_key">"Секретный ключ"</string>
+
+<!-- Settings: Address Book -->
+<string name="address_book">"Адресная книга"</string>
+<string name="add_address_address_book">"Добавить адрес"</string>
+<string name="contact">"Контакт"</string>
+<string name="address_address_book">"Адрес"</string>
+<string name="paste_address_book">"Вставить"</string>
+<string name="scan_address_book">"Сканировать"</string>
+<string name="name_address_book">"Имя"</string>
+<string name="add_contact">"Добавить контакт"</string>
+<string name="scan_prompt_address_book">"Сканируй QR код адреса который вы хотите сохранить"</string>
+<string name="copied_address">"Адрес скопирован"</string>
+<string name="remove_contact">"Удалить контакт"</string>
+<string name="remove_contact_warning">"Вы уверены что хотите удалить этот контакт?"</string>
+
+<!-- Settings: Watch Addresses -->
+<string name="watch_addresses">"Адреса только для просмотра"</string>
+<string name="add_address_watch_addresses">"Добавить адрес"</string>
+<string name="watch_address_explanation">"\"Адреса только для просмотра\" позволяют вам контролировать ваше портфолио в безопасном режиме. Вы не можете отправлять фонды с этих адресов, но вы можете проверять их баланс."</string>
+<string name="watch_address">"Адрес только для просмотра"</string>
+<string name="address_watch_addresses">"Адрес"</string>
+<string name="paste_watch_addresses">"Вставить"</string>
+<string name="scan_watch_addresses">"Сканировать"</string>
+<string name="name_watch_addresses">"Имя"</string>
+<string name="add_watch_address">"Добавить \"адрес только для просмотра\""</string>
+<string name="scan_prompt_watch_address">"Сканируй QR код адреса который вы хотите сохранить"</string>
+<string name="remove_watch_address">"Удалить \"адрес только для просмотра\""</string>
+<string name="remove_watch_address_warning">"Вы уверены что хотите удалить этот \"адрес только для просмотра\"?"</string>
+
+<!-- Settings: Network -->
+<string name="available_nodes">"Доступные серверы"</string>
+<string name="peer_count">"Число соединений: %1$d"</string>
+<string name="block_count">"Число блоков: %1$d"</string>
+
+<!-- Settings: Logout -->
+<string name="logout_warning">"Вы уверены что хотите удалить секретный ключ с этого телефона?"</string>
+
+<!-- Wallet -->
+<string name="my_o3_wallet">"Мой О3 кошелёк"</string>
+<string name="assets">"Активы"</string>
+<string name="transactions">"Перечисления"</string>
+<string name="contacts">"Контакты"</string>
+<string name="unclaimed_gas">"Незапрошенный GAS"</string>
+<string name="add_nep_5_token">"Добавь NEP5 жетон"</string>
+<string name="claim">"Запроси GAS"</string>
+<string name="nep_5_tokens">"NEP5 жетоны"</string>
+<string name="my_address">"Мой адрес"</string>
+<string name="copy_address_my_address">"Копируй адрес"</string>
+<string name="no_transactions">"Перечислений нет"</string>
+<string name="claiming_gas">"Перечисление GAS происходит"</string>
+<string name="claimed_gas_successfully">"Перечисление GAS проиведено успешно. Ждите несколько минут чтобы запросить GAS снова."</string>
+<string name="please_wait_for_claim">"Запрос в процессе, Пожалуйста ждите"</string>
+<string name="my_address_action_label">"Мой NEO адрес"</string>
+<string name="topup_cold_storage_action_label">"Cold Storage"</string>
+<string name="send_action_label">"Отправить"</string>
+
+<!-- Wallet Send -->
+<string name="send">"Отправить"</string>
+<string name="to">"адрес получателя"</string>
+<string name="paste_send">"Вставить"</string>
+<string name="scan_send">"Сканируй"</string>
+<string name="neo_address_placeholder">"NEO адрес"</string>
+<string name="asset">"Актив"</string>
+<string name="amount">"Сумма перечисления"</string>
+<string name="amount_must_be_nonzero">"Сумма перечисления не может быть нулём"</string>
+<string name="sending_in_progress">"Перечисление происходит"</string>
+<string name="sent_successfully">"Перечисление отправлено"</string>
+<string name="send_error">"Ошибка во время отправки, проверьте соединение"</string>
+<string name="send_confirmation">"Вы уверены что хотите переслать %1$s %2$s %3$s?"</string>
+<string name="scan_prompt_qr_send">"Сканируй QR адрес получателя"</string>
+<string name="native_assets_header">"NEO активы"</string>
+<string name="token_assets_header">"Жетоны"</string>
+
+<!-- Wallet Topup -->
+<string name="from_cold_storage">"From: Cold Storage Address"</string>
+<string name="asset_topup">"Активы"</string>
+<string name="amount_topup">"Сумма"</string>
+<string name="scan_qr_code">"Сканируйте QR код"</string>
+<string name="topup_footnote">"Приготовьте QR код для сканирования"</string>
+<string name="confirm">"Подтвердите"</string>
+<string name="get_started">"Старт"</string>
+<string name="cold_storage_private_key">"Your Cold Storage Private Key (WIF)"</string>
+<string name="cold_storage_private_key_explanation">"Your cold storage private key will never be stored on this device.
+    Instead it will be encrypted into two seperate fragments. You will need both pieces in order to withdraw from cold storage. This
+    is made possible from some math magic called Shamirs Secret Sharing Algorithm."</string>
+<string name="cold_storage_scan">"Сканируйте"</string>
+<string name="cold_storage_read_more">"Продолжение"</string>
+<string name="generate_encrypted_key_fragments">"Encrypt Into Key Fragments"</string>
+<string name="scan_prompt_cold_storage">"Scan the private key of cold storage"</string>
+<string name="encryption_in_progress">"Encryption in Progress..."</string>
+<string name="first_fragment_secure">"Two pieces of encrypted data is generated.
+        One is securely stored on your device and You will be given another one in the next screen."</string>
+<string name="continue_button">"Продолжение"</string>
+<string name="encryption_done">"First Fragment Stored on Device"</string>
+<string name="second_key_fragment">"Second Key Fragment"</string>
+<string name="save">"Сохранить"</string>
+<string name="second_key_fragment_explanation">"You can choose to print this or email it to yourself.
+        You will scan this QR code with your O3 wallet inorder to topup from your cold storage account.
+        Anyone who gets a hold of this data alone is not able to do anything with your NEO."</string>
+<string name="done">"Завершено"</string>
+<string name="save_fragment_confirm">"Я сохранил этот QR код"</string>
+<string name="withdraw">"Снять со счёта"</string>
+<string name="cold_storage_vault">"Cold Storage Vault"</string>
+<string name="remove_cold_storage">"Remove Cold Storage"</string>
+
+<!-- Portfolio -->
+<string name="price_history">"%1$s график цены"</string>
+<string name="six_hours">"6ч"</string>
+<string name="one_day">"24ч"</string>
+<string name="one_week">"7дн"</string>
+<string name="one_month">"1мес"</string>
+<string name="three_month">"3мес"</string>
+<string name="all">"макс"</string>
+
+<!-- Tab Titles -->
+<string name="portfolio">"Портфолио"</string>
+<string name="account">"Счёт"</string>
+<string name="news_feed">"Новости"</string>
+
+<!-- Contact Menu -->
+<string name="send_contact_menu">"Пошлите"</string>
+<string name="copy_contact_menu">"Скопируийте"</string>
+<string name="remove_contact_menu">"Удалите"</string>
+
+<!-- Common Alerts -->
+<string name="no_passcode_setup">"Ваш PIN eщё не установлен. Вы можете установить PIN в Андроид настройках."</string>
+<string name="cancelled">"Отменено"</string>
+<string name="cancel">"Отмените"</string>
+<string name="invalid_neo_address">"Ошибочный NEO адрес, проверьте."</string>
+<string name="error">"Ошибка"</string>
+<string name="invalid_wif">"Ошибочный WIF"</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">"Hello blank fragment"</string>
+<string name="neo_asset_id">"0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"</string>
+<string name="gas_asset_id">"0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+<string name="add_address_watch_address_description">"Watch only let you monitor your portfolio in
+        an isolated environment. Although you won't be able to send funds from these addresses you will be able
+        to check the balance"</string>
+<string name="add_address_contact_description">"Your address book will let you send funds
+        all over the world without needing to remember your address"</string>
+<string name="channel_message_notification_title_template">"Channel message: %1$s"</string>
+
+<!-- TODO: remove this placeholder text -->
+<string name="channel_message_notification_placeholder_text_template">"You said %1$s and lorem
+        ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit
+        vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
+    "</string>
+<string name="action_share">"Обмен с друзьями "</string>
+<string name="action_reply">"Ответить"</string>
+</resources>

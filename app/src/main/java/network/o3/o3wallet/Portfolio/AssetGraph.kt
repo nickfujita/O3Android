@@ -10,6 +10,7 @@ import android.arch.lifecycle.Observer
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.ProgressBar
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
@@ -18,7 +19,7 @@ import network.o3.o3wallet.API.O3.PriceHistory
  * Created by drei on 12/8/17.
  */
 
-class AssetGraph : AppCompatActivity() {
+class AssetGraph : LocalizationActivity() {
     private var selectedButton: Button? = null
     private var symbol: String? = null
     private var assetGraphModel: AssetGraphViewModel? = null

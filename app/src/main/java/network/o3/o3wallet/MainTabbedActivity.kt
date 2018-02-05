@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
 import network.o3.o3wallet.Wallet.TabbedAccount
 
 
-class MainTabbedActivity : AppCompatActivity() {
+class MainTabbedActivity : LocalizationActivity() {
 
     var activeTabID: Int? = 0
     var activeTabPosition: Int? = 0

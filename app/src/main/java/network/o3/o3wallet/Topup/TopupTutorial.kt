@@ -6,10 +6,11 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.topup_activity_topup_tutorial.*
 import network.o3.o3wallet.R
 import android.support.design.widget.TabLayout
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import org.jetbrains.anko.alert
 
 
-class TopupTutorial : AppCompatActivity() {
+class TopupTutorial : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

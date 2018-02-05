@@ -5,10 +5,11 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import kotlinx.android.synthetic.main.topup_activity_topup_key_generation.*
 import network.o3.o3wallet.R
 
-class TopupKeyGeneration : AppCompatActivity() {
+class TopupKeyGeneration : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
