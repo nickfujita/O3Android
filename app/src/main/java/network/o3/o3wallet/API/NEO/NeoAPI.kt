@@ -17,9 +17,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import network.o3.o3wallet.*
 import org.json.JSONArray
-import unsigned.Uint
 import unsigned.toUByte
-import unsigned.toUint
 import java.nio.*
 
 
