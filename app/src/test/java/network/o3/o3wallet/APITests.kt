@@ -131,9 +131,10 @@ class APIUnitTests {
 
     @Test
     fun sendTransaction() {
-        val wif = ""
+        val wif = "L4sSGSGh15dtocMMSYS115fhZEVN9UuETWDjgGKu2JDu59yncyVf"
         val wallet = Neowallet.generateFromWIF(wif)
-        NeoNodeRPC().sendNativeAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
+        val node = NeoNodeRPC(url = "http://seed3.neo.org:20332")
+        node.sendNativeAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,500.0,wallet.address,null) {
             var error = it.second
             assert(error != null)
             print(it.first.toString())

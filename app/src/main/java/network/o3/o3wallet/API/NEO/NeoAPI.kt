@@ -350,7 +350,7 @@ class NeoNodeRPC {
         if (needsTwoOutputTransactions) {
             //Transaction To Reciever
             payload = payload + byteArrayOf(0x02.toByte()) + asset.assetID().hexStringToByteArray().reversedArray()
-            val amountToSendInMemory: Int = (toSendAmount * 100000000).toInt()
+            val amountToSendInMemory: Long = (toSendAmount * 100000000).toLong()
             payload += to8BytesArray(amountToSendInMemory)
             //reciever addressHash
             payload += toAddress.hashFromAddress().hexStringToByteArray()
@@ -504,7 +504,7 @@ class NeoNodeRPC {
     }
 
     fun buildNEP5TransferScript(scriptHash: String, fromAddress: String, toAddress: String, amount: Double): ByteArray {
-        val amountToSendInMemory: Int = (amount * 100000000).toInt()
+        val amountToSendInMemory: Long = (amount * 100000000).toLong()
         val fromAddressHash = fromAddress.hashFromAddress()
         val toAddressHash = toAddress.hashFromAddress()
         val scriptBuilder = ScriptBuilder()
