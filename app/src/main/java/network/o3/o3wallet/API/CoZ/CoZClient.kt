@@ -17,8 +17,8 @@ import network.o3.o3wallet.toHex
  */
 
 class CoZClient {
-    //val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
-    val baseAPIURL = "http://testnet-api.neonwallet.com/v2/address/" //TESTNET
+    val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
+    //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
     enum class Route() {
         HISTORY,
         CLAIMS,
@@ -30,7 +30,7 @@ class CoZClient {
     }
 
     fun getTransactionHistory(address: String, completion: (Pair<TransactionHistory?, Error?>) -> (Unit)) {
-        val url = baseAPIURL + "/history/" + address
+        val url = "http://api.wallet.cityofzion.io/v2/address/history/" + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
         request.responseString { request, response, result ->
