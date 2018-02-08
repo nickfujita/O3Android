@@ -81,8 +81,6 @@
                 amountTextView.requestFocus()
                 showFoundContact(address)
             }
-            //TESTNET send to self
-            addressTextView.text = Account.getWallet()!!.address
         }
 
         fun showFoundContact(address:String) {

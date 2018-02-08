@@ -36,8 +36,6 @@ class LoginActivity : LocalizationActivity() {
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
-        //TESTNET Wif testing
-        wifTextfield.text = "L4sSGSGh15dtocMMSYS115fhZEVN9UuETWDjgGKu2JDu59yncyVf"
     }
 
     override fun onResume() {
