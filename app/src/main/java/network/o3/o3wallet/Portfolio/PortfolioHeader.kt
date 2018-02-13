@@ -54,11 +54,11 @@ class PortfolioHeader:Fragment() {
             else -> return
         }
 
-        var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
+        //var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
         val percentChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
 
-        homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
+       /* homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
             homeModel?.getAccountState(displayType, refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
                 val currentNeoPrice = homeModel.getCurrentNeoPrice()
                 val firstNeoPrice = homeModel.getFirstNeoPrice()
@@ -82,7 +82,7 @@ class PortfolioHeader:Fragment() {
                 }
                 fundChangeTextView?.text = percentChange.formattedPercentString()
             })
-        })
+        })*/
     }
 
     private fun configureArrows(view: View?) {
@@ -90,7 +90,7 @@ class PortfolioHeader:Fragment() {
         val leftArrow = view?.findViewById<ImageView>(R.id.leftArrowImageView)
         val rightArrow = view?.findViewById<ImageView>(R.id.rightArrowImageView)
 
-        var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
+      /*  var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         view?.findViewById<TextView>(R.id.fundAmountTextView)!!.setOnClickListener {
             if (homeModel.getCurrency() == CurrencyType.USD) {
                 homeModel.setCurrency(CurrencyType.BTC)
@@ -104,7 +104,7 @@ class PortfolioHeader:Fragment() {
             leftArrow?.setOnClickListener {
                 pager?.currentItem = position - 1
             }
-        }
+        }*/
 
 
         if (position < 2) {

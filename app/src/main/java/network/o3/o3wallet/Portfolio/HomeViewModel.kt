@@ -7,35 +7,38 @@ import java.util.concurrent.CountDownLatch
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
+import network.o3.o3wallet.*
+import network.o3.o3wallet.API.CoZ.NEO
 import network.o3.o3wallet.API.O3.Portfolio
-import network.o3.o3wallet.Account
-import network.o3.o3wallet.CurrencyType
-import network.o3.o3wallet.PersistentStore
-import network.o3.o3wallet.WatchAddress
 
 
 /**
  * Created by drei on 12/6/17.
  */
 
-class HomeViewModel: ViewModel()  {
+interface HomeViewModelProtocol {
+    fun updateBalanceData(assets: ArrayList<AccountAsset>)
+}
+
+class HomeViewModel {
     enum class DisplayType(val position: Int) {
         HOT(0), COMBINED(1), COLD(2)
-    }
-
-    enum class Asset(val id: String) {
-        NEO("0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b"),
-        GAS("0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7")
     }
 
     private var displayType: DisplayType = DisplayType.HOT
     private var interval: Int = 15
     private var currency = CurrencyType.USD
-    private var neoGasColdStorage: MutableLiveData<Pair<Int, Double>>? = null
-    private var neoGasHotWallet: MutableLiveData<Pair<Int, Double>>? = null
-    private var neoGasCombined: MutableLiveData<Pair<Int, Double>>? = null
     private var portfolio: MutableLiveData<Portfolio>? = null
+    private var balanceDispatchGroup =  DispatchGroup()
 
+    lateinit var delegate: HomeViewModelProtocol
+
+
+    var assetsReadOnly = ArrayList<AccountAsset>()
+    var assetsWritable = ArrayList<AccountAsset>()
+    var watchAddresses = PersistentStore.getWatchAddresses()
+    var isLoadingData = false
     private var latestPrice: PriceData? = null
     private var initialPrice: PriceData? = null
 
@@ -51,7 +54,142 @@ class HomeViewModel: ViewModel()  {
         this.interval = interval
     }
 
-    fun getCurrentGasPrice(): Double {
+    fun getInterval(): Int {
+        return this.interval
+    }
+
+
+    fun setDisplayType(displayType: DisplayType) {
+        this.displayType = displayType
+    }
+
+    fun getDisplayType(): DisplayType {
+        return this.displayType
+    }
+
+    fun addReadOnlyAsset(asset: AccountAsset) {
+        val index = assetsReadOnly.indices?.find { assetsReadOnly[it].name == asset.name } ?: -1
+        if (index == -1) {
+            assetsReadOnly.add(asset)
+        } else {
+            assetsReadOnly[index].value += asset.value
+        }
+    }
+
+    fun addWritableAsset(asset: AccountAsset) {
+        assetsWritable.add(asset)
+    }
+
+
+    fun loadAssetsFromModel(useCached: Boolean) {
+        if (!useCached) {
+            assetsReadOnly.clear()
+            assetsWritable.clear()
+            loadAssetsForAllAddresses()
+        } else when (displayType) {
+            DisplayType.HOT -> delegate.updateBalanceData(assetsWritable)
+            DisplayType.COLD -> delegate.updateBalanceData(assetsReadOnly)
+            DisplayType.COMBINED -> delegate.updateBalanceData(assetsReadOnly)
+        }
+    }
+
+    private fun loadAssetsForAllAddresses() {
+        loadAssetsFor(Account.getWallet()?.address!!, false)
+        for (address in watchAddresses) {
+            loadAssetsFor(address.address, true)
+        }
+        val myRunnable = Runnable {
+            delegate.updateBalanceData(assetsWritable)
+        }
+        balanceDispatchGroup.notify(myRunnable)
+    }
+
+    fun loadAssetsFor(address: String, isReadOnly: Boolean) {
+        balanceDispatchGroup.enter()
+        Log.d("LOADING ASSETS FOR: ", address)
+        NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address) {
+            if (it.second != null) {
+                balanceDispatchGroup.leave()
+                return@getAccountState
+            }
+            for (asset in it.first?.balances!!) {
+                var assetToAdd: AccountAsset
+                if (asset.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+                    assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                            name = NeoNodeRPC.Asset.NEO.name,
+                            symbol = NeoNodeRPC.Asset.NEO.name,
+                            decimal = 0,
+                            type = AssetType.NATIVE,
+                            value = asset.value)
+                } else {
+                    assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                            name = NeoNodeRPC.Asset.GAS.name,
+                            symbol = NeoNodeRPC.Asset.GAS.name,
+                            decimal = 0,
+                            type = AssetType.NATIVE,
+                            value = asset.value)
+                }
+
+                if (isReadOnly) {
+                    this.addReadOnlyAsset(assetToAdd)
+                } else {
+                    this.addWritableAsset(assetToAdd)
+                }
+                balanceDispatchGroup.leave()
+            }
+        }
+
+        for (key in PersistentStore.getSelectedNEP5Tokens().keys) {
+            val token = PersistentStore.getSelectedNEP5Tokens()[key]!!
+            balanceDispatchGroup.enter()
+            NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(token.tokenHash, address) {
+                if (it.second != null) {
+                    balanceDispatchGroup.leave()
+                    return@getTokenBalanceOf
+                }
+                val amountDecimal: Double = (it.first!!.toDouble() / (Math.pow(10.0, token.decimal.toDouble())))
+                val tokenToAdd = AccountAsset(assetID = token.tokenHash,
+                        name = token.name,
+                        symbol = token.symbol,
+                        decimal = token.decimal,
+                        type = AssetType.NEP5TOKEN,
+                        value = amountDecimal)
+                if (isReadOnly) {
+                    this.addReadOnlyAsset(tokenToAdd)
+                } else {
+                    this.addWritableAsset(tokenToAdd)
+                }
+                balanceDispatchGroup.leave()
+            }
+        }
+    }
+}
+
+    /*
+     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
+        if (neoGasColdStorage == null || neoGasHotWallet == null || refresh) {
+            neoGasColdStorage = MutableLiveData()
+            neoGasHotWallet = MutableLiveData()
+            neoGasCombined = MutableLiveData()
+            loadAccountState()
+        }
+        return if (display == null) {
+             when (displayType) {
+                DisplayType.HOT -> neoGasHotWallet!!
+                DisplayType.COLD -> neoGasColdStorage!!
+                DisplayType.COMBINED -> neoGasCombined!!
+            }
+        } else {
+            return when (display!!) {
+                DisplayType.HOT -> neoGasHotWallet!!
+                DisplayType.COLD -> neoGasColdStorage!!
+                DisplayType.COMBINED -> neoGasCombined!!
+            }
+        }
+    }
+     */
+
+    /*fun getCurrentGasPrice(): Double {
         return if (currency == CurrencyType.USD) {
             portfolio?.value?.price?.get("gas")?.averageUSD ?: 0.0
         } else {
@@ -83,13 +221,6 @@ class HomeViewModel: ViewModel()  {
         }
     }
 
-    fun setDisplayType(displayType: DisplayType) {
-        this.displayType = displayType
-    }
-
-    fun getDisplayType(): DisplayType {
-        return this.displayType
-    }
 
     fun getInitialPortfolioValue(): Double  {
         return when(currency) {
@@ -110,27 +241,7 @@ class HomeViewModel: ViewModel()  {
         return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
-    fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
-        if (neoGasColdStorage == null || neoGasHotWallet == null || refresh) {
-            neoGasColdStorage = MutableLiveData()
-            neoGasHotWallet = MutableLiveData()
-            neoGasCombined = MutableLiveData()
-            loadAccountState()
-        }
-        return if (display == null) {
-             when (displayType) {
-                DisplayType.HOT -> neoGasHotWallet!!
-                DisplayType.COLD -> neoGasColdStorage!!
-                DisplayType.COMBINED -> neoGasCombined!!
-            }
-        } else {
-            return when (display!!) {
-                DisplayType.HOT -> neoGasHotWallet!!
-                DisplayType.COLD -> neoGasColdStorage!!
-                DisplayType.COMBINED -> neoGasCombined!!
-            }
-        }
-    }
+
 
     fun getPortfolioFromModel(refresh: Boolean): LiveData<Portfolio> {
         if (portfolio == null || refresh) {
@@ -221,5 +332,4 @@ class HomeViewModel: ViewModel()  {
         neoGasColdStorage?.value = Pair(runningNeoCold, runningGasCold)
         neoGasHotWallet?.value = Pair(runningNeoHot, runningGasHot)
         neoGasCombined?.value = Pair(runningNeoCold + runningNeoHot, runningGasCold + runningGasHot)
-    }
-}
+    }*/

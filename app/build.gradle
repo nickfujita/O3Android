@@ -16,10 +16,14 @@ android {
         applicationId "network.o3.o3wallet"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 13
-        versionName "1.4.8"
+        versionCode 17
+        versionName "1.4.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        lintOptions{
+            disable 'MissingTranslation'
+        }
     }
     buildTypes {
         release {

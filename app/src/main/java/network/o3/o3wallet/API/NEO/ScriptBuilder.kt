@@ -27,27 +27,27 @@ class ScriptBuilder {
         }
     }
 
-    fun pushInt(value: Int) {
+    fun pushInt(value: Long) {
 
         when (value) {
-            -1 -> pushOpCode(OPCODE.PUSHM1)
-            0 -> pushOpCode(OPCODE.PUSH0)
-            1 -> pushOpCode(OPCODE.PUSH1)
-            2 -> pushOpCode(OPCODE.PUSH2)
-            3 -> pushOpCode(OPCODE.PUSH3)
-            4 -> pushOpCode(OPCODE.PUSH4)
-            5 -> pushOpCode(OPCODE.PUSH5)
-            6 -> pushOpCode(OPCODE.PUSH6)
-            7 -> pushOpCode(OPCODE.PUSH7)
-            8 -> pushOpCode(OPCODE.PUSH8)
-            9 -> pushOpCode(OPCODE.PUSH9)
-            10 -> pushOpCode(OPCODE.PUSH10)
-            11 -> pushOpCode(OPCODE.PUSH11)
-            12 -> pushOpCode(OPCODE.PUSH12)
-            13 -> pushOpCode(OPCODE.PUSH13)
-            14 -> pushOpCode(OPCODE.PUSH14)
-            15 -> pushOpCode(OPCODE.PUSH15)
-            16 -> pushOpCode(OPCODE.PUSH16)
+            (-1).toLong() -> pushOpCode(OPCODE.PUSHM1)
+            0.toLong() -> pushOpCode(OPCODE.PUSH0)
+            1.toLong() -> pushOpCode(OPCODE.PUSH1)
+            2.toLong() -> pushOpCode(OPCODE.PUSH2)
+            3.toLong() -> pushOpCode(OPCODE.PUSH3)
+            4.toLong() -> pushOpCode(OPCODE.PUSH4)
+            5.toLong() -> pushOpCode(OPCODE.PUSH5)
+            6.toLong() -> pushOpCode(OPCODE.PUSH6)
+            7.toLong() -> pushOpCode(OPCODE.PUSH7)
+            8.toLong() -> pushOpCode(OPCODE.PUSH8)
+            9.toLong() -> pushOpCode(OPCODE.PUSH9)
+            10.toLong() -> pushOpCode(OPCODE.PUSH10)
+            11.toLong() -> pushOpCode(OPCODE.PUSH11)
+            12.toLong() -> pushOpCode(OPCODE.PUSH12)
+            13.toLong() -> pushOpCode(OPCODE.PUSH13)
+            14.toLong() -> pushOpCode(OPCODE.PUSH14)
+            15.toLong() -> pushOpCode(OPCODE.PUSH15)
+            16.toLong() -> pushOpCode(OPCODE.PUSH16)
             else -> pushData(to8BytesArray(value).toHex())
         }
     }
@@ -82,7 +82,7 @@ class ScriptBuilder {
         for (elem in array) {
             pushData(elem)
         }
-        pushInt(array.size)
+        pushInt(array.size.toLong())
         pushOpCode(OPCODE.PACK)
     }
 
@@ -101,7 +101,7 @@ class ScriptBuilder {
             pushHexString(unwrappedData)
         } else if (unwrappedData is Boolean) {
             pushBool(unwrappedData)
-        } else if (unwrappedData is Int) {
+        } else if (unwrappedData is Long) {
             pushInt(unwrappedData)
         } else if (unwrappedData is Array<*>) {
             pushArray(unwrappedData as Array<Any?>)

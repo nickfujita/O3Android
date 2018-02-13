@@ -14,12 +14,15 @@ import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
+import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio
+import org.jetbrains.anko.runOnUiThread
+import org.jetbrains.anko.support.v4.onUiThread
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeViewModelProtocol {
     var selectedButton: Button? = null
-    var homeModel: HomeViewModel? = null
+    lateinit var homeModel: HomeViewModel
     var viewPager: ViewPager? = null
     var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
     var assetListAdapter: AssetListAdapter? = null
@@ -32,9 +35,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
+        homeModel = HomeViewModel()
+        homeModel.delegate = this
+        homeModel.loadAssetsFromModel(false)
         assetListAdapter = AssetListAdapter(this.context!!, this)
-        assetListAdapter?.homeModel = homeModel
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
@@ -54,23 +58,23 @@ class HomeFragment : Fragment() {
             val percentView = header.view?.findViewById<TextView>(R.id.fundChangeTextView)
             if (value == null) { //return to original state
                 amountView?.text = header.unscrubbedDisplayedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
-                percentView?.text = homeModel?.getPercentChange()?.formattedPercentString()
+                /*percentView?.text = homeModel?.getPercentChange()?.formattedPercentString()
                 if (homeModel?.getPercentChange()!! < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
-                }
+                }*/
                 return@OnScrubListener
             } else {
                 val scrubbedAmount = (value as Float).toDouble()
-                val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
+                /*val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
                         homeModel?.getInitialPortfolioValue()!! * 100
                 if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
-                percentView?.text = percentChange.formattedPercentString()
+                percentView?.text = percentChange.formattedPercentString()*/
                 amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
             }
         }
@@ -98,13 +102,20 @@ class HomeFragment : Fragment() {
         })
     }
 
+    override fun updateBalanceData(assets: ArrayList<AccountAsset>) {
+        onUiThread {
+            assetListAdapter?.assets = assets
+            assetListAdapter?.notifyDataSetChanged()
+        }
+    }
+
     fun initiateData(view: View) {
-        homeModel?.getAccountState(refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
-            homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
-                chartDataAdapter.setData(homeModel?.getPriceFloats())
-                assetListAdapter?.notifyDataSetChanged()
-            })
-        })
+    //    homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { balance ->
+            //homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
+          //      chartDataAdapter.setData(homeModel?.getPriceFloats())
+        //        assetListAdapter?.notifyDataSetChanged()
+          //  })
+        //})
     }
 
     fun initiateIntervalButtons(view: View) {
@@ -137,17 +148,17 @@ class HomeFragment : Fragment() {
         val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
         progress?.visibility = View.VISIBLE
         val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
-        homeModel?.getAccountState(refresh = refresh)?.observe(this, Observer<Pair<Int, Double>> { balance ->
-            homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
+     //   homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { assets ->
+        //    homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 progress?.visibility = View.GONE
-                chartDataAdapter.setData(homeModel?.getPriceFloats())
+            //    chartDataAdapter.setData(homeModel?.getPriceFloats())
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
                 header.updateHeaderFunds()
                 assetListAdapter?.notifyDataSetChanged()
-            })
-        })
+          //  })
+       // })
     }
 
     companion object {

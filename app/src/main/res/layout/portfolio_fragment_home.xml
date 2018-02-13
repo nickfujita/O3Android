@@ -114,21 +114,24 @@
                     android:text="ALL"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
-
-            <ListView
-                android:id="@+id/assetListView"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:dividerHeight="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/intervalButtonLayout" />
+                android:fillViewport="true"
+                app:layout_constraintTop_toBottomOf="@+id/intervalButtonLayout">
 
+                <ListView
+                    android:id="@+id/assetListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="8dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:divider="@null"
+                    android:dividerHeight="0dp" />
+            </ScrollView>
         </android.support.constraint.ConstraintLayout>
 
 
