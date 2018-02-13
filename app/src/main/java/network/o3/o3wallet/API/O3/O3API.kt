@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import network.o3.o3wallet.API.CoZ.Claims
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.CoZ.TransactionHistory
+import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.NEO.NEP5Tokens
 
@@ -19,8 +20,8 @@ import network.o3.o3wallet.API.NEO.NEP5Tokens
 class O3API {
     val baseURL = "http://staging-api.o3.network/v1/"
     enum class Route() {
-        HISTORY,
-        PORTFOLIO,
+        PRICE,
+        HISTORICAL,
         FEED;
 
         fun routeName(): String {
@@ -29,7 +30,7 @@ class O3API {
     }
 
     fun getPriceHistory(symbol: String, interval: Int, completion: (Pair<PriceHistory?, Error?>) -> (Unit)) {
-        val url = baseURL + Route.HISTORY.routeName() + "/" + symbol + String.format("?i=%d", interval)
+        val url = baseURL + Route.PRICE.routeName() + "/" + symbol + String.format("?i=%d", interval)
         var request = url.httpGet()
         request.responseString { request, response, result ->
             val (data, error) = result
@@ -45,8 +46,13 @@ class O3API {
         }
     }
 
-    fun getPortfolio(neoAmount: Int, gasAmount: Double, interval: Int, completion: (Pair<Portfolio?, Error?>) -> Unit) {
-        val url = baseURL + Route.PORTFOLIO.routeName() + String.format("?i=%d&neo=%d&gas=%f", interval, neoAmount, gasAmount)
+    fun getPortfolio(assets: ArrayList<AccountAsset>, interval: Int, completion: (Pair<Portfolio?, Error?>) -> Unit) {
+        var queryString = String.format("?i=%d", interval)
+        for (asset in assets) {
+            queryString = queryString + String.format("&%@=%@", asset.symbol, asset.value)
+        }
+
+        val url = baseURL + Route.HISTORICAL.routeName() + queryString
         var request = url.httpGet()
         request.responseString { request, response, result ->
            // print (request)

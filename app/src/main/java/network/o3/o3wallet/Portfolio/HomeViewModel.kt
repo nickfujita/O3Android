@@ -80,17 +80,46 @@ class HomeViewModel {
         assetsWritable.add(asset)
     }
 
+    fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
+        var assets = ArrayList<AccountAsset>()
+        assets = assetsWritable
+        for (asset in assetsReadOnly) {
+            val index = assets.indices?.find { assetsReadOnly[it].name == asset.name } ?: -1
+            if (index == -1) {
+                assets.add(asset)
+            } else {
+                assets[index].value += asset.value
+            }
+        }
+        return assets
+    }
+
 
     fun loadAssetsFromModel(useCached: Boolean) {
+        var assets = ArrayList<AccountAsset>()
         if (!useCached) {
             assetsReadOnly.clear()
             assetsWritable.clear()
             loadAssetsForAllAddresses()
-        } else when (displayType) {
-            DisplayType.HOT -> delegate.updateBalanceData(assetsWritable)
-            DisplayType.COLD -> delegate.updateBalanceData(assetsReadOnly)
-            DisplayType.COMBINED -> delegate.updateBalanceData(assetsReadOnly)
+        } else assets = when (displayType) {
+            DisplayType.HOT -> assetsWritable
+            DisplayType.COLD -> combineReadOnlyAndWritable()
+            DisplayType.COMBINED -> assetsReadOnly
         }
+
+        var sortedAssets = ArrayList<AccountAsset>()
+        val neoIndex = assets.indices?.find { assetsReadOnly[it].name == "NEO"} ?: -1
+        sortedAssets.add(assets[neoIndex])
+        assets.removeAt(neoIndex)
+
+        val gasIndex = assets.indices?.find { assetsReadOnly[it].name == "GAS"} ?: -1
+        sortedAssets.add(assets[gasIndex])
+        assets.removeAt(gasIndex)
+
+        assets.sortBy { it.name }
+        sortedAssets.addAll(assets)
+
+        delegate.updateBalanceData(sortedAssets)
     }
 
     private fun loadAssetsForAllAddresses() {
@@ -163,6 +192,27 @@ class HomeViewModel {
             }
         }
     }
+
+    fun loadPortfolioValue() {
+
+       /* O3API().getPortfolio(this.getTransferableAssets, interval: self.selectedInterval) {
+
+        }*/
+       /* delegate?.showLoadingIndicator()
+        DispatchQueue.global().async {
+            O3Client.shared.getPortfolioValue(self.getTransferableAssets(), interval: self.selectedInterval.rawValue) {result in
+                switch result {
+                    case .failure:
+                    self.delegate?.hideLoadingIndicator()
+                    print(result)
+                    case .success(let portfolio):
+                    self.delegate?.hideLoadingIndicator()
+                    self.delegate?.updateWithPortfolioData(portfolio)
+                }
+        }
+        }*/
+    }
+
 }
 
     /*
