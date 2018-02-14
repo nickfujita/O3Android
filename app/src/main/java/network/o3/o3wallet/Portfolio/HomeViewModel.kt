@@ -7,6 +7,9 @@ import android.util.Log
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
 import org.jetbrains.anko.coroutines.experimental.bg
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 
@@ -38,6 +41,7 @@ class HomeViewModel {
     var assetsReadOnly = ArrayList<AccountAsset>()
     var assetsWritable = ArrayList<AccountAsset>()
     var watchAddresses = PersistentStore.getWatchAddresses()
+    var tokens = PersistentStore.getSelectedNEP5Tokens()
     var isLoadingData = false
     private var latestPrice: PriceData? = null
     private var initialPrice: PriceData? = null
@@ -63,6 +67,11 @@ class HomeViewModel {
             CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
             CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
         }
+    }
+
+    fun getInitialDate(): Date {
+        val df1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        return df1.parse(initialPrice?.time!!)
     }
 
     fun getCurrentPortfolioValue(): Double {
@@ -164,7 +173,7 @@ class HomeViewModel {
     }
 
     private fun loadAssetsForAllAddresses() {
-        balanceCountDownLatch = CountDownLatch((1 + PersistentStore.getSelectedNEP5Tokens().size) * (watchAddresses.size + 1))
+        balanceCountDownLatch = CountDownLatch((1 + tokens.size) * (watchAddresses.size + 1))
         loadAssetsFor(Account.getWallet()?.address!!, false)
         for (address in watchAddresses) {
             loadAssetsFor(address.address, true)
@@ -265,164 +274,3 @@ class HomeViewModel {
         }
     }
 }
-
-    /*
-     fun getAccountState(display: DisplayType? = null, refresh: Boolean): LiveData<Pair<Int, Double>> {
-        if (neoGasColdStorage == null || neoGasHotWallet == null || refresh) {
-            neoGasColdStorage = MutableLiveData()
-            neoGasHotWallet = MutableLiveData()
-            neoGasCombined = MutableLiveData()
-            loadAccountState()
-        }
-        return if (display == null) {
-             when (displayType) {
-                DisplayType.HOT -> neoGasHotWallet!!
-                DisplayType.COLD -> neoGasColdStorage!!
-                DisplayType.COMBINED -> neoGasCombined!!
-            }
-        } else {
-            return when (display!!) {
-                DisplayType.HOT -> neoGasHotWallet!!
-                DisplayType.COLD -> neoGasColdStorage!!
-                DisplayType.COMBINED -> neoGasCombined!!
-            }
-        }
-    }
-     */
-
-    /*fun getCurrentGasPrice(): Double {
-        return if (currency == CurrencyType.USD) {
-            portfolio?.value?.price?.get("gas")?.averageUSD ?: 0.0
-        } else {
-            portfolio?.value?.price?.get("gas")?.averageBTC ?: 0.0
-        }
-    }
-
-    fun getFirstGasPrice(): Double {
-        return if (currency == CurrencyType.USD) {
-            portfolio?.value?.firstPrice?.get("gas")?.averageUSD ?: 0.0
-        } else {
-            portfolio?.value?.firstPrice?.get("gas")?.averageBTC ?: 0.0
-        }
-    }
-
-    fun getCurrentNeoPrice(): Double {
-        return if (currency == CurrencyType.USD) {
-            portfolio?.value?.price?.get("neo")?.averageUSD ?: 0.0
-        } else {
-            portfolio?.value?.price?.get("neo")?.averageBTC?: 0.0
-        }
-    }
-
-    fun getFirstNeoPrice(): Double {
-        return if (currency == CurrencyType.USD) {
-            portfolio?.value?.firstPrice?.get("neo")?.averageUSD ?: 0.0
-        } else {
-            portfolio?.value?.firstPrice?.get("neo")?.averageBTC ?: 0.0
-        }
-    }
-
-
-    fun getInitialPortfolioValue(): Double  {
-        return when(currency) {
-            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
-            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
-        }
-    }
-
-
-
-
-
-
-
-    fun getPortfolioFromModel(refresh: Boolean): LiveData<Portfolio> {
-        if (portfolio == null || refresh) {
-            portfolio = MutableLiveData()
-            loadPortfolio()
-        }
-        return portfolio!!
-    }
-
-    fun getPriceFloats(): FloatArray {
-        val data: Array<Double>? = when (currency) {
-            CurrencyType.USD -> portfolio?.value?.data?.map { it.averageUSD }?.toTypedArray()
-            CurrencyType.BTC -> portfolio?.value?.data?.map { it.averageBTC }?.toTypedArray()
-        }
-        if (data == null) {
-            return FloatArray(0)
-        }
-
-        var floats = FloatArray(data?.count())
-        for (i in data!!.indices) {
-            floats[i] = data[i].toFloat()
-        }
-        return floats.reversedArray()
-    }
-
-    private fun loadPortfolio() {
-        val balance = when (displayType) {
-            DisplayType.HOT -> neoGasHotWallet?.value ?: Pair(0, 0.0)
-            DisplayType.COLD ->  neoGasColdStorage?.value ?: Pair(0, 0.0)
-            DisplayType.COMBINED ->  neoGasCombined?.value ?: Pair(0, 0.0)
-        }
-
-        O3API().getPortfolio(balance.first, balance.second, interval) {
-            if ( it?.second != null ) return@getPortfolio
-            latestPrice = it?.first!!.data?.first()!!
-            initialPrice = it?.first!!.data?.last()!!
-            portfolio?.postValue(it?.first!!)
-        }
-    }
-
-    private fun loadAccountState() {
-        var watchAddresses = PersistentStore.getWatchAddresses()
-
-        val latch = CountDownLatch(1 + watchAddresses.size)
-        var runningGasHot = 0.0
-        var runningNeoHot = 0
-        var runningGasCold = 0.0
-        var runningNeoCold = 0
-
-        if (Account.getWallet() == null) {
-            return
-        }
-
-        NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(Account.getWallet()?.address!!) {
-            if (it.second != null) {
-                latch.countDown()
-                return@getAccountState
-            }
-            var balances = it?.first?.balances!!
-            for (balance in balances) {
-                if (balance.asset == Asset.NEO.id) {
-                    runningNeoHot += balance.value.toInt()
-                } else {
-                    runningGasHot += balance.value.toDouble()
-                }
-            }
-            latch.countDown()
-        }
-
-        for (address: WatchAddress in watchAddresses) {
-            NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address.address) {
-                if (it.second != null) {
-                    latch.countDown()
-                    return@getAccountState
-                }
-                var balances = it?.first?.balances!!
-                for (balance in balances) {
-                    if (balance.asset == Asset.NEO.id) {
-                        runningNeoCold += balance.value.toInt()
-                    } else {
-                        runningGasCold += balance.value.toDouble()
-                    }
-                }
-                latch.countDown()
-            }
-        }
-        latch.await()
-        neoGasColdStorage?.value = Pair(runningNeoCold, runningGasCold)
-        neoGasHotWallet?.value = Pair(runningNeoHot, runningGasHot)
-        neoGasCombined?.value = Pair(runningNeoCold + runningNeoHot, runningGasCold + runningGasHot)
-    }*/

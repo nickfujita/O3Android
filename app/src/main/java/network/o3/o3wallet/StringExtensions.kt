@@ -1,6 +1,8 @@
 package network.o3.o3wallet
 
+import java.text.DateFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -31,4 +33,15 @@ fun Double.formattedCurrencyString(currency: CurrencyType): String {
         CurrencyType.BTC -> this.formattedBTCString()
         CurrencyType.USD -> this.formattedUSDString()
     }
+}
+
+fun Date.IntervaledString(interval: String): String {
+    var dateFormat = ""
+    if (interval == "6H" || interval == "24H") {
+        dateFormat = "hh:mm"
+    } else {
+        dateFormat = "MMM d, hh:mm"
+    }
+    val dateFormatter = SimpleDateFormat(dateFormat)
+    return "since " + dateFormatter.format(this)
 }

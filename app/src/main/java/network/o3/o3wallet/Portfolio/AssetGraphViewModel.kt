@@ -9,6 +9,8 @@ import network.o3.o3wallet.API.O3.PriceHistory
 import network.o3.o3wallet.CurrencyType
 import network.o3.o3wallet.formattedBTCString
 import network.o3.o3wallet.formattedUSDString
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by drei on 12/8/17.
@@ -59,8 +61,18 @@ class AssetGraphViewModel: ViewModel() {
         return ((currentPrice - initialPrice) / initialPrice * 100.0)
     }
 
+
+    fun getInitialDate(): Date {
+        val df1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        return df1.parse(initialPrice?.time!!)
+    }
+
     fun setInterval(interval: String) {
         this.interval = interval
+    }
+
+    fun getInterval(): String {
+        return this.interval
     }
 
     fun getHistoryFromModel(s:String, refresh: Boolean): LiveData<PriceHistory> {

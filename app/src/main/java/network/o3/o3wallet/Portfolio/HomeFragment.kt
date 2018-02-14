@@ -43,6 +43,12 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         initiateIntervalButtons(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeModel.watchAddresses = PersistentStore.getWatchAddresses()
+        homeModel.tokens = PersistentStore.getSelectedNEP5Tokens()
+    }
+
     fun initiateGraph(view: View) {
         val sparkView = view.findViewById<SparkView>(R.id.sparkview)
         sparkView?.sparkAnimator = MorphSparkAnimator()
@@ -66,7 +72,8 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
-                percentView?.text = percentChange.formattedPercentString()
+                percentView?.text = percentChange.formattedPercentString() +
+                        " " +  homeModel?.getInitialDate().IntervaledString(homeModel?.getInterval())
                 amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
             }
         }
@@ -142,19 +149,10 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     }
 
     fun updateHeader(amount: String, percentChange: Double) {
-      /*val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
-        progress?.visibility = View.VISIBLE
-        val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
-     //   homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { assets ->
-        //    homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
-                progress?.visibility = View.GONE
-            //    chartDataAdapter.setData(homeModel?.getPriceFloats())*/
-                viewPager?.setCurrentItem(viewPager?.currentItem!!)
-                val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
-                val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
-                header.setHeaderInfo(amount, percentChange)
-          //  })
-       // })
+        viewPager?.setCurrentItem(viewPager?.currentItem!!)
+        val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
+        val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
+        header.setHeaderInfo(amount, percentChange, homeModel.getInterval(), homeModel.getInitialDate())
     }
 
     override fun showLoadingIndicator() {

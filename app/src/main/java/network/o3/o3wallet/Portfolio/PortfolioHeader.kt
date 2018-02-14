@@ -14,6 +14,7 @@ import android.arch.lifecycle.Observer
 import kotlinx.android.synthetic.main.portfolio_asset_card.*
 import kotlinx.android.synthetic.main.portfolio_fragment_portfolio_header.*
 import network.o3.o3wallet.*
+import java.util.*
 
 class PortfolioHeader:Fragment() {
     private val titles = O3Wallet.appContext!!.resources.getStringArray(R.array.portfolio_headers)
@@ -46,8 +47,9 @@ class PortfolioHeader:Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun setHeaderInfo(amount: String, percentChange: Double) {
-        fundChangeTextView.text = percentChange.formattedPercentString()
+    fun setHeaderInfo(amount: String, percentChange: Double, interval: String, initialDate: Date) {
+        fundChangeTextView.text = percentChange.formattedPercentString() +
+                " " +  initialDate.IntervaledString(interval)
         fundAmountTextView.text = amount
 
         if (percentChange < 0) {
