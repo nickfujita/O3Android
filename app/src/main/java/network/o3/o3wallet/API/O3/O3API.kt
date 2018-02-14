@@ -29,8 +29,8 @@ class O3API {
         }
     }
 
-    fun getPriceHistory(symbol: String, interval: Int, completion: (Pair<PriceHistory?, Error?>) -> (Unit)) {
-        val url = baseURL + Route.PRICE.routeName() + "/" + symbol + String.format("?i=%d", interval)
+    fun getPriceHistory(symbol: String, interval: String, completion: (Pair<PriceHistory?, Error?>) -> (Unit)) {
+        val url = baseURL + Route.PRICE.routeName() + "/" + symbol + String.format("?i=%s", interval)
         var request = url.httpGet()
         request.responseString { request, response, result ->
             val (data, error) = result

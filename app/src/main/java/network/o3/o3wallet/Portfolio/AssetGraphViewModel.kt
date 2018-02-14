@@ -17,7 +17,7 @@ import network.o3.o3wallet.formattedUSDString
 class AssetGraphViewModel: ViewModel() {
     private var history: MutableLiveData<PriceHistory>? = null
     private var symbol = "NEO"
-    private var interval = 15
+    private var interval = "24H"
     private var currency = CurrencyType.USD
     private var latestPrice: PriceData? = null
     private var initialPrice: PriceData? = null
@@ -59,7 +59,7 @@ class AssetGraphViewModel: ViewModel() {
         return ((currentPrice - initialPrice) / initialPrice * 100.0)
     }
 
-    fun setInterval(interval: Int) {
+    fun setInterval(interval: String) {
         this.interval = interval
     }
 

@@ -40,7 +40,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
-        initiateData(view)
         initiateIntervalButtons(view)
     }
 
@@ -89,7 +88,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 // This delay allows for the scroll to complete before the UI thread gets blocked
                 Handler().postDelayed({
                     homeModel?.setDisplayType(displayType)
-                  //  updatePortfolioAndTable(true)
+                    homeModel?.loadAssetsFromModel(false)
                 }, 200)
             }
         })
@@ -114,16 +113,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
             chartDataAdapter.setData(homeModel?.getPriceFloats())
 
         }
-    }
-
-    fun initiateData(view: View) {
-
-    //    homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { balance ->
-            //homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
-          //      chartDataAdapter.setData(homeModel?.getPriceFloats())
-        //        assetListAdapter?.notifyDataSetChanged()
-          //  })
-        //})
     }
 
     fun initiateIntervalButtons(view: View) {

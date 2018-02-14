@@ -13,6 +13,7 @@ import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio
 import org.jetbrains.anko.runOnUiThread
+import java.text.NumberFormat
 
 /**
  * Created by drei on 12/15/17.
@@ -85,7 +86,9 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
             assetPercentChangeView.setTextColor(ContextCompat.getColor(mContext, R.color.colorGain))
         }
 
-        assetAmountView.text = asset.assetAmount.format(digits = assets[position].decimal)
+        var formatter = NumberFormat.getNumberInstance()
+        formatter.maximumFractionDigits = assets[position].decimal
+        assetAmountView.text = formatter.format(asset.assetAmount)
 
 
 

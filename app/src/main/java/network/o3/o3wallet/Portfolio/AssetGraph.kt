@@ -132,7 +132,7 @@ class AssetGraph : LocalizationActivity() {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
         button?.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
-        assetGraphModel?.setInterval(button.tag.toString().toInt())
+        assetGraphModel?.setInterval(button.tag.toString())
         loadGraph(true)
     }
 }

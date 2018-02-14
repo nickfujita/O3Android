@@ -98,8 +98,7 @@ class HomeViewModel {
     }
 
     fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
-        var assets = ArrayList<AccountAsset>()
-        assets = assetsWritable
+        var assets = ArrayList<AccountAsset>(assetsWritable)
         for (asset in assetsReadOnly) {
             val index = assets.indices?.find { assetsReadOnly[it].name == asset.name } ?: -1
             if (index == -1) {
@@ -114,18 +113,37 @@ class HomeViewModel {
     fun getSortedAssets(): ArrayList<AccountAsset> {
         var assets = when (displayType) {
             DisplayType.HOT -> assetsWritable
-            DisplayType.COLD -> combineReadOnlyAndWritable()
-            DisplayType.COMBINED -> assetsReadOnly
+            DisplayType.COMBINED -> combineReadOnlyAndWritable()
+            DisplayType.COLD -> assetsReadOnly
         }
         assets = ArrayList(assets)
         var sortedAssets = ArrayList<AccountAsset>()
         val neoIndex = assets.indices?.find { assets[it].name == "NEO"} ?: -1
-        sortedAssets.add(assets[neoIndex])
-        assets.removeAt(neoIndex)
+        //Make UTXO assets default supported
+        if (neoIndex == -1) {
+            sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                    name = NeoNodeRPC.Asset.NEO.name,
+                    symbol = NeoNodeRPC.Asset.NEO.name,
+                    decimal = 0,
+                    type = AssetType.NATIVE,
+                    value = 0.0))
+        } else {
+            sortedAssets.add(assets[neoIndex])
+            assets.removeAt(neoIndex)
+        }
 
         val gasIndex = assets.indices?.find { assets[it].name == "GAS"} ?: -1
-        sortedAssets.add(assets[gasIndex])
-        assets.removeAt(gasIndex)
+        if (gasIndex == -1) {
+            sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                    name = NeoNodeRPC.Asset.GAS.name,
+                    symbol = NeoNodeRPC.Asset.GAS.name,
+                    decimal = 0,
+                    type = AssetType.NATIVE,
+                    value = 0.0))
+        } else {
+            sortedAssets.add(assets[gasIndex])
+            assets.removeAt(gasIndex)
+        }
 
         assets.sortBy { it.name }
         sortedAssets.addAll(assets)
