@@ -46,10 +46,10 @@ class O3API {
         }
     }
 
-    fun getPortfolio(assets: ArrayList<AccountAsset>, interval: Int, completion: (Pair<Portfolio?, Error?>) -> Unit) {
-        var queryString = String.format("?i=%d", interval)
+    fun getPortfolio(assets: ArrayList<AccountAsset>, interval: String, completion: (Pair<Portfolio?, Error?>) -> Unit) {
+        var queryString = String.format("?i=%s", interval)
         for (asset in assets) {
-            queryString = queryString + String.format("&%@=%@", asset.symbol, asset.value)
+            queryString = queryString + String.format("&%s=%.8f", asset.symbol, asset.value)
         }
 
         val url = baseURL + Route.HISTORICAL.routeName() + queryString

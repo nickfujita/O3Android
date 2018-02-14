@@ -11,6 +11,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.O3.Portfolio
 import org.jetbrains.anko.runOnUiThread
 
 /**
@@ -24,7 +25,8 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
     private val mContext: Context
     private val mfragment: HomeFragment
     var assets = ArrayList<AccountAsset>()
-
+    var portfolio: Portfolio? = null
+    var referenceCurrency: CurrencyType = CurrencyType.USD
     init {
         mContext = context
         mfragment = fragment
@@ -32,8 +34,25 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
 
     override fun getItem(position: Int): TableCellData {
         var assetData = TableCellData("", 0.0, 0.0, 0.0, 0.0)
-        assetData.assetName = assets.get(position).name
+        assetData.assetName = assets.get(position).symbol
         assetData.assetAmount = assets.get(position).value
+
+        if (portfolio != null) {
+            if (referenceCurrency == CurrencyType.USD) {
+                val latestPrice = portfolio!!.price[assets.get(position).symbol]?.averageUSD ?: 0.0
+                val firstPrice = portfolio!!.firstPrice[assets.get(position).symbol]?.averageUSD ?: 0.0
+                assetData.assetPrice = latestPrice
+                assetData.percentChange = (latestPrice - firstPrice) / firstPrice * 100
+                assetData.totalValue = latestPrice * assetData.assetAmount
+            } else {
+                val latestPrice = portfolio!!.price[assets.get(position).symbol]?.averageBTC ?: 0.0
+                val firstPrice = portfolio!!.firstPrice[assets.get(position).symbol]?.averageBTC ?: 0.0
+                assetData.assetPrice = latestPrice
+                assetData.percentChange = (latestPrice - firstPrice) / firstPrice * 100
+                assetData.totalValue = latestPrice * assetData.assetAmount
+            }
+        }
+
         return assetData
     }
 
@@ -56,8 +75,8 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
         val assetPercentChangeView = view.findViewById<TextView>(R.id.percentChangeTextView)
 
         assetNameView.text = asset.assetName
-       // assetPriceView.text = asset.assetPrice.formattedCurrencyString(homeModel?.getCurrency()!!)
-        //assetTotalValueView.text = asset.totalValue.formattedCurrencyString(homeModel?.getCurrency()!!)
+        assetPriceView.text = asset.assetPrice.formattedCurrencyString(referenceCurrency)
+        assetTotalValueView.text = asset.totalValue.formattedCurrencyString(referenceCurrency)
         assetPercentChangeView.text = asset.percentChange.formattedPercentString()
 
         if (asset.percentChange < 0) {
@@ -66,11 +85,8 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
             assetPercentChangeView.setTextColor(ContextCompat.getColor(mContext, R.color.colorGain))
         }
 
-        if (asset.assetName == "NEO") {
-            assetAmountView.text = asset.assetAmount.format(0)
-        } else {
-            assetAmountView.text = asset.assetAmount.format(8)
-        }
+        assetAmountView.text = asset.assetAmount.format(digits = assets[position].decimal)
+
 
 
         view.setOnClickListener {

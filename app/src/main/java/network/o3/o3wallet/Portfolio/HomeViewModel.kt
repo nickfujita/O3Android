@@ -3,14 +3,11 @@ package network.o3.o3wallet.Portfolio
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.API.O3.PriceData
 import network.o3.o3wallet.API.NEO.*
-import java.util.concurrent.CountDownLatch
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import network.o3.o3wallet.*
-import network.o3.o3wallet.API.CoZ.NEO
 import network.o3.o3wallet.API.O3.Portfolio
+import org.jetbrains.anko.coroutines.experimental.bg
+import java.util.concurrent.CountDownLatch
 
 
 /**
@@ -19,6 +16,7 @@ import network.o3.o3wallet.API.O3.Portfolio
 
 interface HomeViewModelProtocol {
     fun updateBalanceData(assets: ArrayList<AccountAsset>)
+    fun updatePortfolioData(portfolio: Portfolio)
 }
 
 class HomeViewModel {
@@ -27,10 +25,10 @@ class HomeViewModel {
     }
 
     private var displayType: DisplayType = DisplayType.HOT
-    private var interval: Int = 15
+    private var interval: String = "24H"
     private var currency = CurrencyType.USD
-    private var portfolio: MutableLiveData<Portfolio>? = null
-    private var balanceDispatchGroup =  DispatchGroup()
+    lateinit private var portfolio: Portfolio
+    private lateinit var balanceCountDownLatch: CountDownLatch
 
     lateinit var delegate: HomeViewModelProtocol
 
@@ -50,12 +48,31 @@ class HomeViewModel {
         return currency
     }
 
-    fun setInterval(interval: Int) {
+    fun setInterval(interval: String) {
         this.interval = interval
     }
 
-    fun getInterval(): Int {
+    fun getInterval(): String {
         return this.interval
+    }
+
+    fun getInitialPortfolioValue(): Double  {
+        return when(currency) {
+            CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> initialPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getCurrentPortfolioValue(): Double {
+        return when(currency) {
+            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
+            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
+        }
+    }
+
+    fun getPercentChange(): Double {
+        if (getInitialPortfolioValue() == 0.0) return 0.0
+        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
     }
 
 
@@ -94,125 +111,139 @@ class HomeViewModel {
         return assets
     }
 
-
-    fun loadAssetsFromModel(useCached: Boolean) {
-        var assets = ArrayList<AccountAsset>()
-        if (!useCached) {
-            assetsReadOnly.clear()
-            assetsWritable.clear()
-            loadAssetsForAllAddresses()
-        } else assets = when (displayType) {
+    fun getSortedAssets(): ArrayList<AccountAsset> {
+        var assets = when (displayType) {
             DisplayType.HOT -> assetsWritable
             DisplayType.COLD -> combineReadOnlyAndWritable()
             DisplayType.COMBINED -> assetsReadOnly
         }
-
+        assets = ArrayList(assets)
         var sortedAssets = ArrayList<AccountAsset>()
-        val neoIndex = assets.indices?.find { assetsReadOnly[it].name == "NEO"} ?: -1
+        val neoIndex = assets.indices?.find { assets[it].name == "NEO"} ?: -1
         sortedAssets.add(assets[neoIndex])
         assets.removeAt(neoIndex)
 
-        val gasIndex = assets.indices?.find { assetsReadOnly[it].name == "GAS"} ?: -1
+        val gasIndex = assets.indices?.find { assets[it].name == "GAS"} ?: -1
         sortedAssets.add(assets[gasIndex])
         assets.removeAt(gasIndex)
 
         assets.sortBy { it.name }
         sortedAssets.addAll(assets)
 
-        delegate.updateBalanceData(sortedAssets)
+        return sortedAssets
+    }
+
+    fun loadAssetsFromModel(useCached: Boolean) {
+        if (!useCached) {
+            assetsReadOnly.clear()
+            assetsWritable.clear()
+            loadAssetsForAllAddresses()
+        } else {
+            delegate.updateBalanceData(getSortedAssets())
+        }
     }
 
     private fun loadAssetsForAllAddresses() {
+        balanceCountDownLatch = CountDownLatch((1 + PersistentStore.getSelectedNEP5Tokens().size) * (watchAddresses.size + 1))
         loadAssetsFor(Account.getWallet()?.address!!, false)
         for (address in watchAddresses) {
             loadAssetsFor(address.address, true)
         }
-        val myRunnable = Runnable {
-            delegate.updateBalanceData(assetsWritable)
-        }
-        balanceDispatchGroup.notify(myRunnable)
+        balanceCountDownLatch.await()
+        delegate.updateBalanceData(getSortedAssets())
     }
 
     fun loadAssetsFor(address: String, isReadOnly: Boolean) {
-        balanceDispatchGroup.enter()
-        Log.d("LOADING ASSETS FOR: ", address)
-        NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address) {
-            if (it.second != null) {
-                balanceDispatchGroup.leave()
-                return@getAccountState
-            }
-            for (asset in it.first?.balances!!) {
-                var assetToAdd: AccountAsset
-                if (asset.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
-                    assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                            name = NeoNodeRPC.Asset.NEO.name,
-                            symbol = NeoNodeRPC.Asset.NEO.name,
-                            decimal = 0,
-                            type = AssetType.NATIVE,
-                            value = asset.value)
-                } else {
-                    assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                            name = NeoNodeRPC.Asset.GAS.name,
-                            symbol = NeoNodeRPC.Asset.GAS.name,
-                            decimal = 0,
-                            type = AssetType.NATIVE,
-                            value = asset.value)
+        bg {
+            NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address) {
+                if (it.second != null) {
+                    balanceCountDownLatch.countDown()
+                    return@getAccountState
                 }
-
-                if (isReadOnly) {
-                    this.addReadOnlyAsset(assetToAdd)
-                } else {
-                    this.addWritableAsset(assetToAdd)
+                for (asset in it.first?.balances!!) {
+                    var assetToAdd: AccountAsset
+                    if (asset.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+                        assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
+                                name = NeoNodeRPC.Asset.NEO.name,
+                                symbol = NeoNodeRPC.Asset.NEO.name,
+                                decimal = 0,
+                                type = AssetType.NATIVE,
+                                value = asset.value)
+                    } else {
+                        assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
+                                name = NeoNodeRPC.Asset.GAS.name,
+                                symbol = NeoNodeRPC.Asset.GAS.name,
+                                decimal = 0,
+                                type = AssetType.NATIVE,
+                                value = asset.value)
+                    }
+                    if (isReadOnly) {
+                        this.addReadOnlyAsset(assetToAdd)
+                    } else {
+                        this.addWritableAsset(assetToAdd)
+                    }
                 }
-                balanceDispatchGroup.leave()
+                balanceCountDownLatch.countDown()
             }
         }
 
         for (key in PersistentStore.getSelectedNEP5Tokens().keys) {
             val token = PersistentStore.getSelectedNEP5Tokens()[key]!!
-            balanceDispatchGroup.enter()
-            NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(token.tokenHash, address) {
-                if (it.second != null) {
-                    balanceDispatchGroup.leave()
-                    return@getTokenBalanceOf
+            bg {
+                NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(token.tokenHash, address) {
+                    if (it.second != null) {
+                        balanceCountDownLatch.countDown()
+                        return@getTokenBalanceOf
+                    }
+                    val amountDecimal: Double = (it.first!!.toDouble() / (Math.pow(10.0, token.decimal.toDouble())))
+                    val tokenToAdd = AccountAsset(assetID = token.tokenHash,
+                            name = token.name,
+                            symbol = token.symbol,
+                            decimal = token.decimal,
+                            type = AssetType.NEP5TOKEN,
+                            value = amountDecimal)
+                    if (isReadOnly) {
+                        this.addReadOnlyAsset(tokenToAdd)
+                    } else {
+                        this.addWritableAsset(tokenToAdd)
+                    }
+                    balanceCountDownLatch.countDown()
                 }
-                val amountDecimal: Double = (it.first!!.toDouble() / (Math.pow(10.0, token.decimal.toDouble())))
-                val tokenToAdd = AccountAsset(assetID = token.tokenHash,
-                        name = token.name,
-                        symbol = token.symbol,
-                        decimal = token.decimal,
-                        type = AssetType.NEP5TOKEN,
-                        value = amountDecimal)
-                if (isReadOnly) {
-                    this.addReadOnlyAsset(tokenToAdd)
-                } else {
-                    this.addWritableAsset(tokenToAdd)
-                }
-                balanceDispatchGroup.leave()
             }
         }
     }
 
-    fun loadPortfolioValue() {
+    fun getPriceFloats(): FloatArray {
 
-       /* O3API().getPortfolio(this.getTransferableAssets, interval: self.selectedInterval) {
-
-        }*/
-       /* delegate?.showLoadingIndicator()
-        DispatchQueue.global().async {
-            O3Client.shared.getPortfolioValue(self.getTransferableAssets(), interval: self.selectedInterval.rawValue) {result in
-                switch result {
-                    case .failure:
-                    self.delegate?.hideLoadingIndicator()
-                    print(result)
-                    case .success(let portfolio):
-                    self.delegate?.hideLoadingIndicator()
-                    self.delegate?.updateWithPortfolioData(portfolio)
-                }
+        val data: Array<Double>? = when (currency) {
+            CurrencyType.USD -> portfolio.data.map { it.averageUSD }?.toTypedArray()
+            CurrencyType.BTC -> portfolio.data.map { it.averageBTC }?.toTypedArray()
         }
-        }*/
+        if (data == null) {
+            return FloatArray(0)
+        }
+
+        var floats = FloatArray(data?.count())
+        for (i in data!!.indices) {
+            floats[i] = data[i].toFloat()
+        }
+        return floats.reversedArray()
     }
 
+    fun loadPortfolioValue() {
+        Log.d("LOADING PORTFOLIO: ", this.getSortedAssets().toString())
+        bg {
+           O3API().getPortfolio(this.getSortedAssets(), this.interval) {
+               if (it.second != null) {
+                   return@getPortfolio
+               }
+               this.portfolio = it.first!!
+               this.initialPrice = this.portfolio.data.last()
+               this.latestPrice = this.portfolio.data.first()
+               delegate.updatePortfolioData(it.first!!)
+           }
+        }
+    }
 }
 
     /*
@@ -279,17 +310,9 @@ class HomeViewModel {
         }
     }
 
-    fun getCurrentPortfolioValue(): Double {
-        return when(currency) {
-            CurrencyType.BTC -> latestPrice?.averageBTC ?: 0.0
-            CurrencyType.USD -> latestPrice?.averageUSD ?: 0.0
-        }
-    }
 
-    fun getPercentChange(): Double {
-        if (getInitialPortfolioValue() == 0.0) return 0.0
-        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
-    }
+
+
 
 
 

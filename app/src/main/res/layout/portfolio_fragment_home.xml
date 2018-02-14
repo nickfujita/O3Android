@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="5"
+                    android:tag="6H"
                     android:text="@string/six_hours"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="20"
+                    android:tag="24H"
                     android:text="@string/one_day"
                     android:textAppearance="@style/IntervalButtonText.Selected" />
 
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="140"
+                    android:tag="1W"
                     android:text="@string/one_week"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="560"
+                    android:tag="1M"
                     android:text="@string/one_month"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="1680"
+                    android:tag="3M"
                     android:text="@string/three_month"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
@@ -110,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="2000"
+                    android:tag="all"
                     android:text="ALL"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>

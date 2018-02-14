@@ -7,16 +7,14 @@ import android.view.View
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import com.robinhood.spark.SparkView
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Handler
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
+import kotlinx.android.synthetic.main.portfolio_fragment_home.*
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.support.v4.onUiThread
 
 
@@ -35,10 +33,10 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        assetListAdapter = AssetListAdapter(this.context!!, this)
         homeModel = HomeViewModel()
         homeModel.delegate = this
         homeModel.loadAssetsFromModel(false)
-        assetListAdapter = AssetListAdapter(this.context!!, this)
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
@@ -57,24 +55,19 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
             val amountView = header.view?.findViewById<TextView>(R.id.fundAmountTextView)
             val percentView = header.view?.findViewById<TextView>(R.id.fundChangeTextView)
             if (value == null) { //return to original state
-                amountView?.text = header.unscrubbedDisplayedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
-                /*percentView?.text = homeModel?.getPercentChange()?.formattedPercentString()
-                if (homeModel?.getPercentChange()!! < 0) {
-                    percentView?.setTextColor(resources.getColor(R.color.colorLoss))
-                } else {
-                    percentView?.setTextColor(resources.getColor(R.color.colorGain))
-                }*/
+                updateHeader(homeModel.getCurrentPortfolioValue().formattedCurrencyString(homeModel.getCurrency()),
+                        homeModel.getPercentChange())
                 return@OnScrubListener
             } else {
                 val scrubbedAmount = (value as Float).toDouble()
-                /*val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
-                        homeModel?.getInitialPortfolioValue()!! * 100
+                val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
+                        homeModel.getInitialPortfolioValue()!! * 100
                 if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
-                percentView?.text = percentChange.formattedPercentString()*/
+                percentView?.text = percentChange.formattedPercentString()
                 amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
             }
         }
@@ -96,7 +89,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 // This delay allows for the scroll to complete before the UI thread gets blocked
                 Handler().postDelayed({
                     homeModel?.setDisplayType(displayType)
-                    updatePortfolioAndTable(true)
+                  //  updatePortfolioAndTable(true)
                 }, 200)
             }
         })
@@ -107,9 +100,24 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
             assetListAdapter?.assets = assets
             assetListAdapter?.notifyDataSetChanged()
         }
+        homeModel.loadPortfolioValue()
+    }
+
+    override fun updatePortfolioData(portfolio: Portfolio) {
+        onUiThread {
+            assetListAdapter?.portfolio = portfolio
+            assetListAdapter?.referenceCurrency = homeModel.getCurrency()
+            assetListAdapter?.notifyDataSetChanged()
+
+            updateHeader(homeModel.getCurrentPortfolioValue().formattedCurrencyString(homeModel.getCurrency()),
+                    homeModel.getPercentChange())
+            chartDataAdapter.setData(homeModel?.getPriceFloats())
+
+        }
     }
 
     fun initiateData(view: View) {
+
     //    homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { balance ->
             //homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
           //      chartDataAdapter.setData(homeModel?.getPriceFloats())
@@ -140,23 +148,22 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
         button?.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
-        homeModel?.setInterval(button.tag.toString().toInt())
-        updatePortfolioAndTable(true)
+        homeModel.setInterval(button.tag.toString())
+        homeModel.loadPortfolioValue()
     }
 
-    fun updatePortfolioAndTable(refresh: Boolean) {
-        val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
+    fun updateHeader(amount: String, percentChange: Double) {
+      /*val progress = view?.findViewById<ProgressBar>(R.id.progressBar)
         progress?.visibility = View.VISIBLE
         val sparkView = view?.findViewById<SparkView>(R.id.sparkview)
      //   homeModel?.getAssetsFromModel(true)?.observe(this, Observer<ArrayList<AccountAsset>> { assets ->
         //    homeModel?.getPortfolioFromModel(refresh)?.observe(this, Observer<Portfolio> { _ ->
                 progress?.visibility = View.GONE
-            //    chartDataAdapter.setData(homeModel?.getPriceFloats())
+            //    chartDataAdapter.setData(homeModel?.getPriceFloats())*/
                 viewPager?.setCurrentItem(viewPager?.currentItem!!)
                 val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
                 val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
-                header.updateHeaderFunds()
-                assetListAdapter?.notifyDataSetChanged()
+                header.setHeaderInfo(amount, percentChange)
           //  })
        // })
     }

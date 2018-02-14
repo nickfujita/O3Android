@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import network.o3.o3wallet.API.O3.Portfolio
 import android.arch.lifecycle.Observer
+import kotlinx.android.synthetic.main.portfolio_asset_card.*
 import kotlinx.android.synthetic.main.portfolio_fragment_portfolio_header.*
 import network.o3.o3wallet.*
 
@@ -43,46 +44,17 @@ class PortfolioHeader:Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateHeaderFunds()
     }
 
-    fun updateHeaderFunds() {
-        val displayType = when(position) {
-            0 -> HomeViewModel.DisplayType.HOT
-            1 -> HomeViewModel.DisplayType.COMBINED
-            2 -> HomeViewModel.DisplayType.COLD
-            else -> return
+    fun setHeaderInfo(amount: String, percentChange: Double) {
+        fundChangeTextView.text = percentChange.formattedPercentString()
+        fundAmountTextView.text = amount
+
+        if (percentChange < 0) {
+            percentChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
+        } else {
+            percentChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
         }
-
-        //var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
-        val fundAmountTextView = view?.findViewById<TextView>(R.id.fundAmountTextView)
-        val percentChangeTextView = view?.findViewById<TextView>(R.id.fundChangeTextView)
-
-       /* homeModel?.getPortfolioFromModel(false)?.observe(this, Observer<Portfolio> { data ->
-            homeModel?.getAccountState(displayType, refresh = true)?.observe(this, Observer<Pair<Int, Double>> { balance ->
-                val currentNeoPrice = homeModel.getCurrentNeoPrice()
-                val firstNeoPrice = homeModel.getFirstNeoPrice()
-                val currentGasPrice = homeModel.getCurrentGasPrice()
-                val firstGasPrice = homeModel.getFirstGasPrice()
-
-                val currentPortfolioValue  = (balance?.first!! * currentNeoPrice +
-                                             balance?.second!! * currentGasPrice)
-                val initialPortfolioValue  = (balance?.first!! * firstNeoPrice +
-                                              balance?.second!! * firstGasPrice)
-
-
-                unscrubbedDisplayedAmount = currentPortfolioValue
-                fundAmountTextView?.text = currentPortfolioValue.formattedCurrencyString(homeModel.getCurrency())
-
-                val percentChange = homeModel?.getPercentChange()
-                if (percentChange < 0) {
-                    fundChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
-                } else {
-                    fundChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
-                }
-                fundChangeTextView?.text = percentChange.formattedPercentString()
-            })
-        })*/
     }
 
     private fun configureArrows(view: View?) {

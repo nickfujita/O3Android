@@ -7,7 +7,7 @@ package network.o3.o3wallet
 class DispatchGroup {
 
     private var count = 0
-    private var runnable: Runnable? = null
+    var runnable: Runnable? = null
 
     @Synchronized
     fun enter() {
