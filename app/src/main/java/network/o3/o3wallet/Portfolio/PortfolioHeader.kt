@@ -51,9 +51,9 @@ class PortfolioHeader:Fragment() {
         fundAmountTextView.text = amount
 
         if (percentChange < 0) {
-            percentChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
+            fundChangeTextView?.setTextColor(resources.getColor(R.color.colorLoss))
         } else {
-            percentChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
+            fundChangeTextView?.setTextColor(resources.getColor(R.color.colorGain))
         }
     }
 
@@ -62,21 +62,21 @@ class PortfolioHeader:Fragment() {
         val leftArrow = view?.findViewById<ImageView>(R.id.leftArrowImageView)
         val rightArrow = view?.findViewById<ImageView>(R.id.rightArrowImageView)
 
-      /*  var homeModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
         view?.findViewById<TextView>(R.id.fundAmountTextView)!!.setOnClickListener {
-            if (homeModel.getCurrency() == CurrencyType.USD) {
-                homeModel.setCurrency(CurrencyType.BTC)
+            var pFragment = (parentFragment as HomeFragment)
+            if (pFragment.homeModel.getCurrency() == CurrencyType.USD) {
+                pFragment.homeModel.setCurrency(CurrencyType.BTC)
             } else {
-                homeModel.setCurrency(CurrencyType.USD)
+                pFragment.homeModel.setCurrency(CurrencyType.USD)
             }
-            (parentFragment as HomeFragment).updatePortfolioAndTable(true)
+            pFragment.homeModel.loadAssetsFromModel(true)
         }
 
         if (position > 0) {
             leftArrow?.setOnClickListener {
                 pager?.currentItem = position - 1
             }
-        }*/
+        }
 
 
         if (position < 2) {

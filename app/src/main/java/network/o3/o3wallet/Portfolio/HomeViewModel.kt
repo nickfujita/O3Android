@@ -17,6 +17,8 @@ import java.util.concurrent.CountDownLatch
 interface HomeViewModelProtocol {
     fun updateBalanceData(assets: ArrayList<AccountAsset>)
     fun updatePortfolioData(portfolio: Portfolio)
+    fun showLoadingIndicator()
+    fun hideLoadingIndicator()
 }
 
 class HomeViewModel {
@@ -249,7 +251,7 @@ class HomeViewModel {
     }
 
     fun loadPortfolioValue() {
-        Log.d("LOADING PORTFOLIO: ", this.getSortedAssets().toString())
+        delegate.showLoadingIndicator()
         bg {
            O3API().getPortfolio(this.getSortedAssets(), this.interval) {
                if (it.second != null) {

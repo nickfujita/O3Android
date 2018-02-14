@@ -111,7 +111,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
             updateHeader(homeModel.getCurrentPortfolioValue().formattedCurrencyString(homeModel.getCurrency()),
                     homeModel.getPercentChange())
             chartDataAdapter.setData(homeModel?.getPriceFloats())
-
+            hideLoadingIndicator()
         }
     }
 
@@ -155,6 +155,18 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 header.setHeaderInfo(amount, percentChange)
           //  })
        // })
+    }
+
+    override fun showLoadingIndicator() {
+        onUiThread {
+            view?.findViewById<ProgressBar>(R.id.progressBar)?.visibility = View.VISIBLE
+        }
+    }
+
+    override fun hideLoadingIndicator() {
+        onUiThread {
+            view?.findViewById<ProgressBar>(R.id.progressBar)?.visibility = View.GONE
+        }
     }
 
     companion object {
