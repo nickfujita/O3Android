@@ -1,5 +1,9 @@
 package network.o3.o3wallet.Portfolio
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -8,6 +12,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import com.robinhood.spark.SparkView
 import android.os.Handler
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
@@ -25,8 +30,18 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     var chartDataAdapter = PortfolioDataAdapter(FloatArray(0))
     var assetListAdapter: AssetListAdapter? = null
 
+    val needReloadDataReciever = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            homeModel.watchAddresses = PersistentStore.getWatchAddresses()
+            homeModel.tokens = PersistentStore.getSelectedNEP5Tokens()
+            homeModel.loadAssetsFromModel(false)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        LocalBroadcastManager.getInstance(this.context!!).registerReceiver(needReloadDataReciever,
+                IntentFilter("need-update-data-event"));
         return inflater!!.inflate(R.layout.portfolio_fragment_home, container, false)
     }
 
@@ -36,6 +51,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         assetListAdapter = AssetListAdapter(this.context!!, this)
         homeModel = HomeViewModel()
         homeModel.delegate = this
+
         homeModel.loadAssetsFromModel(false)
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
@@ -43,10 +59,10 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         initiateIntervalButtons(view)
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeModel.watchAddresses = PersistentStore.getWatchAddresses()
-        homeModel.tokens = PersistentStore.getSelectedNEP5Tokens()
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this.context!!)
+                .unregisterReceiver(needReloadDataReciever)
+        super.onDestroy()
     }
 
     fun initiateGraph(view: View) {
