@@ -16,8 +16,12 @@ import android.widget.ListView
 import android.widget.TextView
 import network.o3.o3wallet.*
 import network.o3.o3wallet.Wallet.Send.SendActivity
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
+import android.support.v4.content.LocalBroadcastManager
+
+
 
 
 /**
@@ -47,13 +51,15 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
         return view
     }
 
+    fun sendReloadDataIntent() {
+        val intent = Intent("need-update-data-event")
+        LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent)
+    }
+
     fun showRemoveAlert(watchAddress: WatchAddress) {
-        alert (resources.getString(R.string.remove_watch_address_warning), resources.getString(R.string.remove_watch_address)) {
-            yesButton {
-                PersistentStore.removeWatchAddress(watchAddress.address, watchAddress.nickname)
-                adapter?.updateData()
-            }
-        }
+        PersistentStore.removeWatchAddress(watchAddress.address, watchAddress.nickname)
+        adapter?.updateData()
+        sendReloadDataIntent()
     }
 
     fun sendToAddress(address: WatchAddress) {
@@ -74,6 +80,7 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RELOAD_DATA) {
             adapter!!.updateData()
+            sendReloadDataIntent()
         }
     }
 

@@ -10,6 +10,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import network.o3.o3wallet.*
+import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.O3.Portfolio
+import org.jetbrains.anko.runOnUiThread
+import java.text.NumberFormat
 
 /**
  * Created by drei on 12/15/17.
@@ -21,53 +25,36 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
 
     private val mContext: Context
     private val mfragment: HomeFragment
-    var homeModel: HomeViewModel? = null
-
+    var assets = ArrayList<AccountAsset>()
+    var portfolio: Portfolio? = null
+    var referenceCurrency: CurrencyType = CurrencyType.USD
     init {
         mContext = context
         mfragment = fragment
     }
 
     override fun getItem(position: Int): TableCellData {
-       if (position == 0) {
-           var neoData = TableCellData("", 0.0, 0.0, 0.0, 0.0)
-           homeModel?.getAccountState(homeModel?.getDisplayType(), false)?.observe(mfragment, Observer<Pair<Int, Double>> { balance ->
-               val currentNeoPrice = homeModel!!.getCurrentNeoPrice()
-               val firstNeoPrice = homeModel!!.getFirstNeoPrice()
+        var assetData = TableCellData("", 0.0, 0.0, 0.0, 0.0)
+        assetData.assetName = assets.get(position).symbol
+        assetData.assetAmount = assets.get(position).value
 
-               neoData.assetAmount = balance?.first?.toDouble()!!
-               neoData.assetPrice = homeModel?.getCurrentNeoPrice()!!
-               neoData.totalValue = balance?.first!! * currentNeoPrice
-               if (firstNeoPrice == 0.0 || neoData.assetAmount == 0.0) {
-                   neoData.percentChange = 0.0
-               } else {
-                   neoData.percentChange = (currentNeoPrice - firstNeoPrice) / firstNeoPrice * 100
-               }
+        if (portfolio != null) {
+            if (referenceCurrency == CurrencyType.USD) {
+                val latestPrice = portfolio!!.price[assets.get(position).symbol]?.averageUSD ?: 0.0
+                val firstPrice = portfolio!!.firstPrice[assets.get(position).symbol]?.averageUSD ?: 0.0
+                assetData.assetPrice = latestPrice
+                assetData.percentChange = (latestPrice - firstPrice) / firstPrice * 100
+                assetData.totalValue = latestPrice * assetData.assetAmount
+            } else {
+                val latestPrice = portfolio!!.price[assets.get(position).symbol]?.averageBTC ?: 0.0
+                val firstPrice = portfolio!!.firstPrice[assets.get(position).symbol]?.averageBTC ?: 0.0
+                assetData.assetPrice = latestPrice
+                assetData.percentChange = (latestPrice - firstPrice) / firstPrice * 100
+                assetData.totalValue = latestPrice * assetData.assetAmount
+            }
+        }
 
-               notifyDataSetChanged()
-           })
-           neoData.assetName = "NEO"
-           return neoData
-       } else {
-           var gasData = TableCellData("", 0.0, 0.0, 0.0, 0.0)
-           homeModel?.getAccountState(homeModel?.getDisplayType(), false)?.observe(mfragment, Observer<Pair<Int, Double>> { balance ->
-               val currentGasPrice = homeModel!!.getCurrentGasPrice()
-               val firstGasPrice = homeModel!!.getFirstGasPrice()
-
-               gasData.assetAmount = balance?.second?.toDouble()!!
-               gasData.assetPrice = homeModel?.getCurrentGasPrice()!!
-               gasData.totalValue = (balance?.second!! * currentGasPrice)
-               if (firstGasPrice == 0.0 || gasData.assetAmount == 0.0) {
-                   gasData.percentChange = 0.0
-               } else {
-                   gasData.percentChange = (currentGasPrice - firstGasPrice) / firstGasPrice * 100
-               }
-
-               notifyDataSetChanged()
-           })
-           gasData.assetName = "GAS"
-           return gasData
-       }
+        return assetData
     }
 
     override fun getItemId(position: Int): Long {
@@ -75,7 +62,7 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
     }
 
     override fun getCount(): Int {
-        return 2
+        return assets.count()
     }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
@@ -89,8 +76,8 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
         val assetPercentChangeView = view.findViewById<TextView>(R.id.percentChangeTextView)
 
         assetNameView.text = asset.assetName
-        assetPriceView.text = asset.assetPrice.formattedCurrencyString(homeModel?.getCurrency()!!)
-        assetTotalValueView.text = asset.totalValue.formattedCurrencyString(homeModel?.getCurrency()!!)
+        assetPriceView.text = asset.assetPrice.formattedCurrencyString(referenceCurrency)
+        assetTotalValueView.text = asset.totalValue.formattedCurrencyString(referenceCurrency)
         assetPercentChangeView.text = asset.percentChange.formattedPercentString()
 
         if (asset.percentChange < 0) {
@@ -99,11 +86,10 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
             assetPercentChangeView.setTextColor(ContextCompat.getColor(mContext, R.color.colorGain))
         }
 
-        if (asset.assetName == "NEO") {
-            assetAmountView.text = asset.assetAmount.format(0)
-        } else {
-            assetAmountView.text = asset.assetAmount.format(8)
-        }
+        var formatter = NumberFormat.getNumberInstance()
+        formatter.maximumFractionDigits = assets[position].decimal
+        assetAmountView.text = formatter.format(asset.assetAmount)
+
 
 
         view.setOnClickListener {

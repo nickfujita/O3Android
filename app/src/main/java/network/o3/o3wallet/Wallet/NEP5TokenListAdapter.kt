@@ -1,6 +1,8 @@
 package network.o3.o3wallet.Wallet
 
 import android.content.Context
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,6 +69,8 @@ class NEP5TokenListAdapter(context: Context) : BaseAdapter() {
             } else {
                 PersistentStore.removeToken(getItem(position))
             }
+            val intent = Intent("need-update-data-event")
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent)
         }
 
         return view!!

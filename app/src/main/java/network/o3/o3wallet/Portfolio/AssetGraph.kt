@@ -47,7 +47,8 @@ class AssetGraph : LocalizationActivity() {
         } else {
             percentView?.setTextColor(resources.getColor(R.color.colorGain))
         }
-        percentView.text = percentChange.formattedPercentString()
+        percentView.text = percentChange.formattedPercentString() +
+                " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
     }
 
     private fun initiateGraph() {
@@ -73,7 +74,8 @@ class AssetGraph : LocalizationActivity() {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
                 priceView.text = price.formattedCurrencyString(assetGraphModel!!.getCurrency())
-                percentView.text = percentChange.formattedPercentString()
+                percentView.text = percentChange.formattedPercentString() +
+                        " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
             }
         }
     }
@@ -124,7 +126,8 @@ class AssetGraph : LocalizationActivity() {
             } else {
                 percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorGain))
             }
-            percentView.text = percentChange.formattedPercentString()
+            percentView.text = percentChange.formattedPercentString() +
+                    " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
         })
     }
 
@@ -132,7 +135,7 @@ class AssetGraph : LocalizationActivity() {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
         button?.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
-        assetGraphModel?.setInterval(button.tag.toString().toInt())
+        assetGraphModel?.setInterval(button.tag.toString())
         loadGraph(true)
     }
 }
