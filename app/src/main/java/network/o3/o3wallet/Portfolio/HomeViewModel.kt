@@ -7,6 +7,7 @@ import android.util.Log
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
 import org.jetbrains.anko.coroutines.experimental.bg
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -71,7 +72,11 @@ class HomeViewModel {
 
     fun getInitialDate(): Date {
         val df1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        return df1.parse(initialPrice?.time!!)
+        return try {
+            df1.parse(initialPrice?.time ?: "")
+        } catch (e: ParseException) {
+            return Date()
+        }
     }
 
     fun getCurrentPortfolioValue(): Double {
@@ -96,7 +101,7 @@ class HomeViewModel {
     }
 
     fun addReadOnlyAsset(asset: AccountAsset) {
-        val index = assetsReadOnly.indices?.find { assetsReadOnly[it].name == asset.name } ?: -1
+        val index = assetsReadOnly.indices.find { assetsReadOnly[it].name == asset.name } ?: -1
         if (index == -1) {
             assetsReadOnly.add(asset)
         } else {
@@ -111,7 +116,7 @@ class HomeViewModel {
     fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
         var assets = ArrayList<AccountAsset>(assetsWritable)
         for (asset in assetsReadOnly) {
-            val index = assets.indices?.find { assetsReadOnly[it].name == asset.name } ?: -1
+            val index = assets.indices.find { assetsReadOnly[it].name == asset.name } ?: -1
             if (index == -1) {
                 assets.add(asset)
             } else {
@@ -129,7 +134,7 @@ class HomeViewModel {
         }
         assets = ArrayList(assets)
         var sortedAssets = ArrayList<AccountAsset>()
-        val neoIndex = assets.indices?.find { assets[it].name == "NEO"} ?: -1
+        val neoIndex = assets.indices.find { assets[it].name == "NEO"} ?: -1
         //Make UTXO assets default supported
         if (neoIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
@@ -143,7 +148,7 @@ class HomeViewModel {
             assets.removeAt(neoIndex)
         }
 
-        val gasIndex = assets.indices?.find { assets[it].name == "GAS"} ?: -1
+        val gasIndex = assets.indices.find { assets[it].name == "GAS"} ?: -1
         if (gasIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                     name = NeoNodeRPC.Asset.GAS.name,
@@ -252,8 +257,8 @@ class HomeViewModel {
             return FloatArray(0)
         }
 
-        var floats = FloatArray(data?.count())
-        for (i in data!!.indices) {
+        var floats = FloatArray(data.count())
+        for (i in data.indices) {
             floats[i] = data[i].toFloat()
         }
         return floats.reversedArray()

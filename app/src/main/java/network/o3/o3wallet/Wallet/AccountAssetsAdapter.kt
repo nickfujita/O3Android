@@ -78,7 +78,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
         if (position != getCount() - 1) {
             val view: View?
             val vh: AccountAssetRow
-            if (convertView == null) {
+            if (convertView == null || convertView.tag !is AccountAssetRow) {
                 view = this.inflator.inflate(R.layout.wallet_account_asset_row, parent, false)
                 vh = AccountAssetRow(view)
                 view.tag = vh

@@ -9,6 +9,7 @@ import network.o3.o3wallet.API.O3.PriceHistory
 import network.o3.o3wallet.CurrencyType
 import network.o3.o3wallet.formattedBTCString
 import network.o3.o3wallet.formattedUSDString
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,7 +65,11 @@ class AssetGraphViewModel: ViewModel() {
 
     fun getInitialDate(): Date {
         val df1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        return df1.parse(initialPrice?.time!!)
+        return try {
+            df1.parse(initialPrice?.time ?: "")
+        } catch (e: ParseException) {
+            return Date()
+        }
     }
 
     fun setInterval(interval: String) {
