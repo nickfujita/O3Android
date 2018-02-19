@@ -34,7 +34,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         override fun onReceive(context: Context, intent: Intent) {
             homeModel.watchAddresses = PersistentStore.getWatchAddresses()
             homeModel.tokens = PersistentStore.getSelectedNEP5Tokens()
-            homeModel.loadAssetsFromModel(false)
         }
     }
 
@@ -111,7 +110,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 // This delay allows for the scroll to complete before the UI thread gets blocked
                 Handler().postDelayed({
                     homeModel?.setDisplayType(displayType)
-                    homeModel?.loadAssetsFromModel(false)
+                    homeModel?.loadAssetsFromModel(true)
                 }, 200)
             }
         })
@@ -119,7 +118,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
 
     override fun updateBalanceData(assets: ArrayList<AccountAsset>) {
         onUiThread {
-            assetListAdapter?.assets = assets
+            assetListAdapter?.assets = ArrayList(assets)
             assetListAdapter?.notifyDataSetChanged()
         }
         homeModel.loadPortfolioValue()

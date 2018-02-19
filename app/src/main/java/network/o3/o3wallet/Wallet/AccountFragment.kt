@@ -11,6 +11,7 @@ import network.o3.o3wallet.API.CoZ.Claims
 import network.o3.o3wallet.API.CoZ.CoZClient
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
+import android.content.res.Resources
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.res.ResourcesCompat
@@ -106,8 +107,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         assetListView = view.findViewById<ListView>(R.id.assetListView)
         unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
 
-        val muli = ResourcesCompat.getFont(view.context, R.font.muli_bold)
-
         swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
@@ -121,8 +120,15 @@ class AccountFragment : Fragment(), TokenListProtocol {
         }
 
         setupActionButton(view)
+        try {
+            val muli = ResourcesCompat.getFont(view.context, R.font.muli_bold)
+            unclaimedGASLabel.typeface = muli
+        } catch (e: Resources.NotFoundException) {
 
-        unclaimedGASLabel.typeface = muli
+        }
+
+
+
         unclaimedGASLabel.text = "0.00000000"
         claimButton.setOnClickListener { claimGasTapped() }
 
