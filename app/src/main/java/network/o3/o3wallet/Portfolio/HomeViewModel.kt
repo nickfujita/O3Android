@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import kotlin.collections.ArrayList
 
 
 /**
@@ -39,8 +40,8 @@ class HomeViewModel {
     lateinit var delegate: HomeViewModelProtocol
 
 
-    var assetsReadOnly = ArrayList<AccountAsset>()
-    var assetsWritable = ArrayList<AccountAsset>()
+    var assetsReadOnly = arrayListOf<AccountAsset>()
+    var assetsWritable = arrayListOf<AccountAsset>()
     var watchAddresses = PersistentStore.getWatchAddresses()
     var tokens = PersistentStore.getSelectedNEP5Tokens()
     var isLoadingData = false
@@ -116,10 +117,11 @@ class HomeViewModel {
     fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
         var assets = ArrayList<AccountAsset>(assetsWritable)
         for (asset in assetsReadOnly) {
-            val index = assets.indices.find { assetsReadOnly[it].name == asset.name } ?: -1
+            val index = assets.indices.find { assets[it].name == asset.name } ?: -1
             if (index == -1) {
-                assets.add(asset)
+                assets.add(asset.copy())
             } else {
+                assets[index] = assets[index].copy()
                 assets[index].value += asset.value
             }
         }
@@ -127,14 +129,18 @@ class HomeViewModel {
     }
 
     fun getSortedAssets(): ArrayList<AccountAsset> {
-        var assets = when (displayType) {
-            DisplayType.HOT -> assetsWritable
-            DisplayType.COMBINED -> combineReadOnlyAndWritable()
-            DisplayType.COLD -> assetsReadOnly
+        val assets = when (displayType) {
+            DisplayType.HOT -> ArrayList(assetsWritable)
+            DisplayType.COMBINED -> ArrayList(combineReadOnlyAndWritable())
+            DisplayType.COLD -> ArrayList(assetsReadOnly)
         }
-        assets = ArrayList(assets)
-        var sortedAssets = ArrayList<AccountAsset>()
-        val neoIndex = assets.indices.find { assets[it].name == "NEO"} ?: -1
+        val assetsDeepCopy = arrayListOf<AccountAsset>()
+        for (elem in assets) {
+            assetsDeepCopy.add(elem.copy())
+        }
+
+        val sortedAssets = ArrayList<AccountAsset>()
+        val neoIndex = assetsDeepCopy.indices.find { assetsDeepCopy[it].name == "NEO" } ?: -1
         //Make UTXO assets default supported
         if (neoIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
@@ -144,11 +150,11 @@ class HomeViewModel {
                     type = AssetType.NATIVE,
                     value = 0.0))
         } else {
-            sortedAssets.add(assets[neoIndex])
-            assets.removeAt(neoIndex)
+            sortedAssets.add(assetsDeepCopy[neoIndex].copy())
+            assetsDeepCopy.removeAt(neoIndex)
         }
 
-        val gasIndex = assets.indices.find { assets[it].name == "GAS"} ?: -1
+        val gasIndex = assetsDeepCopy.indices.find { assetsDeepCopy[it].name == "GAS" } ?: -1
         if (gasIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                     name = NeoNodeRPC.Asset.GAS.name,
@@ -157,12 +163,12 @@ class HomeViewModel {
                     type = AssetType.NATIVE,
                     value = 0.0))
         } else {
-            sortedAssets.add(assets[gasIndex])
-            assets.removeAt(gasIndex)
+            sortedAssets.add(assetsDeepCopy[gasIndex].copy())
+            assetsDeepCopy.removeAt(gasIndex)
         }
 
-        assets.sortBy { it.name }
-        sortedAssets.addAll(assets)
+        assetsDeepCopy.sortBy { it.name }
+        sortedAssets.addAll(assetsDeepCopy)
 
         return sortedAssets
     }
