@@ -11,7 +11,9 @@ import android.widget.Toast
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.topup_activity_send_amount.*
-import neowallet.Neowallet
+import neoutils.Neoutils.generateFromWIF
+import neoutils.Neoutils.recoverFromSharedSecret
+import neoutils.Wallet
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.Wallet.toast
@@ -50,7 +52,7 @@ class TopupSendAmountActivity : LocalizationActivity() {
             return
         }
         scanButton.isEnabled = false
-        val wallet = Neowallet.generateFromWIF(coldStorageWIF)
+        val wallet = generateFromWIF(coldStorageWIF)
         scanButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
         NeoNodeRPC(PersistentStore.getNodeURL()).sendNativeAssetTransaction(wallet!!, this.selectedAsset, amount, Account.getWallet()?.address!!, null) {
             runOnUiThread {
@@ -92,7 +94,7 @@ class TopupSendAmountActivity : LocalizationActivity() {
             val sharedSecretPieceOne = Account.getColdStorageKeyFragmentOnDevice()
             val sharedSecretPieceTwo = result.contents
             try {
-                coldStorageWIF = Neowallet.recoverFromSharedSecret(sharedSecretPieceOne.hexStringToByteArray(), sharedSecretPieceTwo.hexStringToByteArray())
+                coldStorageWIF = recoverFromSharedSecret(sharedSecretPieceOne.hexStringToByteArray(), sharedSecretPieceTwo.hexStringToByteArray())
                 scanButton.text = resources.getString(R.string.confirm)
                 lockImageView.image = resources.getDrawable(R.drawable.ic_lock_open_alt)
                 scanButton.setOnClickListener { finishTransaction() }

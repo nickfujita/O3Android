@@ -20,6 +20,7 @@
     import android.widget.*
     import com.akexorcist.localizationactivity.ui.LocalizationActivity
     import com.google.zxing.integration.android.IntentIntegrator
+    import neoutils.Neoutils.validateNEOAddress
     import network.o3.o3wallet.API.NEO.AccountAsset
     import network.o3.o3wallet.Account
     import network.o3.o3wallet.PersistentStore
@@ -264,12 +265,15 @@
             if (result != null) {
                 if (result.contents == null) {
                     Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
-                } else {
+                } else if (validateNEOAddress(result.contents))
                     addressTextView.setText(result.contents)
+                } else try {
+                    //val uri = Nep9.newURI(result!!.contents)
+                    //addressTextView.setText(uri.address)
+                } catch(e: Exception) {
                 }
             }
         }
-    }
 
     fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {

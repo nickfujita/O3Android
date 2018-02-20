@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.PopupMenu
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import kotlinx.android.synthetic.main.topup_activity_topup_cold_storage_balance.*
-import neowallet.Neowallet
+import neoutils.Wallet
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.Account
