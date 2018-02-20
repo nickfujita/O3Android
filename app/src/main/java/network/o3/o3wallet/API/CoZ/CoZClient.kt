@@ -1,16 +1,9 @@
 package network.o3.o3wallet.API.CoZ
 
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.jsonArray
-import com.github.salomonbrys.kotson.jsonObject
 import com.google.gson.Gson
-import neowallet.Neowallet
-import network.o3.o3wallet.API.NEO.NeoNodeRPC
-import network.o3.o3wallet.Account
-import network.o3.o3wallet.hexStringToByteArray
-import network.o3.o3wallet.toHex
+
 
 /**
  * Created by drei on 11/24/17.

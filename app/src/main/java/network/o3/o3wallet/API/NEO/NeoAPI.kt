@@ -7,16 +7,11 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import neowallet.Wallet
+import neoutils.Neoutils.sign
+import neoutils.Neoutils.validateNEOAddress
 import network.o3.o3wallet.API.CoZ.*
-import neowallet.Neowallet
-import java.math.BigInteger
-import android.R.array
-import android.util.Size
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
+import neoutils.Wallet
 import network.o3.o3wallet.*
-import org.json.JSONArray
 import unsigned.toUByte
 import java.nio.*
 
@@ -132,7 +127,7 @@ class NeoNodeRPC {
     }
 
     fun validateAddress(address: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
-        val valid = neowallet.Neowallet.validateNEOAddress(address)
+        val valid = validateNEOAddress(address)
         completion(kotlin.Pair<kotlin.Boolean?, Error?>(valid, null))
     }
 
@@ -377,7 +372,7 @@ class NeoNodeRPC {
                 asset, inputData.payload!!, inputData.totalAmount!!,
                 amount, toAddress, attributes)
         val privateKeyHex = wallet.privateKey.toHex()
-        val signatureData = Neowallet.sign(rawTransaction, privateKeyHex)
+        val signatureData = sign(rawTransaction, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawTransaction, signatureData)
         return finalPayload
     }
@@ -402,7 +397,7 @@ class NeoNodeRPC {
                 Account?.getWallet()?.address!!, null)
 
         val privateKeyHex = wallet.privateKey.toHex()
-        val signature = Neowallet.sign(rawTransaction, privateKeyHex)
+        val signature = sign(rawTransaction, privateKeyHex)
         var finalPayload = concatenatePayloadData(wallet, rawTransaction, signature)
         finalPayload = finalPayload + contractAddress.hexStringToByteArray()
         return finalPayload
@@ -452,7 +447,7 @@ class NeoNodeRPC {
     private fun generateClaimTransactionPayload(wallet: Wallet, claims: Claims): ByteArray {
         val rawClaim = generateClaimInputData(wallet, claims)
         val privateKeyHex = wallet.privateKey.toHex()
-        val signature = Neowallet.sign(rawClaim, privateKeyHex)
+        val signature = sign(rawClaim, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawClaim, signature)
         return finalPayload
     }
