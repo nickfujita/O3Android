@@ -86,7 +86,7 @@
             }
         }
 
-        fun showFoundContact(address:String) {
+        fun showFoundContact(address: String) {
             val contacts = PersistentStore.getContacts()
             val foundContact = contacts.find { it.address == address }
             val toLabel = findViewById<TextView>(R.id.sendToLabel)
@@ -282,10 +282,11 @@
                     }
                     updateSelectedAsset()
 
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                 }
             }
         }
+    }
 
     fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {

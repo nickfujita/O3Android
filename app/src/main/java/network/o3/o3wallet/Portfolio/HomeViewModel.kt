@@ -230,7 +230,7 @@ class HomeViewModel {
                         assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                                 name = NeoNodeRPC.Asset.GAS.name,
                                 symbol = NeoNodeRPC.Asset.GAS.name,
-                                decimal = 0,
+                                decimal = 8,
                                 type = AssetType.NATIVE,
                                 value = asset.value)
                     }
