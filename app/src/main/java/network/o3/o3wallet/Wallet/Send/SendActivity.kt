@@ -22,6 +22,7 @@
     import com.google.zxing.integration.android.IntentIntegrator
     import neoutils.Neoutils
     import neoutils.Neoutils.parseNEP9URI
+    import neoutils.Neoutils.validateNEOAddress
     import network.o3.o3wallet.API.NEO.AccountAsset
     import network.o3.o3wallet.Account
     import network.o3.o3wallet.PersistentStore
@@ -285,7 +286,6 @@
                 }
             }
         }
-    }
 
     fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {

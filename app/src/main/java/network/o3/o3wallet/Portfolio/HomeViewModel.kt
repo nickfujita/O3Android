@@ -143,6 +143,7 @@ class HomeViewModel {
             if (index == -1) {
                 assets.add(deepCopyAsset(asset))
             } else {
+                assets[index] = assets[index].copy()
                 assets[index].value += asset.value
             }
         }
