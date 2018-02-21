@@ -20,6 +20,8 @@
     import android.widget.*
     import com.akexorcist.localizationactivity.ui.LocalizationActivity
     import com.google.zxing.integration.android.IntentIntegrator
+    import neoutils.Neoutils
+    import neoutils.Neoutils.parseNEP9URI
     import neoutils.Neoutils.validateNEOAddress
     import network.o3.o3wallet.API.NEO.AccountAsset
     import network.o3.o3wallet.Account
@@ -84,7 +86,7 @@
             }
         }
 
-        fun showFoundContact(address:String) {
+        fun showFoundContact(address: String) {
             val contacts = PersistentStore.getContacts()
             val foundContact = contacts.find { it.address == address }
             val toLabel = findViewById<TextView>(R.id.sendToLabel)
@@ -265,15 +267,26 @@
             if (result != null) {
                 if (result.contents == null) {
                     Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
-                } else if (validateNEOAddress(result.contents))
+                } else if (Neoutils.validateNEOAddress(result.contents)) {
                     addressTextView.setText(result.contents)
                 } else try {
-                    //val uri = Nep9.newURI(result!!.contents)
-                    //addressTextView.setText(uri.address)
-                } catch(e: Exception) {
+                    val uri = parseNEP9URI(result!!.contents)
+                    addressTextView.setText(uri.to)
+                    amountTextView.setText(uri.amount.toString())
+                    isNativeAsset = true
+                    assetID = uri.assetID
+                    if (assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+                        shortName = "NEO"
+                    } else {
+                        shortName = "GAS"
+                    }
+                    updateSelectedAsset()
+
+                } catch (e: Exception) {
                 }
             }
         }
+    }
 
     fun TextView.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {

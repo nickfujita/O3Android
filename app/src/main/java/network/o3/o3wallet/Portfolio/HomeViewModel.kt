@@ -64,6 +64,28 @@ class HomeViewModel {
         return this.interval
     }
 
+    fun deepCopyAssets(arrayList: ArrayList<AccountAsset>): ArrayList<AccountAsset> {
+        val assetsDeepCopy = ArrayList<AccountAsset>()
+        for (elem in arrayList) {
+            assetsDeepCopy.add(AccountAsset(assetID = elem.assetID,
+                    name = elem.name,
+                    symbol = elem.symbol,
+                    decimal = elem.decimal,
+                    type = elem.type,
+                    value = elem.value))
+        }
+        return assetsDeepCopy
+    }
+
+    fun deepCopyAsset(asset: AccountAsset): AccountAsset {
+        return AccountAsset(assetID = asset.assetID,
+                name = asset.name,
+                symbol = asset.symbol,
+                decimal = asset.decimal,
+                type = asset.type,
+                value = asset.value)
+    }
+
     fun getInitialPortfolioValue(): Double  {
         return when(currency) {
             CurrencyType.BTC -> initialPrice?.averageBTC ?: 0.0
@@ -115,11 +137,11 @@ class HomeViewModel {
     }
 
     fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
-        var assets = ArrayList<AccountAsset>(assetsWritable)
+        var assets = deepCopyAssets(assetsWritable)
         for (asset in assetsReadOnly) {
             val index = assets.indices.find { assets[it].name == asset.name } ?: -1
             if (index == -1) {
-                assets.add(asset.copy())
+                assets.add(deepCopyAsset(asset))
             } else {
                 assets[index] = assets[index].copy()
                 assets[index].value += asset.value
@@ -129,18 +151,13 @@ class HomeViewModel {
     }
 
     fun getSortedAssets(): ArrayList<AccountAsset> {
-        val assets = when (displayType) {
-            DisplayType.HOT -> ArrayList(assetsWritable)
-            DisplayType.COMBINED -> ArrayList(combineReadOnlyAndWritable())
-            DisplayType.COLD -> ArrayList(assetsReadOnly)
+        val assetsToSort = when (displayType) {
+            DisplayType.HOT -> deepCopyAssets(assetsWritable)
+            DisplayType.COMBINED -> deepCopyAssets(combineReadOnlyAndWritable())
+            DisplayType.COLD -> deepCopyAssets(assetsReadOnly)
         }
-        val assetsDeepCopy = arrayListOf<AccountAsset>()
-        for (elem in assets) {
-            assetsDeepCopy.add(elem.copy())
-        }
-
         val sortedAssets = ArrayList<AccountAsset>()
-        val neoIndex = assetsDeepCopy.indices.find { assetsDeepCopy[it].name == "NEO" } ?: -1
+        val neoIndex = assetsToSort.indices.find { assetsToSort[it].name == "NEO" } ?: -1
         //Make UTXO assets default supported
         if (neoIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
@@ -150,25 +167,25 @@ class HomeViewModel {
                     type = AssetType.NATIVE,
                     value = 0.0))
         } else {
-            sortedAssets.add(assetsDeepCopy[neoIndex].copy())
-            assetsDeepCopy.removeAt(neoIndex)
+            sortedAssets.add(deepCopyAsset(assetsToSort[neoIndex]))
+            assetsToSort.removeAt(neoIndex)
         }
 
-        val gasIndex = assetsDeepCopy.indices.find { assetsDeepCopy[it].name == "GAS" } ?: -1
+        val gasIndex = assetsToSort.indices.find { assetsToSort[it].name == "GAS" } ?: -1
         if (gasIndex == -1) {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                     name = NeoNodeRPC.Asset.GAS.name,
                     symbol = NeoNodeRPC.Asset.GAS.name,
-                    decimal = 0,
+                    decimal = 8,
                     type = AssetType.NATIVE,
                     value = 0.0))
         } else {
-            sortedAssets.add(assetsDeepCopy[gasIndex].copy())
-            assetsDeepCopy.removeAt(gasIndex)
+            sortedAssets.add(deepCopyAsset(assetsToSort[gasIndex]))
+            assetsToSort.removeAt(gasIndex)
         }
 
-        assetsDeepCopy.sortBy { it.name }
-        sortedAssets.addAll(assetsDeepCopy)
+        assetsToSort.sortBy { it.name }
+        sortedAssets.addAll(deepCopyAssets(assetsToSort))
 
         return sortedAssets
     }
@@ -213,7 +230,7 @@ class HomeViewModel {
                         assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                                 name = NeoNodeRPC.Asset.GAS.name,
                                 symbol = NeoNodeRPC.Asset.GAS.name,
-                                decimal = 0,
+                                decimal = 8,
                                 type = AssetType.NATIVE,
                                 value = asset.value)
                     }
