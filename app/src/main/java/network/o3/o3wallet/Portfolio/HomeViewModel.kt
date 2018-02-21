@@ -143,7 +143,6 @@ class HomeViewModel {
             if (index == -1) {
                 assets.add(deepCopyAsset(asset))
             } else {
-                assets[index] = deepCopyAsset(assets[index])
                 assets[index].value += asset.value
             }
         }
@@ -176,7 +175,7 @@ class HomeViewModel {
             sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
                     name = NeoNodeRPC.Asset.GAS.name,
                     symbol = NeoNodeRPC.Asset.GAS.name,
-                    decimal = 0,
+                    decimal = 8,
                     type = AssetType.NATIVE,
                     value = 0.0))
         } else {
