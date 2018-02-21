@@ -125,7 +125,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             }
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
-            val data = Uri.parse("mailto:hello@o3.network")
+            val data = Uri.parse("mailto:support@o3.network")
             intent.data = data
             startActivity(mContext, intent, null)
             return
