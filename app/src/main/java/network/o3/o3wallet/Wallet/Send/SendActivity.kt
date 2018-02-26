@@ -114,7 +114,12 @@
         private fun displayAssets() {
             val assetSelectorSheet = AssetSelectionBottomSheet()
             val assets = intent.extras.getSerializable("assets")
-            assetSelectorSheet.assets = assets as ArrayList<AccountAsset>
+            if (assets == null) {
+                assetSelectorSheet.assets = arrayListOf()
+            } else {
+                assetSelectorSheet.assets = assets as ArrayList<AccountAsset>
+            }
+
             assetSelectorSheet.show(this.supportFragmentManager, assetSelectorSheet.tag)
         }
 
