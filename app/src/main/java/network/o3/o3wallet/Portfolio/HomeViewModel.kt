@@ -35,7 +35,7 @@ class HomeViewModel {
     private var interval: String = "24H"
     private var currency = CurrencyType.USD
     lateinit private var portfolio: Portfolio
-    private lateinit var balanceCountDownLatch: CountDownLatch
+    private var balanceCountDownLatch: CountDownLatch? = null
 
     lateinit var delegate: HomeViewModelProtocol
 
@@ -191,6 +191,9 @@ class HomeViewModel {
     }
 
     fun loadAssetsFromModel(useCached: Boolean) {
+        if (balanceCountDownLatch != null && balanceCountDownLatch?.count?.toInt() != 0) {
+            return
+        }
         if (!useCached) {
             assetsReadOnly.clear()
             assetsWritable.clear()
@@ -206,7 +209,7 @@ class HomeViewModel {
         for (address in watchAddresses) {
             loadAssetsFor(address.address, true)
         }
-        balanceCountDownLatch.await()
+        balanceCountDownLatch?.await()
         delegate.updateBalanceData(getSortedAssets())
     }
 
@@ -214,7 +217,7 @@ class HomeViewModel {
         bg {
             NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address) {
                 if (it.second != null) {
-                    balanceCountDownLatch.countDown()
+                    balanceCountDownLatch?.countDown()
                     return@getAccountState
                 }
                 for (asset in it.first?.balances!!) {
@@ -240,7 +243,7 @@ class HomeViewModel {
                         this.addWritableAsset(assetToAdd)
                     }
                 }
-                balanceCountDownLatch.countDown()
+                balanceCountDownLatch?.countDown()
             }
         }
 
@@ -249,7 +252,7 @@ class HomeViewModel {
             bg {
                 NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(token.tokenHash, address) {
                     if (it.second != null) {
-                        balanceCountDownLatch.countDown()
+                        balanceCountDownLatch?.countDown()
                         return@getTokenBalanceOf
                     }
                     val amountDecimal: Double = (it.first!!.toDouble() / (Math.pow(10.0, token.decimal.toDouble())))
@@ -264,7 +267,7 @@ class HomeViewModel {
                     } else {
                         this.addWritableAsset(tokenToAdd)
                     }
-                    balanceCountDownLatch.countDown()
+                    balanceCountDownLatch?.countDown()
                 }
             }
         }

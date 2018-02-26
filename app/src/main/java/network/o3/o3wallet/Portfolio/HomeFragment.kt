@@ -50,7 +50,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         assetListAdapter = AssetListAdapter(this.context!!, this)
         homeModel = HomeViewModel()
         homeModel.delegate = this
-
         homeModel.loadAssetsFromModel(false)
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
