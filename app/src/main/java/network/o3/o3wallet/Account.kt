@@ -63,7 +63,7 @@ object Account {
             return false
         }
         val storedEncryptedWIF = storedVal?.data?.hexStringToByteArray()
-        if (storedEncryptedWIF == null || storedEncryptedWIF.size == 0) {
+        if (storedEncryptedWIF == null || storedEncryptedWIF.size == 0 || !Decryptor().keyStoreEntryExists("O3 Key")) {
             return false
         }
         return true

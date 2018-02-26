@@ -15,6 +15,7 @@ import com.crashlytics.android.Crashlytics
 import com.google.zxing.integration.android.IntentIntegrator
 import io.fabric.sdk.android.Fabric
 import network.o3.o3wallet.Account
+import network.o3.o3wallet.BuildConfig
 import network.o3.o3wallet.R
 import network.o3.o3wallet.SelectingBestNode
 import org.jetbrains.anko.alert
@@ -27,7 +28,9 @@ class MainActivity : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Fabric.with(this, Crashlytics())
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, Crashlytics())
+        }
         setContentView(R.layout.onboarding_activity_main)
 
         val loginButton = findViewById<Button>(R.id.loginButton)
