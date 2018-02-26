@@ -134,17 +134,28 @@ object PersistentStore {
     }
 
 
-    fun getSelectedNEP5Tokens(): HashMap<String,NEP5Token> {
+    fun getSelectedNEP5Tokens(): HashMap<String, NEP5Token> {
         var jsonString = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
                 .getString("SELECTED_NEP5_TOKENS", null)
-
         if (jsonString == null) {
-            return HashMap<String,NEP5Token>()
+            return HashMap<String, NEP5Token>()
         }
 
         val gson = Gson()
-        val list = gson.fromJson<HashMap<String,NEP5Token>>(jsonString)
-        return list
+        val list = gson.fromJson(jsonString, Map::class.java)
+        var tokens = HashMap<String, NEP5Token>()
+        for (key in list.keys) {
+            val assetMap = list[key] as Map<String, *>
+            var asset =  NEP5Token(tokenHash = assetMap["tokenHash"] as String,
+                    name = assetMap["name"] as String,
+                    totalSupply = assetMap["totalSupply"] as Double,
+                    decimal = (assetMap["decimal"] as Double).toInt(),
+                    symbol = assetMap["symbol"] as String
+            )
+            tokens.put(key as String, asset)
+        }
+
+        return tokens
     }
 
     fun addToken(token: NEP5Token): HashMap<String,NEP5Token> {
