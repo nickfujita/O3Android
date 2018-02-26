@@ -1,5 +1,6 @@
 package network.o3.o3wallet.Crypto
 
+import android.util.Log
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -21,6 +22,10 @@ class Decryptor {
     private fun initKeyStore() {
         keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
         keyStore?.load(null)
+    }
+
+    fun keyStoreEntryExists(alias: String): Boolean {
+        return keyStore?.getEntry(alias, null) != null
     }
 
     fun decrypt(alias: String, encryptedData: ByteArray, encryptionIv: ByteArray): String {

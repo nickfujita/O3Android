@@ -74,7 +74,7 @@ class LoginActivity : LocalizationActivity() {
         }
 
         if (wifTextfield.text.trim().count() > 0) {
-            val valid = Account.fromWIF(wifTextfield.text.toString())
+            val valid = Account.fromWIF(wifTextfield.text.trim().toString())
             if (valid == false) {
                 baseContext.toast(resources.getString(R.string.invalid_wif))
                 return

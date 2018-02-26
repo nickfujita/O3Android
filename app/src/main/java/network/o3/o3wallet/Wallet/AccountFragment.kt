@@ -46,7 +46,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
     private lateinit var claims: Claims
-    private lateinit var currentAccountState: AccountState
+    private var currentAccountState: AccountState? = null
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
     private lateinit var swipeContainer: SwipeRefreshLayout
@@ -376,10 +376,11 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     fun claimGasTapped() {
-        claimToast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
         if (this.currentAccountState == null) {
+            context?.toast("Unable to retrieve account details, check settings -> network")
             return
         }
+        claimToast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
         setClaiming(true)
         claimProgress.visibility = View.VISIBLE
         claimButton.isEnabled = false
