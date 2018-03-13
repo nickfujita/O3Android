@@ -20,6 +20,7 @@
     import android.widget.*
     import com.akexorcist.localizationactivity.ui.LocalizationActivity
     import com.google.zxing.integration.android.IntentIntegrator
+    import kotlinx.android.synthetic.main.wallet_activity_send.*
     import neoutils.Neoutils
     import neoutils.Neoutils.parseNEP9URI
     import neoutils.Neoutils.validateNEOAddress
@@ -27,6 +28,7 @@
     import network.o3.o3wallet.Account
     import network.o3.o3wallet.PersistentStore
     import network.o3.o3wallet.R
+    import network.o3.o3wallet.Settings.ContactsFragment
     import network.o3.o3wallet.Wallet.toast
     import network.o3.o3wallet.Wallet.toastUntilCancel
     import org.jetbrains.anko.alert
@@ -75,6 +77,7 @@
 
             pasteAddressButton.setOnClickListener { pasteAddressTapped() }
             scanAddressButton.setOnClickListener { scanAddressTapped() }
+            fromAddressButton.setOnClickListener { addFromAddressTapped() }
 
             val extras = intent.extras
             val address = extras.getString("address")
@@ -255,6 +258,14 @@
                 val item = clip.getItemAt(0)
                 addressTextView.text = item.text.toString()
             }
+        }
+
+        private fun addFromAddressTapped() {
+            val contactsModal = ContactsFragment.newInstance()
+            val args = Bundle()
+            args.putBoolean("canAddAddress", false)
+            contactsModal.arguments = args
+            contactsModal.show(supportFragmentManager, contactsModal.tag)
         }
 
 
