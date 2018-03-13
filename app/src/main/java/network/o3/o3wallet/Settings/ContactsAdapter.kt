@@ -13,6 +13,8 @@ import network.o3.o3wallet.Contact
 import network.o3.o3wallet.R
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.opengl.Visibility
+import network.o3.o3wallet.Wallet.Send.SendActivity
 import network.o3.o3wallet.Wallet.toast
 
 
@@ -54,15 +56,7 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment, canAddAddres
         }
     }
 
-    fun getAddressView(layoutInflater: LayoutInflater, position: Int, viewGroup: ViewGroup?): View {
-        val view = layoutInflater.inflate(R.layout.settings_address_entry_row, viewGroup, false)
-        val titleTextView = view.findViewById<TextView>(R.id.addressNickNameTextView)
-        val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
-        val optionButton = view.findViewById<ImageButton>(R.id.contact_option_button)
-
-        titleTextView.text = getItem(position).nickname
-        subtitleTextView.text = getItem(position).address
-
+    fun setOptionMenu(optionButton: ImageButton, position: Int) {
         optionButton.setOnClickListener {
             val popup = PopupMenu(mContext,optionButton)
             popup.menuInflater.inflate(R.menu.contact_menus,popup.menu)
@@ -84,6 +78,27 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment, canAddAddres
             }
             popup.show()
         }
+    }
+
+    fun getAddressView(layoutInflater: LayoutInflater, position: Int, viewGroup: ViewGroup?): View {
+        val view = layoutInflater.inflate(R.layout.settings_address_entry_row, viewGroup, false)
+        val titleTextView = view.findViewById<TextView>(R.id.addressNickNameTextView)
+        val subtitleTextView = view.findViewById<TextView>(R.id.addressTextView)
+        val optionButton = view.findViewById<ImageButton>(R.id.contact_option_button)
+
+        titleTextView.text = getItem(position).nickname
+        subtitleTextView.text = getItem(position).address
+
+        if (mCanAddAddress) {
+            setOptionMenu(optionButton, position)
+        } else {
+            optionButton.visibility = View.GONE
+            view.setOnClickListener {
+                (mContext as SendActivity).addressTextView.text = subtitleTextView.text
+                mFragment.dismiss()
+            }
+        }
+
 
         return view
     }
