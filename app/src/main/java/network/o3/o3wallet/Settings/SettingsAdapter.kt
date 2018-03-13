@@ -103,7 +103,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         if (position == CellType.CONTACTS.ordinal  ) {
             val contactsModal = ContactsFragment.newInstance()
             val args = Bundle()
-            args.putBoolean("canAddAddress", false)
+            args.putBoolean("canAddAddress", true)
             contactsModal.arguments = args
             contactsModal.show((mContext as LocalizationActivity).supportFragmentManager, contactsModal.tag)
             return
