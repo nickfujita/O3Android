@@ -272,12 +272,12 @@
             if (result != null) {
                 if (result.contents == null) {
                     Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
-                } else if (Neoutils.validateNEOAddress(result.contents)) {
-                    addressTextView.setText(result.contents)
+                } else if (Neoutils.validateNEOAddress(result.contents.trim())) {
+                    addressTextView.text = result.contents.trim()
                 } else try {
-                    val uri = parseNEP9URI(result!!.contents)
-                    addressTextView.setText(uri.to)
-                    amountTextView.setText(uri.amount.toString())
+                    val uri = parseNEP9URI(result.contents.trim())
+                    addressTextView.text = uri.to
+                    amountTextView.text = uri.amount.toString()
                     isNativeAsset = true
                     assetID = uri.assetID
                     if (assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
