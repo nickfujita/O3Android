@@ -374,6 +374,7 @@ class NeoNodeRPC {
         val privateKeyHex = wallet.privateKey.toHex()
         val signatureData = sign(rawTransaction, privateKeyHex)
         val finalPayload = concatenatePayloadData(wallet, rawTransaction, signatureData)
+        Log.d("PAYLAOD:", finalPayload.toHex())
         return finalPayload
     }
 
