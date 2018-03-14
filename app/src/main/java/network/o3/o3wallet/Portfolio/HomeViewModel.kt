@@ -190,7 +190,7 @@ class HomeViewModel {
         return sortedAssets
     }
 
-    @Synchronized
+    //@Synchronized
     fun loadAssetsFromModel(useCached: Boolean) {
         if (balanceCountDownLatch != null && balanceCountDownLatch?.count?.toInt() != 0) {
             return
