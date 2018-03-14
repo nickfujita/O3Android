@@ -163,10 +163,16 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     }
 
     fun updateHeader(amount: String, percentChange: Double) {
-        viewPager?.setCurrentItem(viewPager?.currentItem!!)
-        val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
-        val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
-        header.setHeaderInfo(amount, percentChange, homeModel.getInterval(), homeModel.getInitialDate())
+        var currentItem = 0
+        if (viewPager != null) {
+            currentItem = viewPager?.currentItem!!
+        }
+        viewPager?.setCurrentItem(currentItem)
+        val name = "android:switcher:" + R.id.portfolioHeaderFragment + ":" + currentItem
+        val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader?
+        if (header != null) {
+            header.setHeaderInfo(amount, percentChange, homeModel.getInterval(), homeModel.getInitialDate())
+        }
     }
 
     override fun showLoadingIndicator() {

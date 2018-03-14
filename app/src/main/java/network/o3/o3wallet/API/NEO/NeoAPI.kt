@@ -17,7 +17,7 @@ import java.nio.*
 
 
 class NeoNodeRPC {
-    var nodeURL = "http://node1.o3.network:10332"
+    var nodeURL = "http://seed1.o3node.org:10332"
 
     //var nodeURL = "http://seed3.neo.org:20332" //TESTNET
     enum class Asset() {
