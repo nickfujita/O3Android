@@ -20,6 +20,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 import android.os.Build
+import android.os.Bundle
 import android.util.DisplayMetrics
 import com.akexorcist.localizationactivity.core.LanguageSetting.getLanguage
 import com.akexorcist.localizationactivity.core.LanguageSetting.setLanguage
@@ -101,6 +102,9 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     fun getClickListenerForPosition(position: Int) {
         if (position == CellType.CONTACTS.ordinal  ) {
             val contactsModal = ContactsFragment.newInstance()
+            val args = Bundle()
+            args.putBoolean("canAddAddress", true)
+            contactsModal.arguments = args
             contactsModal.show((mContext as LocalizationActivity).supportFragmentManager, contactsModal.tag)
             return
         } else if (position == CellType.WATCHADRESS.ordinal) {

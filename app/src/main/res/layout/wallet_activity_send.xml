@@ -56,6 +56,16 @@
                     android:text="@string/paste_send"
                     app:layout_constraintEnd_toStartOf="@+id/scanAddressButton"
                     tools:layout_editor_absoluteY="0dp" />
+
+                <Button
+                    android:id="@+id/fromAddressButton"
+                    style="@style/BorderLessButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_address_book"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/pasteAddressButton"
+                    app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
             <EditText
