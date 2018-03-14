@@ -28,7 +28,7 @@ class SelectingBestNode : LocalizationActivity() {
 
     fun getBestNode() {
 
-        val nodes = "http://seed1.neo.org:10332," +
+        val nodes = "https://seed1.neo.org:10331," +
                 "http://seed2.neo.org:10332," +
                 "http://seed3.neo.org:10332," +
                 "http://seed4.neo.org:10332," +
@@ -38,8 +38,9 @@ class SelectingBestNode : LocalizationActivity() {
                 "http://seed3.cityofzion.io:8080," +
                 "http://seed4.cityofzion.io:8080," +
                 "http://seed5.cityofzion.io:8080," +
-                "http://node1.o3.network:10332," +
-                "http://node2.o3.network:10332"
+                "http://seed1.o3node.org:10332," +
+                "http://seed2.o3node.org:10332," +
+                "http://seed3.o3node.org:10332"
 
 
         async(UI) {

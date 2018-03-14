@@ -1,5 +1,6 @@
 package network.o3.o3wallet
 
+import android.app.Dialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -10,6 +11,10 @@ import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
 import network.o3.o3wallet.Wallet.TabbedAccount
+import android.content.DialogInterface
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.yesButton
 
 
 class MainTabbedActivity : LocalizationActivity() {
@@ -20,6 +25,12 @@ class MainTabbedActivity : LocalizationActivity() {
             TabbedAccount.newInstance(), NewsFeedFragment.newInstance(),
             SettingsFragment.newInstance())
 
+    override fun onBackPressed() {
+        alert ("Are you sure you want to exit?", "") {
+            yesButton { super.onBackPressed() }
+            noButton {  }
+        }.show()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabbar_activity_main_tabbed)
