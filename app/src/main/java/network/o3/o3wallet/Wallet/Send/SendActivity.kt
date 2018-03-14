@@ -45,6 +45,8 @@
         lateinit var scanAddressButton: Button
         lateinit var view: View
 
+        var ownedAssets: ArrayList<AccountAsset> = arrayListOf()
+
         var isNativeAsset = true
         //if native asset this refers to assetid, otherwise tokenhash
         var assetID = NeoNodeRPC.Asset.NEO.assetID()
@@ -81,6 +83,12 @@
 
             val extras = intent.extras
             val address = extras.getString("address")
+            val assets = intent.extras.getSerializable("assets")
+            if (intent.extras.getSerializable("assets") == null) {
+                ownedAssets = arrayListOf()
+            } else {
+                ownedAssets = intent.extras.getSerializable("assets") as ArrayList<AccountAsset>
+            }
 
             if (address != "") {
                 addressTextView.text = address
@@ -116,13 +124,7 @@
 
         private fun displayAssets() {
             val assetSelectorSheet = AssetSelectionBottomSheet()
-            val assets = intent.extras.getSerializable("assets")
-            if (assets == null) {
-                assetSelectorSheet.assets = arrayListOf()
-            } else {
-                assetSelectorSheet.assets = assets as ArrayList<AccountAsset>
-            }
-
+            assetSelectorSheet.assets = ownedAssets
             assetSelectorSheet.show(this.supportFragmentManager, assetSelectorSheet.tag)
         }
 
@@ -191,7 +193,11 @@
         private fun sendTokenAsset(address: String, amount: Double) {
             val wallet = Account.getWallet()
             val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
-
+            val gasIndex  = ownedAssets.indices.find { ownedAssets[it].name.toUpperCase() == "GAS"}
+            if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value == 0.0) {
+                baseContext.toast("You must have 0.0000000001 GAS to send a token")
+                return
+            }
             NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet!!.address, address, amount) {
                 runOnUiThread {
                     toast.cancel()
