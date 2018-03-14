@@ -1,6 +1,7 @@
 package network.o3.o3wallet.Wallet
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v4.app.FragmentPagerAdapter
 import network.o3.o3wallet.R
 import network.o3.o3wallet.Settings.ContactsFragment
@@ -28,9 +29,17 @@ class AccountFragmentPagerAdapter(fm: android.support.v4.app.FragmentManager, co
             return AccountTransactionsFragment.newInstance()
         }
         if (position == 2) {
-            return ContactsFragment.newInstance()
+            val contactsModal = ContactsFragment.newInstance()
+            val args = Bundle()
+            args.putBoolean("canAddAddress", true)
+            contactsModal.arguments = args
+            return contactsModal
         }
-        return ContactsFragment.newInstance()
+        val contactsModal = ContactsFragment.newInstance()
+        val args = Bundle()
+        args.putBoolean("canAddAddress", true)
+        contactsModal.arguments = args
+        return contactsModal
     }
 
     override fun getPageTitle(position: Int): CharSequence {

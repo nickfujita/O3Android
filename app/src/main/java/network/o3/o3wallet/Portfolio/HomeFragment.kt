@@ -37,6 +37,11 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        homeModel = HomeViewModel()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         LocalBroadcastManager.getInstance(this.context!!).registerReceiver(needReloadDataReciever,
@@ -48,7 +53,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         super.onViewCreated(view, savedInstanceState)
 
         assetListAdapter = AssetListAdapter(this.context!!, this)
-        homeModel = HomeViewModel()
         homeModel.delegate = this
         homeModel.loadAssetsFromModel(false)
         view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter

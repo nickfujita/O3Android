@@ -20,26 +20,21 @@ import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.*
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
+import kotlinx.android.synthetic.main.wallet_activity_send.*
 import neoutils.Neoutils
 import neoutils.Neoutils.parseNEP9URI
-import neoutils.SeedNodeResponse
+import neoutils.Neoutils.validateNEOAddress
 import network.o3.o3wallet.API.NEO.AccountAsset
-import network.o3.o3wallet.API.NEO.AccountState
-import network.o3.o3wallet.API.NEO.Balance
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import network.o3.o3wallet.Settings.ContactsFragment
 import network.o3.o3wallet.Wallet.toast
 import network.o3.o3wallet.Wallet.toastUntilCancel
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.coroutines.experimental.bg
-import org.jetbrains.anko.custom.onUiThread
 import org.jetbrains.anko.yesButton
 
-class SendActivity : LocalizationActivity() {
+class SendActivity: LocalizationActivity() {
 
     lateinit var addressTextView: TextView
     lateinit var amountTextView: TextView
@@ -50,7 +45,7 @@ class SendActivity : LocalizationActivity() {
     lateinit var scanAddressButton: Button
     lateinit var view: View
 
-    private var gasBalance: Balance? = null
+    var ownedAssets: ArrayList<AccountAsset> = arrayListOf()
 
     var isNativeAsset = true
     //if native asset this refers to assetid, otherwise tokenhash
@@ -84,70 +79,21 @@ class SendActivity : LocalizationActivity() {
 
         pasteAddressButton.setOnClickListener { pasteAddressTapped() }
         scanAddressButton.setOnClickListener { scanAddressTapped() }
+        fromAddressButton.setOnClickListener { addFromAddressTapped() }
 
         val extras = intent.extras
         val address = extras.getString("address")
+        val assets = intent.extras.getSerializable("assets")
+        if (intent.extras.getSerializable("assets") == null) {
+            ownedAssets = arrayListOf()
+        } else {
+            ownedAssets = intent.extras.getSerializable("assets") as ArrayList<AccountAsset>
+        }
 
         if (address != "") {
             addressTextView.text = address
             amountTextView.requestFocus()
             showFoundContact(address)
-        }
-        //get best node in the background here.
-        getBestNode()
-
-        //get account state in the background here to check if a user has GAS to perform sending token
-        async(UI) {
-            bg {
-                NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address = Account.getWallet()!!.address) {
-                    runOnUiThread {
-                        showAccountState(it)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun showAccountState(data: Pair<AccountState?, Error?>): Unit {
-        val error = data.second
-        val accountState = data.first
-
-        if (error != null) {
-            return
-        }
-        for (balance in accountState!!.balances.iterator()) {
-            //if only care about GAS here
-            if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
-                this.gasBalance = balance
-            }
-        }
-    }
-
-    private fun gotBestNode(node: SeedNodeResponse) {
-        PersistentStore.setNodeURL(node.url)
-    }
-
-    private fun getBestNode() {
-        val nodes = "https://seed1.neo.org:10331," +
-                "http://seed2.neo.org:10332," +
-                "http://seed3.neo.org:10332," +
-                "http://seed4.neo.org:10332," +
-                "http://seed5.neo.org:10332," +
-                "http://seed1.cityofzion.io:8080," +
-                "http://seed2.cityofzion.io:8080," +
-                "http://seed3.cityofzion.io:8080," +
-                "http://seed4.cityofzion.io:8080," +
-                "http://seed5.cityofzion.io:8080," +
-                "http://seed1.o3node.org:10332," +
-                "http://seed2.o3node.org:10332," +
-                "http://seed3.o3node.org:10332"
-
-
-        async(UI) {
-            val data: Deferred<SeedNodeResponse> = bg {
-                Neoutils.selectBestSeedNode(nodes)
-            }
-            gotBestNode(data.await())
         }
     }
 
@@ -178,15 +124,10 @@ class SendActivity : LocalizationActivity() {
 
     private fun displayAssets() {
         val assetSelectorSheet = AssetSelectionBottomSheet()
-        val assets = intent.extras.getSerializable("assets")
-        if (assets == null) {
-            assetSelectorSheet.assets = arrayListOf()
-        } else {
-            assetSelectorSheet.assets = assets as ArrayList<AccountAsset>
-        }
-
+        assetSelectorSheet.assets = ownedAssets
         assetSelectorSheet.show(this.supportFragmentManager, assetSelectorSheet.tag)
     }
+
 
     fun updateSelectedAsset() {
         selectedAssetTextView.text = shortName
@@ -252,36 +193,30 @@ class SendActivity : LocalizationActivity() {
     private fun sendTokenAsset(address: String, amount: Double) {
         val wallet = Account.getWallet()
         val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
-
+        val gasIndex  = ownedAssets.indices.find { ownedAssets[it].name.toUpperCase() == "GAS"}
+        if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value == 0.0) {
+            baseContext.toast("You must have 0.0000000001 GAS to send a token")
+            return
+        }
         NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet!!.address, address, amount) {
             runOnUiThread {
                 toast.cancel()
                 val error = it.second
-                if (error != null) {
+                val success = it.first
+                if (success == true) {
+                    baseContext!!.toast(resources.getString(R.string.sent_successfully))
+                    Handler().postDelayed(Runnable {
+                        finish()
+                    }, 1000)
+                } else {
+                    this.checkEnableSendButton()
                     val message = resources.getString(R.string.send_error)
                     val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                     snack.setAction("Close") {
                         finish()
                     }
                     snack.show()
-                } else {
-                    val success = it.first
-                    if (success == true) {
-                        baseContext!!.toast(resources.getString(R.string.sent_successfully))
-                        Handler().postDelayed(Runnable {
-                            finish()
-                        }, 1000)
-                    } else {
-                        this.checkEnableSendButton()
-                        val message = resources.getString(R.string.send_error)
-                        val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                        snack.setAction("Close") {
-                            finish()
-                        }
-                        snack.show()
-                    }
                 }
-
             }
         }
     }
@@ -296,19 +231,6 @@ class SendActivity : LocalizationActivity() {
             baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
             return
         }
-        //check if user has enough GAS to perform send token here.
-        if (isNativeAsset == false) {
-            if (this.gasBalance == null || this.gasBalance!!.value == 0.0) {
-                //alert that a user need 0.00000001 gas to send token
-                alert("You need at least 0.00000001GAS to send any token", "") {
-                    yesButton {
-                        addressTextView.requestFocus()
-                    }
-                }.show()
-                return
-            }
-        }
-
 
         NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(address) {
             if (it.second != null || it?.first == false) {
@@ -342,6 +264,14 @@ class SendActivity : LocalizationActivity() {
             val item = clip.getItemAt(0)
             addressTextView.text = item.text.toString()
         }
+    }
+
+    private fun addFromAddressTapped() {
+        val contactsModal = ContactsFragment.newInstance()
+        val args = Bundle()
+        args.putBoolean("canAddAddress", false)
+        contactsModal.arguments = args
+        contactsModal.show(supportFragmentManager, contactsModal.tag)
     }
 
 

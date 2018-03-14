@@ -39,7 +39,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
         val listView = view.findViewById<ListView>(R.id.contactsListView)
         listView.addHeaderView(headerView)
 
-        adapter = ContactsAdapter(this.context!!, this)
+        adapter = ContactsAdapter(this.context!!, this, arguments["canAddAddress"] as Boolean)
         listView?.adapter = adapter
         return view
     }
