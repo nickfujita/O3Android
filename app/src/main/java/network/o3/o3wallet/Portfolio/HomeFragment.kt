@@ -16,7 +16,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.ViewPager.*
 import android.widget.*
 import com.robinhood.spark.animation.MorphSparkAnimator
-import kotlinx.android.synthetic.main.portfolio_fragment_home.*
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio

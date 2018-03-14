@@ -1,6 +1,5 @@
 package network.o3.o3wallet.Portfolio
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -9,9 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import network.o3.o3wallet.API.O3.Portfolio
-import android.arch.lifecycle.Observer
-import kotlinx.android.synthetic.main.portfolio_asset_card.*
 import kotlinx.android.synthetic.main.portfolio_fragment_portfolio_header.*
 import network.o3.o3wallet.*
 import java.util.*
