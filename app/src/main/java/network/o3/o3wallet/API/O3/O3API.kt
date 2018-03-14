@@ -18,7 +18,7 @@ import network.o3.o3wallet.API.NEO.NEP5Tokens
  */
 
 class O3API {
-    val baseURL = "http://staging-api.o3.network/v1/"
+    val baseURL = "http://api.o3.network/v1/"
     enum class Route() {
         PRICE,
         HISTORICAL,
