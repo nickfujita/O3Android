@@ -21,14 +21,17 @@ class NewsFeedFragment : Fragment() {
         val featureView = getLayoutInflater().inflate(R.layout.news_fragment_features, null)
         listView?.adapter = NewsFeedAdapter(context!!, this)
 
-        model?.getFeedData(true)?.observe(this, Observer { feed ->
-            (listView!!.adapter as NewsFeedAdapter).setData(feed!!)
-            listView?.addHeaderView(featureView)
-        })
+
 
         model?.getFeatureData(true)?.observe(this, Observer {features ->
             val featuredRecycler = featureView.findViewById<RecyclerView>(R.id.featuredList)
             featuredRecycler?.adapter = FeaturesAdapter(features = features?.toCollection(ArrayList())!!)
+            model?.getFeedData(true)?.observe(this, Observer { feed ->
+                (listView!!.adapter as NewsFeedAdapter).setData(feed!!)
+                if (features?.isNotEmpty() ?: false) {
+                    listView?.addHeaderView(featureView)
+                }
+            })
         })
 
         return view
