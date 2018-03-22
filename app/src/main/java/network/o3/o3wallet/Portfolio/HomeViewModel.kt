@@ -67,7 +67,7 @@ class HomeViewModel {
     fun deepCopyAssets(arrayList: ArrayList<AccountAsset>): ArrayList<AccountAsset> {
         val assetsDeepCopy = ArrayList<AccountAsset>()
         for (elem in arrayList) {
-            if (elem.assetID != null) {
+            if (elem != null && elem.assetID != null) {
                 assetsDeepCopy.add(AccountAsset(assetID = elem.assetID,
                         name = elem.name,
                         symbol = elem.symbol,
