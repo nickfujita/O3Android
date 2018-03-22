@@ -34,3 +34,14 @@ data class FeedItem(val title: String,
                     val published: String,
                     val source: String,
                     val images: Array<NewsImage>)
+
+data class FeatureFeed(val features: Array<Feature>)
+
+data class Feature(val category: String,
+                   val title: String,
+                   val subtitle: String,
+                   val imageURL: String,
+                   val createdAt: Int,
+                   val index: Int,
+                   val actionTitle: String,
+                   val actionURL: String)

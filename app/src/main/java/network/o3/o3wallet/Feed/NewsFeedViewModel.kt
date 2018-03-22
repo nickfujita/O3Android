@@ -3,6 +3,8 @@ package network.o3.o3wallet.Feed
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import network.o3.o3wallet.API.O3.Feature
+import network.o3.o3wallet.API.O3.FeatureFeed
 import network.o3.o3wallet.API.O3.FeedData
 import network.o3.o3wallet.API.O3.O3API
 
@@ -12,6 +14,8 @@ import network.o3.o3wallet.API.O3.O3API
 
 class NewsFeedViewModel: ViewModel() {
     var feedData: MutableLiveData<FeedData>? = null
+    var featureData: MutableLiveData<Array<Feature>>? = null
+
 
     fun getFeedData(refresh: Boolean): LiveData<FeedData> {
         if (feedData == null || refresh) {
@@ -21,10 +25,25 @@ class NewsFeedViewModel: ViewModel() {
         return feedData!!
     }
 
+    fun getFeatureData(refresh: Boolean): LiveData<Array<Feature>> {
+        if (featureData == null || refresh) {
+            featureData = MutableLiveData()
+            loadFeatureData()
+        }
+        return featureData!!
+    }
+
     fun loadFeedData() {
         O3API().getNewsFeed {
-            if ( it?.second != null ) return@getNewsFeed
+            if (it.second != null) return@getNewsFeed
             feedData?.postValue(it?.first!!)
+        }
+    }
+
+    fun loadFeatureData() {
+        O3API().getFeatures {
+            if (it.second != null) return@getFeatures
+            featureData?.postValue(it.first!!)
         }
     }
 }

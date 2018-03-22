@@ -98,4 +98,18 @@ class O3API {
             }
         }
     }
+
+    fun getFeatures(completion: (Pair<Array<Feature>?, Error?>) -> Unit) {
+        val url = "https://cdn.o3.network/data/featured.json"
+        url.httpGet().responseString {request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val featureFeed = gson.fromJson<FeatureFeed>(data!!)
+                completion(Pair(featureFeed.features, null))
+            } else {
+                completion(Pair(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 }

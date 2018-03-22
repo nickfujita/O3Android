@@ -3,6 +3,7 @@ package network.o3.o3wallet.Feed
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.Observer
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +18,19 @@ class NewsFeedFragment : Fragment() {
 
         val view =  inflater!!.inflate(R.layout.news_fragment_news_feed, container, false)
         val listView = view?.findViewById<ListView>(R.id.newsList)
-        val adapter = NewsFeedAdapter(context!!, this)
+        val featureView = getLayoutInflater().inflate(R.layout.news_fragment_features, null)
         listView?.adapter = NewsFeedAdapter(context!!, this)
+
         model?.getFeedData(true)?.observe(this, Observer { feed ->
             (listView!!.adapter as NewsFeedAdapter).setData(feed!!)
+            listView?.addHeaderView(featureView)
         })
+
+        model?.getFeatureData(true)?.observe(this, Observer {features ->
+            val featuredRecycler = featureView.findViewById<RecyclerView>(R.id.featuredList)
+            featuredRecycler?.adapter = FeaturesAdapter(features = features?.toCollection(ArrayList())!!)
+        })
+
         return view
     }
 
