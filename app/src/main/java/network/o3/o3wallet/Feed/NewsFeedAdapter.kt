@@ -15,6 +15,7 @@ import network.o3.o3wallet.API.O3.NewsImage
 import network.o3.o3wallet.R
 import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
+import android.widget.ListAdapter
 import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
 
