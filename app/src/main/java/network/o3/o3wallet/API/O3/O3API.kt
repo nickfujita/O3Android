@@ -112,4 +112,18 @@ class O3API {
             }
         }
     }
+
+    fun getTokenSales(completion: (Pair<TokenSales?, Error?>) -> Unit) {
+        val url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+        url.httpGet().responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val tokenSales = gson.fromJson<TokenSales>(data!!)
+                completion(Pair(tokenSales, null))
+            } else {
+                completion(Pair(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 }

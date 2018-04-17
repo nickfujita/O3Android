@@ -1,12 +1,10 @@
 package network.o3.o3wallet
 
-import neowallet.Neowallet
 import org.junit.Test
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
-import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.O3.O3API
 import java.nio.ByteBuffer
 
@@ -75,31 +73,9 @@ class APIUnitTests {
     }
 
     @Test
-    fun getTransactionHistory() {
-        var latch = CountDownLatch(1)
-        CoZClient().getTransactionHistory(testAddress) {
-            assert(it.first != null)
-            print (it.first!!.toString())
-            latch.countDown()
-        }
-        latch.await(2000, TimeUnit.MILLISECONDS)
-    }
-
-    @Test
-    fun getPortfolio() {
-        var latch = CountDownLatch(1)
-        O3API().getPortfolio(2, 2.0, 15) {
-            assert(it.first != null)
-            print (it.first!!.toString())
-            latch.countDown()
-        }
-        latch.await(20000, TimeUnit.MILLISECONDS)
-    }
-
-    @Test
     fun getPriceHistory() {
         var latch = CountDownLatch(1)
-        O3API().getPriceHistory("NEO", 15) {
+        O3API().getPriceHistory("NEO", "15") {
             assert(it.first != null)
             print (it.first!!.toString())
             latch.countDown()
@@ -118,26 +94,13 @@ class APIUnitTests {
     }
 
     @Test
-    fun claim() {
-        //testnet
-        val wif = ""
-        val wallet = Neowallet.generateFromWIF(wif)
-        NeoNodeRPC().claimGAS(wallet) {
-            var error = it.second
-            assert(error == null)
-            print(it.first.toString())
+    fun getTokenSales() {
+        var latch = CountDownLatch(1)
+        O3API().getTokenSales{
+            assert(it.first != null)
+            print (it.first!!.toString())
         }
-    }
-
-    @Test
-    fun sendTransaction() {
-        val wif = ""
-        val wallet = Neowallet.generateFromWIF(wif)
-        NeoNodeRPC().sendNativeAssetTransaction(wallet, NeoNodeRPC.Asset.GAS,1.0,wallet.address,null) {
-            var error = it.second
-            assert(error != null)
-            print(it.first.toString())
-        }
+        latch.await(2000000000, TimeUnit.MILLISECONDS)
     }
 
     @Test
