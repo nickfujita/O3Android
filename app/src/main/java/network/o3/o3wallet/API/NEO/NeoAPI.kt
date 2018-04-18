@@ -6,6 +6,7 @@ import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import neoutils.Neoutils.sign
 import neoutils.Neoutils.validateNEOAddress
@@ -156,91 +157,6 @@ class NeoNodeRPC {
             }
         }
     }
-
-    /*
-    fun getBlockBy(index: Int, completion: (Pair<Block?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETBLOCK.methodName(),
-                "params" to jsonArray(index, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-        println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val block = gson.fromJson<Block>(nodeResponse.result)
-                completion(Pair<Block?, Error?>(block, null))
-            } else {
-                completion(Pair<Block?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }
-
-
-
-    fun getBlockBy(hash: String, completion: (Pair<Block?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETBLOCK.methodName(),
-                "params" to jsonArray(hash, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-            println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val block = gson.fromJson<Block>(nodeResponse.result)
-                completion(Pair<Block?, Error?>(block, null))
-            } else {
-                completion(Pair<Block?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }
-
-    fun getTransactionBy(hash: String, completion: (Pair<Transaction?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETRAWTRANSACTION.methodName(),
-                "params" to jsonArray(hash, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-            println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val transaction = gson.fromJson<Transaction>(nodeResponse.result)
-                completion(Pair<Transaction?, Error?>(transaction, null))
-            } else {
-                completion(Pair<Transaction?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }*/
-
 
     fun claimGAS(wallet: Wallet, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
         CoZClient().getClaims(wallet.address) {
@@ -453,6 +369,33 @@ class NeoNodeRPC {
         return finalPayload
     }
 
+    fun invokeFunction(params: JsonArray, completion: (Pair<InvokeFunctionResponse?, Error?>) -> Unit) {
+        val dataJson = jsonObject(
+                "jsonrpc" to "2.0",
+                "method" to RPC.INVOKEFUNCTION.methodName(),
+                "params" to params,
+                "id" to 3
+        )
+
+        var request = nodeURL.httpPost().body(dataJson.toString()).timeout(600000)
+        request.headers["Content-Type"] = "application/json"
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                try {
+                    val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                    val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
+
+                    completion(Pair<InvokeFunctionResponse?, Error?>(invokeResponse, null))
+                } catch (error: Error) {
+                    completion(Pair<InvokeFunctionResponse?, Error?>(null, Error(error.localizedMessage)))
+                }
+            } else {
+                completion(Pair<InvokeFunctionResponse?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 
     fun getTokenBalanceOf(tokenHash: String, address: String, completion: (Pair<Long?, Error?>) -> Unit) {
 
@@ -467,34 +410,18 @@ class NeoNodeRPC {
         invokeFunctionParams.add(stack)
         params.add(jsonArray(invokeFunctionParams))
 
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.INVOKEFUNCTION.methodName(),
-                "params" to jsonArray(params),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
-                if (invokeResponse.stack.count() > 0) {
-                    val stack = invokeResponse.stack[0]
-                    var amount: Long = 0
-                    if (stack.value.isNotEmpty()) {
-                        amount = stack.value.littleEndianHexStringToInt64()
-                    }
-
-                    completion(Pair<Long?, Error?>(amount, null))
-                } else {
-                    completion(Pair<Long?, Error?>(0, null))
+        invokeFunction(params.toJsonArray()) {
+            if (it.second != null) {
+                completion(Pair<Long?, Error?>(null, it.second))
+            } else if (it.first!!.stack.count() > 0) {
+                val stack = it.first!!.stack[0]
+                var amount: Long = 0
+                if (stack.value.isNotEmpty()) {
+                    amount = stack.value.littleEndianHexStringToInt64()
                 }
+                completion(Pair<Long?, Error?>(amount, null))
             } else {
-                completion(Pair<Long?, Error?>(null, Error(error.localizedMessage)))
+                completion(Pair<Long?, Error?>(0, null))
             }
         }
     }
@@ -535,5 +462,26 @@ class NeoNodeRPC {
                 }
             }
         }
+    }
+
+    fun getWhitelistStatus(address: String, scriptHash: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
+
+        var params: ArrayList<Any> = arrayListOf<Any>()
+        params.add(scriptHash)
+        params.add("tokensale_status")
+        var invokeFunctionParams: ArrayList<Any> = arrayListOf()
+        var stack = JsonObject()
+        stack.set("type", "Hash160")
+        stack.set("value", address.hash160().toString())
+        invokeFunctionParams.add(stack)
+        params.add(jsonArray(invokeFunctionParams))
+
+        val dataJson = jsonObject(
+                "jsonrpc" to "2.0",
+                "method" to RPC.INVOKEFUNCTION.methodName(),
+                "params" to jsonArray(params),
+                "id" to 1
+        )
+
     }
 }

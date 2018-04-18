@@ -8,19 +8,21 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="27dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Get Notified About Token Sales"
         android:textAppearance="@style/PrimaryTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="30dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button2"
         style="@style/BorderLessButton.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Share Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -34,8 +36,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Share you're email and we'll send you the latest information about token sales on O3. Our team vets all tokens that appear on O3, and this email is never shared with third parties. No ShiteCoins Allowed"
+        android:text="Share you're email and we'll send you the latest information about token sales on O3. Our team vets all tokens that appear on O3, and this email is never shared with third parties. No ****coins allowed"
         android:textAlignment="center"
+        android:textAppearance="@style/RegularText.Small.Gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
