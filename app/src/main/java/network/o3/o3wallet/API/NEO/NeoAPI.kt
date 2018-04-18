@@ -426,6 +426,34 @@ class NeoNodeRPC {
         }
     }
 
+    fun getWhiteListStatus(contractHash: String, address: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
+
+        var params: ArrayList<Any> = arrayListOf<Any>()
+        params.add(contractHash)
+        params.add("tokensale_status")
+        var invokeFunctionParams: ArrayList<Any> = arrayListOf()
+        //var stack = Stack(type = "Hash160",value = address.hash160().toString())
+        var stack = JsonObject()
+        stack.set("type", "Hash160")
+        stack.set("value", address.hash160().toString())
+        invokeFunctionParams.add(stack)
+        params.add(jsonArray(invokeFunctionParams))
+
+        invokeFunction(params.toJsonArray()) {
+            if (it.second != null) {
+                completion(Pair<Boolean?, Error?>(null, it.second))
+            } else if (it.first!!.stack.count() > 0) {
+                val whiteListed = it.first!!.stack[0].value
+                if (whiteListed == "01") {
+                    completion(Pair<Boolean?, Error?>(true, null))
+                }
+                completion(Pair<Boolean?, Error?>(false, null))
+            } else {
+                completion(Pair<Boolean?, Error?>(false, null))
+            }
+        }
+    }
+
     fun buildNEP5TransferScript(scriptHash: String, fromAddress: String, toAddress: String, amount: Double): ByteArray {
         val amountToSendInMemory: Long = (amount * 100000000).toLong()
         val fromAddressHash = fromAddress.hashFromAddress()
