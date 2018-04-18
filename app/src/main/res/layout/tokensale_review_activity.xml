@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="network.o3.o3wallet.TokenSales.TokenSaleReviewActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ImageView
+        android:id="@+id/tokenSaleReviewBannerImageView"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/black" />
+
+    <TextView
+        android:id="@+id/tokenSaleReviewSendTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="You are sending"
+        android:textAppearance="@style/RegularText.Small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewBannerImageView" />
+
+    <TextView
+        android:id="@+id/tokenSaleReviewSendAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10 NEO"
+        android:textAppearance="@style/TokenSaleAmountTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewSendTitleTextView" />
+
+    <TextView
+        android:id="@+id/tokenSaleReviewPriorityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With Priority"
+        android:textAppearance="@style/RegularText.Accent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewSendAmountTextView" />
+
+    <ImageView
+        android:id="@+id/tokenSaleTransferImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewPriorityTextView"
+        app:srcCompat="@color/black" />
+
+    <TextView
+        android:id="@+id/tokenSaleReviewReceiveTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="You will receive"
+        android:textAppearance="@style/RegularText.Small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleTransferImageView" />
+
+    <TextView
+        android:id="@+id/tokenSaleReviewReceiveAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:text="100 Spot"
+        android:textAppearance="@style/TokenSaleAmountTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewReceiveTitleTextView" />
+
+    <CheckBox
+        android:id="@+id/issuerDisclaimerCheckbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="I have read and agreed to the token sale agreement provided by the token issuer"
+        android:textAppearance="@style/RegularText.Small"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewReceiveAmountTextView" />
+
+    <CheckBox
+        android:id="@+id/o3DisclaimerCheckbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="I understand that I am interacting directly with a decentralized smart contract. O3 does not store any funds, and is not liable for any issues with the smart contract"
+        android:textAppearance="@style/RegularText.Small"
+        android:textColor="@color/colorAccent"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/issuerDisclaimerCheckbox" />
+
+    <Button
+        android:id="@+id/tokenSaleReviewParticipateButton"
+        style="@style/PrimaryButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Participate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/o3DisclaimerCheckbox" />
+</android.support.constraint.ConstraintLayout>

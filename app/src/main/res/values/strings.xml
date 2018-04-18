@@ -109,6 +109,7 @@
     <string name="my_address_action_label">My NEO address</string>
     <string name="topup_cold_storage_action_label">Cold Storage</string>
     <string name="send_action_label">Send</string>
+    <string name="token_sale_action_label">Token Sale</string>
 
     <!-- Wallet Send -->
     <string name="send">Send</string>

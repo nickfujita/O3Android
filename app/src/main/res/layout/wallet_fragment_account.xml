@@ -58,6 +58,14 @@
             fab:fab_label="@string/send_action_label"
             fab:fab_size="mini" />
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_token_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fab_send"
+            fab:fab_label="@string/token_sale_action_label"
+            fab:fab_size="mini" />
+
     </com.github.clans.fab.FloatingActionMenu>
 
     <LinearLayout

@@ -50,9 +50,11 @@ data class TokenSales(val live: Array<TokenSale>)
 
 data class TokenSale(val name: String,
                      val symbol: String,
+                     val shortDescription: String,
                      val scriptHash: String,
                      val webURL: String,
                      val imageURL: String,
+                     val squareLogoURL: String,
                      val startTime: Long,
                      val endTime: Long,
                      val acceptingAssets: Array<AcceptingAsset>,
@@ -61,8 +63,8 @@ data class TokenSale(val name: String,
 
 data class AcceptingAsset(val asset: String,
                           val basicRate: Long,
-                          val min: Long,
-                          val max: Long)
+                          val min: Double,
+                          val max: Double)
 
 data class InfoRow(val label: String,
                    val value: String)

@@ -25,6 +25,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
+import network.o3.o3wallet.TokenSales.TokenSalesActivity
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
 import network.o3.o3wallet.Topup.TopupColdStorageBalanceActivity
@@ -43,6 +44,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var topupButton: FloatingActionButton
     private lateinit var myQrButton: FloatingActionButton
     private lateinit var sendButton: FloatingActionButton
+    private lateinit var tokenSaleButton: FloatingActionButton
     private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
     private lateinit var claims: Claims
@@ -80,6 +82,11 @@ class AccountFragment : Fragment(), TokenListProtocol {
         topupButton = view.findViewById<FloatingActionButton>(R.id.fab_cold_storage)
         myQrButton = view.findViewById<FloatingActionButton>(R.id.fab_my_address)
         sendButton = view.findViewById<FloatingActionButton>(R.id.fab_send)
+        tokenSaleButton = view.findViewById<FloatingActionButton>(R.id.fab_token_sale)
+
+        tokenSaleButton.colorNormal = resources.getColor(R.color.colorAccent)
+        tokenSaleButton.colorPressed = resources.getColor(R.color.colorAccentLight)
+        tokenSaleButton.setOnClickListener { showTokenSale() }
 
         topupButton.colorNormal = resources.getColor(R.color.colorAccent)
         topupButton.colorPressed = resources.getColor(R.color.colorAccentLight)
@@ -172,6 +179,11 @@ class AccountFragment : Fragment(), TokenListProtocol {
             val topupIntent = Intent(context, TopupColdStorageBalanceActivity::class.java)
             startActivity(topupIntent)
         }
+    }
+
+    private fun showTokenSale() {
+        val tokenSaleIntent = Intent(context, TokenSalesActivity::class.java)
+        startActivity(tokenSaleIntent)
     }
 
     override fun reloadTokenList() {
