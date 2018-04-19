@@ -251,7 +251,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             assets.add(asset)
         }
 
-        val adapter = AccountAssetsAdapter(this,context,Account.getWallet()!!.address, assets.toTypedArray())
+        val adapter = AccountAssetsAdapter(this,context!!, Account.getWallet()!!.address, assets.toTypedArray())
         assetListView.adapter = adapter
     }
 

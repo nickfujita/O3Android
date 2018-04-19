@@ -149,6 +149,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             tokenSaleReviewIntent.putExtra("assetReceiveAmount", sendAssetAmount * selectedAsset.basicRate)
             tokenSaleReviewIntent.putExtra("assetReceiveContractHash", tokenSale.scriptHash)
             tokenSaleReviewIntent.putExtra("withPriority", priorityEnabled)
+            tokenSaleReviewIntent.putExtra("tokenSaleName", tokenSale.name)
             startActivity(tokenSaleReviewIntent)
         }
     }

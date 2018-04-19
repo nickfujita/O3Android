@@ -26,10 +26,10 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
         dialog!!.setContentView(contentView)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.wallet_fragment_nep5_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.wallet_fragment_nep5_list, container, false)
         listView = view.findViewById<ListView>(R.id.nep5TokenListView)
-        val nep5adapter = NEP5TokenListAdapter(context)
+        val nep5adapter = NEP5TokenListAdapter(context!!)
         listView.adapter = nep5adapter
         nep5Model = NEP5ViewModel()
         nep5Model?.getNodesFromModel(refresh = true)?.observe(this,  Observer<Array<NEP5Token>> { tokens ->

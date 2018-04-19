@@ -42,10 +42,10 @@ class MyAddressFragment : BottomSheetDialogFragment() {
         qrImageView.setImageBitmap(bitmap)
 
         copyButton.setOnClickListener{
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText(resources.getString(R.string.copied_address),Account.getWallet()!!.address)
             clipboard.primaryClip = clip
-            context.toast(resources.getString(R.string.copied_address))
+            context?.toast(resources.getString(R.string.copied_address))
         }
         return view
     }

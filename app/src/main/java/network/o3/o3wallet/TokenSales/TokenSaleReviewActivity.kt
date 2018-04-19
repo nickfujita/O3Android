@@ -19,6 +19,7 @@ class TokenSaleReviewActivity : AppCompatActivity() {
     private lateinit var assetSendId: String
     private lateinit var assetReceiveSymbol: String
     private lateinit var assetReceiveContractHash: String
+    private lateinit var tokenSaleName: String
 
     private var assetSendAmount: Double = 0.0
     private var assetReceiveAmount: Double = 0.0
@@ -42,6 +43,13 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.tokenSaleReviewParticipateButton)
         button.setOnClickListener {
             val intent = Intent(this, TokenSaleReceiptActivity::class.java)
+            intent.putExtra("assetSendSymbol", assetSendSymbol)
+            intent.putExtra("assetSendAmount", assetSendAmount)
+            intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
+            intent.putExtra("assetReceiveAmount", assetReceiveAmount)
+            intent.putExtra("priorityEnabled", priorityEnabled)
+            intent.putExtra("transactionID", "INSERT TRANSACTION ID")
+            intent.putExtra("tokenSaleName", tokenSaleName)
             startActivity(intent)
         }
     }
@@ -55,6 +63,7 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         assetReceiveContractHash = intent.getStringExtra("assetReceiveContractHash")
         assetReceiveAmount = intent.getDoubleExtra("assetReceiveAmount", 0.0)
         priorityEnabled = intent.getBooleanExtra("priorityEnabled", false)
+        tokenSaleName = intent.getStringExtra("tokenSaleName")
     }
 
 
