@@ -9,10 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import neoutils.Neoutils
+import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.TokenSale
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 /**
  * Created by drei on 4/17/18.
@@ -80,9 +83,6 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>): RecyclerV
 
         fun bindTokenSale(tokenSale: TokenSale?) {
             this.tokenSale = tokenSale!!
-            
-
-
 
             val daysLeftTextView = view.find<TextView>(R.id.tokenSaleDaysLeftTextView)
             val coinNameTextView = view.find<TextView>(R.id.tokenSaleCoinNameTextView)

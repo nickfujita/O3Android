@@ -118,6 +118,15 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="RegularText.Accent.Bold">
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="RegularText.Small.Primary">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
     <style name="RegularSubtitleText">
         <item name="android:textColor">@color/colorSubtitleGrey</item>
         <item name="android:textSize">12dp</item>

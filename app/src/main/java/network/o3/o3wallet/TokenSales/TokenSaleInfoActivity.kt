@@ -1,8 +1,10 @@
 package network.o3.o3wallet.TokenSales
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.CardView
 import android.text.InputType
 import android.text.SpannableString
@@ -15,14 +17,19 @@ import network.o3.o3wallet.API.O3.TokenSale
 import network.o3.o3wallet.R
 import com.bumptech.glide.Glide
 import com.google.common.io.Resources
+import kotlinx.android.synthetic.main.tokensale_info_footer.*
 import kotlinx.android.synthetic.main.wallet_activity_send.*
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.AcceptingAsset
+import network.o3.o3wallet.Account
+import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.afterTextChanged
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.sdk15.coroutines.onClick
 import org.jetbrains.anko.sdk15.coroutines.textChangedListener
 import org.jetbrains.anko.textColor
+import org.jetbrains.anko.yesButton
 import org.w3c.dom.Text
 
 
@@ -106,6 +113,20 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         }
     }
 
+    fun initiatePriority() {
+        val priorityCheckbox = footerView.findViewById<CheckBox>(R.id.tokenSalePriorityCheckbox)
+        priorityCheckbox.setOnClickListener {
+            priorityEnabled = !priorityEnabled
+        }
+        val priorityInfoTextView = footerView.findViewById<TextView>(R.id.priorityInfoTextView)
+        priorityInfoTextView.setOnClickListener {
+            alert ("Priority uses some of your gas to give your transaction priority in the blockchain. " +
+                    "This makes sure you always get in on a token sale before everyone else.") {
+                yesButton { "OK" }
+            }.show()
+        }
+    }
+
     fun initiateParticipateButton() {
         participateButton = footerView.findViewById(R.id.tokenSaleInfoParticipateButton)
         participateButton.isEnabled = false
@@ -129,6 +150,22 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             tokenSaleReviewIntent.putExtra("assetReceiveContractHash", tokenSale.scriptHash)
             tokenSaleReviewIntent.putExtra("withPriority", priorityEnabled)
             startActivity(tokenSaleReviewIntent)
+        }
+    }
+
+    fun initiateActionButton() {
+        val fab = headerView.findViewById<FloatingActionButton>(R.id.websiteActionButton)
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(tokenSale.webURL))
+        fab.setOnClickListener {
+            startActivity(browserIntent)
+        }
+    }
+
+    fun getWhiteListStatus() {
+        NeoNodeRPC(PersistentStore.getNodeURL()).getWhiteListStatus(tokenSale.scriptHash, Account.getWallet()?.address!!) {
+            if (it.second != null) {
+                return@getWhiteListStatus
+            }
         }
     }
 
@@ -157,6 +194,8 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         initiateParticipateButton()
         initiateAssetSelectorCards()
         initiatePartcipationEditText()
+        initiateActionButton()
+        initiatePriority()
         listView.addHeaderView(headerView)
         listView.addFooterView(footerView)
 
