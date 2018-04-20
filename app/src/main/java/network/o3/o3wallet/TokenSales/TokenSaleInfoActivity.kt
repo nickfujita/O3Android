@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.CardView
 import android.text.InputType
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.*
@@ -16,9 +15,6 @@ import com.google.gson.Gson
 import network.o3.o3wallet.API.O3.TokenSale
 import network.o3.o3wallet.R
 import com.bumptech.glide.Glide
-import com.google.common.io.Resources
-import kotlinx.android.synthetic.main.tokensale_info_footer.*
-import kotlinx.android.synthetic.main.wallet_activity_send.*
 import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.AcceptingAsset
@@ -27,13 +23,12 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.afterTextChanged
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.sdk15.coroutines.onClick
-import org.jetbrains.anko.sdk15.coroutines.textChangedListener
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.yesButton
-import org.w3c.dom.Text
-import kotlin.math.floor
-import kotlin.math.max
+import java.text.DecimalFormat
+import network.o3.o3wallet.DecimalDigitsInputFilter
+import android.text.InputFilter
+
 
 
 class TokenSaleInfoActivity : AppCompatActivity() {
@@ -106,7 +101,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
             selectedAsset = gasInfo
             amountEditText.text = SpannableStringBuilder("")
-            amountEditText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+            amountEditText.inputType = (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
         }
 
         neoCard.setOnClickListener {
@@ -120,7 +115,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
             selectedAsset = neoInfo
             amountEditText.text = SpannableStringBuilder("")
-            amountEditText.inputType = InputType.TYPE_CLASS_NUMBER
+            amountEditText.inputType = (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NULL)
         }
     }
 
@@ -128,9 +123,19 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         val doubleValue = amountEditText.text.toString().toDoubleOrNull()
         val recieveAmountTextView = footerView.findViewById<TextView>(R.id.tokenSaleRecieveAmountTextView)
         if (doubleValue != null) {
-            recieveAmountTextView.text = (doubleValue * selectedAsset.basicRate).toString() + " " + tokenSale.symbol
             participateButton.isEnabled = true
             participateButton.backgroundColor = resources.getColor(R.color.colorPrimary)
+            val recieveAmount = doubleValue * selectedAsset.basicRate
+            val df = DecimalFormat()
+            if (recieveAmount - recieveAmount.toLong() == 0.0) {
+                df.setMaximumFractionDigits(0)
+                val numString = df.format(recieveAmount)
+                recieveAmountTextView.text = numString + " " + tokenSale.symbol
+            } else {
+                df.setMaximumFractionDigits(8)
+                val numString = df.format(recieveAmount)
+                recieveAmountTextView.text = numString + " " + tokenSale.symbol
+            }
         } else if (amountEditText.text.toString() == "") {
             recieveAmountTextView.text = "0" + " " + tokenSale.symbol
             participateButton.isEnabled = false
@@ -139,6 +144,8 @@ class TokenSaleInfoActivity : AppCompatActivity() {
     }
 
     fun initiatePartcipationEditText() {
+        amountEditText.inputType = (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NULL)
+        amountEditText.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 8)))
         amountEditText.afterTextChanged {
             updateTokenRecieveAmount()
         }
@@ -265,7 +272,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         footerView = layoutInflater.inflate(R.layout.tokensale_info_footer, null)
 
         amountEditText = footerView.findViewById<EditText>(R.id.tokenSaleParticipationAmountEditText)
-        footerView.findViewById<TextView>(R.id.tokenSaleRecieveAmountTextView).text = "0" + tokenSale.symbol
+        footerView.findViewById<TextView>(R.id.tokenSaleRecieveAmountTextView).text = "0 " + tokenSale.symbol
 
         initiateAssetSelectorCards()
         initiateParticipateButton()
