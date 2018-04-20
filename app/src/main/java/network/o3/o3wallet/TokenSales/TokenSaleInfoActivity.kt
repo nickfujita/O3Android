@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.common.io.Resources
 import kotlinx.android.synthetic.main.tokensale_info_footer.*
 import kotlinx.android.synthetic.main.wallet_activity_send.*
+import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.AcceptingAsset
 import network.o3.o3wallet.Account
@@ -31,6 +32,8 @@ import org.jetbrains.anko.sdk15.coroutines.textChangedListener
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.yesButton
 import org.w3c.dom.Text
+import kotlin.math.floor
+import kotlin.math.max
 
 
 class TokenSaleInfoActivity : AppCompatActivity() {
@@ -42,9 +45,27 @@ class TokenSaleInfoActivity : AppCompatActivity() {
     private lateinit var headerView: View
     private lateinit var amountEditText: EditText
     private lateinit var participateButton: Button
+    private lateinit var gasCardBalanceTextView: TextView
+    private lateinit var neoCardBalanceTextView: TextView
 
     var priorityEnabled = false
 
+    private var gasBalance = 0.0
+    private var neoBalance = 0
+
+    fun loadBalance() {
+        CoZClient().getBalance(Account.getWallet()?.address!!) {
+            if (it.second != null) {
+                return@getBalance
+            }
+            gasBalance = it.first!!.GAS.balance
+            neoBalance = it.first!!.NEO.balance
+            runOnUiThread {
+                gasCardBalanceTextView.text = "Balance: " + gasBalance.toString()
+                neoCardBalanceTextView.text = "Balance: " + neoBalance.toString()
+            }
+        }
+    }
 
     fun initiateAssetSelectorCards() {
         val gasCard = footerView.findViewById<CardView>(R.id.gasAssetCardView)
@@ -52,6 +73,10 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         val gasCardTitleTextView = footerView.findViewById<TextView>(R.id.gasCardTitleTextView)
         val neoCardTitleTextView = footerView.findViewById<TextView>(R.id.neoCardTitleTextView)
+
+        gasCardBalanceTextView = footerView.findViewById<TextView>(R.id.gasCardBalanceTextView)
+        neoCardBalanceTextView = footerView.findViewById<TextView>(R.id.neoCardBalanceTextView)
+
         gasCardTitleTextView.text = "Use GAS"
         neoCardTitleTextView.text = "Use NEO"
 
@@ -61,19 +86,23 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         neoCardDescriptionTextView.text = "1 NEO = " + neoInfo.basicRate + " " + tokenSale.symbol
 
         neoCardTitleTextView.textColor = resources.getColor(R.color.colorPrimary)
-        neoCardDescriptionTextView.textColor = resources.getColor(R.color.colorPrimary)
+        neoCardDescriptionTextView.textColor = resources.getColor(R.color.colorAccent)
+        neoCardBalanceTextView.textColor = resources.getColor(R.color.colorPrimary)
 
         gasCardTitleTextView.textColor = resources.getColor(R.color.colorDisabledButton)
         gasCardDescriptionTextView.textColor = resources.getColor(R.color.colorDisabledButton)
+        gasCardBalanceTextView.textColor = resources.getColor(R.color.colorDisabledButton)
 
         selectedAsset = neoInfo
 
         gasCard.setOnClickListener {
             gasCardTitleTextView.textColor = resources.getColor(R.color.colorPrimary)
-            gasCardDescriptionTextView.textColor = resources.getColor(R.color.colorPrimary)
+            gasCardDescriptionTextView.textColor = resources.getColor(R.color.colorAccent)
+            gasCardBalanceTextView.textColor = resources.getColor(R.color.colorPrimary)
 
             neoCardTitleTextView.textColor = resources.getColor(R.color.colorDisabledButton)
             neoCardDescriptionTextView.textColor = resources.getColor(R.color.colorDisabledButton)
+            neoCardBalanceTextView.textColor = resources.getColor(R.color.colorDisabledButton)
 
             selectedAsset = gasInfo
             amountEditText.text = SpannableStringBuilder("")
@@ -82,10 +111,12 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         neoCard.setOnClickListener {
             neoCardTitleTextView.textColor = resources.getColor(R.color.colorPrimary)
-            neoCardDescriptionTextView.textColor = resources.getColor(R.color.colorPrimary)
+            neoCardDescriptionTextView.textColor = resources.getColor(R.color.colorAccent)
+            neoCardBalanceTextView.textColor = resources.getColor(R.color.colorPrimary)
 
             gasCardTitleTextView.textColor = resources.getColor(R.color.colorDisabledButton)
             gasCardDescriptionTextView.textColor = resources.getColor(R.color.colorDisabledButton)
+            gasCardBalanceTextView.textColor = resources.getColor(R.color.colorDisabledButton)
 
             selectedAsset = neoInfo
             amountEditText.text = SpannableStringBuilder("")
@@ -132,9 +163,13 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         participateButton.isEnabled = false
         participateButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
         participateButton.setOnClickListener {
+
+            if (!validateEditText()) {
+                return@setOnClickListener
+            }
+
             val tokenSaleReviewIntent = Intent(this, TokenSaleReviewActivity::class.java)
             val sendAssetAmount = amountEditText.text.toString().toDouble()
-
             tokenSaleReviewIntent.putExtra("bannerURL", tokenSale.imageURL)
             tokenSaleReviewIntent.putExtra("assetSendAmount", sendAssetAmount)
             tokenSaleReviewIntent.putExtra("assetSendSymbol", selectedAsset.asset.toUpperCase())
@@ -152,6 +187,47 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             tokenSaleReviewIntent.putExtra("tokenSaleName", tokenSale.name)
             startActivity(tokenSaleReviewIntent)
         }
+    }
+
+    fun validateEditText(): Boolean {
+        val doubleValue = amountEditText.text.toString().toDoubleOrNull()
+        if (selectedAsset.asset.toUpperCase() == "NEO") {
+            if (doubleValue == null) {
+                alert("Entered Amount is not a Valid Number").show()
+                return false
+            } else if (doubleValue - doubleValue.toInt() != 0.0) {
+                alert("You must send a whole amount of NEO").show()
+                return false
+            } else if(doubleValue.toInt() > neoBalance) {
+                alert("You cannot send more than your available NEO balance").show()
+                return false
+            } else if(doubleValue.toInt() > neoInfo.max) {
+                alert("You cannot send more NEO than the max contribution amount").show()
+                return false
+            } else if (doubleValue < neoInfo.min) {
+                alert("You have to send more NEO than the minimum contribution amount").show()
+                return false
+            }
+            return true
+        }
+
+        if (selectedAsset.asset.toUpperCase() == "GAS") {
+            if (doubleValue == null) {
+                alert("Entered Amount is not a Valid Number").show()
+                return false
+            } else if (doubleValue > gasBalance) {
+                alert("You cannot send more than your available GAS balance").show()
+                return false
+            } else if (doubleValue > gasInfo.max) {
+                alert("You cannot send more GAS than the max contribution amount").show()
+                return false
+            } else if (doubleValue < gasInfo.min) {
+                alert("You have to send more GAS than the minimum contribution amount").show()
+                return false
+            }
+            return true
+        }
+        return false
     }
 
     fun initiateActionButton() {
@@ -179,7 +255,6 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         gasInfo = tokenSale.acceptingAssets.find { it.asset.toUpperCase() == "GAS" }!!
         neoInfo = tokenSale.acceptingAssets.find { it.asset.toUpperCase() == "NEO" }!!
 
-
         val listView = findViewById<ListView>(R.id.tokenInfoListView)
         listView.adapter = TokenSaleInfoAdapter(this)
         (listView.adapter as TokenSaleInfoAdapter).setData(tokenSale)
@@ -192,11 +267,12 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         amountEditText = footerView.findViewById<EditText>(R.id.tokenSaleParticipationAmountEditText)
         footerView.findViewById<TextView>(R.id.tokenSaleRecieveAmountTextView).text = "0" + tokenSale.symbol
 
-        initiateParticipateButton()
         initiateAssetSelectorCards()
+        initiateParticipateButton()
         initiatePartcipationEditText()
         initiateActionButton()
         initiatePriority()
+        loadBalance()
         listView.addHeaderView(headerView)
         listView.addFooterView(footerView)
 

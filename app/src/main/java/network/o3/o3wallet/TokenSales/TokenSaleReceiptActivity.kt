@@ -1,5 +1,7 @@
 package network.o3.o3wallet.TokenSales
 
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -35,6 +37,31 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         }
     }
 
+    fun initiateReceiptEmail() {
+        val emailTextView = findViewById<TextView>(R.id.tokenSaleEmailReceiptTextView)
+        emailTextView.setOnClickListener {
+            val emailIntent = Intent(Intent.ACTION_SEND);
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.setType("text/plain");
+
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, tokenSaleName + " Tokensale Participation Receipt")
+            val emailString = "This receipt proves that your transaction has submitted for procesing on the NEO Blockchain\n\n" +
+                    "Once it has been authorized on to the blockchain, the funds will leave your wallet, and the token issuer will be" +
+                    " responsible for the distribution of the tokens." +
+                    "You can use this transaction ID as proof of your participation in the token sale. Additional details follow.\n\n" +
+                    "Date: Date\n" +
+                    "Token Sale Name: Token Sale Name\n" +
+                    "Transaction ID: Transaction ID\n" +
+                    "Sent: 10 NEO\n" +
+                    "Should Recieve: 1000 SPOT\n\n" + "" +
+                    "Regards\n" +
+                    "O3 Team"
+
+            emailIntent.putExtra(Intent.EXTRA_TEXT, emailString)
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tokensale_receipt_activity)
@@ -48,5 +75,7 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         tokenSaleName = intent.getStringExtra("tokenSaleName")
 
         setRecieptValues()
+        initiateReceiptEmail()
+
     }
 }
