@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import network.o3.o3wallet.R
+import java.text.DecimalFormat
+import java.util.*
 
 class TokenSaleReceiptActivity : AppCompatActivity() {
     private lateinit var tokenSaleName: String
@@ -19,17 +21,25 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
     private var priorityEnabled: Boolean = false
 
     fun setRecieptValues() {
+        val df = DecimalFormat()
+        df.maximumFractionDigits = 8
+
         val txidview = findViewById<TextView>(R.id.receiptTxIdValueTextView)
         txidview.text = txID
 
         val tokenSaleTextView = findViewById<TextView>(R.id.receiptSaleNameValueTextView)
         tokenSaleTextView.text = tokenSaleName
 
+        if (assetSendSymbol == "NEO") { df.maximumFractionDigits = 0 }
         val assetSendTextView = findViewById<TextView>(R.id.receiptSendingValueTextView)
-        assetSendTextView.text = assetSendAmount.toString() + " " + assetSendSymbol
+        assetSendTextView.text = df.format(assetSendAmount) + " " + assetSendSymbol
 
+        df.maximumFractionDigits = 8
         val assetReceiveTextView = findViewById<TextView>(R.id.receiptForValueTextView)
-        assetReceiveTextView.text = assetSendAmount.toString() + assetReceiveSymbol
+        assetReceiveTextView.text = df.format(assetReceiveAmount) + " " + assetReceiveSymbol
+
+        val dateTextView = findViewById<TextView>(R.id.receiptDateValueTextView)
+        dateTextView.text = Date().toString()
 
         if (!priorityEnabled) {
             findViewById<TextView>(R.id.receiptPriorityValueTextView).visibility = View.INVISIBLE

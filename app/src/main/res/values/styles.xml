@@ -114,8 +114,16 @@
         <item name="android:textColor">@color/colorSubtitleGrey</item>
     </style>
 
+    <style name="RegularText.Small.Accent">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
     <style name="RegularText.Accent">
         <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="RegularText.Error">
+        <item name="android:textColor">@color/colorLoss</item>
     </style>
 
     <style name="RegularText.Accent.Bold">

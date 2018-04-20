@@ -61,7 +61,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewPriorityTextView"
-        app:srcCompat="@color/black" />
+        app:srcCompat="@drawable/ic_repeat_alt" />
 
     <TextView
         android:id="@+id/tokenSaleReviewReceiveTitleTextView"
@@ -131,4 +131,30 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/o3DisclaimerCheckbox" />
+
+    <TextView
+        android:id="@+id/whiteListErrorTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/RegularText.Error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tokenSaleReviewReceiveAmountTextView" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/whiteListFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_globe" />
 </android.support.constraint.ConstraintLayout>

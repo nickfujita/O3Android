@@ -130,7 +130,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Use Priority"
+        android:text="Use Priority (0.0011 GAS)"
+        android:textAppearance="@style/RegularText.Small.Accent"
+        android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tokenSaleParticipationAmountEditText" />
 
@@ -175,7 +177,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
-        android:text="What is Priority"
+        android:text="What is Priority?"
+        android:textAppearance="@style/RegularText.Small.Gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tokenSaleParticipationAmountEditText" />
 

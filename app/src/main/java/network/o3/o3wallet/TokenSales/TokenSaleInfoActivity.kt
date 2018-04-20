@@ -192,6 +192,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             tokenSaleReviewIntent.putExtra("assetReceiveContractHash", tokenSale.scriptHash)
             tokenSaleReviewIntent.putExtra("withPriority", priorityEnabled)
             tokenSaleReviewIntent.putExtra("tokenSaleName", tokenSale.name)
+            tokenSaleReviewIntent.putExtra("tokenSaleWebURL", tokenSale.webURL)
             startActivity(tokenSaleReviewIntent)
         }
     }
@@ -200,19 +201,22 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         val doubleValue = amountEditText.text.toString().toDoubleOrNull()
         if (selectedAsset.asset.toUpperCase() == "NEO") {
             if (doubleValue == null) {
-                alert("Entered Amount is not a Valid Number").show()
+                alert("Entered Amount is not a Valid Number") { yesButton {"Ok"} }.show()
                 return false
             } else if (doubleValue - doubleValue.toInt() != 0.0) {
-                alert("You must send a whole amount of NEO").show()
+                alert("You must send a whole amount of NEO") { yesButton {"Ok"} }.show()
                 return false
             } else if(doubleValue.toInt() > neoBalance) {
-                alert("You cannot send more than your available NEO balance").show()
+                alert("You cannot send more than your available NEO balance") { yesButton {"Ok"} }.show()
                 return false
             } else if(doubleValue.toInt() > neoInfo.max) {
-                alert("You cannot send more NEO than the max contribution amount").show()
+                alert("You cannot send more NEO than the max contribution amount") { yesButton {"Ok"} }.show()
                 return false
             } else if (doubleValue < neoInfo.min) {
-                alert("You have to send more NEO than the minimum contribution amount").show()
+                alert("You have to send more NEO than the minimum contribution amount") { yesButton {"Ok"} }.show()
+                return false
+            } else if (priorityEnabled && gasBalance < 0.0011) {
+                alert("You do not have enough gas in order to send a priority transaction") { yesButton {"Ok"} }.show()
                 return false
             }
             return true
@@ -220,16 +224,19 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         if (selectedAsset.asset.toUpperCase() == "GAS") {
             if (doubleValue == null) {
-                alert("Entered Amount is not a Valid Number").show()
+                alert("Entered Amount is not a Valid Number") { yesButton {"Ok"} }.show()
                 return false
             } else if (doubleValue > gasBalance) {
-                alert("You cannot send more than your available GAS balance").show()
+                alert("You cannot send more than your available GAS balance") { yesButton {"Ok"} }.show()
                 return false
             } else if (doubleValue > gasInfo.max) {
-                alert("You cannot send more GAS than the max contribution amount").show()
+                alert("You cannot send more GAS than athe max contribution amount") { yesButton {"Ok"} }.show()
                 return false
             } else if (doubleValue < gasInfo.min) {
-                alert("You have to send more GAS than the minimum contribution amount").show()
+                alert("You have to send more GAS than the minimum contribution amount") { yesButton {"Ok"} }.show()
+                return false
+            } else if (priorityEnabled && gasBalance - doubleValue < 0.0011) {
+                alert("You do not have enough gas in order to send a priority transaction") { yesButton {"Ok"} }.show()
                 return false
             }
             return true
@@ -242,14 +249,6 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(tokenSale.webURL))
         fab.setOnClickListener {
             startActivity(browserIntent)
-        }
-    }
-
-    fun getWhiteListStatus() {
-        NeoNodeRPC(PersistentStore.getNodeURL()).getWhiteListStatus(tokenSale.scriptHash, Account.getWallet()?.address!!) {
-            if (it.second != null) {
-                return@getWhiteListStatus
-            }
         }
     }
 
