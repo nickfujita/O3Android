@@ -8,6 +8,7 @@ import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import neoutils.Neoutils
 import neoutils.Neoutils.sign
 import neoutils.Neoutils.validateNEOAddress
 import network.o3.o3wallet.API.CoZ.*
@@ -492,24 +493,23 @@ class NeoNodeRPC {
         }
     }
 
-    fun getWhitelistStatus(address: String, scriptHash: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
+    fun participateTokenSales(scriptHash: String, assetID: String, amount: Double, remark: String, networkFee: Double,  completion: (Pair<Boolean?, Error?>) -> Unit){
+        val utxoEndpoint = CoZClient().baseAPIURL + CoZClient.Route.BALANCE.routeName()
 
-        var params: ArrayList<Any> = arrayListOf<Any>()
-        params.add(scriptHash)
-        params.add("tokensale_status")
-        var invokeFunctionParams: ArrayList<Any> = arrayListOf()
-        var stack = JsonObject()
-        stack.set("type", "Hash160")
-        stack.set("value", address.hash160().toString())
-        invokeFunctionParams.add(stack)
-        params.add(jsonArray(invokeFunctionParams))
-
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.INVOKEFUNCTION.methodName(),
-                "params" to jsonArray(params),
-                "id" to 1
-        )
-
+        val finalPayload = try {
+            Neoutils.mintTokensRawTransactionMobile(utxoEndpoint, scriptHash, Account.getWallet()?.wif, assetID, amount, remark, networkFee)
+        } catch (error: Error) {
+            completion(Pair(false, error))
+            return
+        }
+        if (finalPayload == null) {
+            completion(Pair(false, null))
+            return
+        }
+        sendRawTransaction(finalPayload) {
+            var success = it.first
+            var error = it.second
+            completion(Pair (success, error))
+        }
     }
 }

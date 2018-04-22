@@ -15,10 +15,15 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
     private lateinit var txID: String
     private lateinit var assetSendSymbol: String
     private lateinit var assetReceiveSymbol: String
+    private lateinit var dateString: String
+    private lateinit var assetSendString: String
+    private lateinit var assetReceiveString: String
+
 
     private var assetSendAmount: Double = 0.0
     private var assetReceiveAmount: Double = 0.0
     private var priorityEnabled: Boolean = false
+
 
     fun setRecieptValues() {
         val df = DecimalFormat()
@@ -32,14 +37,17 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
 
         if (assetSendSymbol == "NEO") { df.maximumFractionDigits = 0 }
         val assetSendTextView = findViewById<TextView>(R.id.receiptSendingValueTextView)
-        assetSendTextView.text = df.format(assetSendAmount) + " " + assetSendSymbol
+        assetSendString = df.format(assetSendAmount) + " " + assetSendSymbol
+        assetSendTextView.text = assetSendString
 
         df.maximumFractionDigits = 8
         val assetReceiveTextView = findViewById<TextView>(R.id.receiptForValueTextView)
-        assetReceiveTextView.text = df.format(assetReceiveAmount) + " " + assetReceiveSymbol
+        assetReceiveString = df.format(assetReceiveAmount) + " " + assetReceiveSymbol
+        assetReceiveTextView.text = assetReceiveString
 
         val dateTextView = findViewById<TextView>(R.id.receiptDateValueTextView)
-        dateTextView.text = Date().toString()
+        dateString = Date().toString()
+        dateTextView.text = dateString
 
         if (!priorityEnabled) {
             findViewById<TextView>(R.id.receiptPriorityValueTextView).visibility = View.INVISIBLE
@@ -59,11 +67,11 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
                     "Once it has been authorized on to the blockchain, the funds will leave your wallet, and the token issuer will be" +
                     " responsible for the distribution of the tokens." +
                     "You can use this transaction ID as proof of your participation in the token sale. Additional details follow.\n\n" +
-                    "Date: Date\n" +
-                    "Token Sale Name: Token Sale Name\n" +
-                    "Transaction ID: Transaction ID\n" +
-                    "Sent: 10 NEO\n" +
-                    "Should Recieve: 1000 SPOT\n\n" + "" +
+                    "Date: " + dateString + "\n" +
+                    "Token Sale Name: "+ tokenSaleName + "\n" +
+                    "Transaction ID: "+ txID + "\n" +
+                    "Sent: "+ assetSendString + "\n" +
+                    "Should Recieve: " + assetReceiveString + "\n\n" +
                     "Regards\n" +
                     "O3 Team"
 
@@ -83,6 +91,7 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         priorityEnabled = intent.getBooleanExtra("priorityEnabled", false)
         txID = intent.getStringExtra("transactionID")
         tokenSaleName = intent.getStringExtra("tokenSaleName")
+
 
         setRecieptValues()
         initiateReceiptEmail()

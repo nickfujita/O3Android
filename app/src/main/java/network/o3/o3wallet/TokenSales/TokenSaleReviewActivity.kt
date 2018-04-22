@@ -5,6 +5,8 @@ import android.net.Uri
 import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.view.View
 import android.widget.Button
@@ -16,7 +18,9 @@ import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.yesButton
 import org.w3c.dom.Text
 import java.text.DecimalFormat
 
@@ -35,6 +39,8 @@ class TokenSaleReviewActivity : AppCompatActivity() {
     private var priorityEnabled: Boolean = false
 
     private lateinit var participateButton: Button
+    private lateinit var loadingConstraintView: ConstraintLayout
+    private lateinit var mainConstraintView: ConstraintLayout
 
     fun initiateViews(whitelisted: Boolean) {
         val bannerView = findViewById<ImageView>(R.id.tokenSaleReviewBannerImageView)
@@ -45,6 +51,10 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         val whiteListErrorTextView = findViewById<TextView>(R.id.whiteListErrorTextView)
         val issuerAgreementCheckbox = findViewById<CheckBox>(R.id.issuerDisclaimerCheckbox)
         val o3AgreementCheckbox = findViewById<CheckBox>(R.id.o3DisclaimerCheckbox)
+
+        mainConstraintView = findViewById<ConstraintLayout>(R.id.tokenSaleReviewConstraintView)
+        loadingConstraintView = findViewById<ConstraintLayout>(R.id.tokenSaleLoadingConstraintView)
+
 
         Glide.with(this).load(bannerURL).into(bannerView)
         val df = DecimalFormat()
@@ -95,21 +105,50 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         }*/
     }
 
+    fun performMinting() {
+        val remark = String.format("O3X%s", tokenSaleName)
+        var fee: Double = 0.0
+        if (priorityEnabled) { fee = 0.0011 }
+
+        NeoNodeRPC(PersistentStore.getNodeURL()).participateTokenSales(assetReceiveContractHash, assetSendId,
+                assetSendAmount, remark, fee) {
+            runOnUiThread {
+                loadingConstraintView.visibility = View.GONE
+                mainConstraintView.visibility = View.VISIBLE
+                if (it.second != null) {
+                    alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
+                } else if (it.first != true) {
+                    alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
+                } else {
+                    val intent = Intent(this, TokenSaleReceiptActivity::class.java)
+                    intent.putExtra("assetSendSymbol", assetSendSymbol)
+                    intent.putExtra("assetSendAmount", assetSendAmount)
+                    intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
+                    intent.putExtra("assetReceiveAmount", assetReceiveAmount)
+                    intent.putExtra("priorityEnabled", priorityEnabled)
+                    intent.putExtra("transactionID", "INSERT TRANSACTION ID")
+                    intent.putExtra("tokenSaleName", tokenSaleName)
+                    intent.putExtra("tokenSaleWebURL", tokenSaleWebURL)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
+
     fun initiateParticipateButton(whitelisted: Boolean) {
         participateButton = findViewById<Button>(R.id.tokenSaleReviewParticipateButton)
         participateButton.isEnabled = false
         participateButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
         participateButton.setOnClickListener {
-            val intent = Intent(this, TokenSaleReceiptActivity::class.java)
-            intent.putExtra("assetSendSymbol", assetSendSymbol)
-            intent.putExtra("assetSendAmount", assetSendAmount)
-            intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
-            intent.putExtra("assetReceiveAmount", assetReceiveAmount)
-            intent.putExtra("priorityEnabled", priorityEnabled)
-            intent.putExtra("transactionID", "INSERT TRANSACTION ID")
-            intent.putExtra("tokenSaleName", tokenSaleName)
-            intent.putExtra("tokenSaleWebURL", tokenSaleWebURL)
-            startActivity(intent)
+            //TODO MAKE THIS THE MINT TOKEN FUNCTION
+                mainConstraintView.visibility = View.GONE
+                loadingConstraintView.visibility = View.VISIBLE
+            val handler = Handler()
+            handler.postDelayed( {
+                performMinting()
+            }, 3000)
+
         }
         //TODO: READD WHITELISTING WHEN SHIPPING
         /*if (!whitelisted) {
