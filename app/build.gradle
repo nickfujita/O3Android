@@ -97,7 +97,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-design-coroutines:$anko_version"
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.github.kotlin-graphics:kotlin-unsigned:v2.1'
-    implementation ('com.airbnb.android:lottie:2.5.4') { exclude group: 'com.android.support' }
+    implementation('com.airbnb.android:lottie:2.5.4') { exclude group: 'com.android.support' }
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }

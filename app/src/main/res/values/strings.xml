@@ -42,6 +42,7 @@
         <item>Language</item>
         <item>Contact</item>
         <item>Logout</item>
+        <item>Advanced</item>
         <item>Version</item>
     </string-array>
     <!-- This string exists in order to allow for proper formatting-->
