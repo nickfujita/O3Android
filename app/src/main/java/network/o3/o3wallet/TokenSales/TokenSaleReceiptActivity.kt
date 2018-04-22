@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import network.o3.o3wallet.MainTabbedActivity
 import network.o3.o3wallet.R
+import org.w3c.dom.Text
 import java.text.DecimalFormat
 import java.util.*
 
@@ -55,9 +57,21 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        returnToMain()
+    }
+
+    fun returnToMain() {
+        intent = Intent(this, MainTabbedActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
+    }
+
     fun initiateReceiptEmail() {
         val emailTextView = findViewById<TextView>(R.id.tokenSaleEmailReceiptTextView)
         emailTextView.setOnClickListener {
+
+
             val emailIntent = Intent(Intent.ACTION_SEND);
             emailIntent.setData(Uri.parse("mailto:"));
             emailIntent.setType("text/plain");
@@ -76,7 +90,7 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
                     "O3 Team"
 
             emailIntent.putExtra(Intent.EXTRA_TEXT, emailString)
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."))
         }
     }
 
@@ -92,6 +106,11 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         txID = intent.getStringExtra("transactionID")
         tokenSaleName = intent.getStringExtra("tokenSaleName")
 
+
+        val returnButton = findViewById<TextView>(R.id.returnToMainButton)
+        returnButton.setOnClickListener {
+            returnToMain()
+        }
 
         setRecieptValues()
         initiateReceiptEmail()

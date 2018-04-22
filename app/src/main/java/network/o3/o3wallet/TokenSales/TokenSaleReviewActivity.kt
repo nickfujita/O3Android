@@ -105,12 +105,26 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         }*/
     }
 
+    fun moveToReceipt() {
+        val intent = Intent(this, TokenSaleReceiptActivity::class.java)
+        intent.putExtra("assetSendSymbol", assetSendSymbol)
+        intent.putExtra("assetSendAmount", assetSendAmount)
+        intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
+        intent.putExtra("assetReceiveAmount", assetReceiveAmount)
+        intent.putExtra("priorityEnabled", priorityEnabled)
+        intent.putExtra("transactionID", "INSERT TRANSACTION ID")
+        intent.putExtra("tokenSaleName", tokenSaleName)
+        intent.putExtra("tokenSaleWebURL", tokenSaleWebURL)
+        startActivity(intent)
+    }
+
     fun performMinting() {
         val remark = String.format("O3X%s", tokenSaleName)
         var fee: Double = 0.0
         if (priorityEnabled) { fee = 0.0011 }
-
-        NeoNodeRPC(PersistentStore.getNodeURL()).participateTokenSales(assetReceiveContractHash, assetSendId,
+        moveToReceipt()
+        //TODO: READD ON MAINNET WHEN SHIPPING
+        /*NeoNodeRPC(PersistentStore.getNodeURL()).participateTokenSales(assetReceiveContractHash, assetSendId,
                 assetSendAmount, remark, fee) {
             runOnUiThread {
                 loadingConstraintView.visibility = View.GONE
@@ -120,19 +134,10 @@ class TokenSaleReviewActivity : AppCompatActivity() {
                 } else if (it.first != true) {
                     alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
                 } else {
-                    val intent = Intent(this, TokenSaleReceiptActivity::class.java)
-                    intent.putExtra("assetSendSymbol", assetSendSymbol)
-                    intent.putExtra("assetSendAmount", assetSendAmount)
-                    intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
-                    intent.putExtra("assetReceiveAmount", assetReceiveAmount)
-                    intent.putExtra("priorityEnabled", priorityEnabled)
-                    intent.putExtra("transactionID", "INSERT TRANSACTION ID")
-                    intent.putExtra("tokenSaleName", tokenSaleName)
-                    intent.putExtra("tokenSaleWebURL", tokenSaleWebURL)
-                    startActivity(intent)
+                   moveToReceipt()
                 }
             }
-        }
+        }*/
     }
 
 
