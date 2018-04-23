@@ -22,6 +22,7 @@ import org.jetbrains.anko.yesButton
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import com.akexorcist.localizationactivity.core.LanguageSetting.getLanguage
 import com.akexorcist.localizationactivity.core.LanguageSetting.setLanguage
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
@@ -39,7 +40,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
-            R.drawable.ic_settings_logout, R.drawable.ic_mobile_android)
+            R.drawable.ic_settings_logout, R.drawable.ic_mobile_android, R.drawable.ic_bug)
     init {
         mContext = context
         mFragment = fragment
@@ -49,7 +50,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         PRIVATEKEY, CONTACTS,
         WATCHADRESS, NETWORK, LANGUAGE,
         CONTACT, LOGOUT,
-        VERSION
+        VERSION, ADVANCED
 
     }
 
@@ -62,7 +63,10 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     }
 
     override fun getCount(): Int {
-        return settingsTitles.count()
+        if (BuildConfig.DEBUG) {
+            return settingsTitles.count()
+        }
+        return settingsTitles.count() - 1
     }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
@@ -160,6 +164,9 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
                     mFragment.startActivityForResult( intent, 0, null)
                 }
             }
+        } else if (position == CellType.ADVANCED.ordinal) {
+            val intent = Intent(mContext, AdvancedSettingsActivity::class.java)
+            mFragment.startActivity(intent)
         }
     }
 }

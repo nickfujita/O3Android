@@ -72,7 +72,7 @@ class ScriptBuilderTests {
                 65536 to "0300000100000000")
         val neoScript = ScriptBuilder()
         for (key in testCases.keys) {
-            neoScript.pushInt(key)
+            neoScript.pushInt(key.toLong())
             if (neoScript.getScriptHexString().toLowerCase() != testCases[key]) {
                 throw Exception("Test not passed: ${neoScript.getScriptHexString().toLowerCase()} != $testCases[key]")
             }

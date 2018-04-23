@@ -4,6 +4,10 @@ import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import android.text.Spanned
+import android.text.InputFilter
+import java.util.regex.Pattern
+
 
 /**
  * Created by drei on 12/7/17.
@@ -44,4 +48,20 @@ fun Date.IntervaledString(interval: String): String {
     }
     val dateFormatter = SimpleDateFormat(dateFormat)
     return "since " + dateFormatter.format(this)
+}
+
+class DecimalDigitsInputFilter(digitsBeforeZero: Int, digitsAfterZero: Int) : InputFilter {
+
+    internal var mPattern: Pattern
+
+    init {
+        mPattern = Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?")
+    }
+
+    override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
+
+        val matcher = mPattern.matcher(dest)
+        return if (!matcher.matches()) "" else null
+    }
+
 }

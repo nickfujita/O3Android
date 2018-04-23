@@ -105,6 +105,36 @@
         <item name="android:fontFamily">@font/muli</item>
     </style>
 
+    <style name="RegularText.Small">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="RegularText.Small.Gray">
+        <item name="android:textColor">@color/colorSubtitleGrey</item>
+    </style>
+
+    <style name="RegularText.Small.Accent">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="RegularText.Accent">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="RegularText.Error">
+        <item name="android:textColor">@color/colorLoss</item>
+    </style>
+
+    <style name="RegularText.Accent.Bold">
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="RegularText.Small.Primary">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
     <style name="RegularSubtitleText">
         <item name="android:textColor">@color/colorSubtitleGrey</item>
         <item name="android:textSize">12dp</item>
@@ -206,6 +236,24 @@
     <style name="TableRowNumberText">
         <item name="android:textSize">16dp</item>
         <item name="android:fontFamily">@font/muli</item>
+    </style>
+
+    <style name="TokenSalePrimaryText">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="TokenSaleAmountTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
+    </style>
+
+    <style name="TokenSaleAccentText">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/muli_bold</item>
     </style>
 
 </resources>

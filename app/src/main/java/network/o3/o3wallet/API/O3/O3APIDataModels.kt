@@ -45,3 +45,30 @@ data class Feature(val category: String,
                    val index: Int,
                    val actionTitle: String,
                    val actionURL: String)
+
+data class TokenSales(val subscribeURL: String, val live: Array<TokenSale>)
+
+data class TokenSale(val name: String,
+                     val symbol: String,
+                     val shortDescription: String,
+                     val scriptHash: String,
+                     val webURL: String,
+                     val imageURL: String,
+                     val squareLogoURL: String,
+                     val startTime: Long,
+                     val endTime: Long,
+                     val acceptingAssets: Array<AcceptingAsset>,
+                     val info: Array<InfoRow>,
+                     val footer: Array<FooterRow>)
+
+data class AcceptingAsset(val asset: String,
+                          val basicRate: Long,
+                          val min: Double,
+                          val max: Double)
+
+data class InfoRow(val label: String,
+                   val value: String)
+
+data class FooterRow(val label: String,
+                     val value: String,
+                     val link: String)

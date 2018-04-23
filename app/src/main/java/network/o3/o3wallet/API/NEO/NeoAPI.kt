@@ -6,13 +6,18 @@ import android.util.Log
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.*
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import neoutils.Neoutils
 import neoutils.Neoutils.sign
 import neoutils.Neoutils.validateNEOAddress
+import neoutils.RawTransaction
 import network.o3.o3wallet.API.CoZ.*
 import neoutils.Wallet
 import network.o3.o3wallet.*
+import org.jetbrains.anko.defaultSharedPreferences
 import unsigned.toUByte
+import java.lang.Exception
 import java.nio.*
 
 
@@ -156,91 +161,6 @@ class NeoNodeRPC {
             }
         }
     }
-
-    /*
-    fun getBlockBy(index: Int, completion: (Pair<Block?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETBLOCK.methodName(),
-                "params" to jsonArray(index, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-        println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val block = gson.fromJson<Block>(nodeResponse.result)
-                completion(Pair<Block?, Error?>(block, null))
-            } else {
-                completion(Pair<Block?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }
-
-
-
-    fun getBlockBy(hash: String, completion: (Pair<Block?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETBLOCK.methodName(),
-                "params" to jsonArray(hash, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-            println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val block = gson.fromJson<Block>(nodeResponse.result)
-                completion(Pair<Block?, Error?>(block, null))
-            } else {
-                completion(Pair<Block?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }
-
-    fun getTransactionBy(hash: String, completion: (Pair<Transaction?, Error?>) -> (Unit)) {
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.GETRAWTRANSACTION.methodName(),
-                "params" to jsonArray(hash, 1),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        println(RPC.GETBLOCKCOUNT.methodName())
-        request.httpHeaders["Content-Type"] =  "application/json"
-        request.responseString { request, response, result ->
-            println(request)
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                println(data)
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                println (nodeResponse.toString())
-                val transaction = gson.fromJson<Transaction>(nodeResponse.result)
-                completion(Pair<Transaction?, Error?>(transaction, null))
-            } else {
-                completion(Pair<Transaction?, Error?>(null, Error(error.localizedMessage)))
-            }
-        }
-    }*/
-
 
     fun claimGAS(wallet: Wallet, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
         CoZClient().getClaims(wallet.address) {
@@ -453,6 +373,33 @@ class NeoNodeRPC {
         return finalPayload
     }
 
+    fun invokeFunction(params: JsonArray, completion: (Pair<InvokeFunctionResponse?, Error?>) -> Unit) {
+        val dataJson = jsonObject(
+                "jsonrpc" to "2.0",
+                "method" to RPC.INVOKEFUNCTION.methodName(),
+                "params" to params,
+                "id" to 3
+        )
+
+        var request = nodeURL.httpPost().body(dataJson.toString()).timeout(600000)
+        request.headers["Content-Type"] = "application/json"
+        request.responseString { request, response, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                try {
+                    val nodeResponse = gson.fromJson<NodeResponse>(data!!)
+                    val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
+
+                    completion(Pair<InvokeFunctionResponse?, Error?>(invokeResponse, null))
+                } catch (error: Error) {
+                    completion(Pair<InvokeFunctionResponse?, Error?>(null, Error(error.localizedMessage)))
+                }
+            } else {
+                completion(Pair<InvokeFunctionResponse?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 
     fun getTokenBalanceOf(tokenHash: String, address: String, completion: (Pair<Long?, Error?>) -> Unit) {
 
@@ -467,34 +414,46 @@ class NeoNodeRPC {
         invokeFunctionParams.add(stack)
         params.add(jsonArray(invokeFunctionParams))
 
-        val dataJson = jsonObject(
-                "jsonrpc" to "2.0",
-                "method" to RPC.INVOKEFUNCTION.methodName(),
-                "params" to jsonArray(params),
-                "id" to 1
-        )
-
-        var request = nodeURL.httpPost().body(dataJson.toString())
-        request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
-            val (data, error) = result
-            if (error == null) {
-                val gson = Gson()
-                val nodeResponse = gson.fromJson<NodeResponse>(data!!)
-                val invokeResponse = gson.fromJson<InvokeFunctionResponse>(nodeResponse.result)
-                if (invokeResponse.stack.count() > 0) {
-                    val stack = invokeResponse.stack[0]
-                    var amount: Long = 0
-                    if (stack.value.isNotEmpty()) {
-                        amount = stack.value.littleEndianHexStringToInt64()
-                    }
-
-                    completion(Pair<Long?, Error?>(amount, null))
-                } else {
-                    completion(Pair<Long?, Error?>(0, null))
+        invokeFunction(params.toJsonArray()) {
+            if (it.second != null) {
+                completion(Pair<Long?, Error?>(null, it.second))
+            } else if (it.first!!.stack.count() > 0) {
+                val stack = it.first!!.stack[0]
+                var amount: Long = 0
+                if (stack.value.isNotEmpty()) {
+                    amount = stack.value.littleEndianHexStringToInt64()
                 }
+                completion(Pair<Long?, Error?>(amount, null))
             } else {
-                completion(Pair<Long?, Error?>(null, Error(error.localizedMessage)))
+                completion(Pair<Long?, Error?>(0, null))
+            }
+        }
+    }
+
+    fun getWhiteListStatus(contractHash: String, address: String, completion: (Pair<Boolean?, Error?>) -> Unit) {
+
+        var params: ArrayList<Any> = arrayListOf<Any>()
+        params.add(contractHash)
+        params.add("tokensale_status")
+        var invokeFunctionParams: ArrayList<Any> = arrayListOf()
+        //var stack = Stack(type = "Hash160",value = address.hash160().toString())
+        var stack = JsonObject()
+        stack.set("type", "Hash160")
+        stack.set("value", address.hash160().toString())
+        invokeFunctionParams.add(stack)
+        params.add(jsonArray(invokeFunctionParams))
+
+        invokeFunction(params.toJsonArray()) {
+            if (it.second != null) {
+                completion(Pair<Boolean?, Error?>(null, it.second))
+            } else if (it.first!!.stack.count() > 0) {
+                val whiteListed = it.first!!.stack[0].value
+                if (whiteListed == "01") {
+                    completion(Pair<Boolean?, Error?>(true, null))
+                }
+                completion(Pair<Boolean?, Error?>(false, null))
+            } else {
+                completion(Pair<Boolean?, Error?>(false, null))
             }
         }
     }
@@ -534,6 +493,31 @@ class NeoNodeRPC {
                     completion(Pair<Boolean?, Error?>(success, error))
                 }
             }
+        }
+    }
+
+    fun participateTokenSales(scriptHash: String, assetID: String, amount: Double, remark: String, networkFee: Double,  completion: (Pair<String?, Error?>) -> Unit){
+        var utxoEndpoint = CoZClient().baseAPIURL
+        val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
+        if (isPrivateNet) {
+            utxoEndpoint = "http://192.168.0.27:5000"
+        }
+        var finalPayload: RawTransaction? = null
+        try {
+            finalPayload = Neoutils.mintTokensRawTransactionMobile(utxoEndpoint, scriptHash, Account.getWallet()?.wif, assetID, amount, remark, networkFee)
+        } catch (e: Exception) {
+            completion(Pair(null, Error(e.localizedMessage)))
+            return
+        }
+        if (finalPayload == null) {
+            completion(Pair(null, null))
+            return
+        }
+        Log.d("MINT TRANSACTION ID: ", finalPayload.txid )
+        sendRawTransaction(finalPayload.data) {
+            var success = it.first
+            var error = it.second
+            completion(Pair (finalPayload.txid, error))
         }
     }
 }

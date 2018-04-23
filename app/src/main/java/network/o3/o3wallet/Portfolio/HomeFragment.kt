@@ -48,7 +48,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         return inflater!!.inflate(R.layout.portfolio_fragment_home, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         assetListAdapter = AssetListAdapter(this.context!!, this)

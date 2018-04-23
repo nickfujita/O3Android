@@ -53,7 +53,7 @@ class WatchAddressFragment : BottomSheetDialogFragment() {
 
     fun sendReloadDataIntent() {
         val intent = Intent("need-update-data-event")
-        LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent)
+        LocalBroadcastManager.getInstance(this.context!!).sendBroadcast(intent)
     }
 
     fun showRemoveAlert(watchAddress: WatchAddress) {

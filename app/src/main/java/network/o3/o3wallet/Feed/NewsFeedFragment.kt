@@ -21,8 +21,6 @@ class NewsFeedFragment : Fragment() {
         val featureView = getLayoutInflater().inflate(R.layout.news_fragment_features, null)
         listView?.adapter = NewsFeedAdapter(context!!, this)
 
-
-
         model?.getFeatureData(true)?.observe(this, Observer {features ->
             val featuredRecycler = featureView.findViewById<RecyclerView>(R.id.featuredList)
             featuredRecycler?.adapter = FeaturesAdapter(features = features?.toCollection(ArrayList())!!)

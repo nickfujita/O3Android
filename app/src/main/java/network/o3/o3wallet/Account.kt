@@ -2,7 +2,7 @@ package network.o3.o3wallet
 
 import android.preference.PreferenceManager
 import neoutils.Neoutils.generateFromWIF
-import neoutils.Neoutils.generatePublicKeyFromPrivateKey
+import neoutils.Neoutils.generateFromPrivateKey
 import neoutils.Wallet
 import network.o3.o3wallet.Crypto.Decryptor
 import network.o3.o3wallet.Crypto.Encryptor
@@ -83,7 +83,7 @@ object Account {
         var bytes = ByteArray(32)
         random.nextBytes(bytes)
         val hex = bytes.toHex()
-        wallet = generatePublicKeyFromPrivateKey(hex)
+        wallet = generateFromPrivateKey(hex)
         storeEncryptedKeyOnDevice()
     }
 
