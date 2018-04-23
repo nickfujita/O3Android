@@ -42,8 +42,8 @@
         <item>Language</item>
         <item>Contact</item>
         <item>Logout</item>
-        <item>Advanced</item>
         <item>Version</item>
+        <item>Advanced</item>
     </string-array>
     <!-- This string exists in order to allow for proper formatting-->
     <string name="version">Version: %1$s</string>

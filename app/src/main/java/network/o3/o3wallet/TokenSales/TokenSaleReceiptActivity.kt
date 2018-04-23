@@ -59,6 +59,7 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         returnToMain()
+        super.onBackPressed()
     }
 
     fun returnToMain() {

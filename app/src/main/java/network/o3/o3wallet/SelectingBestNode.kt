@@ -9,12 +9,18 @@ import kotlinx.coroutines.experimental.async
 import neoutils.Neoutils.selectBestSeedNode
 import neoutils.SeedNodeResponse
 import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.defaultSharedPreferences
 
 class SelectingBestNode : LocalizationActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.portfolio_activity_selecting_best_node)
+        val sharedPref = O3Wallet.appContext!!.defaultSharedPreferences
+        with (sharedPref.edit()) {
+            putBoolean("USING_PRIVATE_NET", false)
+            commit()
+        }
         getBestNode()
     }
 

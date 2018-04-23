@@ -49,12 +49,14 @@ class TokenSaleInfoActivity : AppCompatActivity() {
     private var neoBalance = 0
 
     fun loadBalance() {
-        CoZClient().getBalance(Account.getWallet()?.address!!) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(Account.getWallet()?.address!!) {
             if (it.second != null) {
-                return@getBalance
+                return@getAccountState
             }
-            gasBalance = it.first!!.GAS.balance
-            neoBalance = it.first!!.NEO.balance
+            var neoAsset =  it.first!!.balances.find { it.asset.contains(NeoNodeRPC.Asset.NEO.assetID()) }
+            var gasAsset = it.first!!.balances.find { it.asset.contains(NeoNodeRPC.Asset.GAS.assetID()) }
+            gasBalance = gasAsset?.value ?: 0.0
+            neoBalance = (neoAsset?.value ?: 0.0).toInt()
             runOnUiThread {
                 gasCardBalanceTextView.text = "Balance: " + gasBalance.toString()
                 neoCardBalanceTextView.text = "Balance: " + neoBalance.toString()

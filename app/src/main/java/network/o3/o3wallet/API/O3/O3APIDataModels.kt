@@ -46,7 +46,7 @@ data class Feature(val category: String,
                    val actionTitle: String,
                    val actionURL: String)
 
-data class TokenSales(val live: Array<TokenSale>)
+data class TokenSales(val subscribeURL: String, val live: Array<TokenSale>)
 
 data class TokenSale(val name: String,
                      val symbol: String,

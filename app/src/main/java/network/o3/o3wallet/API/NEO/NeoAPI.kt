@@ -11,10 +11,13 @@ import com.google.gson.JsonObject
 import neoutils.Neoutils
 import neoutils.Neoutils.sign
 import neoutils.Neoutils.validateNEOAddress
+import neoutils.RawTransaction
 import network.o3.o3wallet.API.CoZ.*
 import neoutils.Wallet
 import network.o3.o3wallet.*
+import org.jetbrains.anko.defaultSharedPreferences
 import unsigned.toUByte
+import java.lang.Exception
 import java.nio.*
 
 
@@ -493,23 +496,28 @@ class NeoNodeRPC {
         }
     }
 
-    fun participateTokenSales(scriptHash: String, assetID: String, amount: Double, remark: String, networkFee: Double,  completion: (Pair<Boolean?, Error?>) -> Unit){
-        val utxoEndpoint = CoZClient().baseAPIURL + CoZClient.Route.BALANCE.routeName()
-
-        val finalPayload = try {
-            Neoutils.mintTokensRawTransactionMobile(utxoEndpoint, scriptHash, Account.getWallet()?.wif, assetID, amount, remark, networkFee)
-        } catch (error: Error) {
-            completion(Pair(false, error))
+    fun participateTokenSales(scriptHash: String, assetID: String, amount: Double, remark: String, networkFee: Double,  completion: (Pair<String?, Error?>) -> Unit){
+        var utxoEndpoint = CoZClient().baseAPIURL
+        val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
+        if (isPrivateNet) {
+            utxoEndpoint = "http://192.168.0.27:5000"
+        }
+        var finalPayload: RawTransaction? = null
+        try {
+            finalPayload = Neoutils.mintTokensRawTransactionMobile(utxoEndpoint, scriptHash, Account.getWallet()?.wif, assetID, amount, remark, networkFee)
+        } catch (e: Exception) {
+            completion(Pair(null, Error(e.localizedMessage)))
             return
         }
         if (finalPayload == null) {
-            completion(Pair(false, null))
+            completion(Pair(null, null))
             return
         }
-        sendRawTransaction(finalPayload) {
+        Log.d("MINT TRANSACTION ID: ", finalPayload.txid )
+        sendRawTransaction(finalPayload.data) {
             var success = it.first
             var error = it.second
-            completion(Pair (success, error))
+            completion(Pair (finalPayload.txid, error))
         }
     }
 }

@@ -1,10 +1,12 @@
 package network.o3.o3wallet.TokenSales
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -21,12 +23,13 @@ import org.jetbrains.anko.textColor
  * Created by drei on 4/17/18.
  */
 
-class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>, private var subscribeURL: String): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val TOKEN_SALE_VIEW = 0
     val FOOTER_VIEW = 1
 
-    fun setData(tokenSales: ArrayList<TokenSale>) {
+    fun setData(tokenSales: ArrayList<TokenSale>, subscribeURL: String) {
         this.tokensales = tokenSales
+        this.subscribeURL = subscribeURL
         notifyDataSetChanged()
     }
 
@@ -45,7 +48,7 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>): RecyclerV
         if(position < tokensales.count()) {
             (holder as? TokenSaleViewHolder)?.bindTokenSale(tokensales[position])
         } else {
-            (holder as? FooterViewHolder)?.bindFooter()
+            (holder as? FooterViewHolder)?.bindFooter(subscribeURL)
         }
     }
 
@@ -103,8 +106,12 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>): RecyclerV
             private val FOOTER_KEY = "FOOTER"
         }
 
-        fun bindFooter() {
-
+        fun bindFooter(subscribeURL: String) {
+            val subscribe = view.findViewById<Button>(R.id.subscribeNewsletterButton)
+            subscribe.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(subscribeURL))
+                view.context.startActivity(intent)
+            }
         }
     }
 }

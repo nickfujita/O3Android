@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/subscribeNewsletterButton"
         style="@style/BorderLessButton.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

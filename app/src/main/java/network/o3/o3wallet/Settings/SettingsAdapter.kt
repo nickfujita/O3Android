@@ -40,7 +40,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
-            R.drawable.ic_settings_logout, R.drawable.ic_bug, R.drawable.ic_mobile_android)
+            R.drawable.ic_settings_logout, R.drawable.ic_mobile_android, R.drawable.ic_bug)
     init {
         mContext = context
         mFragment = fragment
@@ -49,8 +49,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     enum class CellType {
         PRIVATEKEY, CONTACTS,
         WATCHADRESS, NETWORK, LANGUAGE,
-        CONTACT, LOGOUT, ADVANCED,
-        VERSION
+        CONTACT, LOGOUT,
+        VERSION, ADVANCED
 
     }
 
@@ -63,7 +63,10 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
     }
 
     override fun getCount(): Int {
-        return settingsTitles.count()
+        if (BuildConfig.DEBUG) {
+            return settingsTitles.count()
+        }
+        return settingsTitles.count() - 1
     }
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {

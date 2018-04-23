@@ -53,14 +53,20 @@
 
             <TextView
                 android:id="@+id/receiptTxIdValueTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:text="TextView"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
                 android:textAppearance="@style/RegularText.Small.Primary"
                 app:layout_constraintBottom_toBottomOf="@+id/receiptTxIdLabelTextView"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/receiptTxIdLabelTextView"
                 app:layout_constraintTop_toTopOf="@+id/receiptTxIdLabelTextView"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -237,7 +243,7 @@
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_marginBottom="16dp"
-        android:text="Return To Main"
+        android:text="Return Home"
         android:textAppearance="@style/RegularText.Small.Gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -43,7 +43,6 @@ class TokenSaleReviewActivity : AppCompatActivity() {
     private lateinit var mainConstraintView: ConstraintLayout
 
     fun initiateViews(whitelisted: Boolean) {
-        val bannerView = findViewById<ImageView>(R.id.tokenSaleReviewBannerImageView)
         val sendAmountView = findViewById<TextView>(R.id.tokenSaleReviewSendAmountTextView)
         val receiveAmountTextView = findViewById<TextView>(R.id.tokenSaleReviewReceiveAmountTextView)
         val priorityTextView = findViewById<TextView>(R.id.tokenSaleReviewPriorityTextView)
@@ -56,7 +55,6 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         loadingConstraintView = findViewById<ConstraintLayout>(R.id.tokenSaleLoadingConstraintView)
 
 
-        Glide.with(this).load(bannerURL).into(bannerView)
         val df = DecimalFormat()
         if (assetSendSymbol == "NEO") {
             df.maximumFractionDigits = 0
@@ -91,7 +89,7 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         }
 
         //TODO: READD WHITELISTING WHEN SHIPPING
-        /*if (!whitelisted) {
+        if (!whitelisted) {
             whiteListFloatingActionButton.visibility = View.VISIBLE
             whiteListFloatingActionButton.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(tokenSaleWebURL))
@@ -100,19 +98,22 @@ class TokenSaleReviewActivity : AppCompatActivity() {
             whiteListErrorTextView.text = "It looks like you're not whitelisted for this token sale. " +
                     "You can use the issuers website to figure out how to get whitelisted or contact the team " +
                     "if you think this is a mistake"
-            issuerAgreementCheckbox.visibility = View.GONE
-            o3AgreementCheckbox.visibility = View.GONE
-        }*/
+        } else {
+            issuerAgreementCheckbox.visibility = View.VISIBLE
+            o3AgreementCheckbox.visibility = View.VISIBLE
+            participateButton.visibility = View.VISIBLE
+            whiteListErrorTextView.visibility = View.GONE
+        }
     }
 
-    fun moveToReceipt() {
+    fun moveToReceipt(txId: String) {
         val intent = Intent(this, TokenSaleReceiptActivity::class.java)
         intent.putExtra("assetSendSymbol", assetSendSymbol)
         intent.putExtra("assetSendAmount", assetSendAmount)
         intent.putExtra("assetReceiveSymbol", assetReceiveSymbol)
         intent.putExtra("assetReceiveAmount", assetReceiveAmount)
         intent.putExtra("priorityEnabled", priorityEnabled)
-        intent.putExtra("transactionID", "INSERT TRANSACTION ID")
+        intent.putExtra("transactionID", txId)
         intent.putExtra("tokenSaleName", tokenSaleName)
         intent.putExtra("tokenSaleWebURL", tokenSaleWebURL)
         startActivity(intent)
@@ -122,43 +123,37 @@ class TokenSaleReviewActivity : AppCompatActivity() {
         val remark = String.format("O3X%s", tokenSaleName)
         var fee: Double = 0.0
         if (priorityEnabled) { fee = 0.0011 }
-        moveToReceipt()
-        //TODO: READD ON MAINNET WHEN SHIPPING
-        /*NeoNodeRPC(PersistentStore.getNodeURL()).participateTokenSales(assetReceiveContractHash, assetSendId,
+        NeoNodeRPC(PersistentStore.getNodeURL()).participateTokenSales(assetReceiveContractHash, assetSendId,
                 assetSendAmount, remark, fee) {
             runOnUiThread {
-                loadingConstraintView.visibility = View.GONE
-                mainConstraintView.visibility = View.VISIBLE
                 if (it.second != null) {
+                    loadingConstraintView.visibility = View.GONE
+                    mainConstraintView.visibility = View.VISIBLE
                     alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
-                } else if (it.first != true) {
+                } else if (it.first == null) {
+                    loadingConstraintView.visibility = View.GONE
+                    mainConstraintView.visibility = View.VISIBLE
                     alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
                 } else {
-                   moveToReceipt()
+                   moveToReceipt(it.first!!)
                 }
             }
-        }*/
+        }
     }
 
 
-    fun initiateParticipateButton(whitelisted: Boolean) {
-        participateButton = findViewById<Button>(R.id.tokenSaleReviewParticipateButton)
+    fun initiateParticipateButton() {
         participateButton.isEnabled = false
         participateButton.backgroundColor = resources.getColor(R.color.colorDisabledButton)
         participateButton.setOnClickListener {
-            //TODO MAKE THIS THE MINT TOKEN FUNCTION
-                mainConstraintView.visibility = View.GONE
-                loadingConstraintView.visibility = View.VISIBLE
+            mainConstraintView.visibility = View.GONE
+            loadingConstraintView.visibility = View.VISIBLE
             val handler = Handler()
             handler.postDelayed( {
                 performMinting()
             }, 3000)
 
         }
-        //TODO: READD WHITELISTING WHEN SHIPPING
-        /*if (!whitelisted) {
-            button.visibility = View.GONE
-        }*/
     }
 
     fun parseIntent() {
@@ -178,16 +173,19 @@ class TokenSaleReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseIntent()
+        setContentView(R.layout.tokensale_review_activity)
+        val bannerView = findViewById<ImageView>(R.id.tokenSaleReviewBannerImageView)
+        participateButton = findViewById<Button>(R.id.tokenSaleReviewParticipateButton)
+        Glide.with(this).load(bannerURL).into(bannerView)
         NeoNodeRPC(PersistentStore.getNodeURL()).getWhiteListStatus(assetReceiveContractHash, Account.getWallet()?.address!!) {
             runOnUiThread {
                 if (it.second != null) {
-                    setContentView(R.layout.tokensale_review_activity)
                     initiateViews(false)
-                    initiateParticipateButton(false)
+                    initiateParticipateButton()
 
                 } else {
                     initiateViews(it.first!!)
-                    initiateParticipateButton(it.first!!)
+                    initiateParticipateButton()
                 }
             }
         }

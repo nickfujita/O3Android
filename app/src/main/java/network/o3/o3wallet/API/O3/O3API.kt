@@ -12,6 +12,8 @@ import network.o3.o3wallet.API.CoZ.TransactionHistory
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.NEO.NEP5Tokens
+import network.o3.o3wallet.O3Wallet
+import org.jetbrains.anko.defaultSharedPreferences
 
 /**
  * Created by drei on 11/24/17.
@@ -86,7 +88,11 @@ class O3API {
     }
 
     fun getAvailableNEP5Tokens(completion: (Pair<Array<NEP5Token>?, Error?>) -> Unit) {
-        val url = "https://o3.network/settings/nep5.json"
+        var url = "https://o3.network/settings/nep5.json"
+        val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
+        if (isPrivateNet) {
+            url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/nep5.private.json"
+        }
         url.httpGet().responseString { request, response, result ->
             val (data, error) = result
             if (error == null) {
@@ -114,7 +120,11 @@ class O3API {
     }
 
     fun getTokenSales(completion: (Pair<TokenSales?, Error?>) -> Unit) {
-        val url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+        var url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+        val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
+        if (isPrivateNet) {
+            url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+        }
         url.httpGet().responseString { request, response, result ->
             val (data, error) = result
             if (error == null) {
