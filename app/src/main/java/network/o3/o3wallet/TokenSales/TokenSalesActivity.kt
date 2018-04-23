@@ -19,7 +19,7 @@ class TokenSalesActivity : AppCompatActivity() {
         setContentView(R.layout.tokensales_list_activity)
 
         val listingsView = findViewById<RecyclerView>(R.id.tokenSalesListingRecyclerView)
-        listingsView?.adapter = TokenSalesAdapter(tokenSales, "https://newsletters.o3.network/tokensales/")
+        listingsView?.adapter = TokenSalesAdapter(tokenSales, "https://cdn.o3.network/newsletters/tokensales/index.html")
 
         model = TokenSalesViewModel()
         model?.getTokenSales(true)?.observe(this, Observer { tokenSales ->

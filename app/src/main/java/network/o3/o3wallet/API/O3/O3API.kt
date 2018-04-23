@@ -120,7 +120,7 @@ class O3API {
     }
 
     fun getTokenSales(completion: (Pair<TokenSales?, Error?>) -> Unit) {
-        var url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+        var url = "https://cdn.o3.network/data/tokensales.json"
         val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
         if (isPrivateNet) {
             url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
