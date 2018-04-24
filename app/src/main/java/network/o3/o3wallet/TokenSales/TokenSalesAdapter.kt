@@ -18,6 +18,9 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import android.graphics.Movie
+
+
 
 /**
  * Created by drei on 4/17/18.
@@ -61,7 +64,6 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>, private va
             val view = layoutInflater.inflate(R.layout.tokensales_listing_footer, parent, false)
             return FooterViewHolder (view)
         }
-
     }
 
     class TokenSaleViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
