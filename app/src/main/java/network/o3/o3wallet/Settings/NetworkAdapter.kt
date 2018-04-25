@@ -11,6 +11,8 @@ import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.*
 import android.graphics.Color
 import android.widget.CheckBox
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 
 /**
  * Created by drei on 12/11/17.
@@ -81,6 +83,8 @@ class NetworkAdapter(context: Context): BaseAdapter() {
         }
 
         view.setOnClickListener {
+            Answers().logCustom(CustomEvent("Network Node Set")
+                    .putCustomAttribute("Network Node", node.url))
             PersistentStore.setNodeURL(node.url)
             notifyDataSetChanged()
         }

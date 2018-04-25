@@ -12,6 +12,8 @@ import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
 import network.o3.o3wallet.Wallet.TabbedAccount
 import android.content.DialogInterface
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
@@ -51,28 +53,37 @@ class MainTabbedActivity : LocalizationActivity() {
                     return false
                 }
 
+                var tabName = ""
                 when (item.getItemId()) {
                     R.id.action_item1 -> {
                         switchFragment(0)
                         activeTabID = item.itemId
                         activeTabPosition = 0
+                        tabName = "Home"
                     }
                     R.id.action_item2 -> {
                         switchFragment(1)
                         activeTabID = item.itemId
                         activeTabPosition = 1
+                        tabName = "Wallet"
                     }
                     R.id.action_item3 -> {
                         switchFragment(2)
                         activeTabID = item.itemId
                         activeTabPosition = 2
+                        tabName = "News"
                     }
                     R.id.action_item4 -> {
                         val settingsModal = fragments!!.get(3) as SettingsFragment
                         settingsModal.show(supportFragmentManager, settingsModal.tag)
+                        tabName = "Settings"
+                        Answers().logCustom(CustomEvent("Tab Tapped")
+                                .putCustomAttribute("Tab Name", tabName))
                         return false
                     }
                 }
+                Answers().logCustom(CustomEvent("Tab Tapped")
+                        .putCustomAttribute("Tab Name", tabName))
                 return true
             }
         })

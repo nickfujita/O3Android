@@ -16,6 +16,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.robinhood.ticker.TickerUtils
@@ -54,6 +56,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
     private lateinit var claimToast: Toast
+    private var claimAmount: Double = 0.0
     private var isClaiming = false
     var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
 
@@ -302,7 +305,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                     this.claims = data!!
                     val amount = data!!.total_unspent_claim / 100000000.0
                     unclaimedGASLabel.text = "%.8f".format(amount)
-
+                    claimAmount = amount
                     if (isClaiming) {
                         this.claimButton.isEnabled = false
                     } else {
@@ -327,6 +330,9 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 var error = it.second
                 setClaiming(false)
                 if (success == true) {
+                    Answers().logCustom(CustomEvent("Gas Claimed").
+                            putCustomAttribute("Amount", claimAmount))
+                    claimAmount = 0.0
                     claimToast.cancel()
                     context!!.toast(resources.getString(R.string.claimed_gas_successfully))
                     disableGasInfo()

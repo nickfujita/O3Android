@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import android.widget.ListAdapter
 import com.bumptech.glide.request.RequestOptions
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.ContentViewEvent
+import com.crashlytics.android.answers.CustomEvent
 import java.text.SimpleDateFormat
 
 
@@ -66,6 +69,10 @@ class NewsFeedAdapter(context: Context, fragment: NewsFeedFragment): BaseAdapter
         Glide.with(mContext).load(feedItem?.images[0].url).apply(RequestOptions().centerCrop()).into(imageView)
 
         view?.setOnClickListener {
+            Answers().logContentView(ContentViewEvent()
+                    .putContentType("NEO News Today")
+                    .putContentId(feedItem.title)
+                    .putContentName("NewsFeed Item View"))
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(feedItem?.link))
             startActivity(mContext, browserIntent, null)
         }
