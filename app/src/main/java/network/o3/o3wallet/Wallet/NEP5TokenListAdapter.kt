@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
+import com.github.salomonbrys.kotson.toJsonArray
 import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.NEO.Node
 import network.o3.o3wallet.PersistentStore
@@ -59,15 +62,22 @@ class NEP5TokenListAdapter(context: Context) : BaseAdapter() {
             vh = view.tag as NEP5TokenRow
         }
 
-        vh.tokenNameTextView.text = getItem(position).name
-        vh.tokenSymbolTextView.text = getItem(position).symbol
+        val token = getItem(position)
+        vh.tokenNameTextView.text = token.name
+        vh.tokenSymbolTextView.text = token.symbol
 
-        vh.checkbox.isChecked = selectedList.get(getItem(position).tokenHash) != null
+        vh.checkbox.isChecked = selectedList.get(token.tokenHash) != null
         vh.checkbox.setOnClickListener {
             if (vh.checkbox.isChecked == true) {
-                PersistentStore.addToken(getItem(position))
+                PersistentStore.addToken(token)
+                Answers().logCustom(CustomEvent("Added New Token")
+                        .putCustomAttribute("Token Name", PersistentStore.getSelectedNEP5Tokens().keys.count())
+                        .putCustomAttribute("Which Tokens", (PersistentStore.getSelectedNEP5Tokens().keys.toJsonArray().toString())))
             } else {
                 PersistentStore.removeToken(getItem(position))
+                Answers().logCustom(CustomEvent("Removed Token")
+                        .putCustomAttribute("Token Name", PersistentStore.getSelectedNEP5Tokens().keys.count())
+                        .putCustomAttribute("Which Tokens", (PersistentStore.getSelectedNEP5Tokens().keys.toJsonArray().toString())))
             }
             val intent = Intent("need-update-data-event")
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent)

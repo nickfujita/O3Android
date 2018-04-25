@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.*
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.wallet_activity_send.*
 import neoutils.Neoutils
@@ -173,6 +175,10 @@ class SendActivity: LocalizationActivity() {
                 val error = it.second
                 val success = it.first
                 if (success == true) {
+                    Answers().logCustom(CustomEvent("Native Asset Sent")
+                            .putCustomAttribute("Asset Name", toSendAsset.name)
+                            .putCustomAttribute("Amount", amount))
+
                     baseContext!!.toast(resources.getString(R.string.sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()
@@ -204,6 +210,9 @@ class SendActivity: LocalizationActivity() {
                 val error = it.second
                 val success = it.first
                 if (success == true) {
+                    Answers().logCustom(CustomEvent("Native Asset Sent")
+                            .putCustomAttribute("Asset Name", selectedAssetTextView.text.toString())
+                            .putCustomAttribute("Amount", amount))
                     baseContext!!.toast(resources.getString(R.string.sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()

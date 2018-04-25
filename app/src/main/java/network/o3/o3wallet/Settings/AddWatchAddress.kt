@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
@@ -63,6 +65,8 @@ class AddWatchAddress : LocalizationActivity() {
                     }
                 } else {
                     PersistentStore.addWatchAddress(addressField.text.trim().toString(), nickNameField.text.trim().toString())
+                    Answers().logCustom(CustomEvent("Watch Address Added")
+                            .putCustomAttribute("Total Watch Addresses", PersistentStore.getWatchAddresses().count()))
                     finish()
                 }
             }

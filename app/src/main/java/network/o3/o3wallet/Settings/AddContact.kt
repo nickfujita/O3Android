@@ -12,6 +12,8 @@ import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.Toast
 import com.akexorcist.localizationactivity.ui.LocalizationActivity
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.Wallet.Send.afterTextChanged
 import org.jetbrains.anko.alert
@@ -66,6 +68,8 @@ class AddContact : LocalizationActivity() {
                     }
                 } else {
                     PersistentStore.addContact(addressField.text.trim().toString(), nickNameField.text.trim().toString())
+                    Answers().logCustom(CustomEvent("Contact Added").
+                            putCustomAttribute("Total Contacts", PersistentStore.getContacts().count()))
                     //RELOAD_DATA = 1
                     setResult(1)
                     finish()
