@@ -122,6 +122,14 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="RegularText.Gain">
+        <item name="android:textColor">@color/colorGain</item>
+    </style>
+
+    <style name="RegularText.Loss">
+        <item name="android:textColor">@color/colorLoss</item>
+    </style>
+
     <style name="RegularText.Error">
         <item name="android:textColor">@color/colorLoss</item>
     </style>

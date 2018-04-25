@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentPagerAdapter
 import network.o3.o3wallet.R
 import network.o3.o3wallet.Settings.ContactsFragment
+import network.o3.o3wallet.Wallet.TransactionHistory.TransactionHistoryFragment
 
 /**
  * Created by apisit on 12/18/17.
@@ -26,7 +27,7 @@ class AccountFragmentPagerAdapter(fm: android.support.v4.app.FragmentManager, co
             return AccountFragment.newInstance()
         }
         if (position == 1) {
-            return AccountTransactionsFragment.newInstance()
+            return TransactionHistoryFragment.newInstance()
         }
         if (position == 2) {
             val contactsModal = ContactsFragment.newInstance()

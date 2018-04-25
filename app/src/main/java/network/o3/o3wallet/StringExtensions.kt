@@ -7,6 +7,9 @@ import java.util.*
 import android.text.Spanned
 import android.text.InputFilter
 import java.util.regex.Pattern
+import java.util.Collections.replaceAll
+
+
 
 
 /**
@@ -27,6 +30,24 @@ fun Double.formattedPercentString(): String {
 }
 
 fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+
+fun Double.removeTrailingZeros(): String {
+    var formatter = NumberFormat.getNumberInstance()
+    formatter.maximumFractionDigits = 8
+    return  formatter.format(this)
+
+    /* var doubleString = this.format(8)
+    if (this % 1.0 == 0.0) {
+        return this.format(0)
+    }
+    for (x in doubleString.length - 1 downTo  0) {
+        if (doubleString[x] == '0') {
+            doubleString = doubleString.removeSuffix("0")
+        }
+    }*/
+   // return doubleString
+}
+
 
 enum class CurrencyType {
     BTC, USD
