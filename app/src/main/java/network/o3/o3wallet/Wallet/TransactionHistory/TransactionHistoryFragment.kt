@@ -1,6 +1,7 @@
 package network.o3.o3wallet.Wallet.TransactionHistory
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,7 @@ import network.o3.o3wallet.R
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.find
 import org.jetbrains.anko.support.v4.onUiThread
+import java.util.concurrent.CountDownLatch
 
 /**
  * A simple [Fragment] subclass.
@@ -21,10 +23,11 @@ import org.jetbrains.anko.support.v4.onUiThread
 class TransactionHistoryFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView
+    private lateinit var swipeContainer: SwipeRefreshLayout
 
     var txHistory: NeoScanTransactionHistory? = null
     var currentPage = 1
-
+    var paginator: PaginationScrollListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -38,20 +41,35 @@ class TransactionHistoryFragment : Fragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = TransactionHistoryAdapter(entries, context)
 
-        var paginator = object: PaginationScrollListener(layoutManager) {
+
+        swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        swipeContainer.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary)
+
+        swipeContainer.setOnRefreshListener {
+            swipeContainer.isRefreshing = true
+            this.loadFirstPage()
+        }
+
+
+        paginator = object: PaginationScrollListener(layoutManager) {
             override fun loadMoreItems() {
+                isLoading = true
                 onUiThread { (recyclerView.adapter as TransactionHistoryAdapter).addLoadingFooter() }
                 currentPage = currentPage + 1
                 NeoScanClient().getNeoScanTransactionHistory(Account.getWallet()?.address!!, currentPage) {
-                    onUiThread { (recyclerView.adapter as TransactionHistoryAdapter).removeLoadingFooter() }
-                    if (it.second != null) {
-                        currentPage = currentPage - 1
-                        return@getNeoScanTransactionHistory
-                    }
-                    totalPageCount = it.first?.total_pages!!
-                    isLastPage = currentPage == totalPageCount
+                    isLoading = false
                     onUiThread {
-                        (recyclerView.adapter as TransactionHistoryAdapter).addAllTransactions(it.first?.entries?.toList()!!)
+                        (recyclerView.adapter as TransactionHistoryAdapter).removeLoadingFooter()
+                        if (it.second != null) {
+                            currentPage = currentPage - 1
+                        } else {
+                            totalPageCount = it.first?.total_pages!!
+                            isLastPage = currentPage == totalPageCount
+                            (recyclerView.adapter as TransactionHistoryAdapter).addAllTransactions(it.first?.entries?.toList()!!)
+                        }
                     }
                 }
             }
@@ -63,9 +81,14 @@ class TransactionHistoryFragment : Fragment() {
     }
 
     fun loadFirstPage() {
+        currentPage = 1
+        if (paginator != null) {
+            paginator?.isLastPage = false
+        }
+        onUiThread { (recyclerView.adapter as TransactionHistoryAdapter).removeAllTransactions() }
         NeoScanClient().getNeoScanTransactionHistory(Account.getWallet()?.address!!, currentPage) {
+            onUiThread {  swipeContainer.isRefreshing = false }
             if (it.second != null) {
-                currentPage = currentPage - 1
                 return@getNeoScanTransactionHistory
             }
             onUiThread {

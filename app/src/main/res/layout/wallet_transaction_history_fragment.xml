@@ -4,9 +4,14 @@
     android:layout_height="match_parent"
     tools:context="network.o3.o3wallet.Wallet.TransactionHistory.TransactionHistoryFragment">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/txHistoryRecyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/txHistoryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </FrameLayout>

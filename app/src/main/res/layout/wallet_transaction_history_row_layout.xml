@@ -4,12 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/transactionHistoryRow"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="80dp"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="80dp">
+
+        <TextView
+            android:id="@+id/toTextView"
+            style="@style/RegularText.Small.Primary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:ellipsize="middle"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="To"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/assetTextView" />
 
         <TextView
             android:id="@+id/assetTextView"
@@ -19,27 +37,25 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:includeFontPadding="false"
-            android:text="TextView"
-            android:textStyle="bold"
+            android:text="   "
+            android:textAppearance="@style/RegularText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/transactionIDTextView"
-            style="@style/TableRowSubtitleText"
+            android:id="@+id/fromTextView"
+            style="@style/RegularText.Small.Accent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="100dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:ellipsize="middle"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="TextView"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="From"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toTextView" />
 
         <TextView
             android:id="@+id/amountTextView"
@@ -50,7 +66,19 @@
             android:layout_marginTop="8dp"
             android:includeFontPadding="false"
             android:text="TextView"
+            android:textAppearance="@style/RegularText.Gain"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/blockNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textAppearance="@style/RegularText.Small.Gray"
+            app:layout_constraintStart_toEndOf="@+id/assetTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
