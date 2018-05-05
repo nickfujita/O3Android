@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="all"
-                    android:text="ALL"
+                    android:text="@string/PORTFOLIO_all"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
             <ScrollView

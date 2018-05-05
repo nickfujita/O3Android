@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:text="My Address" />
+            android:text="@string/WALLET_my_address" />
 
         <ImageView
             android:id="@+id/addressQRCodeImageView"
@@ -39,7 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
 
@@ -50,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
-            android:text="Copy Address" />
+            android:text="@string/WALLET_copy_address_my_address" />
     </LinearLayout>
 
 </FrameLayout>

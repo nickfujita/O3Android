@@ -191,6 +191,8 @@
     </string-array>
 
     <!-- Portfolio -->
+    <string name="PORTFOLIO_selecting_best_node">Selecting Best Node</string>
+    <string name="PORTFOLIO_selecting_best_node_description">The node selecting process may take quite a while depending on your internet connection</string>
     <string name="PORTFOLIO_price_history">%1$s Price History</string>
 
     <string-array name="PORTFOLIO_headers">

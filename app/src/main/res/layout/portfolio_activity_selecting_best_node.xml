@@ -27,7 +27,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="Selecting best node"
+        android:text="@string/PORTFOLIO_selecting_best_node"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

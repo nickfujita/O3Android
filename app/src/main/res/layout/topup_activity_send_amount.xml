@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NEO"
+        tools:ignore="HardcodedText"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/coldStoageKeyTitle"
@@ -21,7 +22,6 @@
         android:id="@+id/coldStorageAddressView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="gsdfgfsgfsgfsgfsd"
         android:textAppearance="@style/RegularSubtitleText"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -31,6 +31,7 @@
         android:layout_width="160dp"
         android:layout_height="43dp"
         android:hint="0"
+        tools:ignore="HardcodedText"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="@+id/assetTextView"
