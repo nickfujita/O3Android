@@ -139,35 +139,6 @@
                 android:background="@drawable/accent_button_background"
                  android:text="@string/SEND_send"  />
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:clipToPadding="false">
-
-                <TextView
-                    android:id="@+id/textView15"
-                    style="@style/BoldText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Note"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-            <EditText
-                android:id="@+id/noteTextView"
-                style="@style/RegularText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="Note"
-                android:ems="10"
-                android:hint="Note to receiver"
-
-                android:inputType="textPersonName"
-                android:visibility="invisible" />
-
 
         </LinearLayout>
 

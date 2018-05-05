@@ -67,7 +67,7 @@ class NeoNodeRPC {
         var request = nodeURL.httpPost().body(dataJson.toString())
         println(RPC.GETBLOCKCOUNT.methodName())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
             print(result.component1())
 
             val (data, error) = result
@@ -92,7 +92,7 @@ class NeoNodeRPC {
 
         var request = nodeURL.httpPost().body(dataJson.toString())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
 
             val (data, error) = result
             if (error == null) {
@@ -116,7 +116,7 @@ class NeoNodeRPC {
 
         var request = nodeURL.httpPost().body(dataJson.toString())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
 
             val (data, error) = result
             if (error == null) {
