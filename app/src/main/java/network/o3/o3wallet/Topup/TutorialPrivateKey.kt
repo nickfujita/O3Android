@@ -28,7 +28,7 @@ class TutorialPrivateKey : LocalizationActivity() {
         coldStorageScanButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt(resources.getString(R.string.scan_prompt_cold_storage))
+            integrator.setPrompt(resources.getString(R.string.TOPUP_scan_prompt_cold_storage))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -58,7 +58,7 @@ class TutorialPrivateKey : LocalizationActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents == null) {
-            Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
         } else {
             coldStorageWifTextView.setText(result.contents)
         }

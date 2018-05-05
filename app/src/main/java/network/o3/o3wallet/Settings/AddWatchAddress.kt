@@ -25,7 +25,7 @@ class AddWatchAddress : LocalizationActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity_add_watch_address)
 
-        this.title = resources.getString(R.string.watch_address)
+        this.title = resources.getString(R.string.SETTINGS_watch_address)
         val nickNameField = findViewById<EditText>(R.id.NickNameField)
         val addressField = findViewById<EditText>(R.id.AddressField)
         val saveButton = findViewById<Button>(R.id.AddButton)
@@ -33,7 +33,7 @@ class AddWatchAddress : LocalizationActivity() {
         scanAddressButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt(resources.getString(R.string.scan_prompt_watch_address))
+            integrator.setPrompt(resources.getString(R.string.SETTINGS_scan_prompt_watch_address))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -59,7 +59,7 @@ class AddWatchAddress : LocalizationActivity() {
             NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(addressField.text.trim().toString()) {
                 if (it.second != null || it?.first == false) {
                     runOnUiThread {
-                        alert (resources.getString(R.string.invalid_neo_address), resources.getString(R.string.error)) {
+                        alert (resources.getString(R.string.ALERT_invalid_neo_address), resources.getString(R.string.ALERT_error)) {
                             yesButton {  }
                         }.show()
                     }
@@ -77,7 +77,7 @@ class AddWatchAddress : LocalizationActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null ) {
             if (result.contents == null) {
-                Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
             } else {
                 findViewById<EditText>(R.id.AddressField).setText(result.contents)
             }

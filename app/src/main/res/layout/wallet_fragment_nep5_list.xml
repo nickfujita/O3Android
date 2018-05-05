@@ -21,7 +21,7 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
-            android:text="@string/nep_5_tokens"
+            android:text="@string/WALLET_nep_5_tokens"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

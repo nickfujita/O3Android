@@ -29,7 +29,7 @@ class AssetGraph : LocalizationActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.portfolio_activity_asset_graph)
         symbol = intent.getStringExtra("SYMBOL")
-        title = resources.getString(R.string.price_history, symbol!!)
+        title = resources.getString(R.string.PORTFOLIO_price_history, symbol!!)
         assetGraphModel = ViewModelProviders.of(this).get(AssetGraphViewModel::class.java)
 
         initiateGraph()

@@ -38,7 +38,7 @@ class TopupSendAmountActivity : LocalizationActivity() {
     fun scanButtonTapped() {
         val integrator = IntentIntegrator(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-        integrator.setPrompt(resources.getString(R.string.scan_prompt_watch_address))
+        integrator.setPrompt(resources.getString(R.string.SETTINGS_scan_prompt_watch_address))
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
     }
@@ -48,7 +48,7 @@ class TopupSendAmountActivity : LocalizationActivity() {
         var amount = topupAmountTextView.text.trim().toString().toDouble()
 
         if (amount == 0.0) {
-            baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
+            baseContext.toast(resources.getString(R.string.SEND_amount_must_be_nonzero))
             return
         }
         scanButton.isEnabled = false
@@ -59,7 +59,7 @@ class TopupSendAmountActivity : LocalizationActivity() {
                 val error = it.second
                 val success = it.first
                 if (success == true) {
-                    baseContext!!.toast(resources.getString(R.string.sent_successfully))
+                    baseContext!!.toast(resources.getString(R.string.SEND_sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()
                     }, 1000)
@@ -89,13 +89,13 @@ class TopupSendAmountActivity : LocalizationActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents == null) {
-            Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
         } else {
             val sharedSecretPieceOne = Account.getColdStorageKeyFragmentOnDevice()
             val sharedSecretPieceTwo = result.contents
             try {
                 coldStorageWIF = recoverFromSharedSecret(sharedSecretPieceOne.hexStringToByteArray(), sharedSecretPieceTwo.hexStringToByteArray())
-                scanButton.text = resources.getString(R.string.confirm)
+                scanButton.text = resources.getString(R.string.TOPUP_confirm)
                 lockImageView.image = resources.getDrawable(R.drawable.ic_lock_open_alt)
                 scanButton.setOnClickListener { finishTransaction() }
             } catch (error: Error) {

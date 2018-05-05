@@ -22,7 +22,7 @@ import network.o3.o3wallet.R
 
 class LandingFeatureScroll: Fragment() {
     val imageIds: List<Int> = listOf(R.drawable.chart_line, R.drawable.exchange, R.drawable.lock)
-    var titles = O3Wallet.appContext!!.resources.getStringArray(R.array.onboarding_image_titles)
+    var titles = O3Wallet.appContext!!.resources.getStringArray(R.array.ONBOARDING_image_titles)
 
     companion object {
         fun newInstance(position: Int): LandingFeatureScroll {

@@ -334,7 +334,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                             putCustomAttribute("Amount", claimAmount))
                     claimAmount = 0.0
                     claimToast.cancel()
-                    context!!.toast(resources.getString(R.string.claimed_gas_successfully))
+                    context!!.toast(resources.getString(R.string.WALLET_claimed_gas_successfully))
                     disableGasInfo()
                     loadAccountState()
                     loadClaimableGAS()
@@ -398,7 +398,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             context?.toast("Unable to retrieve account details, check settings -> network")
             return
         }
-        claimToast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
+        claimToast = context!!.toastUntilCancel(resources.getString(R.string.WALLET_claiming_gas))
         setClaiming(true)
         claimProgress.visibility = View.VISIBLE
         claimButton.isEnabled = false

@@ -73,7 +73,7 @@ class MainActivity : LocalizationActivity() {
     fun createWalletTapped() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (Account.isEncryptedWalletPresent()) {
-            alert (resources.getString(R.string.existing_key_detected)) {
+            alert (resources.getString(R.string.ONBOARDING_existing_key_detected)) {
                 yesButton {
                     authenticateReplaceWallet()
                 }
@@ -83,7 +83,7 @@ class MainActivity : LocalizationActivity() {
             }.show()
         } else if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
             Account.createNewWallet()
@@ -96,7 +96,7 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
             val intent = mKeyguardManager.createConfirmDeviceCredentialIntent("Log in to your existing wallet", null)
@@ -123,7 +123,7 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         }
         val intent = Intent(this, LoginActivity::class.java)

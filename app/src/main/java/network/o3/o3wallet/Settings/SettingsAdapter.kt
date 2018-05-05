@@ -36,7 +36,7 @@ import java.util.*
 class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter() {
     private val mContext: Context
     private var mFragment: SettingsFragment
-    var settingsTitles = context.resources.getStringArray(R.array.settings_menu_titles)
+    var settingsTitles = context.resources.getStringArray(R.array.SETTINGS_settings_menu_titles)
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
@@ -76,7 +76,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         titleTextView.text = getItem(position).first
         if (position == CellType.VERSION.ordinal) {
             val version = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
-            titleTextView.text = mContext.resources.getString(R.string.version, version)
+            titleTextView.text = mContext.resources.getString(R.string.SETTINGS_version, version)
         }
 
         view.findViewById<ImageView>(R.id.settingsIcon).setImageResource(getItem(position).second)

@@ -34,7 +34,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.settings_fragment_contacts, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header_row, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.contact)
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.WALLET_address_book)
 
         val listView = view.findViewById<ListView>(R.id.contactsListView)
         listView.addHeaderView(headerView)
@@ -45,7 +45,7 @@ class ContactsFragment : BottomSheetDialogFragment() {
     }
 
     fun showRemoveAlert(contact: Contact) {
-        alert(resources.getString(R.string.remove_contact_warning),resources.getString(R.string.remove_contact)) {
+        alert(resources.getString(R.string.WALLET_remove_contact_warning),resources.getString(R.string.WALLET_remove_contact)) {
             yesButton {
                 PersistentStore.removeContact(contact.address, contact.nickname)
                 adapter?.updateData()

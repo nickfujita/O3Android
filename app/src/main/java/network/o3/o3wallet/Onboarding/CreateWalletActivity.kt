@@ -27,9 +27,9 @@ class CreateWalletActivity : LocalizationActivity() {
     }
 
     fun startButtonTapped() {
-        alert (resources.getString(R.string.alert_warning)) {
+        alert (resources.getString(R.string.ONBOARDING_please_backup_warning)) {
             yesButton {
-                alert(resources.getString(R.string.warning_confirmation)) {
+                alert(resources.getString(R.string.ONBOARDING_backup_warning_confirmation)) {
                     yesButton {
                         val intent = Intent(this@CreateWalletActivity, SelectingBestNode::class.java)
                         startActivity(intent)

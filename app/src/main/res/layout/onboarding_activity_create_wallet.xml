@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="@string/create_welcome"
+        android:text="@string/ONBOARDING_Welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="@string/your_public_address"
+        android:text="@string/ONBOARDING_your_public_address"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrView" />
@@ -54,7 +54,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="@string/your_private_key_create"
+        android:text="@string/ONBOARDING_your_private_key"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
@@ -67,7 +67,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:includeFontPadding="false"
-        android:text="@string/private_key_warning"
+        android:text="@string/ONBOARDING_private_key_warning"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:textColor="@color/colorLoss"
         app:layout_constraintStart_toStartOf="parent"

@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
-        android:text="@string/topup_footnote"
+        android:text="@string/TOPUP_footnote"
         android:textAppearance="@style/RegularSubtitleText"
         app:layout_constraintEnd_toEndOf="@+id/scanButton"
         app:layout_constraintStart_toStartOf="@+id/scanButton"
@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/amount_topup"
+        android:text="@string/TOPUP_amount"
         android:textAppearance="@style/BoldText"
         app:layout_constraintStart_toStartOf="@+id/coldStoageKeyTitle"
         app:layout_constraintTop_toBottomOf="@+id/coldStoageKeyTitle" />
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
-        android:text="@string/scan_qr_code"
+        android:text="@string/TOPUP_scan_qr_code"
         app:layout_constraintEnd_toEndOf="@+id/topupAmountTextView"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/topupAmountTextView" />
@@ -75,18 +75,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="@string/from_cold_storage"
+        android:text="@string/TOPUP_from_cold_storage"
         android:textAppearance="@style/BoldText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/from_cold_storage" />
+        tools:text="@string/TOPUP_from_cold_storage" />
 
     <TextView
         android:id="@+id/coldStoageKeyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/asset_topup"
+        android:text="@string/TOPUP_asset"
         android:textAppearance="@style/BoldText"
         app:layout_constraintStart_toStartOf="@+id/coldStorageAddressView"
         app:layout_constraintTop_toBottomOf="@+id/coldStorageAddressView" />

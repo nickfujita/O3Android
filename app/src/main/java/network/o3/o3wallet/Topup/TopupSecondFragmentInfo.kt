@@ -33,7 +33,7 @@ class TopupSecondFragmentInfo : LocalizationActivity() {
         setContentView(R.layout.topup_activity_topup_second_fragment_info)
         val secretPieceTwo = intent.getStringExtra("SecretPieceTwo")
         secretPieceTwoTextView.text = secretPieceTwo
-        secretKeySavedCheckbox.text = resources.getString(R.string.save_fragment_confirm)
+        secretKeySavedCheckbox.text = resources.getString(R.string.TOPUP_save_fragment_confirm)
         val bitmap = QRCode.from(secretPieceTwo).withSize(1000, 1000).bitmap()
         secretPieceQrCodeView.setImageBitmap(bitmap)
 

@@ -29,7 +29,7 @@ class TopupKeyGeneration : LocalizationActivity() {
 
         fun showCompletion() {
             encryptingProgress.visibility = View.INVISIBLE
-            encryptionProgressTextView.text = resources.getString(R.string.encryption_done)
+            encryptionProgressTextView.text = resources.getString(R.string.TOPUP_encryption_done)
             lockImage.visibility = View.VISIBLE
             encryptionInfoTextView.visibility = View.VISIBLE
             continueEncryptionButton.visibility = View.VISIBLE

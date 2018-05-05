@@ -50,12 +50,12 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
         when (position) {
             0 -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_asset_row_header, parent, false)
-                view.findViewById<TextView>(R.id.headerTextView).text = mContext.resources.getString(R.string.native_assets_header)
+                view.findViewById<TextView>(R.id.headerTextView).text = mContext.resources.getString(R.string.SEND_native_assets_header)
                 return view
             }
             3 -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_asset_row_header, parent, false)
-                view.findViewById<TextView>(R.id.headerTextView).text = mContext.resources.getString(R.string.token_assets_header)
+                view.findViewById<TextView>(R.id.headerTextView).text = mContext.resources.getString(R.string.SEND_token_assets_header)
                 return view
             }
             1, 2 -> {

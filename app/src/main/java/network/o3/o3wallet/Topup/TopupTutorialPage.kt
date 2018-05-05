@@ -35,11 +35,11 @@ class TopupTutorialPage: Fragment() {
         val position = arguments!!.getInt("position")
         view.findViewById<ImageView>(R.id.tutorialImage).setImageResource(imageIds[position])
         view.findViewById<TextView>(R.id.tutorialExplanation).text =
-                resources.getStringArray(R.array.topup_tutorial_explanations)[position]
+                resources.getStringArray(R.array.TOPUP_tutorial_explanations)[position]
         view.findViewById<TextView>(R.id.tutorialSubtitleTextView).text =
-                resources.getStringArray(R.array.topup_tutorial_subtitles)[position]
+                resources.getStringArray(R.array.TOPUP_tutorial_subtitles)[position]
         view.findViewById<TextView>(R.id.tutorialTitle).text =
-               resources.getStringArray(R.array.topup_tutorial_titles)[position]
+               resources.getStringArray(R.array.TOPUP_tutorial_titles)[position]
         return view
     }
 }
