@@ -6,7 +6,7 @@ import android.os.AsyncTask
 /**
  * Created by apisit on 12/9/17.
  */
-class ClaimGASTask(): AsyncTask<Void, Void, String>() {
+class ClaimGASTask : AsyncTask<Void, Void, String>() {
 
 
     override fun doInBackground(vararg params: Void?): String? {
@@ -14,13 +14,4 @@ class ClaimGASTask(): AsyncTask<Void, Void, String>() {
         return null
     }
 
-    override fun onPreExecute() {
-        super.onPreExecute()
-        // ...
-    }
-
-    override fun onPostExecute(result: String?) {
-        super.onPostExecute(result)
-        // ...
-    }
 }

@@ -54,7 +54,7 @@ class SendActivity: LocalizationActivity() {
     var assetID = NeoNodeRPC.Asset.NEO.assetID()
     var shortName = "NEO"
 
-    public val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
+    val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -204,7 +204,7 @@ class SendActivity: LocalizationActivity() {
             baseContext.toast("You must have 0.0000000001 GAS to send a token")
             return
         }
-        NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet!!.address, address, amount) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet.address, address, amount) {
             runOnUiThread {
                 toast.cancel()
                 val error = it.second
@@ -242,7 +242,7 @@ class SendActivity: LocalizationActivity() {
         }
 
         NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(address) {
-            if (it.second != null || it?.first == false) {
+            if (it.second != null || it.first == false) {
                 runOnUiThread {
                     alert(resources.getString(R.string.ALERT_invalid_neo_address), resources.getString(R.string.ALERT_error)) {
                         yesButton {

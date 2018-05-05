@@ -68,7 +68,7 @@ class AssetGraph : LocalizationActivity() {
                 val percentChange = ((price - assetGraphModel?.getInitialPrice()!!) /
                         assetGraphModel?.getInitialPrice()!! * 100)
 
-                if (percentChange!! < 0) {
+                if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
@@ -133,7 +133,7 @@ class AssetGraph : LocalizationActivity() {
 
     fun tappedIntervalButton(button: Button) {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
-        button?.setTextAppearance(R.style.IntervalButtonText_Selected)
+        button.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
         assetGraphModel?.setInterval(button.tag.toString())
         loadGraph(true)

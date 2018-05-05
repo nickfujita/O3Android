@@ -73,9 +73,9 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         emailTextView.setOnClickListener {
 
 
-            val emailIntent = Intent(Intent.ACTION_SEND);
-            emailIntent.setData(Uri.parse("mailto:"));
-            emailIntent.setType("text/plain");
+            val emailIntent = Intent(Intent.ACTION_SEND)
+            emailIntent.data = Uri.parse("mailto:")
+            emailIntent.type = "text/plain"
 
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, tokenSaleName + " Tokensale Participation Receipt")
             val emailString = "This receipt proves that your transaction has submitted for procesing on the NEO Blockchain\n\n" +

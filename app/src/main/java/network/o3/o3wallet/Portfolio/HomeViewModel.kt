@@ -34,7 +34,7 @@ class HomeViewModel {
     private var displayType: DisplayType = DisplayType.HOT
     private var interval: String = "24H"
     private var currency = CurrencyType.USD
-    lateinit private var portfolio: Portfolio
+    private lateinit var portfolio: Portfolio
     private var balanceCountDownLatch: CountDownLatch? = null
 
     lateinit var delegate: HomeViewModelProtocol
@@ -279,8 +279,8 @@ class HomeViewModel {
     fun getPriceFloats(): FloatArray {
 
         val data: Array<Double>? = when (currency) {
-            CurrencyType.USD -> portfolio.data.map { it.averageUSD }?.toTypedArray()
-            CurrencyType.BTC -> portfolio.data.map { it.averageBTC }?.toTypedArray()
+            CurrencyType.USD -> portfolio.data.map { it.averageUSD }.toTypedArray()
+            CurrencyType.BTC -> portfolio.data.map { it.averageBTC }.toTypedArray()
         }
         if (data == null) {
             return FloatArray(0)

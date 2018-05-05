@@ -54,7 +54,7 @@ class MainTabbedActivity : LocalizationActivity() {
                 }
 
                 var tabName = ""
-                when (item.getItemId()) {
+                when (item.itemId) {
                     R.id.action_item1 -> {
                         switchFragment(0)
                         activeTabID = item.itemId

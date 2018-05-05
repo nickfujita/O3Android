@@ -43,14 +43,14 @@ class NetworkViewModel: ViewModel() {
         }
 
         val newNodes = ArrayList<Node>()
-        for (node in neoNodes!!) {
+        for (node in neoNodes) {
             NeoNodeRPC(node.url).getConnectionCount {
                 val connectionCount = it.first ?: 0
                 //latch.countDown()
                 NeoNodeRPC(node.url).getBlockCount {
                     val blockCount = it.first ?: 0
                     newNodes.add(Node(node.url, blockCount, connectionCount))
-                    nodes?.postValue(newNodes?.toTypedArray())
+                    nodes?.postValue(newNodes.toTypedArray())
                 }
             }
         }

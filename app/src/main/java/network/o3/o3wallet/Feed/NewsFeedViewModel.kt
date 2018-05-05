@@ -36,7 +36,7 @@ class NewsFeedViewModel: ViewModel() {
     fun loadFeedData() {
         O3API().getNewsFeed {
             if (it.second != null) return@getNewsFeed
-            feedData?.postValue(it?.first!!)
+            feedData?.postValue(it.first!!)
         }
     }
 

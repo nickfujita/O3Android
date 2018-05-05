@@ -39,10 +39,6 @@ class PortfolioHeader:Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     fun setHeaderInfo(amount: String, percentChange: Double, interval: String, initialDate: Date) {
         fundChangeTextView.text = percentChange.formattedPercentString() +
                 " " +  initialDate.IntervaledString(interval)

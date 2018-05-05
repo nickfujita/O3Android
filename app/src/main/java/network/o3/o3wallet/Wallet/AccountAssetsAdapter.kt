@@ -75,7 +75,7 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        if (position != getCount() - 1) {
+        if (position != count - 1) {
             val view: View?
             val vh: AccountAssetRow
             if (convertView == null || convertView.tag !is AccountAssetRow) {
@@ -105,18 +105,18 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
 
     }
 
-    public fun updateAdapter(assets: Array<AccountAsset>) {
+    fun updateAdapter(assets: Array<AccountAsset>) {
         this.arrayOfAccountAssets = assets
         notifyDataSetChanged()
     }
 }
 
-public class AccountAssetRow(row: View?) {
+class AccountAssetRow(row: View?) {
     val assetNameTextView: TextView
     val assetAmountTextView: TextView
 
     init {
         this.assetNameTextView = row?.findViewById<TextView>(R.id.assetName) as TextView
-        this.assetAmountTextView = row?.findViewById<TextView>(R.id.assetAmount) as TextView
+        this.assetAmountTextView = row.findViewById<TextView>(R.id.assetAmount) as TextView
     }
 }

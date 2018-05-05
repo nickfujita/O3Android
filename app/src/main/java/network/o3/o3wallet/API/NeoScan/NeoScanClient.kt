@@ -11,7 +11,7 @@ import network.o3.o3wallet.API.CoZ.TransactionHistory
 class NeoScanClient {
     val baseAPIURL = "https://neoscan.io/api/main_net/v1/"
 
-    enum class Route() {
+    enum class Route {
         GET_ADDRESS_ABSTRACTS;
 
         fun routeName(): String {

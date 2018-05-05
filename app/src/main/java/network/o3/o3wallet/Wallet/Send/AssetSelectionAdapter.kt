@@ -61,14 +61,14 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
             1, 2 -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_native_asset_row, parent, false)
                 view.findViewById<TextView>(R.id.nativeAssetName).text = item!!.name
-                view.findViewById<TextView>(R.id.assetAmountTextView).text = item!!.value.toString()
+                view.findViewById<TextView>(R.id.assetAmountTextView).text = item.value.toString()
                 setListenerForRow(view, item.assetID, true, item.symbol)
                 return view
             } else -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_token_row, parent, false)
                 view.findViewById<TextView>(R.id.assetShortNameTextView).text = item!!.symbol
-                view.findViewById<TextView>(R.id.assetLongNameTextView).text = item!!.name
-                view.findViewById<TextView>(R.id.assetAmountTextView).text = item!!.value.toString()
+                view.findViewById<TextView>(R.id.assetLongNameTextView).text = item.name
+                view.findViewById<TextView>(R.id.assetAmountTextView).text = item.value.toString()
                 setListenerForRow(view, item.assetID, false, item.symbol)
                 return view
             }

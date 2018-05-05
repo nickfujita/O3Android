@@ -28,7 +28,7 @@ class SelectingBestNode : LocalizationActivity() {
         PersistentStore.setNodeURL(node.url)
         //close activity and start the main tabbed one fresh
         val intent = Intent(this, MainTabbedActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 

@@ -130,11 +130,11 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             val recieveAmount = doubleValue * selectedAsset.basicRate
             val df = DecimalFormat()
             if (recieveAmount - recieveAmount.toLong() == 0.0) {
-                df.setMaximumFractionDigits(0)
+                df.maximumFractionDigits = 0
                 val numString = df.format(recieveAmount)
                 recieveAmountTextView.text = numString + " " + tokenSale.symbol
             } else {
-                df.setMaximumFractionDigits(8)
+                df.maximumFractionDigits = 8
                 val numString = df.format(recieveAmount)
                 recieveAmountTextView.text = numString + " " + tokenSale.symbol
             }
@@ -147,7 +147,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
     fun initiatePartcipationEditText() {
         amountEditText.inputType = (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NULL)
-        amountEditText.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 8)))
+        amountEditText.filters = arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 8))
         amountEditText.afterTextChanged {
             updateTokenRecieveAmount()
         }
@@ -269,7 +269,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         headerView = layoutInflater.inflate(R.layout.tokensale_info_header, null)
         val bannerImageView = headerView.findViewById<ImageView>(R.id.tokensaleBannerView)
-        Glide.with(this).load(tokenSale.imageURL).into(bannerImageView);
+        Glide.with(this).load(tokenSale.imageURL).into(bannerImageView)
         footerView = layoutInflater.inflate(R.layout.tokensale_info_footer, null)
 
         amountEditText = footerView.findViewById<EditText>(R.id.tokenSaleParticipationAmountEditText)

@@ -12,7 +12,6 @@ import network.o3.o3wallet.O3Wallet
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.custom.onUiThread
 import org.jetbrains.anko.defaultSharedPreferences
 
 class AdvancedSettingsActivity : AppCompatActivity() {

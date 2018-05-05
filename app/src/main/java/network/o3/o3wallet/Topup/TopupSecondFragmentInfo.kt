@@ -87,7 +87,7 @@ class TopupSecondFragmentInfo : LocalizationActivity() {
                 qrFile)
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
-        sendIntent.setType("images/jpeg")
+        sendIntent.type = "images/jpeg"
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(sendIntent)

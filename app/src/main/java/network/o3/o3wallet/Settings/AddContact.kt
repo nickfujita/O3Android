@@ -60,7 +60,7 @@ class AddContact : LocalizationActivity() {
 
 
             NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(addressField.text.trim().toString()) {
-                if (it.second != null || it?.first == false) {
+                if (it.second != null || it.first == false) {
                     runOnUiThread {
                         alert (resources.getString(R.string.ALERT_invalid_neo_address), resources.getString(R.string.ALERT_error)) {
                             yesButton {  }

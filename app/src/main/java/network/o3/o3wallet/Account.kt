@@ -40,14 +40,14 @@ object Account {
     fun getColdStorageKeyFragmentOnDevice(): String {
         val alias = "Cold Storage Key Fragment"
         val storedVal = EncryptedSettingsRepository.getProperty(alias, O3Wallet.appContext!!)
-        if (storedVal?.data == null) {
+        if (storedVal.data == null) {
             return ""
         }
-        val storedEncryptedFragment = storedVal?.data?.hexStringToByteArray()
+        val storedEncryptedFragment = storedVal.data?.hexStringToByteArray()
         if (storedEncryptedFragment == null || storedEncryptedFragment.size == 0) {
             return ""
         }
-        val storedIv = storedVal?.iv!!
+        val storedIv = storedVal.iv!!
         val decrypted = Decryptor().decrypt(alias, storedEncryptedFragment, storedIv)
         return decrypted
     }
@@ -59,10 +59,10 @@ object Account {
     fun isEncryptedWalletPresent(): Boolean {
         val alias = "O3 Key"
         val storedVal = EncryptedSettingsRepository.getProperty(alias, O3Wallet.appContext!!)
-        if (storedVal?.data == null) {
+        if (storedVal.data == null) {
             return false
         }
-        val storedEncryptedWIF = storedVal?.data?.hexStringToByteArray()
+        val storedEncryptedWIF = storedVal.data?.hexStringToByteArray()
         if (storedEncryptedWIF == null || storedEncryptedWIF.size == 0 || !Decryptor().keyStoreEntryExists("O3 Key")) {
             return false
         }
@@ -72,8 +72,8 @@ object Account {
     fun restoreWalletFromDevice() {
         val alias = "O3 Key"
         val storedVal = EncryptedSettingsRepository.getProperty(alias, O3Wallet.appContext!!)
-        val storedEncryptedWIF = storedVal?.data?.hexStringToByteArray()!!
-        val storedIv = storedVal?.iv!!
+        val storedEncryptedWIF = storedVal.data?.hexStringToByteArray()!!
+        val storedIv = storedVal.iv!!
         val decrypted = Decryptor().decrypt(alias, storedEncryptedWIF, storedIv)
         wallet = generateFromWIF(decrypted)
     }

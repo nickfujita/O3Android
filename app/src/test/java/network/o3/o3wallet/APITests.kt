@@ -117,7 +117,7 @@ class APIUnitTests {
     fun testConvertHexStringByteArrayToInt() {
         var v = "00ab510d" //hex little endian
         var b = v.hexStringToByteArray().reversedArray()
-        var amount = ByteBuffer.wrap(b).getInt()
+        var amount = ByteBuffer.wrap(b).int
         print(amount)
     }
 }

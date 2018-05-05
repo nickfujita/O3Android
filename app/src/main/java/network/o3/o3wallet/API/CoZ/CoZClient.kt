@@ -12,7 +12,7 @@ import com.google.gson.Gson
 class CoZClient {
     val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
     //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
-    enum class Route() {
+    enum class Route {
         HISTORY,
         CLAIMS,
         BALANCE;

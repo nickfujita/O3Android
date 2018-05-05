@@ -75,7 +75,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
         titleTextView.text = getItem(position).first
         if (position == CellType.VERSION.ordinal) {
-            val version = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
+            val version = mContext.packageManager.getPackageInfo(mContext.packageName, 0).versionName
             titleTextView.text = mContext.resources.getString(R.string.SETTINGS_version, version)
         }
 
@@ -89,8 +89,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
 
     private fun setLocale(locale: Locale) {
         val resources = mContext.resources
-        val configuration = resources.getConfiguration()
-        val displayMetrics = resources.getDisplayMetrics()
+        val configuration = resources.configuration
+        val displayMetrics = resources.displayMetrics
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale)
         } else {
@@ -156,7 +156,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
                 Toast.makeText(mContext,
                         "Secure lock screen hasn't set up.\n"
                                 + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show()
                 return
             } else {
                 val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(null, null)

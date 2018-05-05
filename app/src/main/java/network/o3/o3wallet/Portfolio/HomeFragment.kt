@@ -44,8 +44,8 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         LocalBroadcastManager.getInstance(this.context!!).registerReceiver(needReloadDataReciever,
-                IntentFilter("need-update-data-event"));
-        return inflater!!.inflate(R.layout.portfolio_fragment_home, container, false)
+                IntentFilter("need-update-data-event"))
+        return inflater.inflate(R.layout.portfolio_fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         assetListAdapter = AssetListAdapter(this.context!!, this)
         homeModel.delegate = this
         homeModel.loadAssetsFromModel(false)
-        view!!.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
+        view.findViewById<ListView>(R.id.assetListView).adapter = assetListAdapter
         initiateGraph(view)
         initiateViewPager(view)
         initiateIntervalButtons(view)
@@ -82,16 +82,16 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                 return@OnScrubListener
             } else {
                 val scrubbedAmount = (value as Float).toDouble()
-                val percentChange = (scrubbedAmount - homeModel?.getInitialPortfolioValue()!!) /
-                        homeModel.getInitialPortfolioValue()!! * 100
+                val percentChange = (scrubbedAmount - homeModel.getInitialPortfolioValue()) /
+                        homeModel.getInitialPortfolioValue() * 100
                 if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
                 percentView?.text = percentChange.formattedPercentString() +
-                        " " +  homeModel?.getInitialDate().IntervaledString(homeModel?.getInterval())
-                amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel?.getCurrency()!!)
+                        " " +  homeModel.getInitialDate().IntervaledString(homeModel.getInterval())
+                amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel.getCurrency())
             }
         }
     }
@@ -111,8 +111,8 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
 
                 // This delay allows for the scroll to complete before the UI thread gets blocked
                 Handler().postDelayed({
-                    homeModel?.setDisplayType(displayType)
-                    homeModel?.loadAssetsFromModel(true)
+                    homeModel.setDisplayType(displayType)
+                    homeModel.loadAssetsFromModel(true)
                 }, 200)
             }
         })
@@ -134,7 +134,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
 
             updateHeader(homeModel.getCurrentPortfolioValue().formattedCurrencyString(homeModel.getCurrency()),
                     homeModel.getPercentChange())
-            chartDataAdapter.setData(homeModel?.getPriceFloats())
+            chartDataAdapter.setData(homeModel.getPriceFloats())
             hideLoadingIndicator()
         }
     }
@@ -159,14 +159,14 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
 
     fun tappedIntervalButton(button: Button) {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
-        button?.setTextAppearance(R.style.IntervalButtonText_Selected)
+        button.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
         homeModel.setInterval(button.tag.toString())
         homeModel.loadPortfolioValue()
     }
 
     fun updateHeader(amount: String, percentChange: Double) {
-        viewPager?.setCurrentItem(viewPager?.currentItem!!)
+        viewPager?.currentItem = viewPager?.currentItem!!
         val name = "android:switcher:" + viewPager?.id + ":" + viewPager?.currentItem
         val header = childFragmentManager.findFragmentByTag(name) as PortfolioHeader
         header.setHeaderInfo(amount, percentChange, homeModel.getInterval(), homeModel.getInitialDate())

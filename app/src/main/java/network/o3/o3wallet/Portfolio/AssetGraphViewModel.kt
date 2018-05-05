@@ -104,9 +104,9 @@ class AssetGraphViewModel: ViewModel() {
 
     private fun loadHistory() {
         O3API().getPriceHistory(symbol, interval) {
-            if (it?.second != null) return@getPriceHistory
-            latestPrice = it?.first?.data?.first()!!
-            initialPrice = it?.first?.data?.last()!!
+            if (it.second != null) return@getPriceHistory
+            latestPrice = it.first?.data?.first()!!
+            initialPrice = it.first?.data?.last()!!
             history?.postValue(it.first!!)
         }
     }

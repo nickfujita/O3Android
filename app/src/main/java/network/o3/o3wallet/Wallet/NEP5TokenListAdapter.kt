@@ -89,13 +89,13 @@ class NEP5TokenListAdapter(context: Context) : BaseAdapter() {
 }
 
 private class NEP5TokenRow(row: View?) {
-    public val tokenNameTextView: TextView
-    public val tokenSymbolTextView: TextView
-    public val checkbox: CheckBox
+    val tokenNameTextView: TextView
+    val tokenSymbolTextView: TextView
+    val checkbox: CheckBox
 
     init {
         this.tokenNameTextView = row?.findViewById<TextView>(R.id.tokenNameTextView) as TextView
-        this.tokenSymbolTextView = row?.findViewById<TextView>(R.id.tokenSymbolTextView) as TextView
-        this.checkbox = row?.findViewById<CheckBox>(R.id.nep5TokenCheckbox) as CheckBox
+        this.tokenSymbolTextView = row.findViewById<TextView>(R.id.tokenSymbolTextView) as TextView
+        this.checkbox = row.findViewById<CheckBox>(R.id.nep5TokenCheckbox) as CheckBox
     }
 }

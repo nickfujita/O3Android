@@ -114,7 +114,7 @@ class ContactsAdapter(context: Context, fragment: ContactsFragment, canAddAddres
 
     override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(mContext)
-        if (position != getCount() - 1 || !mCanAddAddress) {
+        if (position != count - 1 || !mCanAddAddress) {
             return getAddressView(layoutInflater, position, viewGroup)
         } else {
             return getAddView(layoutInflater, viewGroup)

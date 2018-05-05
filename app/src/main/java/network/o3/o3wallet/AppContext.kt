@@ -14,7 +14,7 @@ import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate
 class O3Wallet : Application() {
     override fun onCreate() {
         super.onCreate()
-        O3Wallet.appContext = getApplicationContext()
+        O3Wallet.appContext = applicationContext
     }
 
     var localizationDelegate = LocalizationApplicationDelegate(this)
