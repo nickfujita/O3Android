@@ -102,9 +102,9 @@ class SendActivity: LocalizationActivity() {
         val foundContact = contacts.find { it.address == address }
         val toLabel = findViewById<TextView>(R.id.sendToLabel)
         if (foundContact != null) {
-            toLabel.text = "To: %s".format(foundContact.nickname)
+            toLabel.text = String.format(resources.getString(R.string.WALLET_to_formatted), foundContact.nickname)
         } else {
-            toLabel.text = "To"
+            toLabel.text = String.format(resources.getString(R.string.WALLET_to_formatted), "")
         }
     }
 
@@ -199,7 +199,7 @@ class SendActivity: LocalizationActivity() {
         val toast = baseContext.toastUntilCancel(resources.getString(R.string.SEND_sending_in_progress))
         val gasIndex  = ownedAssets.indices.find { ownedAssets[it].name.toUpperCase() == "GAS"}
         if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value == 0.0) {
-            baseContext.toast("You must have 0.0000000001 GAS to send a token")
+            baseContext.toast(resources.getString(R.string.SEND_Not_Enough_GAS_For_Token_Send))
             return
         }
         NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet.address, address, amount) {
@@ -219,7 +219,7 @@ class SendActivity: LocalizationActivity() {
                     this.checkEnableSendButton()
                     val message = resources.getString(R.string.SEND_send_error)
                     val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                    snack.setAction("Close") {
+                    snack.setAction(resources.getString(R.string.ALERT_Close)) {
                         finish()
                     }
                     snack.show()

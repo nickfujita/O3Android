@@ -121,7 +121,7 @@ class TransactionHistoryAdapter(private var transactionHistoryEntries: MutableLi
                 assetTextView.text = token.symbol.toUpperCase()
                 return true
             } else {
-                assetTextView.text = "Unknown Asset"
+                assetTextView.text = view.context.resources.getString(R.string.WALLET_unknown_asset)
                 return true
             }
         }
@@ -147,15 +147,15 @@ class TransactionHistoryAdapter(private var transactionHistoryEntries: MutableLi
             }
 
             if (tx.address_to == Account.getWallet()?.address!!) {
-                toTextView.text = "To: O3 Wallet"
+                toTextView.text = view.context.resources.getString(R.string.WALLET_to_O3_wallet) //"To: O3 Wallet"
                 amountTextView.text =  "+" + amountToDisplay.removeTrailingZeros()
                 amountTextView.textColor = O3Wallet.appContext!!.resources!!.getColor(R.color.colorGain)
             } else if (toNickname != null) {
-                toTextView.text = "To: " + toNickname
+                toTextView.text =   String.format(view.context.resources.getString(R.string.WALLET_to_formatted), toNickname)
                 amountTextView.text =  "-" + amountToDisplay.removeTrailingZeros()
                 amountTextView.textColor = O3Wallet.appContext!!.resources!!.getColor(R.color.colorLoss)
             }else {
-                toTextView.text = "To: " + tx.address_to
+                toTextView.text = String.format(view.context.resources.getString(R.string.WALLET_to_formatted), tx.address_to)
                 amountTextView.text =  "-" + amountToDisplay.removeTrailingZeros()
                 amountTextView.textColor = O3Wallet.appContext!!.resources!!.getColor(R.color.colorLoss)
             }
@@ -167,14 +167,14 @@ class TransactionHistoryAdapter(private var transactionHistoryEntries: MutableLi
             }
 
             if (tx.address_from == Account.getWallet()?.address!!) {
-                fromTextView.text = "From: O3 Wallet"
+                fromTextView.text = view.context.resources.getString(R.string.WALLET_from_O3_wallet)
             } else if (fromNickname != null) {
-                fromTextView.text = "From: " + fromNickname
+                fromTextView.text = String.format(view.context.resources.getString(R.string.WALLET_from_formatted), toNickname)
             } else {
-                fromTextView.text = "From: " + tx.address_from
+                fromTextView.text = String.format(view.context.resources.getString(R.string.WALLET_from_formatted), tx.address_from)
             }
 
-            blockTextView.text = "Block Number: " + tx.block_height
+            blockTextView.text = String.format(view.context.resources.getString(R.string.WALLET_block_number), tx.block_height.toString())
 
             view.setOnClickListener {
                 val url = "https://neoscan.io/transaction/" + tx.txid

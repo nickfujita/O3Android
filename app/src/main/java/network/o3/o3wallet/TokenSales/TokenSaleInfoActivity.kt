@@ -204,27 +204,27 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         if (selectedAsset.asset.toUpperCase() == "NEO") {
             if (doubleValue == null) {
                 alert(resources.getString(R.string.TOKENSALE_Error_Invalid_Amount)) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue - doubleValue.toInt() != 0.0) {
                     alert(resources.getString(R.string.TOKENSALE_Error_Must_Send_Whole_NEO)) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if(doubleValue.toInt() > neoBalance) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Not_Enough_Balance), "NEO")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if(doubleValue.toInt() > neoInfo.max) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Max_Contribution), "NEO")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue < neoInfo.min) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Min_Contribution), "NEO")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (priorityEnabled && gasBalance < 0.0011) {
                 alert(resources.getString(R.string.TOKENSALE_Error_Not_Enough_For_Priority)) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             }
             return true
@@ -233,23 +233,23 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         if (selectedAsset.asset.toUpperCase() == "GAS") {
             if (doubleValue == null) {
                 alert(resources.getString(R.string.TOKENSALE_Error_Invalid_Amount)) { yesButton {
-                    resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue > gasBalance) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Not_Enough_Balance), "GAS")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue > gasInfo.max) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Max_Contribution), "GAS")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue < gasInfo.min) {
                 alert(String.format(resources.getString(R.string.TOKENSALE_Error_Min_Contribution), "GAS")) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (priorityEnabled && gasBalance - doubleValue < 0.0011) {
                 alert(resources.getString(R.string.TOKENSALE_Error_Not_Enough_For_Priority)) {
-                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button} }.show()
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             }
             return true

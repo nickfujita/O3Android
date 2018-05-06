@@ -28,7 +28,7 @@ class MainTabbedActivity : LocalizationActivity() {
             SettingsFragment.newInstance())
 
     override fun onBackPressed() {
-        alert ("Are you sure you want to exit?", "") {
+        alert (resources.getString(R.string.SETTINGS_logout_warning)) {
             yesButton { super.onBackPressed() }
             noButton {  }
         }.show()

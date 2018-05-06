@@ -395,7 +395,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     fun claimGasTapped() {
         if (this.currentAccountState == null) {
-            context?.toast("Unable to retrieve account details, check settings -> network")
+            context?.toast(resources.getString(R.string.WALLET_Claim_Error_Load_Account_State))
             return
         }
         claimToast = context!!.toastUntilCancel(resources.getString(R.string.WALLET_claiming_gas))

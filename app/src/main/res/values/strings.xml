@@ -94,7 +94,7 @@
     <string name="WALLET_remove_contact" comment="Action to remove a contact from the address book">Remove Contact</string>
     <string name="WALLET_remove_contact_warning" comment="Warning displayed when user attempts to remove contract from the address book">Are you sure you want to remove this contact?</string>
     <string name="WALLET_add_address_contact_description" comment="Description explaining what happens when you add a contact">Your address book will let you send funds
-        all over the world without needing to remember your address</string>
+        all over the world without needing to remember your address</string>"
 
     <!-- Wallet -->
     <string name="WALLET_my_o3_wallet" comment="A title for the wallet page where all assets are listed">My O3 Wallet</string>
@@ -110,6 +110,7 @@
     <string name="WALLET_claiming_gas" comment="A title for when claiming gas is in progress">Claiming Gas</string>
     <string name="WALLET_claimed_gas_successfully" comment="A message displayed when gas has been claimed succcessfully">Claimed Gas Successfully, Please Wait several minutes before claiming again</string>
     <string name="WALLET_please_wait_for_claim" comment="A message to display when the claiming is in progresss">Claim Pending...Please Wait</string>
+    <string name="WALLET_Claim_Error_Load_Account_State" comment="An error to display when attemptinf to claim gas, but can not load the account detaiks">Unable to retrieve account details, check settings -> network</string>
 
     <string name="WALLET_my_address_action_label" comment="Action button title to look at your neo address">My NEO address</string>
     <string name="WALLET_topup_cold_storage_action_label" comment="Action button title to look at your cold storage address">Cold Storage</string>
@@ -118,7 +119,14 @@
 
     <!-- Wallet History -->
     <string name="WALLET_to" comment="to label in transaction history screen">To</string>>
+    <string name="WALLET_to_formatted" comment="to label in transaction history screen and send screen">To: %1$s</string>>
     <string name="WALLET_from" comment="from label in transaction history screen">From</string>>
+    <string name="WALLET_from_formatted" comment="to label in transaction history screen">From: %1$s</string>>
+    <string name="WALLET_unknown_asset" comment="label for when the asset set is an unknwon asset">Unkown Asset</string>
+    <string name="WALLET_to_O3_wallet" comment="label for when transaction goes to O3 wallet">To: O3 Wallet</string>
+    <string name="WALLET_from_O3_wallet" comment="label for when transaction goes from O3 wallet">From: O3 Wallet</string>
+    <string name="WALLET_block_number" comment="label for block number in transaction histoty">Block Nuber: %1$s</string>
+
 
     <!-- Wallet Send -->
     <string name="SEND_send" comment="Send label in send screen">Send</string>
@@ -132,6 +140,8 @@
     <string name="SEND_sending_in_progress" comment="Alert message shown when sending is in progress">Sending...</string>
     <string name="SEND_sent_successfully" comment="Alert message when send completed successfully">Sent Succesfully</string>
     <string name="SEND_send_error" comment="Error message when sending failed, generally resolved by checking your network status">Error while sending, please check your network</string>
+    <string name="SEND_Not_Enough_GAS_For_Token_Send" comment="Error when trying to send token but don't have any gas in balance">You must have 0.0000000001 GAS to send a token</string>
+
     <string name="SEND_send_confirmation" comment="Confirmation prompt for the transaction. e.g Are you sure you want to send 1 NEO to Bob">"Are you sure you want to send %1$s %2$s to %3$s?</string>
     <string name="SEND_scan_prompt_qr" comment="Prompt for scanning recipient QR Code">Scan the qr code of the recipient address</string>
 
@@ -300,6 +310,8 @@
     <string name="ALERT_action_reply" comment="reply">Reply</string>
     <string name="ALERT_OK_Confirm_Button" comment="OK button for alert dialogs">OK</string>
     <string name="ALERT_Something_Went_Wrong" comment="Generic error when it is unclear what went wrong">Something went wrong. Please Try Again Error</string>
+    <string name="ALERT_Close" comment="string for close actions in alert">Close</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>

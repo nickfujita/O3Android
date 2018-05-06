@@ -51,7 +51,7 @@ class TutorialPrivateKey : LocalizationActivity() {
             intent.putExtra("Address", tempWallet.address)
             startActivity(intent)
         } catch (e: Exception) {
-            alert ("Invalid WIF Key Please try again").show()
+            alert (resources.getString(R.string.ALERT_invalid_wif)).show()
         }
     }
 

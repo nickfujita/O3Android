@@ -74,7 +74,7 @@ class AssetGraph : LocalizationActivity() {
                 }
                 priceView.text = price.formattedCurrencyString(assetGraphModel!!.getCurrency())
                 percentView.text = percentChange.formattedPercentString() +
-                        " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: applicationContext.resources.getString(R.string.PORTFOLIO_one_day))
+                        " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
             }
         }
     }
@@ -126,7 +126,7 @@ class AssetGraph : LocalizationActivity() {
                 percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorGain))
             }
             percentView.text = percentChange.formattedPercentString() +
-                    " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: applicationContext.resources.getString(R.string.PORTFOLIO_one_day))
+                    " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
         })
     }
 
