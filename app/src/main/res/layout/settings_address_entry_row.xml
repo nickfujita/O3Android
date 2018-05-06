@@ -16,6 +16,7 @@
         android:layout_marginTop="4dp"
         android:includeFontPadding="false"
         android:text="Bittrex Address"
+        tools:ignore="HardcodedText"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +30,7 @@
         android:layout_marginStart="16dp"
         android:includeFontPadding="false"
         android:text="1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2"
+        tools:ignore="HardcodedText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressNickNameTextView" />

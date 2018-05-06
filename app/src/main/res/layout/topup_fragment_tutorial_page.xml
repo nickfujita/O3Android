@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Introducing"
+        android:text="@string/TOPUP_Introducing"
         android:textAppearance="@style/TutorialSubtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
         android:id="@+id/tutorialTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="O3 Simple Transfer"
+        android:text="@string/TOPUP_O3_Simple_Transfer"
         android:textAppearance="@style/TutorialTitle"
         app:layout_constraintStart_toStartOf="@+id/tutorialSubtitleTextView"
         app:layout_constraintTop_toBottomOf="@+id/tutorialSubtitleTextView" />
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
-        android:text="Secure and Convenient way to transfer NEO or GAS from any one of your NEO addresses to O3 Mobile Wallet."
+        android:text="@string/TOPUP_Simple_Transfer_Explanation"
         android:textAppearance="@style/TutorialInfoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tutorialTitle"

@@ -31,6 +31,7 @@
     <string name="ONBOARDING_scan" comment="Title for scan button, allowing users to login by scanning private key">Scan</string>
     <string name="ONBOARDING_login_footnote" comment="Footnote showing that the private key will be stored locally on the device">This private key will be stored on your device after logging in.</string>
     <string name="ONBOARDING_scan_prompt" comment="Prompt asking the user to scan their QR code in order to log ib">Scan the QR code of your private key</string>>
+    <string name="ONBOARDING_Login_To_Existing" comment="Prompt when displaying passcode to login to existing wallet">Log in to your existing wallet</string>
 
     <!-- Settings: Menu -->
     <string name="SETTINGS_settings_title" comment="A title for the settings menu">Settings</string>
@@ -115,6 +116,10 @@
     <string name="WALLET_send_action_label" comment="Action button title to send NEO">Send</string>
     <string name="WALLET_token_sale_action_label" comment="Action button title to participate in a token sale">Token Sale</string>
 
+    <!-- Wallet History -->
+    <string name="WALLET_to" comment="to label in transaction history screen">To</string>>
+    <string name="WALLET_from" comment="from label in transaction history screen">From</string>>
+
     <!-- Wallet Send -->
     <string name="SEND_send" comment="Send label in send screen">Send</string>
     <string name="SEND_to" comment="Send To address in send screen">To</string>
@@ -132,6 +137,67 @@
 
     <string name="SEND_native_assets_header" comment="Section header for Native Assets(NEO/GAS) when selecting what asset to send">Native Assets</string>
     <string name="SEND_token_assets_header" comment="Section header for Token assets when selecting what asset to send">Tokens</string>
+
+
+
+    <!-- TokenSale -->
+    <string name="TOKENSALE_Live_Status" comment="Text showing that the token sale is currently live">• LIVE</string>
+    <string name="TOKENSALE_Get_Notified" comment="Title telling users to get notified about token sale">Get Notified About Token Sales</string>
+    <string name="TOKENSALE_Share_Email" comment="Button title that allows users to share their email address for newsletter">Share Email</string>
+    <string name="TOKENSALE_Get_Notified_Description" comment="Description text for newsletter infor">
+        Share you're email and we'll send you the latest information about token sales on O3. Our team vets all tokens that appear on O3, and this email is never shared with third parties. No ****coins allowed
+    </string>
+    <string name="TOKENSALE_Days_Remaining" comment="Displays how many days are remaining in the token sale">%1$s Days Remaining</string>
+
+    <string name="TOKENSALE_Use_Priority" comment="Description text for use priority checkbox">Use Priority (0.0011 GAS)</string>
+    <string name="TOKENSALE_What_Is_Priority" comment="Title for button that further explains what priority is">What is Priority?</string>
+    <string name="TOKENSALE_Balance" comment="Formatted Strings for balace amount in token sale">Balance: %1$s</string>
+    <string name="TOKENSALE_Use_Gas" comment="Button title for using gas in token sale">Use GAS</string>
+    <string name="TOKENSALE_Use_Neo" comment="Button title for using neo in token sale">Use NEO</string>
+    <string name="TOKENSALE_Error_Not_Enough_For_Priority" comment="Error to display when there is not enough gas to do a priority transaction">You do not have enough gas in order to send a priority transaction</string>
+    <string name="TOKENSALE_Error_Min_Contribution" comment="Error to display when trying to send less than the minimum contribution amount">You have to send more %1$s than the minimum contribution amount</string>
+    <string name="TOKENSALE_Error_Max_Contribution" comment="Error to display when trying to send more than the maximum contribution amount">You have to send less %1$s than the maximum contribution amount</string>
+    <string name="TOKENSALE_Error_Not_Enough_Balance" comment="Error to display when trying to send more than available balance">You cannot send more than your available %1$s balance</string>
+    <string name="TOKENSALE_Error_Invalid_Amount" comment="Error when trying to send an invalid amount to smart contract">Entered amount is not a valid number</string>
+    <string name="TOKENSALE_Error_Must_Send_Whole_NEO" comment="Error when trying to participate in token sale with a non whole amount of neo">You must send a whole amount of NEO</string>
+
+    <string name="TOKENSALE_You_Are_Sending" comment="Review title for how much you are sendung">You are sending</string>
+    <string name="TOKENSALE_You_Will_Receive" comment="Review title for how much coin you will receive">You will receive</string>
+    <string name="TOKENSALE_Read_Issuer_Agreement" comment="Issuer Agreement Disclaimer text">I have read and agreed to the token sale agreement provided by the token issuer</string>
+    <string name="TOKENSALE_O3_Agreement" comment="O3 Agreement Disclaimer text">I understand that I am interacting directly with a decentralized smart contract. O3 does not store any funds, and is not liable for any issues with the smart contract</string>
+    <string name="TOKENSALE_Participate" comment="Participate Button Title">Participate</string>
+    <string name="TOKENSALE_Minting_In_Progress" comment="Loading text while the smart contract is being invoked">Minting In Progress...</string>
+    <string name="TOKENSALE_With_Priority" comment="Text indicating that this transasction will be sent with priority">With Priority</string>
+    <string name="TOKENSALE_Not_Whitelisted" comment="Error to display when the user is not whitelisted for this particular token sale">
+        It looks like you're not whitelisted for this token sale. You can use the issuers website to figure out how to get whitelisted or contact the team
+        if you think this is a mistake.
+    </string>
+
+    <string name="TOKENSALE_Receipt_Date_Label" comment="Label for date in the receipt after tokensale transaction">DATE</string>
+    <string name="TOKENSALE_Receipt_Tokensale_name_Label" comment="Label for token sale name in the receipt after tokensale transaction">TOKEN SALE</string>
+    <string name="TOKENSALE_Receipt_Txid_Label" comment="Label for transaction id in the receipt after tokensale transaction">TRANSACTION ID</string>
+    <string name="TOKENSALE_Receipt_Sending_Label" comment="Label for sending amount and asset type in the receipt after tokensale transaction">SENDING</string>
+    <string name="TOKENSALE_Receipt_For_Label" comment="Label for receiving amount and asset type in the receipt after tokensale transaction">FOR</string>
+    <string name="TOKENSALE_Receipt_Priority_Label" comment="Label for priority enabled in the receipt after tokensale transaction">PRIORITY</string>
+    <string name="TOKENSALE_Receipt_Transaction_Succeded" comment="Transaction Succeeded Title">Your Transaction Has Succeeded</string>
+    <string name="TOKENSALE_Email_Receipt" comment="Action item to email receipt to yourself">Email Receipt</string>
+    <string name="TOKENSALE_Return_Home" comment="Action Item to return to back home after saving receipt">Return Home</string>
+    <string name="TOKENSALE_Receipt_Transaction_Details" comment="Transaction Details title on receipt">TRANSACTION DETAILS</string>
+    <string name="TOKENSALE_Email_Title" comment="Title for the email of the token sale receipt">%1$s Token Sale Participation Receipt</string>
+    <string name="TOKENSALE_Email_Full_text" comment="Full email text to be used in email for receipt">
+        This receipt proves that your transaction has submitted for procesing on the NEO Blockchain\n\n
+        Once it has been authorized on to the blockchain, the funds will leave your wallet, and the token issuer will be
+         responsible for the distribution of the tokens.
+         You can use this transaction ID as proof of your participation in the token sale. Additional details follow.\n\n
+        Date: %1$s\n
+        Token Sale Name: %2$s\n
+        Transaction ID: %3$s\n
+        Sent: %4$s\n
+        Should Recieve: %5$s\n
+        Regards\n
+        O3 Team
+    </string>
+
 
     <!-- Wallet Topup -->
     <string name="TOPUP_from_cold_storage" comment="Allowing you to topup from the cold storage address">From: Cold Storage Address</string>
@@ -167,6 +233,9 @@
     <string name="TOPUP_withdraw" comment="withdraw button title">Withdraw</string>
     <string name="TOPUP_cold_storage_vault" comment="cold storage vault title">Cold Storage Vault</string>
     <string name="TOPUP_remove_cold_storage" comment="Remove Cold Storage button title">Remove Cold Storage</string>
+    <string name="TOPUP_Introducing" comment="Title introducting new topup feature">Introducing</string>
+    <string name="TOPUP_O3_Simple_Transfer" comment="O3 Simple Transfer Explanation">O3 Simple Transfer</string>
+    <string name="TOPUP_Simple_Transfer_Explanation" comment="Explanation of toup feature">Secure and Convenient way to transfer NEO or GAS from any one of your NEO addresses to O3 Mobile Wallet.</string>
 
 
     <string-array name="TOPUP_tutorial_titles">
@@ -228,7 +297,9 @@
     <string name="ALERT_error" comment="title for error dialogs">Error</string>
     <string name="ALERT_invalid_wif" comment="Trying to etner an invalid wif when logging in">Invalid WIF</string>
     <string name="ALERT_action_share" comment="Share data with another app">Share</string>
-    <string name="ALERT_action_reply" comment="trply">Reply</string>
+    <string name="ALERT_action_reply" comment="reply">Reply</string>
+    <string name="ALERT_OK_Confirm_Button" comment="OK button for alert dialogs">OK</string>
+    <string name="ALERT_Something_Went_Wrong" comment="Generic error when it is unclear what went wrong">Something went wrong. Please Try Again Error</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>

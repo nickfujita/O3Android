@@ -41,7 +41,7 @@ class PortfolioHeader:Fragment() {
 
     fun setHeaderInfo(amount: String, percentChange: Double, interval: String, initialDate: Date) {
         fundChangeTextView.text = percentChange.formattedPercentString() +
-                " " +  initialDate.IntervaledString(interval)
+                " " +  initialDate.intervaledString(interval)
         fundAmountTextView.text = amount
 
         if (percentChange < 0) {

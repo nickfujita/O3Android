@@ -42,7 +42,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="The node selecting process may take quite a while, depending on your internet connection."
+        android:text="@string/PORTFOLIO_selecting_best_node_description"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

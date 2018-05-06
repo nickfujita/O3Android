@@ -1,7 +1,6 @@
 package network.o3.o3wallet.Portfolio
 
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -48,7 +47,7 @@ class AssetGraph : LocalizationActivity() {
             percentView?.setTextColor(resources.getColor(R.color.colorGain))
         }
         percentView.text = percentChange.formattedPercentString() +
-                " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
     }
 
     private fun initiateGraph() {
@@ -75,7 +74,7 @@ class AssetGraph : LocalizationActivity() {
                 }
                 priceView.text = price.formattedCurrencyString(assetGraphModel!!.getCurrency())
                 percentView.text = percentChange.formattedPercentString() +
-                        " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                        " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: applicationContext.resources.getString(R.string.PORTFOLIO_one_day))
             }
         }
     }
@@ -127,7 +126,7 @@ class AssetGraph : LocalizationActivity() {
                 percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorGain))
             }
             percentView.text = percentChange.formattedPercentString() +
-                    " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                    " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: applicationContext.resources.getString(R.string.PORTFOLIO_one_day))
         })
     }
 

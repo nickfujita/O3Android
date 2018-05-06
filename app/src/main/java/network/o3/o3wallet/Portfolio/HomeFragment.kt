@@ -90,7 +90,7 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
                 percentView?.text = percentChange.formattedPercentString() +
-                        " " +  homeModel.getInitialDate().IntervaledString(homeModel.getInterval())
+                        " " +  homeModel.getInitialDate().intervaledString(homeModel.getInterval())
                 amountView?.text = scrubbedAmount.formattedCurrencyString(homeModel.getCurrency())
             }
         }

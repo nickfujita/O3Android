@@ -138,7 +138,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             startActivity(mContext, intent, null)
             return
         } else if (position == CellType.LOGOUT.ordinal) {
-            mContext.alert("Are you sure you want to remove your private key from this device?") {
+            mContext.alert(O3Wallet.appContext!!.resources.getString(R.string.SETTINGS_logout_warning)) {
                 yesButton {
                     Account.deleteKeyFromDevice()
                     val intent = Intent(mContext, MainActivity::class.java)
@@ -154,8 +154,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             if (!mKeyguardManager.isKeyguardSecure) {
                 // Show a message that the user hasn't set up a lock screen.
                 Toast.makeText(mContext,
-                        "Secure lock screen hasn't set up.\n"
-                                + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                        O3Wallet.appContext!!.resources.getString(R.string.ALERT_no_passcode_setup),
                         Toast.LENGTH_LONG).show()
                 return
             } else {

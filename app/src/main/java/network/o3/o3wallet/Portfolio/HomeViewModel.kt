@@ -32,7 +32,7 @@ class HomeViewModel {
     }
 
     private var displayType: DisplayType = DisplayType.HOT
-    private var interval: String = "24H"
+    private var interval: String = O3Wallet.appContext!!.resources.getString(R.string.PORTFOLIO_one_day)
     private var currency = CurrencyType.USD
     private lateinit var portfolio: Portfolio
     private var balanceCountDownLatch: CountDownLatch? = null

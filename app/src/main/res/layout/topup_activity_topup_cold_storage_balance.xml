@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="AQVkEUmmjcZiuGL6qdgpmymrCQECcXhYQm"
+                tools:ignore="HardCodedText"
                 android:textAppearance="@style/SubtitleText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -48,7 +49,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:text="Withdraw"
+                android:text="@string/TOPUP_withdraw"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -60,6 +61,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="NEO"
+                tools:ignore="HardCodedText"
                 android:textAppearance="@style/BoldText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/coldStorageAddressTextView" />
@@ -71,6 +73,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="GAS"
+                tools:ignore="HardCodedText"
                 android:textAppearance="@style/BoldText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView20" />
@@ -80,7 +83,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="100"
+                android:text="0"
+                tools:ignore="HardCodedText"
                 android:textAppearance="@style/RegularText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView20" />
@@ -91,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                android:text="200.5"
+                android:text="0"
+                tools:ignore="HardCodedText"
                 android:textAppearance="@style/RegularText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/coldStorageNeoBalanceTextView" />

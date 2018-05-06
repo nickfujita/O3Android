@@ -40,7 +40,6 @@ class SendActivity: LocalizationActivity() {
 
     lateinit var addressTextView: TextView
     lateinit var amountTextView: TextView
-    lateinit var noteTextView: TextView
     lateinit var selectedAssetTextView: TextView
     lateinit var sendButton: Button
     lateinit var pasteAddressButton: Button
@@ -64,7 +63,6 @@ class SendActivity: LocalizationActivity() {
         view = findViewById<View>(R.id.root_layout)
         addressTextView = findViewById<EditText>(R.id.addressTextView)
         amountTextView = findViewById<EditText>(R.id.amountTextView)
-        noteTextView = findViewById<EditText>(R.id.noteTextView)
         sendButton = findViewById<Button>(R.id.sendButton)
         pasteAddressButton = findViewById<Button>(R.id.pasteAddressButton)
         scanAddressButton = findViewById<Button>(R.id.scanAddressButton)

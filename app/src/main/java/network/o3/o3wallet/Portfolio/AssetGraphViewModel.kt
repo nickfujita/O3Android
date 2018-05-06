@@ -3,12 +3,10 @@ package network.o3.o3wallet.Portfolio
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.API.O3.PriceData
 import network.o3.o3wallet.API.O3.PriceHistory
-import network.o3.o3wallet.CurrencyType
-import network.o3.o3wallet.formattedBTCString
-import network.o3.o3wallet.formattedUSDString
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,7 +18,7 @@ import java.util.*
 class AssetGraphViewModel: ViewModel() {
     private var history: MutableLiveData<PriceHistory>? = null
     private var symbol = "NEO"
-    private var interval = "24H"
+    private var interval = O3Wallet.appContext!!.resources.getString(R.string.PORTFOLIO_one_day)
     private var currency = CurrencyType.USD
     private var latestPrice: PriceData? = null
     private var initialPrice: PriceData? = null

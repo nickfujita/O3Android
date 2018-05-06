@@ -57,9 +57,9 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
+
             Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                    R.string.ALERT_no_passcode_setup,
                     Toast.LENGTH_LONG).show()
             return
         } else {
@@ -99,7 +99,7 @@ class MainActivity : LocalizationActivity() {
             Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
-            val intent = mKeyguardManager.createConfirmDeviceCredentialIntent("Log in to your existing wallet", null)
+            val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(resources.getString(R.string.ONBOARDING_Login_To_Existing), null)
             if (intent != null) {
                 startActivityForResult(intent, 0)
             }

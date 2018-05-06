@@ -17,6 +17,7 @@
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
         android:text="seed4.neo.org"
+        tools:ignore="HardcodedText"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:text="Peers: 125"
+        tools:ignore="HardcodedText"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="@+id/urlTextView"
         app:layout_constraintTop_toBottomOf="@+id/peerCountTextView" />
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:text="Block: 125611"
+        tools:ignore="HardcodedText"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="@+id/blockCountTextView"
         app:layout_constraintTop_toBottomOf="@+id/urlTextView" />

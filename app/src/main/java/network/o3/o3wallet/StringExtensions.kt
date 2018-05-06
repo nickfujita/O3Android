@@ -60,7 +60,7 @@ fun Double.formattedCurrencyString(currency: CurrencyType): String {
     }
 }
 
-fun Date.IntervaledString(interval: String): String {
+fun Date.intervaledString(interval: String): String {
     var dateFormat = ""
     if (interval == "6H" || interval == "24H") {
         dateFormat = "hh:mm"
