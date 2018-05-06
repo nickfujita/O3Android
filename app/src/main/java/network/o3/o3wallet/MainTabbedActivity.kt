@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
@@ -19,7 +18,7 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
 
-class MainTabbedActivity : LocalizationActivity() {
+class MainTabbedActivity : AppCompatActivity() {
 
     var activeTabID: Int? = 0
     var activeTabPosition: Int? = 0

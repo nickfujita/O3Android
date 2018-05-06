@@ -11,7 +11,6 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.Toast
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
@@ -19,7 +18,7 @@ import network.o3.o3wallet.Wallet.Send.afterTextChanged
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
-class AddContact : LocalizationActivity() {
+class AddContact : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity_add_contact)

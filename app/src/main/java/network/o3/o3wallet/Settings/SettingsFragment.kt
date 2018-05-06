@@ -10,7 +10,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.widget.*
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import network.o3.o3wallet.R
 
 
@@ -27,7 +26,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
             // Credentials entered successfully!
             if (resultCode == -1) {
                 val privateKeyModal = PrivateKeyFragment.newInstance()
-                privateKeyModal.show((context as LocalizationActivity).supportFragmentManager, privateKeyModal.tag)
+                privateKeyModal.show((context as AppCompatActivity).supportFragmentManager, privateKeyModal.tag)
             } else {
 
             }

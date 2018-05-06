@@ -8,14 +8,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.R
 import network.o3.o3wallet.SelectingBestNode
 import network.o3.o3wallet.Wallet.toast
 
-class LoginActivity : LocalizationActivity() {
+class LoginActivity : AppCompatActivity() {
     private lateinit var wifTextfield: TextView
     var isFirstActivityLoad = true
     override fun onCreate(savedInstanceState: Bundle?) {

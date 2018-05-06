@@ -22,11 +22,10 @@ import network.o3.o3wallet.*
 import java.net.URI
 import android.support.v4.app.ShareCompat
 import android.util.Log
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import net.glxn.qrgen.core.image.ImageType
 
 
-class TopupSecondFragmentInfo : LocalizationActivity() {
+class TopupSecondFragmentInfo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

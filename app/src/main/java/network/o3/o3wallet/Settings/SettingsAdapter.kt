@@ -23,9 +23,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import com.akexorcist.localizationactivity.core.LanguageSetting.getLanguage
-import com.akexorcist.localizationactivity.core.LanguageSetting.setLanguage
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import java.util.*
 
 
@@ -109,28 +106,18 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             val args = Bundle()
             args.putBoolean("canAddAddress", true)
             contactsModal.arguments = args
-            contactsModal.show((mContext as LocalizationActivity).supportFragmentManager, contactsModal.tag)
+            contactsModal.show((mContext as AppCompatActivity).supportFragmentManager, contactsModal.tag)
             return
         } else if (position == CellType.WATCHADRESS.ordinal) {
             val watchAddressModal = WatchAddressFragment.newInstance()
-            watchAddressModal.show((mContext as LocalizationActivity).supportFragmentManager, watchAddressModal.tag)
+            watchAddressModal.show((mContext as AppCompatActivity).supportFragmentManager, watchAddressModal.tag)
             return
         } else if (position == CellType.NETWORK.ordinal) {
             val networkModal = NetworkFragment.newInstance()
-            networkModal.show((mContext as LocalizationActivity).supportFragmentManager, networkModal.tag)
+            networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
             return
         } else if (position == CellType.LANGUAGE.ordinal) {
-            if (getLanguage(mContext) == Locale.ENGLISH) {
-                setLanguage(mContext as LocalizationActivity, Resources.getSystem().configuration.locale)
-                mFragment.dismiss()
-                mContext.finish()
-                mContext.startActivity(mContext.intent)
-            } else {
-                setLanguage(mContext as LocalizationActivity, Locale.ENGLISH)
-                mFragment.dismiss()
-                mContext.finish()
-                mContext.startActivity(mContext.intent)
-            }
+            //TODO: KILL THIS
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
             val data = Uri.parse("mailto:support@o3.network")
