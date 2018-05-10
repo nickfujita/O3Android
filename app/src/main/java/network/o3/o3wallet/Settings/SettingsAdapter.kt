@@ -45,7 +45,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
 
     enum class CellType {
         PRIVATEKEY, CONTACTS,
-        WATCHADRESS, NETWORK, LANGUAGE,
+        WATCHADRESS, NETWORK,
         CONTACT, LOGOUT,
         VERSION, ADVANCED
 
@@ -116,8 +116,6 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             val networkModal = NetworkFragment.newInstance()
             networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
             return
-        } else if (position == CellType.LANGUAGE.ordinal) {
-            //TODO: KILL THIS
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
             val data = Uri.parse("mailto:support@o3.network")
