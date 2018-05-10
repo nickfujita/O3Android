@@ -15,9 +15,9 @@ import network.o3.o3wallet.API.O3.O3API
 import network.o3.o3wallet.R
 
 
-class NEP5ListFragment() : BottomSheetDialogFragment() {
+class NEP5ListFragment : BottomSheetDialogFragment() {
 
-    public var delegate: TokenListProtocol? = null
+    var delegate: TokenListProtocol? = null
     var nep5Model: NEP5ViewModel? = null
     private lateinit var listView: ListView
     override fun setupDialog(dialog: Dialog?, style: Int) {
@@ -36,11 +36,6 @@ class NEP5ListFragment() : BottomSheetDialogFragment() {
             nep5adapter.setData(tokens!!)
         })
         return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
     }
 
     override fun onCancel(dialog: DialogInterface?) {

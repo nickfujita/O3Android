@@ -14,7 +14,7 @@
         style="@style/BorderLessButton"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:text="+ Add Address"
+        android:text="@string/SETTINGS_add_watch_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="@string/add_address_watch_address_description"
+        android:text="@string/SETTINGS_add_address_watch_address_description"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

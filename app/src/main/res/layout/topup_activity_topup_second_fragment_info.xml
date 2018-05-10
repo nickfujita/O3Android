@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/second_key_fragment"
+        android:text="@string/TOPUP_second_key_fragment"
         android:textAppearance="@style/PrimaryTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,6 @@
         android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="953460cc3d489c70cfd0daa7510da19fb1574d367786aacaeb33fed543767e665a8e8c9fe2d999d07134827e310f8975f1cef991"
         android:textAppearance="@style/RegularText"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,7 @@
         style="@style/BorderLessButton.Accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save"
+        android:text="@string/TOPUP_save"
         app:layout_constraintEnd_toEndOf="@+id/secretPieceQrCodeView"
         app:layout_constraintHorizontal_bias="0.594"
         app:layout_constraintStart_toStartOf="@+id/secretPieceQrCodeView"
@@ -59,7 +58,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="@string/second_key_fragment_explanation"
+        android:text="@string/TOPUP_second_key_fragment_explanation"
         android:textAppearance="@style/TutorialInfoText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -76,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/textView18"
-        tools:text="@string/save_fragment_confirm" />
+        tools:text="@string/TOPUP_save_fragment_confirm" />
 
     <Button
         android:id="@+id/secondFragmentDoneButton"
@@ -86,7 +85,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="@string/done"
+        android:text="@string/TOPUP_done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secretKeySavedCheckbox" />

@@ -13,7 +13,7 @@ class MessagingService : FirebaseMessagingService() {
         }
 
         if (message.notification != null) {
-            ChannelMessageNotification.notify(baseContext, message!!.notification.title.toString(), 0)
+            ChannelMessageNotification.notify(baseContext, message.notification.title.toString(), 0)
         }
     }
 }

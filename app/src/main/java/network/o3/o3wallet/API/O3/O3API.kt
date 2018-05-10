@@ -21,7 +21,7 @@ import org.jetbrains.anko.defaultSharedPreferences
 
 class O3API {
     val baseURL = "http://api.o3.network/v1/"
-    enum class Route() {
+    enum class Route {
         PRICE,
         HISTORICAL,
         FEED;

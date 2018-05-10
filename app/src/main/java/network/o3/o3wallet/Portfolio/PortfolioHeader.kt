@@ -13,7 +13,7 @@ import network.o3.o3wallet.*
 import java.util.*
 
 class PortfolioHeader:Fragment() {
-    private val titles = O3Wallet.appContext!!.resources.getStringArray(R.array.portfolio_headers)
+    private val titles = O3Wallet.appContext!!.resources.getStringArray(R.array.PORTFOLIO_headers)
     var position: Int = 0
     var unscrubbedDisplayedAmount = 0.0
     companion object {
@@ -39,13 +39,9 @@ class PortfolioHeader:Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     fun setHeaderInfo(amount: String, percentChange: Double, interval: String, initialDate: Date) {
         fundChangeTextView.text = percentChange.formattedPercentString() +
-                " " +  initialDate.IntervaledString(interval)
+                " " +  initialDate.intervaledString(interval)
         fundAmountTextView.text = amount
 
         if (percentChange < 0) {

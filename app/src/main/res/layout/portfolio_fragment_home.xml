@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="6H"
-                    android:text="@string/six_hours"
+                    android:text="@string/PORTFOLIO_six_hours"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="24H"
-                    android:text="@string/one_day"
+                    android:text="@string/PORTFOLIO_one_day"
                     android:textAppearance="@style/IntervalButtonText.Selected" />
 
                 <Button
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1W"
-                    android:text="@string/one_week"
+                    android:text="@string/PORTFOLIO_one_week"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1M"
-                    android:text="@string/one_month"
+                    android:text="@string/PORTFOLIO_one_month"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="3M"
-                    android:text="@string/three_month"
+                    android:text="@string/PORTFOLIO_three_month"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
 
                 <Button
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="all"
-                    android:text="ALL"
+                    android:text="@string/PORTFOLIO_all"
                     android:textAppearance="@style/IntervalButtonText.NotSelected" />
             </LinearLayout>
             <ScrollView

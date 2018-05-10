@@ -94,7 +94,7 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>, private va
             val coinDescriptionTextView = view.find<TextView>(R.id.tokenSaleDescriptionTextView)
             val logoImageView = view.find<ImageView>(R.id.tokenSaleSquareImageView)
 
-            daysLeftTextView.text = ((tokenSale.endTime - (System.currentTimeMillis()/1000)) / 3600 / 24).toString() + " Days Remaining"
+            daysLeftTextView.text = String.format(view.context.resources.getString(R.string.TOKENSALE_Days_Remaining), ((tokenSale.endTime - (System.currentTimeMillis()/1000)) / 3600 / 24).toString())
             coinNameTextView.text = tokenSale.name
             coinDescriptionTextView.text = tokenSale.shortDescription
             Glide.with(view.context).load(tokenSale.squareLogoURL).into(logoImageView)

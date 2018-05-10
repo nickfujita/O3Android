@@ -73,25 +73,16 @@ class TokenSaleReceiptActivity : AppCompatActivity() {
         emailTextView.setOnClickListener {
 
 
-            val emailIntent = Intent(Intent.ACTION_SEND);
-            emailIntent.setData(Uri.parse("mailto:"));
-            emailIntent.setType("text/plain");
+            val emailIntent = Intent(Intent.ACTION_SEND)
+            emailIntent.data = Uri.parse("mailto:")
+            emailIntent.type = "text/plain"
 
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, tokenSaleName + " Tokensale Participation Receipt")
-            val emailString = "This receipt proves that your transaction has submitted for procesing on the NEO Blockchain\n\n" +
-                    "Once it has been authorized on to the blockchain, the funds will leave your wallet, and the token issuer will be" +
-                    " responsible for the distribution of the tokens." +
-                    "You can use this transaction ID as proof of your participation in the token sale. Additional details follow.\n\n" +
-                    "Date: " + dateString + "\n" +
-                    "Token Sale Name: "+ tokenSaleName + "\n" +
-                    "Transaction ID: "+ txID + "\n" +
-                    "Sent: "+ assetSendString + "\n" +
-                    "Should Recieve: " + assetReceiveString + "\n\n" +
-                    "Regards\n" +
-                    "O3 Team"
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, String.format(resources.getString(R.string.TOKENSALE_Email_Title), tokenSaleName))
+            val emailString = String.format(resources.getString(R.string.TOKENSALE_Email_Full_text), dateString, tokenSaleName, txID, assetSendString, assetReceiveString)
+
 
             emailIntent.putExtra(Intent.EXTRA_TEXT, emailString)
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."))
+            startActivity(Intent.createChooser(emailIntent, ""))
         }
     }
 

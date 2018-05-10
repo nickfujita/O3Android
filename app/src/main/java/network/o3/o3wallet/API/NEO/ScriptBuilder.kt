@@ -95,7 +95,7 @@ class ScriptBuilder {
             pushBool(false)
             return
         }
-        val unwrappedData = data!!
+        val unwrappedData = data
 
         if (unwrappedData is String) {
             pushHexString(unwrappedData)

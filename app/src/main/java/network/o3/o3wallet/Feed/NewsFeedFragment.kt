@@ -16,9 +16,9 @@ class NewsFeedFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         model = NewsFeedViewModel()
 
-        val view =  inflater!!.inflate(R.layout.news_fragment_news_feed, container, false)
+        val view =  inflater.inflate(R.layout.news_fragment_news_feed, container, false)
         val listView = view?.findViewById<ListView>(R.id.newsList)
-        val featureView = getLayoutInflater().inflate(R.layout.news_fragment_features, null)
+        val featureView = layoutInflater.inflate(R.layout.news_fragment_features, null)
         listView?.adapter = NewsFeedAdapter(context!!, this)
 
         model?.getFeatureData(true)?.observe(this, Observer {features ->
@@ -26,8 +26,8 @@ class NewsFeedFragment : Fragment() {
             featuredRecycler?.adapter = FeaturesAdapter(features = features?.toCollection(ArrayList())!!)
             model?.getFeedData(true)?.observe(this, Observer { feed ->
                 (listView!!.adapter as NewsFeedAdapter).setData(feed!!)
-                if (features?.isNotEmpty() ?: false) {
-                    listView?.addHeaderView(featureView)
+                if (features?.isNotEmpty() == true) {
+                    listView.addHeaderView(featureView)
                 }
             })
         })

@@ -11,7 +11,6 @@ import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.Toast
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
@@ -19,11 +18,11 @@ import network.o3.o3wallet.Wallet.Send.afterTextChanged
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
-class AddContact : LocalizationActivity() {
+class AddContact : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity_add_contact)
-        this.title = resources.getString(R.string.contact)
+        this.title = resources.getString(R.string.WALLET_address_book)
         val nickNameField = findViewById<EditText>(R.id.NickNameField)
         val addressField = findViewById<EditText>(R.id.AddressField)
         val saveButton = findViewById<Button>(R.id.AddButton)
@@ -34,7 +33,7 @@ class AddContact : LocalizationActivity() {
         scanAddressButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt(resources.getString(R.string.scan_prompt_address_book))
+            integrator.setPrompt(resources.getString(R.string.WALLET_scan))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -60,9 +59,9 @@ class AddContact : LocalizationActivity() {
 
 
             NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(addressField.text.trim().toString()) {
-                if (it.second != null || it?.first == false) {
+                if (it.second != null || it.first == false) {
                     runOnUiThread {
-                        alert (resources.getString(R.string.invalid_neo_address), resources.getString(R.string.error)) {
+                        alert (resources.getString(R.string.ALERT_invalid_neo_address), resources.getString(R.string.ALERT_error)) {
                             yesButton {  }
                         }.show()
                     }
@@ -82,7 +81,7 @@ class AddContact : LocalizationActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null ) {
             if (result.contents == null) {
-                Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
             } else {
                 findViewById<EditText>(R.id.AddressField).setText(result.contents)
             }

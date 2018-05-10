@@ -66,14 +66,14 @@ class NewsFeedAdapter(context: Context, fragment: NewsFeedFragment): BaseAdapter
 
         view.findViewById<TextView>(R.id.dateTextView).text = SimpleDateFormat("yyyy-MM-dd").format(date)
         val imageView = view.findViewById<ImageView>(R.id.newImageView)
-        Glide.with(mContext).load(feedItem?.images[0].url).apply(RequestOptions().centerCrop()).into(imageView)
+        Glide.with(mContext).load(feedItem.images[0].url).apply(RequestOptions().centerCrop()).into(imageView)
 
         view?.setOnClickListener {
             Answers().logContentView(ContentViewEvent()
                     .putContentType("NEO News Today")
                     .putContentId(feedItem.title)
                     .putContentName("NewsFeed Item View"))
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(feedItem?.link))
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(feedItem.link))
             startActivity(mContext, browserIntent, null)
         }
         return view

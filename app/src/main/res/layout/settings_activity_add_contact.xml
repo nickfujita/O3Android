@@ -34,7 +34,7 @@
                     style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/address_address_book"
+                    android:text="@string/WALLET_address_book"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/paste_address_book"
+                    android:text="@string/WALLET_paste"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/scanAddressButton"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/scan_address_book"
+                    android:text="@string/WALLET_scan"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -82,7 +82,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:includeFontPadding="false"
-                android:text="@string/name_address_book"
+                android:text="@string/WALLET_name_address_book"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/AddressField" />
 
@@ -109,7 +109,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/accent_button_background"
-                android:text="@string/add_contact"
+                android:text="@string/WALLET_add_contact"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

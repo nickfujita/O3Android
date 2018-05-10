@@ -25,7 +25,7 @@ class NeoNodeRPC {
     var nodeURL = "http://seed1.o3node.org:10332"
 
     //var nodeURL = "http://seed3.neo.org:20332" //TESTNET
-    enum class Asset() {
+    enum class Asset {
         NEO,
         GAS;
 
@@ -43,7 +43,7 @@ class NeoNodeRPC {
         this.nodeURL = url
     }
 
-    enum class RPC() {
+    enum class RPC {
         GETBLOCKCOUNT,
         GETCONNECTIONCOUNT,
         VALIDATEADDRESS,
@@ -67,7 +67,7 @@ class NeoNodeRPC {
         var request = nodeURL.httpPost().body(dataJson.toString())
         println(RPC.GETBLOCKCOUNT.methodName())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
             print(result.component1())
 
             val (data, error) = result
@@ -92,7 +92,7 @@ class NeoNodeRPC {
 
         var request = nodeURL.httpPost().body(dataJson.toString())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
 
             val (data, error) = result
             if (error == null) {
@@ -116,7 +116,7 @@ class NeoNodeRPC {
 
         var request = nodeURL.httpPost().body(dataJson.toString())
         request.headers["Content-Type"] = "application/json"
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
 
             val (data, error) = result
             if (error == null) {
@@ -315,7 +315,7 @@ class NeoNodeRPC {
         val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
         var rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, Asset.GAS,
                 inputData.payload!!, inputData.totalAmount!!, 0.00000001,
-                Account?.getWallet()?.address!!, null)
+                Account.getWallet()?.address!!, null)
 
         val privateKeyHex = wallet.privateKey.toHex()
         val signature = sign(rawTransaction, privateKeyHex)

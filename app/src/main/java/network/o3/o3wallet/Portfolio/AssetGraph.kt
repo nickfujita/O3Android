@@ -1,16 +1,15 @@
 package network.o3.o3wallet.Portfolio
 
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.robinhood.spark.SparkView
 import android.arch.lifecycle.Observer
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ProgressBar
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.PriceHistory
@@ -19,7 +18,7 @@ import network.o3.o3wallet.API.O3.PriceHistory
  * Created by drei on 12/8/17.
  */
 
-class AssetGraph : LocalizationActivity() {
+class AssetGraph : AppCompatActivity() {
     private var selectedButton: Button? = null
     private var symbol: String? = null
     private var assetGraphModel: AssetGraphViewModel? = null
@@ -29,7 +28,7 @@ class AssetGraph : LocalizationActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.portfolio_activity_asset_graph)
         symbol = intent.getStringExtra("SYMBOL")
-        title = resources.getString(R.string.price_history, symbol!!)
+        title = resources.getString(R.string.PORTFOLIO_price_history, symbol!!)
         assetGraphModel = ViewModelProviders.of(this).get(AssetGraphViewModel::class.java)
 
         initiateGraph()
@@ -48,7 +47,7 @@ class AssetGraph : LocalizationActivity() {
             percentView?.setTextColor(resources.getColor(R.color.colorGain))
         }
         percentView.text = percentChange.formattedPercentString() +
-                " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
     }
 
     private fun initiateGraph() {
@@ -68,14 +67,14 @@ class AssetGraph : LocalizationActivity() {
                 val percentChange = ((price - assetGraphModel?.getInitialPrice()!!) /
                         assetGraphModel?.getInitialPrice()!! * 100)
 
-                if (percentChange!! < 0) {
+                if (percentChange < 0) {
                     percentView?.setTextColor(resources.getColor(R.color.colorLoss))
                 } else {
                     percentView?.setTextColor(resources.getColor(R.color.colorGain))
                 }
                 priceView.text = price.formattedCurrencyString(assetGraphModel!!.getCurrency())
                 percentView.text = percentChange.formattedPercentString() +
-                        " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                        " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
             }
         }
     }
@@ -127,13 +126,13 @@ class AssetGraph : LocalizationActivity() {
                 percentView?.setTextColor(ContextCompat.getColor(applicationContext,R.color.colorGain))
             }
             percentView.text = percentChange.formattedPercentString() +
-                    " " +  assetGraphModel?.getInitialDate()?.IntervaledString(assetGraphModel?.getInterval() ?: "24H")
+                    " " +  assetGraphModel?.getInitialDate()?.intervaledString(assetGraphModel?.getInterval() ?: "24H")
         })
     }
 
     fun tappedIntervalButton(button: Button) {
         selectedButton?.setTextAppearance(R.style.IntervalButtonText_NotSelected)
-        button?.setTextAppearance(R.style.IntervalButtonText_Selected)
+        button.setTextAppearance(R.style.IntervalButtonText_Selected)
         selectedButton = button
         assetGraphModel?.setInterval(button.tag.toString())
         loadGraph(true)

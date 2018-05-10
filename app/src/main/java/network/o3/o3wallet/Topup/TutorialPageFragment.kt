@@ -8,6 +8,4 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class TutorialPageFragment : Fragment() {
-
-}
+class TutorialPageFragment : Fragment()

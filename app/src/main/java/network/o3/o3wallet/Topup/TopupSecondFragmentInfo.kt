@@ -22,18 +22,17 @@ import network.o3.o3wallet.*
 import java.net.URI
 import android.support.v4.app.ShareCompat
 import android.util.Log
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import net.glxn.qrgen.core.image.ImageType
 
 
-class TopupSecondFragmentInfo : LocalizationActivity() {
+class TopupSecondFragmentInfo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.topup_activity_topup_second_fragment_info)
         val secretPieceTwo = intent.getStringExtra("SecretPieceTwo")
         secretPieceTwoTextView.text = secretPieceTwo
-        secretKeySavedCheckbox.text = resources.getString(R.string.save_fragment_confirm)
+        secretKeySavedCheckbox.text = resources.getString(R.string.TOPUP_save_fragment_confirm)
         val bitmap = QRCode.from(secretPieceTwo).withSize(1000, 1000).bitmap()
         secretPieceQrCodeView.setImageBitmap(bitmap)
 
@@ -87,7 +86,7 @@ class TopupSecondFragmentInfo : LocalizationActivity() {
                 qrFile)
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
-        sendIntent.setType("images/jpeg")
+        sendIntent.type = "images/jpeg"
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(sendIntent)

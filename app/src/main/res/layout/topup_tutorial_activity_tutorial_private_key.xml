@@ -15,7 +15,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/cold_storage_private_key_explanation"
+        android:text="@string/TOPUP_cold_storage_private_key_explanation"
         android:textAppearance="@style/TutorialSubtitle"
         android:textColor="@color/colorSubtitleGrey"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:includeFontPadding="false"
-        android:text="@string/cold_storage_private_key"
+        android:text="@string/TOPUP_cold_storage_private_key"
         app:layout_constraintEnd_toStartOf="@+id/coldStorageScanButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
         style="@style/BorderLessButton"
         android:layout_width="69dp"
         android:layout_height="34dp"
-        android:text="@string/scan"
+        android:text="@string/TOPUP_cold_storage_scan"
         app:layout_constraintEnd_toEndOf="@+id/coldStorageWifTextView"
         app:layout_constraintTop_toTopOf="@+id/coldStoageKeyTitle" />
 
@@ -67,7 +67,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/cold_storage_read_more"
+        android:text="@string/TOPUP_cold_storage_read_more"
         app:layout_constraintBottom_toTopOf="@+id/generateFragmentsButton"
         app:layout_constraintStart_toStartOf="@+id/shamirSecretExplain"
         app:layout_constraintTop_toBottomOf="@+id/shamirSecretExplain" />
@@ -80,7 +80,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
-        android:text="@string/generate_encrypted_key_fragments"
+        android:text="@string/TOPUP_generate_encrypted_key_fragments"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

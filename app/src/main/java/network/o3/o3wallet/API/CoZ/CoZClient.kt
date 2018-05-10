@@ -12,7 +12,7 @@ import com.google.gson.Gson
 class CoZClient {
     val baseAPIURL = "http://api.wallet.cityofzion.io/v2/address/"
     //val baseAPIURL = "http://testnet-api.wallet.cityofzion.io/v2/" //TESTNET
-    enum class Route() {
+    enum class Route {
         HISTORY,
         CLAIMS,
         BALANCE;
@@ -26,7 +26,7 @@ class CoZClient {
         val url = "http://api.wallet.cityofzion.io/v2/address/history/" + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
-        request.responseString { request, response, result ->
+        request.responseString { _, response, result ->
             val (data, error) = result
             print(response)
             if (error == null) {
@@ -43,7 +43,7 @@ class CoZClient {
         val url = baseAPIURL + Route.CLAIMS.routeName() + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
-        request.responseString { request, response, result ->
+        request.responseString { _, _, result ->
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()
@@ -59,7 +59,7 @@ class CoZClient {
         val url = baseAPIURL + Route.BALANCE.routeName() + address
         var request = url.httpGet()
         request.headers["User-Agent"] =  ""
-        request.timeout(600000).responseString { request, response, result ->
+        request.timeout(600000).responseString { _, _, result ->
             val (data, error) = result
             if (error == null) {
                 val gson = Gson()

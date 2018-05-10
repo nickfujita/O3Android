@@ -23,9 +23,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import com.akexorcist.localizationactivity.core.LanguageSetting.getLanguage
-import com.akexorcist.localizationactivity.core.LanguageSetting.setLanguage
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import java.util.*
 
 
@@ -36,7 +33,7 @@ import java.util.*
 class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter() {
     private val mContext: Context
     private var mFragment: SettingsFragment
-    var settingsTitles = context.resources.getStringArray(R.array.settings_menu_titles)
+    var settingsTitles = context.resources.getStringArray(R.array.SETTINGS_settings_menu_titles)
     var images =  listOf(R.drawable.ic_settingsprivatekeyicon, R.drawable.ic_settingsaddressbookicon,
             R.drawable.ic_settingswatchonlyaddressicon, R.drawable.ic_settingsnetworkicon, R.drawable.ic_settingsnetworkicon,
             R.drawable.ic_settingscontacticon,
@@ -75,8 +72,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
         val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
         titleTextView.text = getItem(position).first
         if (position == CellType.VERSION.ordinal) {
-            val version = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName
-            titleTextView.text = mContext.resources.getString(R.string.version, version)
+            val version = mContext.packageManager.getPackageInfo(mContext.packageName, 0).versionName
+            titleTextView.text = mContext.resources.getString(R.string.SETTINGS_version, version)
         }
 
         view.findViewById<ImageView>(R.id.settingsIcon).setImageResource(getItem(position).second)
@@ -89,8 +86,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
 
     private fun setLocale(locale: Locale) {
         val resources = mContext.resources
-        val configuration = resources.getConfiguration()
-        val displayMetrics = resources.getDisplayMetrics()
+        val configuration = resources.configuration
+        val displayMetrics = resources.displayMetrics
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale)
         } else {
@@ -109,28 +106,18 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             val args = Bundle()
             args.putBoolean("canAddAddress", true)
             contactsModal.arguments = args
-            contactsModal.show((mContext as LocalizationActivity).supportFragmentManager, contactsModal.tag)
+            contactsModal.show((mContext as AppCompatActivity).supportFragmentManager, contactsModal.tag)
             return
         } else if (position == CellType.WATCHADRESS.ordinal) {
             val watchAddressModal = WatchAddressFragment.newInstance()
-            watchAddressModal.show((mContext as LocalizationActivity).supportFragmentManager, watchAddressModal.tag)
+            watchAddressModal.show((mContext as AppCompatActivity).supportFragmentManager, watchAddressModal.tag)
             return
         } else if (position == CellType.NETWORK.ordinal) {
             val networkModal = NetworkFragment.newInstance()
-            networkModal.show((mContext as LocalizationActivity).supportFragmentManager, networkModal.tag)
+            networkModal.show((mContext as AppCompatActivity).supportFragmentManager, networkModal.tag)
             return
         } else if (position == CellType.LANGUAGE.ordinal) {
-            if (getLanguage(mContext) == Locale.ENGLISH) {
-                setLanguage(mContext as LocalizationActivity, Resources.getSystem().configuration.locale)
-                mFragment.dismiss()
-                mContext.finish()
-                mContext.startActivity(mContext.intent)
-            } else {
-                setLanguage(mContext as LocalizationActivity, Locale.ENGLISH)
-                mFragment.dismiss()
-                mContext.finish()
-                mContext.startActivity(mContext.intent)
-            }
+            //TODO: KILL THIS
         } else if (position == CellType.CONTACT.ordinal) {
             val intent = Intent(Intent.ACTION_VIEW)
             val data = Uri.parse("mailto:support@o3.network")
@@ -138,7 +125,7 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             startActivity(mContext, intent, null)
             return
         } else if (position == CellType.LOGOUT.ordinal) {
-            mContext.alert("Are you sure you want to remove your private key from this device?") {
+            mContext.alert(O3Wallet.appContext!!.resources.getString(R.string.SETTINGS_logout_warning)) {
                 yesButton {
                     Account.deleteKeyFromDevice()
                     val intent = Intent(mContext, MainActivity::class.java)
@@ -154,9 +141,8 @@ class SettingsAdapter(context: Context, fragment: SettingsFragment): BaseAdapter
             if (!mKeyguardManager.isKeyguardSecure) {
                 // Show a message that the user hasn't set up a lock screen.
                 Toast.makeText(mContext,
-                        "Secure lock screen hasn't set up.\n"
-                                + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
-                        Toast.LENGTH_LONG).show();
+                        O3Wallet.appContext!!.resources.getString(R.string.ALERT_no_passcode_setup),
+                        Toast.LENGTH_LONG).show()
                 return
             } else {
                 val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(null, null)

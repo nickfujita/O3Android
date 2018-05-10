@@ -13,8 +13,8 @@ import network.o3.o3wallet.Wallet.TransactionHistory.TransactionHistoryFragment
 class AccountFragmentPagerAdapter(fm: android.support.v4.app.FragmentManager, context: Context) : FragmentPagerAdapter(fm){
 
     private val PAGE_COUNT = 3
-    private val tabTitles = arrayOf(context.resources.getString(R.string.assets),
-            context.resources.getString(R.string.transactions), context.resources.getString(R.string.contacts))
+    private val tabTitles = arrayOf(context.resources.getString(R.string.WALLET_assets),
+            context.resources.getString(R.string.WALLET_transactions), context.resources.getString(R.string.WALLET_address_book))
     private val context: Context = context
 
 

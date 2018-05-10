@@ -23,6 +23,7 @@
         android:includeFontPadding="false"
         android:maxLines="3"
         android:text="CoZ announces second developer competition on this day it will be"
+        tools:ignore="HardcodedText"
         android:textAlignment="viewStart"
         android:textAppearance="@style/RegularText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +37,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:text="Published: September 12, 2018"
+        tools:ignore="HardcodedText"
         android:textAppearance="@style/SubtitleText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

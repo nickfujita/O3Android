@@ -4,5 +4,5 @@
 
     <item
         android:id="@+id/remove_cold_storage"
-        android:title="@string/remove_cold_storage" />
+        android:title="@string/TOPUP_remove_cold_storage" />
 </menu>

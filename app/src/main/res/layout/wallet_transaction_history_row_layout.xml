@@ -22,7 +22,7 @@
             android:ellipsize="middle"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="To"
+            android:text="@string/WALLET_to"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -37,7 +37,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:includeFontPadding="false"
-            android:text="   "
             android:textAppearance="@style/RegularText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +50,7 @@
             android:layout_marginStart="16dp"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="From"
+            android:text="@string/WALLET_from"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +64,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:includeFontPadding="false"
-            android:text="TextView"
             android:textAppearance="@style/RegularText.Gain"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textAppearance="@style/RegularText.Small.Gray"
             app:layout_constraintStart_toEndOf="@+id/assetTextView"
             app:layout_constraintTop_toTopOf="parent" />

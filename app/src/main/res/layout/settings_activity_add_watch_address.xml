@@ -34,7 +34,7 @@
                     style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/address_watch_addresses"
+                    android:text="@string/SETTINGS_address_watch_addresses"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/paste_watch_addresses"
+                    android:text="@string/SETTINGS_paste_watch_addresses"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/scanAddressButton"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
                     style="@style/BorderLessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/scan_watch_addresses"
+                    android:text="@string/SETTINGS_scan_watch_addresses"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -82,7 +82,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:includeFontPadding="false"
-                android:text="@string/name_watch_addresses"
+                android:text="@string/SETTINGS_name_watch_addresses"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/AddressField" />
 
@@ -109,7 +109,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/accent_button_background"
-                android:text="@string/add_watch_address"
+                android:text="@string/SETTINGS_add_watch_address"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

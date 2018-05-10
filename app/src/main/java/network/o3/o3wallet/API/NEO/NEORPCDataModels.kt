@@ -28,8 +28,7 @@ data class Transaction(val txid: String,
                   val vout: Array<ValueOut>,
                   val sys_fee: String,
                   val net_fee: String,
-                  val scripts: Array<Script>) {
-}
+                  val scripts: Array<Script>)
 
 data class Block(val confirmations: Int,
             val hash: String,

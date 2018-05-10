@@ -10,7 +10,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.widget.*
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import network.o3.o3wallet.R
 
 
@@ -27,7 +26,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
             // Credentials entered successfully!
             if (resultCode == -1) {
                 val privateKeyModal = PrivateKeyFragment.newInstance()
-                privateKeyModal.show((context as LocalizationActivity).supportFragmentManager, privateKeyModal.tag)
+                privateKeyModal.show((context as AppCompatActivity).supportFragmentManager, privateKeyModal.tag)
             } else {
 
             }
@@ -37,7 +36,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.settings_fragment_menu, container, false)
         val headerView = layoutInflater.inflate(R.layout.settings_header_row, null)
-        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.settings)
+        headerView.findViewById<TextView>(R.id.headerTextView).text = resources.getString(R.string.SETTINGS_settings_title)
 
         val listView = view.findViewById<ListView>(R.id.settingsListView)
         listView.addHeaderView(headerView)

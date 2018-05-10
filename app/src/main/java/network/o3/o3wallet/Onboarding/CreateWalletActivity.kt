@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import net.glxn.qrgen.android.QRCode
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.R
@@ -16,7 +15,7 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
 
-class CreateWalletActivity : LocalizationActivity() {
+class CreateWalletActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +26,9 @@ class CreateWalletActivity : LocalizationActivity() {
     }
 
     fun startButtonTapped() {
-        alert (resources.getString(R.string.alert_warning)) {
+        alert (resources.getString(R.string.ONBOARDING_please_backup_warning)) {
             yesButton {
-                alert(resources.getString(R.string.warning_confirmation)) {
+                alert(resources.getString(R.string.ONBOARDING_backup_warning_confirmation)) {
                     yesButton {
                         val intent = Intent(this@CreateWalletActivity, SelectingBestNode::class.java)
                         startActivity(intent)

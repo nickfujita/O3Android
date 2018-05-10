@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="• LIVE"
+                android:text="@string/TOKENSALE_Live_Status"
                 android:textAppearance="@style/TokenSaleAccentText"
                 app:layout_constraintStart_toStartOf="@+id/tokenSaleSquareImageView"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -53,6 +53,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
                 android:text="28 Days Left"
+                tools:ignore="HardcodedText"
                 android:textAppearance="@style/RegularText.Small.Gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Coin Name"
+                tools:ignore="HardcodedText"
                 android:textAppearance="@style/TableRowTitleText"
                 app:layout_constraintStart_toEndOf="@+id/tokenSaleSquareImageView"
                 app:layout_constraintTop_toTopOf="@+id/tokenSaleSquareImageView" />
@@ -74,6 +76,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
                 android:text="We make digital currencies work for everyone"
+                tools:ignore="HardcodedText"
                 android:textAppearance="@style/RegularText.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tokenSaleSquareImageView"

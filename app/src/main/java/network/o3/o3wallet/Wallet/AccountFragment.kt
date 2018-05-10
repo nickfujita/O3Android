@@ -115,9 +115,9 @@ class AccountFragment : Fragment(), TokenListProtocol {
         claimButton = view.findViewById<Button>(R.id.claimButton)
         unclaimedGASLabel = view.findViewById(R.id.unclaimedGASLabel)
         assetListView = view.findViewById<ListView>(R.id.assetListView)
-        unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList());
+        unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList())
 
-        swipeContainer = view!!.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+        swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary,
@@ -193,7 +193,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         loadAccountState()
     }
 
-    public fun addNewNEP5Token() {
+    fun addNewNEP5Token() {
         val bottomSheet = NEP5ListFragment()
         bottomSheet.delegate = this
         bottomSheet.show(activity!!.supportFragmentManager, "nep5list")
@@ -213,7 +213,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         this.currentAccountState = accountState!!
         swipeContainer.isRefreshing = false
         //construct array of AccountAsset
-        for (balance in accountState!!.balances.iterator()) {
+        for (balance in accountState.balances.iterator()) {
             //NEO
             if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
                 this.neoBalance = balance
@@ -303,13 +303,13 @@ class AccountFragment : Fragment(), TokenListProtocol {
             } else {
                 onUiThread {
                     this.claims = data!!
-                    val amount = data!!.total_unspent_claim / 100000000.0
+                    val amount = data.total_unspent_claim / 100000000.0
                     unclaimedGASLabel.text = "%.8f".format(amount)
                     claimAmount = amount
                     if (isClaiming) {
                         this.claimButton.isEnabled = false
                     } else {
-                        this.claimButton.isEnabled = if (amount == 0.0 || unclaimedGASLabel.visibility == View.GONE) false else true
+                        this.claimButton.isEnabled = !(amount == 0.0 || unclaimedGASLabel.visibility == View.GONE)
                     }
                 }
             }
@@ -317,7 +317,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     private fun enableClaimGASButton(neoAmount: Double) {
-        claimButton.isEnabled = if (neoAmount == 0.0  || unclaimedGASLabel.visibility == View.GONE) false else true
+        claimButton.isEnabled = !(neoAmount == 0.0  || unclaimedGASLabel.visibility == View.GONE)
         if (claimButton.isEnabled == true) {
             loadClaimableGasEvery5Seconds()
         }
@@ -334,7 +334,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                             putCustomAttribute("Amount", claimAmount))
                     claimAmount = 0.0
                     claimToast.cancel()
-                    context!!.toast(resources.getString(R.string.claimed_gas_successfully))
+                    context!!.toast(resources.getString(R.string.WALLET_claimed_gas_successfully))
                     disableGasInfo()
                     loadAccountState()
                     loadClaimableGAS()
@@ -359,7 +359,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             if (error != null) {
                 onUiThread {
                     setClaiming(false)
-                    context?.toast(error!!.message!!)
+                    context?.toast(error.message!!)
                     claimToast.cancel()
                 }
             } else if (claims?.claims?.size == 0) {
@@ -383,7 +383,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 onUiThread {
                     setClaiming(false)
                     claimToast.cancel()
-                    context?.toast(error!!.message!!)
+                    context?.toast(error.message!!)
                 }
             } else if (success == true) {
                 Thread({
@@ -395,10 +395,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     fun claimGasTapped() {
         if (this.currentAccountState == null) {
-            context?.toast("Unable to retrieve account details, check settings -> network")
+            context?.toast(resources.getString(R.string.WALLET_Claim_Error_Load_Account_State))
             return
         }
-        claimToast = context!!.toastUntilCancel(resources.getString(R.string.claiming_gas))
+        claimToast = context!!.toastUntilCancel(resources.getString(R.string.WALLET_claiming_gas))
         setClaiming(true)
         claimProgress.visibility = View.VISIBLE
         claimButton.isEnabled = false
@@ -411,7 +411,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 if (error != null) {
                     onUiThread {
                         setClaiming(false)
-                        context?.toast(error!!.message!!)
+                        context?.toast(error.message!!)
                         claimToast.cancel()
                     }
                 } else if (claims?.claims?.size == 0) {

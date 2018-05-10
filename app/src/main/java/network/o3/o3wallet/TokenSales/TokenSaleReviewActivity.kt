@@ -95,9 +95,7 @@ class TokenSaleReviewActivity : AppCompatActivity() {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(tokenSaleWebURL))
                 startActivity(browserIntent)
             }
-            whiteListErrorTextView.text = "It looks like you're not whitelisted for this token sale. " +
-                    "You can use the issuers website to figure out how to get whitelisted or contact the team " +
-                    "if you think this is a mistake"
+            whiteListErrorTextView.text = resources.getString(R.string.TOKENSALE_Not_Whitelisted)
         } else {
             issuerAgreementCheckbox.visibility = View.VISIBLE
             o3AgreementCheckbox.visibility = View.VISIBLE
@@ -129,11 +127,11 @@ class TokenSaleReviewActivity : AppCompatActivity() {
                 if (it.second != null) {
                     loadingConstraintView.visibility = View.GONE
                     mainConstraintView.visibility = View.VISIBLE
-                    alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
+                    alert(resources.getString(R.string.ALERT_Something_Went_Wrong)) { yesButton { resources.getString(R.string.ALERT_OK_Confirm_Button) } }.show()
                 } else if (it.first == null) {
                     loadingConstraintView.visibility = View.GONE
                     mainConstraintView.visibility = View.VISIBLE
-                    alert("Something went wrong. Try again later") { yesButton { "Ok" } }.show()
+                    alert(resources.getString(R.string.ALERT_Something_Went_Wrong)) { yesButton { resources.getString(R.string.ALERT_OK_Confirm_Button) } }.show()
                 } else {
                    moveToReceipt(it.first!!)
                 }

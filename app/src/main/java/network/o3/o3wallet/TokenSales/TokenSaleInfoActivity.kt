@@ -58,8 +58,8 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             gasBalance = gasAsset?.value ?: 0.0
             neoBalance = (neoAsset?.value ?: 0.0).toInt()
             runOnUiThread {
-                gasCardBalanceTextView.text = "Balance: " + gasBalance.toString()
-                neoCardBalanceTextView.text = "Balance: " + neoBalance.toString()
+                gasCardBalanceTextView.text =  String.format(resources.getString(R.string.TOKENSALE_Balance), gasBalance.toString())
+                neoCardBalanceTextView.text = String.format(resources.getString(R.string.TOKENSALE_Balance), neoBalance.toString())
             }
         }
     }
@@ -74,8 +74,8 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         gasCardBalanceTextView = footerView.findViewById<TextView>(R.id.gasCardBalanceTextView)
         neoCardBalanceTextView = footerView.findViewById<TextView>(R.id.neoCardBalanceTextView)
 
-        gasCardTitleTextView.text = "Use GAS"
-        neoCardTitleTextView.text = "Use NEO"
+        gasCardTitleTextView.text = resources.getString(R.string.TOKENSALE_Use_Gas)
+        neoCardTitleTextView.text = resources.getString(R.string.TOKENSALE_Use_Neo)
 
         val gasCardDescriptionTextView = footerView.findViewById<TextView>(R.id.gasCardDecriptionTextView)
         val neoCardDescriptionTextView = footerView.findViewById<TextView>(R.id.neoCardDescriptionTextView)
@@ -130,11 +130,11 @@ class TokenSaleInfoActivity : AppCompatActivity() {
             val recieveAmount = doubleValue * selectedAsset.basicRate
             val df = DecimalFormat()
             if (recieveAmount - recieveAmount.toLong() == 0.0) {
-                df.setMaximumFractionDigits(0)
+                df.maximumFractionDigits = 0
                 val numString = df.format(recieveAmount)
                 recieveAmountTextView.text = numString + " " + tokenSale.symbol
             } else {
-                df.setMaximumFractionDigits(8)
+                df.maximumFractionDigits = 8
                 val numString = df.format(recieveAmount)
                 recieveAmountTextView.text = numString + " " + tokenSale.symbol
             }
@@ -147,7 +147,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
     fun initiatePartcipationEditText() {
         amountEditText.inputType = (InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NULL)
-        amountEditText.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 8)))
+        amountEditText.filters = arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 8))
         amountEditText.afterTextChanged {
             updateTokenRecieveAmount()
         }
@@ -162,7 +162,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         priorityInfoTextView.setOnClickListener {
             alert ("Priority uses some of your gas to give your transaction priority in the blockchain. " +
                     "This makes sure you always get in on a token sale before everyone else.") {
-                yesButton { "OK" }
+                yesButton { resources.getString(R.string.ALERT_OK_Confirm_Button) }
             }.show()
         }
     }
@@ -203,22 +203,28 @@ class TokenSaleInfoActivity : AppCompatActivity() {
         val doubleValue = amountEditText.text.toString().toDoubleOrNull()
         if (selectedAsset.asset.toUpperCase() == "NEO") {
             if (doubleValue == null) {
-                alert("Entered Amount is not a Valid Number") { yesButton {"Ok"} }.show()
+                alert(resources.getString(R.string.TOKENSALE_Error_Invalid_Amount)) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue - doubleValue.toInt() != 0.0) {
-                alert("You must send a whole amount of NEO") { yesButton {"Ok"} }.show()
+                    alert(resources.getString(R.string.TOKENSALE_Error_Must_Send_Whole_NEO)) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if(doubleValue.toInt() > neoBalance) {
-                alert("You cannot send more than your available NEO balance") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Not_Enough_Balance), "NEO")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if(doubleValue.toInt() > neoInfo.max) {
-                alert("You cannot send more NEO than the max contribution amount") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Max_Contribution), "NEO")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue < neoInfo.min) {
-                alert("You have to send more NEO than the minimum contribution amount") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Min_Contribution), "NEO")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (priorityEnabled && gasBalance < 0.0011) {
-                alert("You do not have enough gas in order to send a priority transaction") { yesButton {"Ok"} }.show()
+                alert(resources.getString(R.string.TOKENSALE_Error_Not_Enough_For_Priority)) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             }
             return true
@@ -226,19 +232,24 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         if (selectedAsset.asset.toUpperCase() == "GAS") {
             if (doubleValue == null) {
-                alert("Entered Amount is not a Valid Number") { yesButton {"Ok"} }.show()
+                alert(resources.getString(R.string.TOKENSALE_Error_Invalid_Amount)) { yesButton {
+                    resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue > gasBalance) {
-                alert("You cannot send more than your available GAS balance") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Not_Enough_Balance), "GAS")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue > gasInfo.max) {
-                alert("You cannot send more GAS than athe max contribution amount") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Max_Contribution), "GAS")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (doubleValue < gasInfo.min) {
-                alert("You have to send more GAS than the minimum contribution amount") { yesButton {"Ok"} }.show()
+                alert(String.format(resources.getString(R.string.TOKENSALE_Error_Min_Contribution), "GAS")) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             } else if (priorityEnabled && gasBalance - doubleValue < 0.0011) {
-                alert("You do not have enough gas in order to send a priority transaction") { yesButton {"Ok"} }.show()
+                alert(resources.getString(R.string.TOKENSALE_Error_Not_Enough_For_Priority)) {
+                    yesButton {resources.getString(R.string.ALERT_OK_Confirm_Button)} }.show()
                 return false
             }
             return true
@@ -269,7 +280,7 @@ class TokenSaleInfoActivity : AppCompatActivity() {
 
         headerView = layoutInflater.inflate(R.layout.tokensale_info_header, null)
         val bannerImageView = headerView.findViewById<ImageView>(R.id.tokensaleBannerView)
-        Glide.with(this).load(tokenSale.imageURL).into(bannerImageView);
+        Glide.with(this).load(tokenSale.imageURL).into(bannerImageView)
         footerView = layoutInflater.inflate(R.layout.tokensale_info_footer, null)
 
         amountEditText = footerView.findViewById<EditText>(R.id.tokenSaleParticipationAmountEditText)

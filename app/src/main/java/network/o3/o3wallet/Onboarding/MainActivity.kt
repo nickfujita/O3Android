@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.Toast
 import co.getchannel.channel.Channel
 import co.getchannel.channel.callback.ChannelCallback
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.crashlytics.android.Crashlytics
 import com.google.zxing.integration.android.IntentIntegrator
 import io.fabric.sdk.android.Fabric
@@ -22,7 +21,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
-class MainActivity : LocalizationActivity() {
+class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var pagerAdapter: LandingPagerAdapter
 
@@ -57,9 +56,9 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
+
             Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Screenlock' to set up a lock screen",
+                    R.string.ALERT_no_passcode_setup,
                     Toast.LENGTH_LONG).show()
             return
         } else {
@@ -73,7 +72,7 @@ class MainActivity : LocalizationActivity() {
     fun createWalletTapped() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (Account.isEncryptedWalletPresent()) {
-            alert (resources.getString(R.string.existing_key_detected)) {
+            alert (resources.getString(R.string.ONBOARDING_existing_key_detected)) {
                 yesButton {
                     authenticateReplaceWallet()
                 }
@@ -83,7 +82,7 @@ class MainActivity : LocalizationActivity() {
             }.show()
         } else if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
             Account.createNewWallet()
@@ -96,10 +95,10 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         } else {
-            val intent = mKeyguardManager.createConfirmDeviceCredentialIntent("Log in to your existing wallet", null)
+            val intent = mKeyguardManager.createConfirmDeviceCredentialIntent(resources.getString(R.string.ONBOARDING_Login_To_Existing), null)
             if (intent != null) {
                 startActivityForResult(intent, 0)
             }
@@ -123,7 +122,7 @@ class MainActivity : LocalizationActivity() {
         val mKeyguardManager =  getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
-            Toast.makeText(this, resources.getString(R.string.no_passcode_setup), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_no_passcode_setup), Toast.LENGTH_LONG).show()
             return
         }
         val intent = Intent(this, LoginActivity::class.java)

@@ -18,7 +18,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import android.widget.*
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.google.zxing.integration.android.IntentIntegrator
@@ -36,11 +35,10 @@ import network.o3.o3wallet.Wallet.toastUntilCancel
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 
-class SendActivity: LocalizationActivity() {
+class SendActivity: AppCompatActivity() {
 
     lateinit var addressTextView: TextView
     lateinit var amountTextView: TextView
-    lateinit var noteTextView: TextView
     lateinit var selectedAssetTextView: TextView
     lateinit var sendButton: Button
     lateinit var pasteAddressButton: Button
@@ -54,17 +52,16 @@ class SendActivity: LocalizationActivity() {
     var assetID = NeoNodeRPC.Asset.NEO.assetID()
     var shortName = "NEO"
 
-    public val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
+    val ARG_REVEAL_SETTINGS: String = "arg_reveal_settings"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.wallet_activity_send)
 
-        this.title = resources.getString(R.string.send)
+        this.title = resources.getString(R.string.SEND_send)
         view = findViewById<View>(R.id.root_layout)
         addressTextView = findViewById<EditText>(R.id.addressTextView)
         amountTextView = findViewById<EditText>(R.id.amountTextView)
-        noteTextView = findViewById<EditText>(R.id.noteTextView)
         sendButton = findViewById<Button>(R.id.sendButton)
         pasteAddressButton = findViewById<Button>(R.id.pasteAddressButton)
         scanAddressButton = findViewById<Button>(R.id.scanAddressButton)
@@ -104,9 +101,9 @@ class SendActivity: LocalizationActivity() {
         val foundContact = contacts.find { it.address == address }
         val toLabel = findViewById<TextView>(R.id.sendToLabel)
         if (foundContact != null) {
-            toLabel.text = "To: %s".format(foundContact.nickname)
+            toLabel.text = String.format(resources.getString(R.string.WALLET_to_formatted), foundContact.nickname)
         } else {
-            toLabel.text = "To"
+            toLabel.text = String.format(resources.getString(R.string.WALLET_to_formatted), "")
         }
     }
 
@@ -146,7 +143,7 @@ class SendActivity: LocalizationActivity() {
         var amount = amountTextView.text.trim().toString().toDouble()
 
         if (amount == 0.0) {
-            baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
+            baseContext.toast(resources.getString(R.string.SEND_amount_must_be_nonzero))
             return
         }
 
@@ -161,7 +158,7 @@ class SendActivity: LocalizationActivity() {
 
     private fun sendNativeAsset(address: String, amount: Double) {
         val wallet = Account.getWallet()
-        val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
+        val toast = baseContext.toastUntilCancel(resources.getString(R.string.SEND_sending_in_progress))
         var toSendAsset: NeoNodeRPC.Asset
         if (shortName == "NEO") {
             toSendAsset = NeoNodeRPC.Asset.NEO
@@ -179,13 +176,13 @@ class SendActivity: LocalizationActivity() {
                             .putCustomAttribute("Asset Name", toSendAsset.name)
                             .putCustomAttribute("Amount", amount))
 
-                    baseContext!!.toast(resources.getString(R.string.sent_successfully))
+                    baseContext!!.toast(resources.getString(R.string.SEND_sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()
                     }, 1000)
                 } else {
                     this.checkEnableSendButton()
-                    val message = resources.getString(R.string.send_error)
+                    val message = resources.getString(R.string.SEND_send_error)
                     val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                     snack.setAction("Close") {
                         finish()
@@ -198,13 +195,13 @@ class SendActivity: LocalizationActivity() {
 
     private fun sendTokenAsset(address: String, amount: Double) {
         val wallet = Account.getWallet()
-        val toast = baseContext.toastUntilCancel(resources.getString(R.string.sending_in_progress))
+        val toast = baseContext.toastUntilCancel(resources.getString(R.string.SEND_sending_in_progress))
         val gasIndex  = ownedAssets.indices.find { ownedAssets[it].name.toUpperCase() == "GAS"}
         if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value == 0.0) {
-            baseContext.toast("You must have 0.0000000001 GAS to send a token")
+            baseContext.toast(resources.getString(R.string.SEND_Not_Enough_GAS_For_Token_Send))
             return
         }
-        NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet!!.address, address, amount) {
+        NeoNodeRPC(PersistentStore.getNodeURL()).sendNEP5Token(wallet!!, assetID, wallet.address, address, amount) {
             runOnUiThread {
                 toast.cancel()
                 val error = it.second
@@ -213,15 +210,15 @@ class SendActivity: LocalizationActivity() {
                     Answers().logCustom(CustomEvent("Native Asset Sent")
                             .putCustomAttribute("Asset Name", selectedAssetTextView.text.toString())
                             .putCustomAttribute("Amount", amount))
-                    baseContext!!.toast(resources.getString(R.string.sent_successfully))
+                    baseContext!!.toast(resources.getString(R.string.SEND_sent_successfully))
                     Handler().postDelayed(Runnable {
                         finish()
                     }, 1000)
                 } else {
                     this.checkEnableSendButton()
-                    val message = resources.getString(R.string.send_error)
+                    val message = resources.getString(R.string.SEND_send_error)
                     val snack = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                    snack.setAction("Close") {
+                    snack.setAction(resources.getString(R.string.ALERT_Close)) {
                         finish()
                     }
                     snack.show()
@@ -237,14 +234,14 @@ class SendActivity: LocalizationActivity() {
         var amount = amountTextView.text.trim().toString().toDouble()
 
         if (amount == 0.0) {
-            baseContext.toast(resources.getString(R.string.amount_must_be_nonzero))
+            baseContext.toast(resources.getString(R.string.SEND_amount_must_be_nonzero))
             return
         }
 
         NeoNodeRPC(PersistentStore.getNodeURL()).validateAddress(address) {
-            if (it.second != null || it?.first == false) {
+            if (it.second != null || it.first == false) {
                 runOnUiThread {
-                    alert(resources.getString(R.string.invalid_neo_address), resources.getString(R.string.error)) {
+                    alert(resources.getString(R.string.ALERT_invalid_neo_address), resources.getString(R.string.ALERT_error)) {
                         yesButton {
                             addressTextView.requestFocus()
                         }
@@ -252,12 +249,12 @@ class SendActivity: LocalizationActivity() {
                 }
             } else {
                 runOnUiThread {
-                    alert(resources.getString(R.string.send_confirmation, amount.toString(),
+                    alert(resources.getString(R.string.SEND_send_confirmation, amount.toString(),
                             this.shortName.toUpperCase(), address)) {
-                        positiveButton(resources.getString(R.string.send)) {
+                        positiveButton(resources.getString(R.string.SEND_send)) {
                             send()
                         }
-                        negativeButton(resources.getString(R.string.cancel)) {
+                        negativeButton(resources.getString(R.string.ALERT_cancel)) {
 
                         }
                     }.show()
@@ -287,7 +284,7 @@ class SendActivity: LocalizationActivity() {
     fun scanAddressTapped() {
         val integrator = IntentIntegrator(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-        integrator.setPrompt(resources.getString(R.string.scan_prompt_qr_send))
+        integrator.setPrompt(resources.getString(R.string.SEND_scan_prompt_qr))
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
     }
@@ -297,7 +294,7 @@ class SendActivity: LocalizationActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
             } else if (Neoutils.validateNEOAddress(result.contents.trim())) {
                 addressTextView.text = result.contents.trim()
             } else try {

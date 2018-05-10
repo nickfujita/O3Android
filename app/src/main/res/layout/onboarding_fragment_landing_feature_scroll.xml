@@ -29,7 +29,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:includeFontPadding="false"
-        android:text="Some awesome feature that is very interesting and you sohuld use this app for sure"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"

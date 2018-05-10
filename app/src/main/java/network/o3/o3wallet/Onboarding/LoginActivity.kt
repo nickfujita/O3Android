@@ -8,14 +8,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.R
 import network.o3.o3wallet.SelectingBestNode
 import network.o3.o3wallet.Wallet.toast
 
-class LoginActivity : LocalizationActivity() {
+class LoginActivity : AppCompatActivity() {
     private lateinit var wifTextfield: TextView
     var isFirstActivityLoad = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +31,7 @@ class LoginActivity : LocalizationActivity() {
         scanButton.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-            integrator.setPrompt(resources.getString(R.string.scan_prompt_watch_address))
+            integrator.setPrompt(resources.getString(R.string.ONBOARDING_scan_prompt))
             integrator.setOrientationLocked(false)
             integrator.initiateScan()
         }
@@ -51,7 +50,7 @@ class LoginActivity : LocalizationActivity() {
         if (!mKeyguardManager.isKeyguardSecure) {
             // Show a message that the user hasn't set up a lock screen.
             Toast.makeText(this,
-                    resources.getString(R.string.no_passcode_setup),
+                    resources.getString(R.string.ALERT_no_passcode_setup),
                     Toast.LENGTH_LONG).show()
                 return
         } else {
@@ -76,7 +75,7 @@ class LoginActivity : LocalizationActivity() {
         if (wifTextfield.text.trim().count() > 0) {
             val valid = Account.fromWIF(wifTextfield.text.trim().toString())
             if (valid == false) {
-                baseContext.toast(resources.getString(R.string.invalid_wif))
+                baseContext.toast(resources.getString(R.string.ALERT_invalid_wif))
                 return
             }
         }
@@ -87,7 +86,7 @@ class LoginActivity : LocalizationActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents == null) {
-            Toast.makeText(this, resources.getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.ALERT_cancelled), Toast.LENGTH_LONG).show()
         } else {
             if (requestCode == 1) {
                 Account.restoreWalletFromDevice()

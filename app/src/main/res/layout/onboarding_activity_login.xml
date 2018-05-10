@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/footnote_login"
+        android:text="@string/ONBOARDING_login_footnote"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/wipTextView" />
 
@@ -41,7 +41,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:includeFontPadding="false"
-        android:text="@string/your_private_key_login"
+        android:text="@string/ONBOARDING_your_private_key"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +54,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/primary_button_background"
-        android:text="@string/login_login"
+        android:text="@string/ONBOARDING_login_action"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
         style="@style/BorderLessButton"
         android:layout_width="69dp"
         android:layout_height="34dp"
-        android:text="@string/scan"
+        android:text="@string/ONBOARDING_scan"
         app:layout_constraintBottom_toBottomOf="@+id/loginKeyTitle"
         app:layout_constraintEnd_toEndOf="@+id/wipTextView"
         app:layout_constraintTop_toTopOf="@+id/loginKeyTitle" />

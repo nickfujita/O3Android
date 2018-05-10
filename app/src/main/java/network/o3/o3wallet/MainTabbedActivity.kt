@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
-import com.akexorcist.localizationactivity.ui.LocalizationActivity
 import network.o3.o3wallet.Feed.NewsFeedFragment
 import network.o3.o3wallet.Portfolio.HomeFragment
 import network.o3.o3wallet.Settings.SettingsFragment
@@ -19,7 +18,7 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 
 
-class MainTabbedActivity : LocalizationActivity() {
+class MainTabbedActivity : AppCompatActivity() {
 
     var activeTabID: Int? = 0
     var activeTabPosition: Int? = 0
@@ -28,7 +27,7 @@ class MainTabbedActivity : LocalizationActivity() {
             SettingsFragment.newInstance())
 
     override fun onBackPressed() {
-        alert ("Are you sure you want to exit?", "") {
+        alert (resources.getString(R.string.SETTINGS_logout_warning)) {
             yesButton { super.onBackPressed() }
             noButton {  }
         }.show()
@@ -54,7 +53,7 @@ class MainTabbedActivity : LocalizationActivity() {
                 }
 
                 var tabName = ""
-                when (item.getItemId()) {
+                when (item.itemId) {
                     R.id.action_item1 -> {
                         switchFragment(0)
                         activeTabID = item.itemId
