@@ -30,8 +30,6 @@ import network.o3.o3wallet.API.NEO.*
 import network.o3.o3wallet.TokenSales.TokenSalesActivity
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
-import network.o3.o3wallet.Topup.TopupColdStorageBalanceActivity
-import network.o3.o3wallet.Topup.TopupTutorial
 import network.o3.o3wallet.Wallet.Send.SendActivity
 
 
@@ -43,7 +41,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     private var fabExpanded = false
     private lateinit var menuButton: FloatingActionMenu
-    private lateinit var topupButton: FloatingActionButton
     private lateinit var myQrButton: FloatingActionButton
     private lateinit var sendButton: FloatingActionButton
     private lateinit var tokenSaleButton: FloatingActionButton
@@ -82,7 +79,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
     fun setupActionButton(view: View) {
         menuButton = view.findViewById<FloatingActionMenu>(R.id.menuActionButton)
-        topupButton = view.findViewById<FloatingActionButton>(R.id.fab_cold_storage)
         myQrButton = view.findViewById<FloatingActionButton>(R.id.fab_my_address)
         sendButton = view.findViewById<FloatingActionButton>(R.id.fab_send)
         tokenSaleButton = view.findViewById<FloatingActionButton>(R.id.fab_token_sale)
@@ -90,10 +86,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         tokenSaleButton.colorNormal = resources.getColor(R.color.colorAccent)
         tokenSaleButton.colorPressed = resources.getColor(R.color.colorAccentLight)
         tokenSaleButton.setOnClickListener { showTokenSale() }
-
-        topupButton.colorNormal = resources.getColor(R.color.colorAccent)
-        topupButton.colorPressed = resources.getColor(R.color.colorAccentLight)
-        topupButton.setOnClickListener { showTopup() }
 
         myQrButton.colorNormal = resources.getColor(R.color.colorAccent)
         myQrButton.colorPressed = resources.getColor(R.color.colorAccentLight)
@@ -171,17 +163,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private fun showMyAddress() {
         val addressBottomSheet = MyAddressFragment()
         addressBottomSheet.show(activity!!.supportFragmentManager, "myaddress")
-    }
-
-    private fun showTopup() {
-        //TODO: ADJUST THIS LOGIC
-        if (PersistentStore.getColdStorageEnabledStatus() == false) {
-            val topupIntent = Intent(context, TopupTutorial::class.java)
-            startActivity(topupIntent)
-        } else {
-            val topupIntent = Intent(context, TopupColdStorageBalanceActivity::class.java)
-            startActivity(topupIntent)
-        }
     }
 
     private fun showTokenSale() {

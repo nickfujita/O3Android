@@ -155,7 +155,7 @@
     <string name="TOKENSALE_Get_Notified" comment="Title telling users to get notified about token sale">Get Notified About Token Sales</string>
     <string name="TOKENSALE_Share_Email" comment="Button title that allows users to share their email address for newsletter">Share Email</string>
     <string name="TOKENSALE_Get_Notified_Description" comment="Description text for newsletter infor">
-        Share you're email and we'll send you the latest information about token sales on O3. Our team vets all tokens that appear on O3, and this email is never shared with third parties. No ****coins allowed
+        Share your email and we\'ll send you the latest information about token sales on O3. Our team vets all tokens that appear on O3, and this email is never shared with third parties. No ****coins allowed
     </string>
     <string name="TOKENSALE_Days_Remaining" comment="Displays how many days are remaining in the token sale">%1$s Days Remaining</string>
 
@@ -179,7 +179,7 @@
     <string name="TOKENSALE_Minting_In_Progress" comment="Loading text while the smart contract is being invoked">Minting In Progress...</string>
     <string name="TOKENSALE_With_Priority" comment="Text indicating that this transasction will be sent with priority">With Priority</string>
     <string name="TOKENSALE_Not_Whitelisted" comment="Error to display when the user is not whitelisted for this particular token sale">
-        It looks like you're not whitelisted for this token sale. You can use the issuers website to figure out how to get whitelisted or contact the team
+        It looks like you\'re not whitelisted for this token sale. You can use the issuers website to figure out how to get whitelisted or contact the team
         if you think this is a mistake.
     </string>
 
@@ -209,7 +209,7 @@
     </string>
 
 
-    <!-- Wallet Topup -->
+    <!-- Wallet Topup  DEPRECATED DO NOT LOCALZIE-->
     <string name="TOPUP_from_cold_storage" comment="Allowing you to topup from the cold storage address">From: Cold Storage Address</string>
     <string name="TOPUP_asset" comment="Label for which asset you want to withdraw from your cold storage address">Asset</string>
     <string name="TOPUP_amount" comment="Label for the ammount which you wish to withdraw from cold storage">Amount</string>

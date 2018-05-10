@@ -35,14 +35,6 @@
         fab:menu_openDirection="up">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_cold_storage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_fab_lock"
-            fab:fab_label="@string/WALLET_topup_cold_storage_action_label"
-            fab:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_my_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
