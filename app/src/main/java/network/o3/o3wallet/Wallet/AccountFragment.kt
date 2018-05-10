@@ -7,8 +7,6 @@ import android.view.View
 import android.support.v4.app.Fragment
 import android.widget.*
 import android.os.Handler
-import network.o3.o3wallet.API.CoZ.Claims
-import network.o3.o3wallet.API.CoZ.CoZClient
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
 import android.content.res.Resources
@@ -27,6 +25,8 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
+import network.o3.o3wallet.API.O3Platform.ClaimData
+import network.o3.o3wallet.API.O3Platform.O3PlatformClient
 import network.o3.o3wallet.TokenSales.TokenSalesActivity
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
@@ -49,7 +49,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var tokenSaleButton: FloatingActionButton
     private lateinit var unclaimedGASLabel: TickerView
     private lateinit var claimButton: Button
-    private lateinit var claims: Claims
+    private lateinit var claims: ClaimData
     private var currentAccountState: AccountState? = null
     private lateinit var neoBalance: Balance
     private lateinit var gasBalance: Balance
@@ -293,7 +293,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     fun loadClaimableGAS() {
-        CoZClient().getClaims(address = Account.getWallet()!!.address) {
+        O3PlatformClient().getClaimableGAS(address = Account.getWallet()!!.address) {
             var error = it.second
             var data = it.first
             if (error != null) {
@@ -303,7 +303,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
             } else {
                 onUiThread {
                     this.claims = data!!
-                    val amount = data.total_unspent_claim / 100000000.0
+                    val amount = this.claims.data.gas.toDouble()
                     unclaimedGASLabel.text = "%.8f".format(amount)
                     claimAmount = amount
                     if (isClaiming) {
@@ -353,7 +353,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         onUiThread {
             claimButton.isEnabled = false
         }
-        CoZClient().getClaims(Account.getWallet()!!.address) {
+        O3PlatformClient().getClaimableGAS(Account.getWallet()!!.address) {
             val claims = it.first
             val error = it.second
             if (error != null) {
@@ -362,7 +362,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                     context?.toast(error.message!!)
                     claimToast.cancel()
                 }
-            } else if (claims?.claims?.size == 0) {
+            } else if (claims?.data?.claims?.size == 0) {
                 Thread({
                     Thread.sleep(5000)
                     performCheckBeforeClaim()
@@ -405,7 +405,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         claimToast.show()
         //avoid double send
         Thread({
-            CoZClient().getClaims(Account.getWallet()!!.address) {
+            O3PlatformClient().getClaimableGAS(Account.getWallet()!!.address) {
                 val claims = it.first
                 val error = it.second
                 if (error != null) {
@@ -414,7 +414,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
                         context?.toast(error.message!!)
                         claimToast.cancel()
                     }
-                } else if (claims?.claims?.size == 0) {
+                } else if (claims?.data?.claims?.size == 0) {
                     Thread({
                         sendNEOToOneSelf()
                     }).run()

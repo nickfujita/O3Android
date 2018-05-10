@@ -1,14 +1,8 @@
 package network.o3.o3wallet.API.O3
 
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.core.FuelManager
 import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.toJson
 import com.google.gson.Gson
-import network.o3.o3wallet.API.CoZ.Claims
-import network.o3.o3wallet.API.CoZ.CoZClient
-import network.o3.o3wallet.API.CoZ.TransactionHistory
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.NEO.NEP5Tokens
