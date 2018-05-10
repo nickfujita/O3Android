@@ -3,7 +3,6 @@ package network.o3.o3wallet.API.NeoScan
 import com.github.kittinunf.fuel.httpGet
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
-import network.o3.o3wallet.API.CoZ.TransactionHistory
 
 /**
  * Created by drei on 4/24/18.

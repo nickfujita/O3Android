@@ -12,12 +12,14 @@ import neoutils.Neoutils
 import neoutils.Neoutils.sign
 import neoutils.Neoutils.validateNEOAddress
 import neoutils.RawTransaction
-import network.o3.o3wallet.API.CoZ.*
+import network.o3.o3wallet.API.O3Platform.*
 import neoutils.Wallet
 import network.o3.o3wallet.*
+import org.jetbrains.anko.db.DoubleParser
 import org.jetbrains.anko.defaultSharedPreferences
 import unsigned.toUByte
 import java.lang.Exception
+import java.math.BigDecimal
 import java.nio.*
 
 
@@ -163,7 +165,7 @@ class NeoNodeRPC {
     }
 
     fun claimGAS(wallet: Wallet, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
-        CoZClient().getClaims(wallet.address) {
+        O3PlatformClient().getClaimableGAS(wallet.address) {
             val claims = it.first
             var error = it.second
             if (error != null) {
@@ -181,7 +183,7 @@ class NeoNodeRPC {
     }
 
     fun sendNativeAssetTransaction(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, attributes: Array<TransactionAttritbute>?, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
-        CoZClient().getBalance(wallet.address) {
+        O3PlatformClient().getUTXOS(wallet.address) {
             var assets = it.first
             var error = it.second
             if (error != null) {
@@ -208,34 +210,37 @@ class NeoNodeRPC {
     data class SendAssetReturn(val totalAmount: Double?, val payload: ByteArray?, val error: Error?)
     data class TransactionAttritbute(val messaeg: String?)
 
-    private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, assets: Assets): SendAssetReturn {
-        var sortedUnspents: List<Unspent>
-        var neededForTransaction: MutableList<Unspent> = arrayListOf()
 
+    private fun getSortedUnspents(asset: Asset, utxos: Array<UTXO>): List<UTXO> {
         if (asset == Asset.NEO) {
-            if (assets.NEO.balance < amount) {
-                return SendAssetReturn(null, null, Error("insufficient balance"))
-            }
-            sortedUnspents = assets.NEO.unspent.sortedBy { it.value }
+            val unsorted = utxos.filter { it.asset.contains(Asset.NEO.assetID()) }
+            return unsorted.sortedBy { it.value.toDouble() }
         } else {
-            if (assets.GAS.balance < amount) {
-                return SendAssetReturn(null, null, Error("insufficient balance"))
-            }
-            sortedUnspents = assets.GAS.unspent.sortedBy { it.value }
+            val unsorted = utxos.filter { it.asset.contains(Asset.GAS.assetID()) }
+            return unsorted.sortedBy { it.value.toDouble() }
         }
+    }
+
+    private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, assets: Assets): SendAssetReturn {
+        var sortedUnspents  = getSortedUnspents(asset, assets.data)
+        var neededForTransaction: MutableList<UTXO> = arrayListOf()
+        if (sortedUnspents.sumByDouble { it.value.toDouble() } <  amount) {
+            return SendAssetReturn(null, null, Error("insufficient balance"))
+        }
+
         var runningAmount = 0.0
         var index = 0
         var count: Int = 0
         //Assume we always have enough balance to do this, prevent the check for bal
         while (runningAmount < amount) {
             neededForTransaction.add(sortedUnspents[index])
-            runningAmount += sortedUnspents[index].value
+            runningAmount += sortedUnspents[index].value.toDouble()
             index += 1
             count += 1
         }
         var inputData: ByteArray = byteArrayOf(count.toByte())
-        for (t: Unspent in neededForTransaction) {
-            val data = hexStringToByteArray(t.txid)
+        for (t: UTXO in neededForTransaction) {
+            val data = hexStringToByteArray(t.txid.removePrefix("0x"))
             val reversedBytes = data.reversedArray()
             inputData = inputData + reversedBytes + ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(t.index.toShort()).array()
         }
@@ -326,10 +331,10 @@ class NeoNodeRPC {
     }
 
     private fun concatenatePayloadData(wallet: Wallet, txData: ByteArray, signatureData: ByteArray): ByteArray {
-        var payload = txData + byteArrayOf(0x01.toByte())                        // signature number
-        payload += byteArrayOf(0x41.toByte())                              // signature struct length
+        var payload = txData + byteArrayOf(0x01.toByte())           // signature number
+        payload += byteArrayOf(0x41.toByte())                                 // signature struct length
         payload += byteArrayOf(0x40.toByte())                                 // signature data length
-        payload += signatureData                   // signature
+        payload += signatureData                                              // signature
         payload += byteArrayOf(0x23.toByte())                                 // contract data length
         payload = payload + byteArrayOf(0x21.toByte()) + wallet.publicKey + byteArrayOf(0xac.toByte()) // NeoSigned publicKey
         return payload
@@ -346,26 +351,29 @@ class NeoNodeRPC {
         return data
     }
 
-    private fun generateClaimInputData(wallet: Wallet, claims: Claims): ByteArray {
+    private fun generateClaimInputData(wallet: Wallet, claims: ClaimData): ByteArray {
         var payload: ByteArray = byteArrayOf(0x02.toByte()) // Claim Transaction Type
         payload += byteArrayOf(0x00.toByte()) // Version
-        val claimsCount = claims.claims.count().toByte()
+        val claimsCount = claims.data.claims.count().toByte()
         payload += byteArrayOf(claimsCount)
-        for (claim: Claim in claims.claims) {
-            payload += hexStringToByteArray(claim.txid).reversedArray()
+        for (claim: UTXO in claims.data.claims) {
+            payload += hexStringToByteArray(claim.txid.removePrefix("0x")).reversedArray()
             payload += ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(claim.index.toShort()).array()
         }
         payload += byteArrayOf(0x00.toByte()) // Attributes
         payload += byteArrayOf(0x00.toByte()) // Inputs
         payload += byteArrayOf(0x01.toByte()) // Output Count
         payload += hexStringToByteArray(NeoNodeRPC.Asset.GAS.assetID()).reversedArray()
-        payload += ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putInt(claims.total_claim).array()
-        payload += wallet.hashedSignature
 
+        val claimIntermediate = BigDecimal(claims.data.gas)
+        val claimLong = claimIntermediate.multiply(BigDecimal(100000000)).toLong()
+        payload += ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(claimLong).array()
+        payload += wallet.hashedSignature
+        Log.d("Claim Payload", payload.toHex())
         return payload
     }
 
-    private fun generateClaimTransactionPayload(wallet: Wallet, claims: Claims): ByteArray {
+    private fun generateClaimTransactionPayload(wallet: Wallet, claims: ClaimData): ByteArray {
         val rawClaim = generateClaimInputData(wallet, claims)
         val privateKeyHex = wallet.privateKey.toHex()
         val signature = sign(rawClaim, privateKeyHex)
@@ -476,12 +484,12 @@ class NeoNodeRPC {
     // transfer amount *
     fun sendNEP5Token(wallet: Wallet, tokenContractHash: String, fromAddress: String, toAddress: String, amount: Double,
                           completion: (Pair<Boolean?, Error?>) -> Unit) {
-        CoZClient().getBalance(wallet.address) {
+        O3PlatformClient().getUTXOS(wallet.address) {
             var assets = it.first
             var error = it.second
             if (error != null) {
                 completion(Pair<Boolean?, Error?>(false, error))
-                return@getBalance
+                return@getUTXOS
             } else {
                 val scriptBytes = buildNEP5TransferScript(tokenContractHash, fromAddress, toAddress, amount)
                 val scriptBytesString = scriptBytes.toHex()

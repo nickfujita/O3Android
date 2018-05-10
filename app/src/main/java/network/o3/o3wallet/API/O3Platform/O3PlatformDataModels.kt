@@ -1,4 +1,7 @@
-package network.o3.o3wallet.API.CoZ
+package network.o3.o3wallet.API.O3Platform
+
+import com.google.gson.JsonElement
+import org.json.JSONObject
 
 /**
  * Created by drei on 11/24/17.
@@ -16,6 +19,9 @@ data class TransactionHistory(val address: String,
                               val name: String,
                               val net: String)
 
+
+data class PlatformResponse(val code: Int, val result: JsonElement)
+
 data class Claim(val claim: Int,
                  val end: Int,
                  val index: Int,
@@ -24,34 +30,10 @@ data class Claim(val claim: Int,
                  val txid: String,
                  val value: Int)
 
-data class Claims(val address: String,
-                  val claims: Array<Claim>,
-                  val net: String,
-                  val total_claim: Int,
-                  val total_unspent_claim: Int)
+data class ClaimData(val data: Claimable)
 
+data class Claimable(val gas: String, val claims: Array<UTXO>)
 
+data class Assets(val data: Array<UTXO>)
 
-data class Assets(
-		val GAS: GAS,
-		val NEO: NEO,
-		val address: String, //AKcm7eABuW1Pjb5HsTwiq7iARSatim9tQ6
-		val net: String //MainNet
-)
-
-data class GAS(
-		val balance: Double, //1.7666314800000003
-		val unspent: List<Unspent>
-)
-
-data class Unspent(
-		val index: Int, //0
-		val txid: String, //3f1e7ddd63eee2f4836aa7ce8505be41af1cdc02e93fdcea8150c3f64c140f68
-		val value: Double //0.02024064
-)
-
-data class NEO(
-		val balance: Int, //235
-		val unspent: List<Unspent>
-)
-
+data class UTXO(val asset: String, val index: Int, val txid: String, val value: String,  val createdAtBlock: Int)

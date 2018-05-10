@@ -15,7 +15,6 @@ import com.google.gson.Gson
 import network.o3.o3wallet.API.O3.TokenSale
 import network.o3.o3wallet.R
 import com.bumptech.glide.Glide
-import network.o3.o3wallet.API.CoZ.CoZClient
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.AcceptingAsset
 import network.o3.o3wallet.Account
