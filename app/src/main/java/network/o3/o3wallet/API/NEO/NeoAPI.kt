@@ -505,10 +505,10 @@ class NeoNodeRPC {
     }
 
     fun participateTokenSales(scriptHash: String, assetID: String, amount: Double, remark: String, networkFee: Double,  completion: (Pair<String?, Error?>) -> Unit){
-        var utxoEndpoint = O3PlatformClient().baseAPIURL
+        var utxoEndpoint = "main"
         val isPrivateNet =  O3Wallet.appContext!!.defaultSharedPreferences.getBoolean("USING_PRIVATE_NET", false)
         if (isPrivateNet) {
-            utxoEndpoint = "http://192.168.0.27:5000"
+            utxoEndpoint = "main"
         }
         var finalPayload: RawTransaction? = null
         try {
