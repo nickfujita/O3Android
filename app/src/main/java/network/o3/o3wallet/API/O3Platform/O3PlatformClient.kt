@@ -3,8 +3,6 @@ package network.o3.o3wallet.API.O3Platform
 import com.github.kittinunf.fuel.httpGet
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
-import okhttp3.internal.platform.Platform
-
 
 /**
  * Created by drei on 11/24/17.
