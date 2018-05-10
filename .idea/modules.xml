@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/O3Wallet.iml" filepath="$PROJECT_DIR$/O3Wallet.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/channel/channel.iml" filepath="$PROJECT_DIR$/channel/channel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/neoutils/neoutils.iml" filepath="$PROJECT_DIR$/neoutils/neoutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/neoutils/neoutils.iml" filepath="$PROJECT_DIR$/neoutils/neoutils.iml" />
     </modules>
   </component>

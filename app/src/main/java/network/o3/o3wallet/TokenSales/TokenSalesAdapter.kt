@@ -47,7 +47,7 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>, private va
         return FOOTER_VIEW
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(position < tokensales.count()) {
             (holder as? TokenSaleViewHolder)?.bindTokenSale(tokensales[position])
         } else {
@@ -55,7 +55,7 @@ class TokenSalesAdapter(private var tokensales: ArrayList<TokenSale>, private va
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent?.context)
         if (viewType == TOKEN_SALE_VIEW) {
             val view = layoutInflater.inflate(R.layout.tokensales_listing_row, parent, false)

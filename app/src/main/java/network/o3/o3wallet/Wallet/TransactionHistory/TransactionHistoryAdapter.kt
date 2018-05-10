@@ -41,7 +41,7 @@ class TransactionHistoryAdapter(private var transactionHistoryEntries: MutableLi
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent?.context)
         if (viewType == TRANSACTION_ENTRY_VIEW) {
             val view = layoutInflater.inflate(R.layout.wallet_transaction_history_row_layout, parent, false)
@@ -52,7 +52,7 @@ class TransactionHistoryAdapter(private var transactionHistoryEntries: MutableLi
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val type = getItemViewType(position)
         if (type == LOADING_FOOTER_VIEW) {
             return

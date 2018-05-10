@@ -121,10 +121,10 @@
     <string name="WALLET_to_formatted" comment="to label in transaction history screen and send screen">To: %1$s</string>>
     <string name="WALLET_from" comment="from label in transaction history screen">From</string>>
     <string name="WALLET_from_formatted" comment="to label in transaction history screen">From: %1$s</string>>
-    <string name="WALLET_unknown_asset" comment="label for when the asset set is an unknwon asset">Unkown Asset</string>
+    <string name="WALLET_unknown_asset" comment="label for when the asset set is an unknwon asset">Unknown Asset</string>
     <string name="WALLET_to_O3_wallet" comment="label for when transaction goes to O3 wallet">To: O3 Wallet</string>
     <string name="WALLET_from_O3_wallet" comment="label for when transaction goes from O3 wallet">From: O3 Wallet</string>
-    <string name="WALLET_block_number" comment="label for block number in transaction histoty">Block Nuber: %1$s</string>
+    <string name="WALLET_block_number" comment="label for block number in transaction histoty">Block Number: %1$s</string>
 
 
     <!-- Wallet Send -->

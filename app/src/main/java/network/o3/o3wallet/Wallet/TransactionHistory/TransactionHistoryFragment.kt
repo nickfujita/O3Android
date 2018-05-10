@@ -39,7 +39,7 @@ class TransactionHistoryFragment : Fragment() {
         val layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.adapter = TransactionHistoryAdapter(entries, context)
+        recyclerView.adapter = TransactionHistoryAdapter(entries, context!!)
 
 
         swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
