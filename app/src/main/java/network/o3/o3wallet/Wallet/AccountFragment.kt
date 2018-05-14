@@ -148,6 +148,18 @@ class AccountFragment : Fragment(), TokenListProtocol {
         loadClaimableGAS()
     }
 
+    private fun loadClaimableGasEvery5Seconds() {
+        val handler = Handler()
+        val delay = 5000 //milliseconds
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                //do something
+                loadClaimableGAS()
+                handler.postDelayed(this, delay.toLong())
+            }
+        }, delay.toLong())
+    }
+
     private fun showMyAddress() {
         val addressBottomSheet = MyAddressFragment()
         addressBottomSheet.show(activity!!.supportFragmentManager, "myaddress")
@@ -288,6 +300,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private fun enableClaimGASButton(neoAmount: Double) {
         claimButton.isEnabled = !(neoAmount == 0.0  || unclaimedGASLabel.visibility == View.GONE)
         if (claimButton.isEnabled == true) {
+            loadClaimableGasEvery5Seconds()
         }
     }
 
