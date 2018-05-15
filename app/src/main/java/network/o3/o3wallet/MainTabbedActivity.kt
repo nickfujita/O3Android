@@ -27,7 +27,7 @@ class MainTabbedActivity : AppCompatActivity() {
             SettingsFragment.newInstance())
 
     override fun onBackPressed() {
-        alert (resources.getString(R.string.SETTINGS_logout_warning)) {
+        alert (resources.getString(R.string.TABBAR_logout_warning)) {
             yesButton { super.onBackPressed() }
             noButton {  }
         }.show()

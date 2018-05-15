@@ -290,6 +290,7 @@
     <string name="TABBAR_portfolio" comment="tabbar title for the portfolio screen">portfolio</string>
     <string name="TABBAR_account" comment="tabbar title for the account screen">Account</string>
     <string name="TABBAR_news_feed" comment="tabbar title for the newsfeed screen">News Feed</string>
+    <string name="TABBAR_logout_warning" comment="title when backing out of the app from the tabbar screen">Are you sure you want to exit the app?</string>
 
     <!-- Contact Menu -->
     <string name="CONTACTS_send_contact_menu" comment="menu item allowing you to send directly to your contacts">Send</string>
