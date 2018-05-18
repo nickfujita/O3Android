@@ -23,7 +23,7 @@ class O3PlatformClient {
     fun getClaimableGAS(address: String, completion: (Pair<ClaimData?, Error?>) -> Unit) {
         val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName()
         var request = url.httpGet()
-        request.headers["User-Agent"] =  ""
+        request.headers["User-Agent"] =  "O3Android"
         request.responseString { _, _, result ->
             val (data, error) = result
 
@@ -41,7 +41,7 @@ class O3PlatformClient {
     fun getUTXOS(address: String, completion: (Pair<Assets?, Error?>) -> Unit) {
         val url = baseAPIURL + address + "/" + Route.UTXO.routeName()
         var request = url.httpGet()
-        request.headers["User-Agent"] =  ""
+        request.headers["User-Agent"] =  "O3Android"
         request.timeout(600000).responseString { _, _, result ->
             val (data, error) = result
             if (error == null) {
