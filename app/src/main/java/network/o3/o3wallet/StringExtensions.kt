@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.text.Spanned
 import android.text.InputFilter
+import java.math.BigDecimal
 import java.util.regex.Pattern
 import java.util.Collections.replaceAll
 
@@ -84,5 +85,12 @@ class DecimalDigitsInputFilter(digitsBeforeZero: Int, digitsAfterZero: Int) : In
         val matcher = mPattern.matcher(dest)
         return if (!matcher.matches()) "" else null
     }
+}
 
+inline fun <T> Iterable<T>.sumByBigDecimal(selector: (T) -> BigDecimal): BigDecimal {
+    var sum: BigDecimal = BigDecimal.ZERO
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
 }

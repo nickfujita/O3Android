@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        app:cardElevation="1dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,11 +34,11 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:text="NEO"
-                tools:ignore="HardcodedText"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/assetAmount"
@@ -46,10 +47,10 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:text="0"
-                tools:ignore="HardcodedText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText"
                 tools:layout_editor_absoluteX="358dp"
                 tools:layout_editor_absoluteY="14dp" />
         </android.support.constraint.ConstraintLayout>

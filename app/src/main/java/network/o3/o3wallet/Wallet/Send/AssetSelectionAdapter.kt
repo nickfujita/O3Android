@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
 import network.o3.o3wallet.R
 import org.jetbrains.anko.find
 
@@ -15,10 +16,10 @@ import org.jetbrains.anko.find
  */
 
 class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet,
-                           assets: ArrayList<AccountAsset>): BaseAdapter() {
+                           assets: ArrayList<TransferableAsset>): BaseAdapter() {
     private val mContext: Context
     private val mFragment: AssetSelectionBottomSheet
-    private val mAssets: ArrayList<AccountAsset>
+    private val mAssets: ArrayList<TransferableAsset>
     private val inflator: LayoutInflater
 
     init {
@@ -32,7 +33,7 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
         return mAssets.count()  + 2
     }
 
-    override fun getItem(position: Int): AccountAsset? {
+    override fun getItem(position: Int): TransferableAsset? {
         return when(position) {
             0 ->  null
             1,2 -> mAssets[position - 1]
@@ -62,14 +63,14 @@ class AssetSelectorAdapter(context: Context, fragment: AssetSelectionBottomSheet
                 val view = inflator.inflate(R.layout.wallet_send_fragment_native_asset_row, parent, false)
                 view.findViewById<TextView>(R.id.nativeAssetName).text = item!!.name
                 view.findViewById<TextView>(R.id.assetAmountTextView).text = item.value.toString()
-                setListenerForRow(view, item.assetID, true, item.symbol)
+                setListenerForRow(view, item.id, true, item.symbol)
                 return view
             } else -> {
                 val view = inflator.inflate(R.layout.wallet_send_fragment_token_row, parent, false)
                 view.findViewById<TextView>(R.id.assetShortNameTextView).text = item!!.symbol
                 view.findViewById<TextView>(R.id.assetLongNameTextView).text = item.name
                 view.findViewById<TextView>(R.id.assetAmountTextView).text = item.value.toString()
-                setListenerForRow(view, item.assetID, false, item.symbol)
+                setListenerForRow(view, item.id, false, item.symbol)
                 return view
             }
         }

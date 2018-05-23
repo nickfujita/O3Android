@@ -22,7 +22,7 @@
     <style name="noTitle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="spark_SparkViewStyle">@style/MySparkViewStyle</item>
     </style>
 

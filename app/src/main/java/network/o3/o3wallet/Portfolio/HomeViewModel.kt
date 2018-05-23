@@ -6,6 +6,9 @@ import network.o3.o3wallet.API.NEO.*
 import android.util.Log
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.O3.Portfolio
+import network.o3.o3wallet.API.O3Platform.O3PlatformClient
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
+import network.o3.o3wallet.API.O3Platform.TransferableAssets
 import org.jetbrains.anko.coroutines.experimental.bg
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -20,7 +23,7 @@ import kotlin.collections.ArrayList
  */
 
 interface HomeViewModelProtocol {
-    fun updateBalanceData(assets: ArrayList<AccountAsset>)
+    fun updateBalanceData(assets: ArrayList<TransferableAsset>)
     fun updatePortfolioData(portfolio: Portfolio)
     fun showLoadingIndicator()
     fun hideLoadingIndicator()
@@ -40,10 +43,9 @@ class HomeViewModel {
     lateinit var delegate: HomeViewModelProtocol
 
 
-    var assetsReadOnly = arrayListOf<AccountAsset>()
-    var assetsWritable = arrayListOf<AccountAsset>()
+    var assetsReadOnly = arrayListOf<TransferableAsset>()
+    var assetsWritable = arrayListOf<TransferableAsset>()
     var watchAddresses = PersistentStore.getWatchAddresses()
-    var tokens = PersistentStore.getSelectedNEP5Tokens()
     var isLoadingData = false
     private var latestPrice: PriceData? = null
     private var initialPrice: PriceData? = null
@@ -62,30 +64,6 @@ class HomeViewModel {
 
     fun getInterval(): String {
         return this.interval
-    }
-
-    fun deepCopyAssets(arrayList: ArrayList<AccountAsset>): ArrayList<AccountAsset> {
-        val assetsDeepCopy = ArrayList<AccountAsset>()
-        for (elem in arrayList) {
-            if (elem != null && elem.assetID != null) {
-                assetsDeepCopy.add(AccountAsset(assetID = elem.assetID,
-                        name = elem.name,
-                        symbol = elem.symbol,
-                        decimal = elem.decimal,
-                        type = elem.type,
-                        value = elem.value))
-            }
-        }
-        return assetsDeepCopy
-    }
-
-    fun deepCopyAsset(asset: AccountAsset): AccountAsset {
-        return AccountAsset(assetID = asset.assetID,
-                name = asset.name,
-                symbol = asset.symbol,
-                decimal = asset.decimal,
-                type = asset.type,
-                value = asset.value)
     }
 
     fun getInitialPortfolioValue(): Double  {
@@ -113,7 +91,7 @@ class HomeViewModel {
 
     fun getPercentChange(): Double {
         if (getInitialPortfolioValue() == 0.0) return 0.0
-        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue()* 100)
+        return ((getCurrentPortfolioValue() - getInitialPortfolioValue()) / getInitialPortfolioValue() * 100)
     }
 
 
@@ -125,7 +103,7 @@ class HomeViewModel {
         return this.displayType
     }
 
-    fun addReadOnlyAsset(asset: AccountAsset) {
+    fun addReadOnlyAsset(asset: TransferableAsset) {
         val index = assetsReadOnly.indices.find { assetsReadOnly[it].name == asset.name } ?: -1
         if (index == -1) {
             assetsReadOnly.add(asset)
@@ -134,60 +112,56 @@ class HomeViewModel {
         }
     }
 
-    fun addWritableAsset(asset: AccountAsset) {
-        assetsWritable.add(asset)
+    fun addReadOnlyBalances(assets: TransferableAssets) {
+        for (asset in assets.assets) {
+            addReadOnlyAsset(asset)
+        }
+        for (token in assets.tokens) {
+            addReadOnlyAsset(token)
+        }
     }
 
-    fun combineReadOnlyAndWritable(): ArrayList<AccountAsset>{
-        var assets = deepCopyAssets(assetsWritable)
+    fun addWritableBalances(assets: TransferableAssets) {
+        for (asset in assets.assets) {
+            assetsWritable.add(asset)
+        }
+        for (token in assets.tokens) {
+            assetsWritable.add(token)
+        }
+    }
+
+    fun combineReadOnlyAndWritable(): ArrayList<TransferableAsset>{
+        var assets = assetsWritable
         for (asset in assetsReadOnly) {
             val index = assets.indices.find { assets[it].name == asset.name } ?: -1
             if (index == -1) {
-                assets.add(deepCopyAsset(asset))
+                assets.add(asset)
             } else {
-                assets[index] = assets[index].copy()
+                assets[index] = assets[index]
                 assets[index].value += asset.value
             }
         }
         return assets
     }
 
-    fun getSortedAssets(): ArrayList<AccountAsset> {
+    fun getSortedAssets(): ArrayList<TransferableAsset> {
         val assetsToSort = when (displayType) {
-            DisplayType.HOT -> deepCopyAssets(assetsWritable)
-            DisplayType.COMBINED -> deepCopyAssets(combineReadOnlyAndWritable())
-            DisplayType.COLD -> deepCopyAssets(assetsReadOnly)
+            DisplayType.HOT -> assetsWritable
+            DisplayType.COMBINED -> combineReadOnlyAndWritable()
+            DisplayType.COLD -> assetsReadOnly
         }
-        val sortedAssets = ArrayList<AccountAsset>()
-        val neoIndex = assetsToSort.indices.find { assetsToSort[it].name == "NEO" } ?: -1
-        //Make UTXO assets default supported
-        if (neoIndex == -1) {
-            sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                    name = NeoNodeRPC.Asset.NEO.name,
-                    symbol = NeoNodeRPC.Asset.NEO.name,
-                    decimal = 0,
-                    type = AssetType.NATIVE,
-                    value = 0.0))
-        } else {
-            sortedAssets.add(deepCopyAsset(assetsToSort[neoIndex]))
-            assetsToSort.removeAt(neoIndex)
-        }
-
-        val gasIndex = assetsToSort.indices.find { assetsToSort[it].name == "GAS" } ?: -1
-        if (gasIndex == -1) {
-            sortedAssets.add(AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                    name = NeoNodeRPC.Asset.GAS.name,
-                    symbol = NeoNodeRPC.Asset.GAS.name,
-                    decimal = 8,
-                    type = AssetType.NATIVE,
-                    value = 0.0))
-        } else {
-            sortedAssets.add(deepCopyAsset(assetsToSort[gasIndex]))
-            assetsToSort.removeAt(gasIndex)
-        }
-
+        val sortedAssets = ArrayList<TransferableAsset>()
         assetsToSort.sortBy { it.name }
-        sortedAssets.addAll(deepCopyAssets(assetsToSort))
+        sortedAssets.addAll(assetsToSort)
+
+        val neoIndex = sortedAssets.indices.find { sortedAssets[it].name == "NEO" } ?: -1
+        if (neoIndex != -1) {
+            Collections.swap(sortedAssets, 0, neoIndex)
+        }
+        val gasIndex = sortedAssets.indices.find { sortedAssets[it].name == "GAS" } ?: -1
+        if (gasIndex != -1) {
+            Collections.swap(sortedAssets, 1, gasIndex)
+        }
 
         return sortedAssets
     }
@@ -207,7 +181,7 @@ class HomeViewModel {
     }
 
     private fun loadAssetsForAllAddresses() {
-        balanceCountDownLatch = CountDownLatch((1 + tokens.size) * (watchAddresses.size + 1))
+        balanceCountDownLatch = CountDownLatch(1 + watchAddresses.size)
         loadAssetsFor(Account.getWallet()?.address!!, false)
         for (address in watchAddresses) {
             loadAssetsFor(address.address, true)
@@ -218,60 +192,17 @@ class HomeViewModel {
 
     fun loadAssetsFor(address: String, isReadOnly: Boolean) {
         bg {
-            NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address) {
-                if (it.second != null) {
+            O3PlatformClient().getTransferableAssets(address) {
+                if (it.second != null || it.first == null) {
                     balanceCountDownLatch?.countDown()
-                    return@getAccountState
+                    return@getTransferableAssets
                 }
-                for (asset in it.first?.balances!!) {
-                    var assetToAdd: AccountAsset
-                    if (asset.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
-                        assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                                name = NeoNodeRPC.Asset.NEO.name,
-                                symbol = NeoNodeRPC.Asset.NEO.name,
-                                decimal = 0,
-                                type = AssetType.NATIVE,
-                                value = asset.value)
-                    } else {
-                        assetToAdd = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                                name = NeoNodeRPC.Asset.GAS.name,
-                                symbol = NeoNodeRPC.Asset.GAS.name,
-                                decimal = 8,
-                                type = AssetType.NATIVE,
-                                value = asset.value)
-                    }
-                    if (isReadOnly) {
-                        this.addReadOnlyAsset(assetToAdd)
-                    } else {
-                        this.addWritableAsset(assetToAdd)
-                    }
+                if (isReadOnly) {
+                    this.addReadOnlyBalances(it.first!!)
+                } else {
+                    this.addWritableBalances(it.first!!)
                 }
                 balanceCountDownLatch?.countDown()
-            }
-        }
-
-        for (key in PersistentStore.getSelectedNEP5Tokens().keys) {
-            val token = PersistentStore.getSelectedNEP5Tokens()[key]!!
-            bg {
-                NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(token.tokenHash, address) {
-                    if (it.second != null) {
-                        balanceCountDownLatch?.countDown()
-                        return@getTokenBalanceOf
-                    }
-                    val amountDecimal: Double = (it.first!!.toDouble() / (Math.pow(10.0, token.decimal.toDouble())))
-                    val tokenToAdd = AccountAsset(assetID = token.tokenHash,
-                            name = token.name,
-                            symbol = token.symbol,
-                            decimal = token.decimal,
-                            type = AssetType.NEP5TOKEN,
-                            value = amountDecimal)
-                    if (isReadOnly) {
-                        this.addReadOnlyAsset(tokenToAdd)
-                    } else {
-                        this.addWritableAsset(tokenToAdd)
-                    }
-                    balanceCountDownLatch?.countDown()
-                }
             }
         }
     }
@@ -295,16 +226,14 @@ class HomeViewModel {
 
     fun loadPortfolioValue() {
         delegate.showLoadingIndicator()
-        bg {
-           O3API().getPortfolio(this.getSortedAssets(), this.interval) {
-               if (it.second != null) {
-                   return@getPortfolio
-               }
-               this.portfolio = it.first!!
-               this.initialPrice = this.portfolio.data.last()
-               this.latestPrice = this.portfolio.data.first()
-               delegate.updatePortfolioData(it.first!!)
-           }
+        O3API().getPortfolio(this.getSortedAssets(), this.interval) {
+            if (it.second != null) {
+                return@getPortfolio
+            }
+            this.portfolio = it.first!!
+            this.initialPrice = this.portfolio.data.last()
+            this.latestPrice = this.portfolio.data.first()
+            delegate.updatePortfolioData(it.first!!)
         }
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.NEP5Token
 import network.o3.o3wallet.API.NEO.NEP5Tokens
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
 import network.o3.o3wallet.O3Wallet
 import org.jetbrains.anko.defaultSharedPreferences
 import java.util.*
@@ -43,7 +44,7 @@ class O3API {
         }
     }
 
-    fun getPortfolio(assets: ArrayList<AccountAsset>, interval: String, completion: (Pair<Portfolio?, Error?>) -> Unit) {
+    fun getPortfolio(assets: ArrayList<TransferableAsset>, interval: String, completion: (Pair<Portfolio?, Error?>) -> Unit) {
         var queryString = String.format("?i=%s", interval)
         for (asset in assets) {
             queryString = queryString + String.format(Locale.US, "&%s=%.8f", asset.symbol, asset.value)

@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="396dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         app:itemIconTint="@color/menu_item"
         app:itemTextColor="@color/menu_item"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -10,6 +10,8 @@ import android.widget.TextView
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.NEO.AssetType
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
+import network.o3.o3wallet.API.O3Platform.TransferableAssets
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
 import org.jetbrains.anko.runOnUiThread
@@ -18,7 +20,7 @@ import java.text.NumberFormat
 /**
  * Created by apisit on 12/20/17.
  */
-class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address: String, assets: Array<AccountAsset>) : BaseAdapter() {
+class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address: String, assets: ArrayList<TransferableAsset>) : BaseAdapter() {
 
     private var arrayOfAccountAssets = assets
     private var address = address
@@ -32,10 +34,10 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
     }
 
     override fun getCount(): Int {
-        return arrayOfAccountAssets.count() + 1 //for add token button row
+        return arrayOfAccountAssets.count()
     }
 
-    override fun getItem(p0: Int): AccountAsset {
+    override fun getItem(p0: Int): TransferableAsset {
         return arrayOfAccountAssets[p0]
     }
 
@@ -43,70 +45,43 @@ class AccountAssetsAdapter(fragment: AccountFragment, context: Context, address:
         return p0.toLong()
     }
 
-    private fun loadTokenBalance(position: Int,v: AccountAssetRow) {
-        val asset = getItem(position)
-        NeoNodeRPC(PersistentStore.getNodeURL()).getTokenBalanceOf(asset.assetID, address = address) {
-            var amountInt = it.first
-            var error = it.second
-            if (error == null) {
-                mContext.runOnUiThread {
-                    val amountDecimal:Double= (amountInt!!.toDouble() / (Math.pow(10.0,asset.decimal.toDouble())))
-                    arrayOfAccountAssets[position].value = amountDecimal
-                    configureRow(position,v)
-                }
-            }
-        }
-    }
     fun configureRow(position: Int, vh: AccountAssetRow) {
         val asset = arrayOfAccountAssets[position]
-        if (asset.assetID.contains(NeoNodeRPC.Asset.NEO.assetID())) {
+        if (asset.id.contains(NeoNodeRPC.Asset.NEO.assetID())) {
             vh.assetNameTextView.text = NeoNodeRPC.Asset.NEO.name
             vh.assetAmountTextView.text = "%d".format(asset.value.toInt())
-        } else if (asset.assetID.contains(NeoNodeRPC.Asset.GAS.assetID())) {
+        } else if (asset.id.contains(NeoNodeRPC.Asset.GAS.assetID())) {
             vh.assetNameTextView.text = NeoNodeRPC.Asset.GAS.name
             vh.assetAmountTextView.text = "%.8f".format(asset.value)
         } else {
             vh.assetNameTextView.text = asset.symbol
             var formatter = NumberFormat.getNumberInstance()
-            formatter.maximumFractionDigits = asset.decimal
+            formatter.maximumFractionDigits = asset.decimals
             vh.assetAmountTextView.text = formatter.format(asset.value)
         }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-
-        if (position != count - 1) {
-            val view: View?
-            val vh: AccountAssetRow
-            if (convertView == null || convertView.tag !is AccountAssetRow) {
-                view = this.inflator.inflate(R.layout.wallet_account_asset_row, parent, false)
-                vh = AccountAssetRow(view)
-                view.tag = vh
-            } else {
-                view = convertView
-                vh = view.tag as AccountAssetRow
-            }
-
-            configureRow(position,vh)
-
-            val asset = arrayOfAccountAssets[position]
-            if (asset.type == AssetType.NEP5TOKEN) {
-                loadTokenBalance(position,vh)
-            }
-            return view!!
-
+        val view: View?
+        val vh: AccountAssetRow
+        if (convertView == null || convertView.tag !is AccountAssetRow) {
+            view = this.inflator.inflate(R.layout.wallet_account_asset_row, parent, false)
+            vh = AccountAssetRow(view)
+            view.tag = vh
         } else {
-            val view = this.inflator.inflate(R.layout.wallet_add_nep5_token_row, parent, false)
-            view.findViewById<Button>(R.id.addNEP5TokenButton).setOnClickListener {
-                mFragment.addNewNEP5Token()
-            }
-            return view
+            view = convertView
+            vh = view.tag as AccountAssetRow
         }
+
+        configureRow(position,vh)
+
+        val asset = arrayOfAccountAssets[position]
+        return view!!
 
     }
 
-    fun updateAdapter(assets: Array<AccountAsset>) {
-        this.arrayOfAccountAssets = assets
+    fun updateAdapter(assets: TransferableAssets) {
+        this.arrayOfAccountAssets = assets.assets
         notifyDataSetChanged()
     }
 }

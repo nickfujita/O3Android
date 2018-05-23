@@ -26,6 +26,9 @@ import neoutils.Neoutils
 import neoutils.Neoutils.parseNEP9URI
 import neoutils.Neoutils.validateNEOAddress
 import network.o3.o3wallet.API.NEO.AccountAsset
+import network.o3.o3wallet.API.O3Platform.O3PlatformClient
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
+import network.o3.o3wallet.API.O3Platform.TransferableAssets
 import network.o3.o3wallet.Account
 import network.o3.o3wallet.PersistentStore
 import network.o3.o3wallet.R
@@ -45,7 +48,7 @@ class SendActivity: AppCompatActivity() {
     lateinit var scanAddressButton: Button
     lateinit var view: View
 
-    var ownedAssets: ArrayList<AccountAsset> = arrayListOf()
+    var ownedAssets: ArrayList<TransferableAsset> = arrayListOf()
 
     var isNativeAsset = true
     //if native asset this refers to assetid, otherwise tokenhash
@@ -82,11 +85,8 @@ class SendActivity: AppCompatActivity() {
 
         val extras = intent.extras
         val address = extras.getString("address")
-        val assets = intent.extras.getSerializable("assets")
-        if (intent.extras.getSerializable("assets") == null) {
-            ownedAssets = arrayListOf()
-        } else {
-            ownedAssets = intent.extras.getSerializable("assets") as ArrayList<AccountAsset>
+        O3PlatformClient().getTransferableAssets(Account.getWallet()?.address!!) {
+            ownedAssets = it.first?.assets ?: arrayListOf()
         }
 
         if (address != "") {
@@ -197,7 +197,7 @@ class SendActivity: AppCompatActivity() {
         val wallet = Account.getWallet()
         val toast = baseContext.toastUntilCancel(resources.getString(R.string.SEND_sending_in_progress))
         val gasIndex  = ownedAssets.indices.find { ownedAssets[it].name.toUpperCase() == "GAS"}
-        if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value == 0.0) {
+        if (gasIndex == null || gasIndex == -1 || ownedAssets[gasIndex].value.toDouble() == 0.0) {
             baseContext.toast(resources.getString(R.string.SEND_Not_Enough_GAS_For_Token_Send))
             return
         }

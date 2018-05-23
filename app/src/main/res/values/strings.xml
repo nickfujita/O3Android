@@ -96,8 +96,8 @@
         all over the world without needing to remember your address</string>"
 
     <!-- Wallet -->
-    <string name="WALLET_my_o3_wallet" comment="A title for the wallet page where all assets are listed">My O3 Wallet</string>
-    <string name="WALLET_assets" comment="A title for the assets tab on the wallet page">Assets</string>
+    <string name="WALLET_my_o3_wallet" comment="A title for the wallet page where all utxos are listed">My O3 Wallet</string>
+    <string name="WALLET_assets" comment="A title for the utxos tab on the wallet page">Assets</string>
     <string name="WALLET_transactions" comment="A title for the transactions tab in the wallet page">Transactions</string>
     <string name="WALLET_unclaimed_gas" comment="A title for the unclaimed gas portio">UNCLAIMED GAS</string>
     <string name="WALLET_add_nep_5_token" comment="Button title to add a nep5 token on the account screen">+ ADD NEP5 TOKEN</string>
@@ -145,7 +145,7 @@
     <string name="SEND_scan_prompt_qr" comment="Prompt for scanning recipient QR Code">Scan the qr code of the recipient address</string>
 
     <string name="SEND_native_assets_header" comment="Section header for Native Assets(NEO/GAS) when selecting what asset to send">Native Assets</string>
-    <string name="SEND_token_assets_header" comment="Section header for Token assets when selecting what asset to send">Tokens</string>
+    <string name="SEND_token_assets_header" comment="Section header for Token utxos when selecting what asset to send">Tokens</string>
 
 
 
@@ -316,4 +316,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="neo_asset_id">0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b</string>
     <string name="gas_asset_id">0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"</string>
+    <string name="WALLET_sync">sync now</string>
+    <string name="WALLET_estimated_gas">Estimated</string>
+    <string name="WALLET_confirmed_gas">Confirmed</string>
+    <string name="WALLET_Claimable_GAS">Claimable GAS</string>
+    <string name="WALLET_learn_more_claim">Learn More</string>
+    <string name="WALLET_syncing_title">Fetching transaction records...</string>
+    <string name="WALLET_syncing_subtitle">Please wait...</string>
+    <string name="WALLET_successful_claim_subtitle">It will be in your account soon</string>
+    <string name="WALLET_successful_claim_title">GAS claimed successfully</string>
+    <string name="WALLET_sync_failed">Oh no! Something went wrong with the syncing process. Check back later and try again</string>
+    <string name="WALLET_claim_error">An error occured while claiming, check the network in your settings and try again</string>
 </resources>

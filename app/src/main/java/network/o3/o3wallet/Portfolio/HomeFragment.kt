@@ -19,6 +19,7 @@ import com.robinhood.spark.animation.MorphSparkAnimator
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
 import org.jetbrains.anko.support.v4.onUiThread
 
 
@@ -32,7 +33,6 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
     val needReloadDataReciever = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             homeModel.watchAddresses = PersistentStore.getWatchAddresses()
-            homeModel.tokens = PersistentStore.getSelectedNEP5Tokens()
         }
     }
 
@@ -118,9 +118,9 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
         })
     }
 
-    override fun updateBalanceData(assets: ArrayList<AccountAsset>) {
+    override fun updateBalanceData(assets: ArrayList<TransferableAsset>) {
         onUiThread {
-            assetListAdapter?.assets = ArrayList(assets)
+            assetListAdapter?.assets = assets
             assetListAdapter?.notifyDataSetChanged()
         }
         homeModel.loadPortfolioValue()

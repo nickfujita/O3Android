@@ -1,36 +1,43 @@
 package network.o3.o3wallet.Wallet
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.support.v4.app.Fragment
 import android.widget.*
-import android.os.Handler
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
+import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
-import com.crashlytics.android.answers.Answers
-import com.crashlytics.android.answers.CustomEvent
+import android.util.Log
+import android.view.animation.DecelerateInterpolator
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
 import kotlinx.android.synthetic.main.wallet_fragment_account.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.*
-import network.o3.o3wallet.API.O3Platform.ClaimData
-import network.o3.o3wallet.API.O3Platform.O3PlatformClient
+import network.o3.o3wallet.API.O3Platform.*
 import network.o3.o3wallet.TokenSales.TokenSalesActivity
-import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.support.v4.onUiThread
 import network.o3.o3wallet.Wallet.Send.SendActivity
+import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
+import org.w3c.dom.Text
 
 
 interface TokenListProtocol {
@@ -44,8 +51,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var myQrButton: FloatingActionButton
     private lateinit var sendButton: FloatingActionButton
     private lateinit var tokenSaleButton: FloatingActionButton
-    private lateinit var unclaimedGASLabel: TickerView
+    private lateinit var unclaimedGASTicker: TickerView
+    private lateinit var syncButton: Button
     private lateinit var claimButton: Button
+    private lateinit var learnMoreClaimButton: Button
     private lateinit var claims: ClaimData
     private var currentAccountState: AccountState? = null
     private lateinit var neoBalance: Balance
@@ -53,23 +62,25 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
     private lateinit var claimToast: Toast
+    private lateinit var accountViewModel: AccountViewModel
     private var claimAmount: Double = 0.0
     private var isClaiming = false
-    var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
+    private var firstLoad = true
+    private var tickupHandler = Handler()
+    private lateinit var tickupRunnable: Runnable
+
+    //var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
 
 
     fun setClaiming(claiming:Boolean) {
         isClaiming = claiming
-        this.claimButton.isEnabled = !claiming
+        this.syncButton.isEnabled = !claiming
         if (claiming) {
-            claimProgress.visibility = View.VISIBLE
+            //claimProgress.visibility = View.VISIBLE
         } else {
-            claimProgress.visibility = View.INVISIBLE
+            //claimProgress.visibility = View.INVISIBLE
         }
         //finished claiming but have user wait 5 minutes
-        if (waitingForClaimTextView != null) {
-            this.claimButton.isEnabled = false
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -78,10 +89,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     fun setupActionButton(view: View) {
-        menuButton = view.findViewById<FloatingActionMenu>(R.id.menuActionButton)
-        myQrButton = view.findViewById<FloatingActionButton>(R.id.fab_my_address)
-        sendButton = view.findViewById<FloatingActionButton>(R.id.fab_send)
-        tokenSaleButton = view.findViewById<FloatingActionButton>(R.id.fab_token_sale)
+        menuButton = view.findViewById(R.id.menuActionButton)
+        myQrButton = view.findViewById(R.id.fab_my_address)
+        sendButton = view.findViewById(R.id.fab_send)
+        tokenSaleButton = view.findViewById(R.id.fab_token_sale)
 
         tokenSaleButton.colorNormal = resources.getColor(R.color.colorAccent)
         tokenSaleButton.colorPressed = resources.getColor(R.color.colorAccentLight)
@@ -101,15 +112,44 @@ class AccountFragment : Fragment(), TokenListProtocol {
         menuButton.bringToFront()
     }
 
+    fun reloadAllData() {
+        accountViewModel.getAssets(true).observe(this, Observer<TransferableAssets?> {
+            if (it == null) {
+                context?.toast(accountViewModel.getLastError().localizedMessage)
+            } else {
+                showAssets(it)
+                accountViewModel.getBlock(true).observe(this, Observer<Int?> {
+                    accountViewModel.getClaims(true).observe(this, Observer<ClaimData?> {
+                        if (it == null) {
+                            this.syncButton.isEnabled = false
+                            context?.toast(accountViewModel.getLastError().localizedMessage)
+                        } else {
+                            showClaims(it)
+                            if (firstLoad) {
+                                beginTickup()
+                                firstLoad = false
+                            }
+                        }
+                    })
+                })
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        claimProgress.visibility = View.INVISIBLE
-        claimButton = view.findViewById<Button>(R.id.claimButton)
-        unclaimedGASLabel = view.findViewById(R.id.unclaimedGASLabel)
-        assetListView = view.findViewById<ListView>(R.id.assetListView)
-        unclaimedGASLabel.setCharacterList(TickerUtils.getDefaultNumberList())
+        accountViewModel = AccountViewModel()
 
-        swipeContainer = view.findViewById<SwipeRefreshLayout>(R.id.swipeContainer)
+
+        //claimProgress.visibility = View.INVISIBLE
+        syncButton = view.findViewById(R.id.syncButton)
+        claimButton = view.find(R.id.claimButton)
+        learnMoreClaimButton = view.find(R.id.learnMoreClaimButton)
+        unclaimedGASTicker = view.findViewById(R.id.unclaimedGasTicker)
+        assetListView = view.findViewById(R.id.assetListView)
+        unclaimedGASTicker.setCharacterList(TickerUtils.getDefaultNumberList())
+
+        swipeContainer = view.findViewById(R.id.swipeContainer)
         swipeContainer.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary,
@@ -117,37 +157,54 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
         swipeContainer.setOnRefreshListener {
             swipeContainer.isRefreshing = true
-            this.loadAccountState()
-            this.loadClaimableGAS()
+            reloadAllData()
         }
 
         setupActionButton(view)
-        try {
-            val muli = ResourcesCompat.getFont(view.context, R.font.muli_bold)
-            unclaimedGASLabel.typeface = muli
-        } catch (e: Resources.NotFoundException) {
 
+
+
+        unclaimedGASTicker.text = "0.00000000"
+        unclaimedGASTicker.textColor = resources.getColor(R.color.colorSubtitleGrey)
+        syncButton.setOnClickListener {
+            syncTapped()
+        }
+
+        claimButton.setOnClickListener {
+            claimTapped()
+        }
+
+        learnMoreClaimButton.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+            startActivity(browserIntent)
         }
 
 
 
-        unclaimedGASLabel.text = "0.00000000"
-        claimButton.setOnClickListener { claimGasTapped() }
-
         //menuButton.transitionName = "reveal"
-        claimButton.isEnabled = false
+
 
         activity?.title = "Account"
 
-        //Account state doesn't return balance array if account has zero NEO and GAS
-        //we must init balance with 0
-        neoBalance = Balance( NeoNodeRPC.Asset.NEO.assetID(),0.0)
-        gasBalance= Balance( NeoNodeRPC.Asset.GAS.assetID(),0.0)
 
-        loadAccountState()
-        loadClaimableGAS()
+        reloadAllData()
     }
 
+    private fun tickup() {
+        var current = unclaimedGASTicker.text.toDouble()
+        val addIntervalAmount = (accountViewModel.getNeoBalance() * 7 / 100000000.0)
+        unclaimedGASTicker.text = "%.8f".format(current + addIntervalAmount)
+    }
+
+    private fun beginTickup() {
+        tickupRunnable = object : Runnable {
+            override fun run() {
+                tickup()
+                tickupHandler.postDelayed(this, 15000)
+            }
+        }
+        tickupHandler.postDelayed(tickupRunnable, 15000)
+    }
 
     private fun showMyAddress() {
         val addressBottomSheet = MyAddressFragment()
@@ -160,241 +217,167 @@ class AccountFragment : Fragment(), TokenListProtocol {
     }
 
     override fun reloadTokenList() {
-        loadAccountState()
+       // loadAccountState()
     }
 
-    fun addNewNEP5Token() {
-        val bottomSheet = NEP5ListFragment()
-        bottomSheet.delegate = this
-        bottomSheet.show(activity!!.supportFragmentManager, "nep5list")
-    }
-
-    private fun showAccountState(data: Pair<AccountState?, Error?>): Unit {
-
-        val error = data.second
-        val accountState = data.first
-
-        if (error != null) {
-            swipeContainer.isRefreshing = false
-            context!!.toast(error.message!!)
-            return
-        }
-
-        this.currentAccountState = accountState!!
+    private fun showAssets(data: TransferableAssets) {
         swipeContainer.isRefreshing = false
-        //construct array of AccountAsset
-        for (balance in accountState.balances.iterator()) {
-            //NEO
-            if (balance.asset.contains(NeoNodeRPC.Asset.NEO.assetID())) {
-                this.neoBalance = balance
-                this.enableClaimGASButton(balance.value)
-
-            } else if (balance.asset.contains(NeoNodeRPC.Asset.GAS.assetID())) {
-                this.gasBalance = balance
-            }
-        }
-
-        assets.clear()
-        var neo = AccountAsset(assetID = NeoNodeRPC.Asset.NEO.assetID(),
-                name = NeoNodeRPC.Asset.NEO.name,
-                symbol = NeoNodeRPC.Asset.NEO.name,
-                decimal = 0,
-                type = AssetType.NATIVE,
-                value = neoBalance.value)
-        assets.add(neo)
-
-        var gas = AccountAsset(assetID = NeoNodeRPC.Asset.GAS.assetID(),
-                name = NeoNodeRPC.Asset.GAS.name,
-                symbol = NeoNodeRPC.Asset.GAS.name,
-                decimal = 0,
-                type = AssetType.NATIVE,
-                value = gasBalance.value)
-        assets.add(gas)
-
-        val selectedToken = PersistentStore.getSelectedNEP5Tokens()
-
-        selectedToken.all { t ->
-            var token = t.value
-            var asset =  AccountAsset(assetID = token.tokenHash,
-                    name = token.name,
-                    symbol = token.symbol,
-                    decimal = token.decimal,
-                    type = AssetType.NEP5TOKEN,
-                    value = 0.0)
-            assets.add(asset)
-        }
-
-        val adapter = AccountAssetsAdapter(this,context!!, Account.getWallet()!!.address, assets.toTypedArray())
+        val adapter = AccountAssetsAdapter(this,context!!, Account.getWallet()!!.address,
+                data.assets)
         assetListView.adapter = adapter
     }
 
-    private fun loadAccountState() {
-        //TODO: PHASE THIS OUT EVENTUALLY, NEEDED FOR DATA MODEL FIX
-        if (PersistentStore.getNeedClearTokens() == true) {
-            PersistentStore.removeAllTokens()
-            PersistentStore.setNeedClearTokens(false)
-        }
-        claimButton.isEnabled = false
-        async(UI) {
-            bg {
-                NeoNodeRPC(PersistentStore.getNodeURL()).getAccountState(address = Account.getWallet()!!.address) {
-                    onUiThread {
-                        showAccountState(it)
-                    }
-                }
-            }
+
+    fun showClaims(claims: ClaimData) {
+        val amount = claims.data.gas.toDouble()
+        unclaimedGASTicker.text =  "%.8f".format(accountViewModel.getEstimatedGas(claims))
+        claimAmount = amount
+        if (accountViewModel.getClaimingStatus()) {
+            this.syncButton.isEnabled = false
+        } else {
+            this.syncButton.isEnabled = !(amount == 0.0 || unclaimedGASTicker.visibility == View.GONE)
         }
     }
 
-    private fun disableGasInfo() {
-        if (waitingForClaimTextView != null) {
-            claimButton.isEnabled = false
-            unclaimedGASLabel.visibility = View.GONE
-            waitingForClaimTextView.visibility = View.VISIBLE
-        }
-    }
-
-    private fun enableGasInfo() {
-        if (waitingForClaimTextView != null) {
-            claimButton.isEnabled = true
-            unclaimedGASLabel.visibility = View.VISIBLE
-            waitingForClaimTextView.visibility = View.GONE
-        }
-    }
-
-    fun loadClaimableGAS() {
-        O3PlatformClient().getClaimableGAS(address = Account.getWallet()!!.address) {
-            var error = it.second
-            var data = it.first
-            if (error != null) {
-                onUiThread {
-                    this.claimButton.isEnabled = false
-                }
-            } else {
-                onUiThread {
-                    this.claims = data!!
-                    val amount = this.claims.data.gas.toDouble()
-                    unclaimedGASLabel.text = "%.8f".format(amount)
-                    claimAmount = amount
-                    if (isClaiming) {
-                        this.claimButton.isEnabled = false
-                    } else {
-                        this.claimButton.isEnabled = !(amount == 0.0 || unclaimedGASLabel.visibility == View.GONE)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun enableClaimGASButton(neoAmount: Double) {
-        claimButton.isEnabled = !(neoAmount == 0.0  || unclaimedGASLabel.visibility == View.GONE)
-        if (claimButton.isEnabled == true) {
-        }
-    }
-
-    fun performClaimGAS() {
-        NeoNodeRPC(PersistentStore.getNodeURL()).claimGAS(Account.getWallet()!!) {
-            onUiThread {
-                var success = it.first
-                var error = it.second
-                setClaiming(false)
-                if (success == true) {
-                    Answers().logCustom(CustomEvent("Gas Claimed").
-                            putCustomAttribute("Amount", claimAmount))
-                    claimAmount = 0.0
-                    claimToast.cancel()
-                    context!!.toast(resources.getString(R.string.WALLET_claimed_gas_successfully))
-                    disableGasInfo()
-                    loadAccountState()
-                    loadClaimableGAS()
-                    var r = Runnable { kotlin.run {
-                        enableGasInfo()
-                    } }
-                    Handler().postDelayed(r, 60000)
-                } else {
-
-                }
-            }
-        }
-    }
-
-    fun performCheckBeforeClaim() {
+    fun showSyncingInProgress() {
         onUiThread {
-            claimButton.isEnabled = false
+            view?.find<ImageView>(R.id.syncingProgress)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.syncingSubtitle)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.syncingTitle)?.visibility = View.VISIBLE
+            view?.find<View>(R.id.gasClaimDivider)?.visibility = View.GONE
+
+            view?.find<TextView>(R.id.gasStateTitle)?.visibility = View.GONE
+            view?.find<TextView>(R.id.claimableGasHeader)?.visibility = View.GONE
+            view?.find<TickerView>(R.id.unclaimedGasTicker)?.visibility = View.GONE
+            view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.GONE
+            learnMoreClaimButton.visibility = View.GONE
+            syncButton.visibility = View.GONE
         }
-        O3PlatformClient().getClaimableGAS(Account.getWallet()!!.address) {
-            val claims = it.first
-            val error = it.second
-            if (error != null) {
-                onUiThread {
-                    setClaiming(false)
-                    context?.toast(error.message!!)
-                    claimToast.cancel()
+    }
+
+    fun showReadyToClaim() {
+        onUiThread {
+            unclaimedGASTicker.text = accountViewModel.getStoredClaims().data.gas
+            unclaimedGASTicker.textColor = resources.getColor(R.color.colorBlack)
+
+            view?.find<ImageView>(R.id.syncingProgress)?.visibility = View.GONE
+            view?.find<TextView>(R.id.syncingSubtitle)?.visibility = View.GONE
+            view?.find<TextView>(R.id.syncingTitle)?.visibility = View.GONE
+            view?.find<View>(R.id.gasClaimDivider)?.visibility = View.VISIBLE
+
+            view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.gasStateTitle)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.gasStateTitle)?.text = getString(R.string.WALLET_confirmed_gas)
+
+            view?.find<TextView>(R.id.claimableGasHeader)?.visibility = View.VISIBLE
+            view?.find<TickerView>(R.id.unclaimedGasTicker)?.visibility = View.VISIBLE
+            claimButton.visibility = View.VISIBLE
+        }
+    }
+
+    fun showClaimSucceeded() {
+        onUiThread {
+            view?.find<TextView>(R.id.gasStateTitle)?.visibility = View.GONE
+            view?.find<TextView>(R.id.claimableGasHeader)?.visibility = View.GONE
+            view?.find<TickerView>(R.id.unclaimedGasTicker)?.visibility = View.GONE
+            view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.GONE
+            view?.find<View>(R.id.gasClaimDivider)?.visibility = View.GONE
+            claimButton.visibility = View.GONE
+
+            view?.find<TextView>(R.id.successfulClaimAmountTextView)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.successfulClaimTitleTextView)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.successfulClaimSubtitle)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.successfulClaimAmountTextView)?.text = unclaimedGASTicker.text
+            view?.find<ImageView>(R.id.coinsImageView)?.visibility = View.VISIBLE
+
+            progressBarBegin(60000, true)
+
+        }
+    }
+
+    fun progressBarBegin(millis: Long, claimComplete: Boolean) {
+        val progressBar = view?.find<ProgressBar>(R.id.canClaimAgainProgress)
+        progressBar?.visibility = View.VISIBLE
+
+        progressBar?.max = 10000
+        val animation = ObjectAnimator.ofInt(progressBar, "progress" , 0, 10000)
+        animation.setDuration(millis)
+        animation.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {}
+            override fun onAnimationRepeat(animation: Animator?) {}
+            override fun onAnimationEnd(animation: Animator?) {
+                if (claimComplete) {
+                    showUnsyncedClaim(true)
                 }
-            } else if (claims?.data?.claims?.size == 0) {
-                Thread({
-                    Thread.sleep(5000)
-                    performCheckBeforeClaim()
-                }).run()
+            }
+            override fun onAnimationCancel(animation: Animator?) {}
+        })
+        animation.start()
+    }
+
+    fun showUnsyncedClaim(reload: Boolean) {
+        onUiThread {
+            view?.find<ImageView>(R.id.syncingProgress)?.visibility = View.GONE
+            view?.find<TextView>(R.id.syncingSubtitle)?.visibility = View.GONE
+            view?.find<TextView>(R.id.syncingTitle)?.visibility = View.GONE
+            view?.find<TextView>(R.id.successfulClaimAmountTextView)?.visibility = View.GONE
+            view?.find<TextView>(R.id.successfulClaimTitleTextView)?.visibility = View.GONE
+            view?.find<TextView>(R.id.successfulClaimSubtitle)?.visibility = View.GONE
+            view?.find<ImageView>(R.id.coinsImageView)?.visibility = View.GONE
+            view?.find<ProgressBar>(R.id.canClaimAgainProgress)?.visibility = View.GONE
+
+            view?.find<TextView>(R.id.gasStateTitle)?.visibility = View.VISIBLE
+            view?.find<TextView>(R.id.gasStateTitle)?.text = getString(R.string.WALLET_estimated_gas)
+            view?.find<TextView>(R.id.claimableGasHeader)?.visibility = View.VISIBLE
+            view?.find<TickerView>(R.id.unclaimedGasTicker)?.visibility = View.VISIBLE
+            view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.VISIBLE
+            view?.find<View>(R.id.gasClaimDivider)?.visibility = View.VISIBLE
+            unclaimedGASTicker.textColor = resources.getColor(R.color.colorSubtitleGrey)
+            learnMoreClaimButton.visibility = View.VISIBLE
+            syncButton.visibility = View.VISIBLE
+
+            if (reload) {
+                firstLoad = true
+                reloadAllData()
+            }
+        }
+    }
+
+
+    fun syncTapped() {
+        tickupHandler.removeCallbacks(tickupRunnable)
+        showSyncingInProgress()
+        progressBarBegin(45000, false)
+        accountViewModel.syncChain {
+            onUiThread {
+                view?.find<ProgressBar>(R.id.canClaimAgainProgress)?.visibility = View.GONE
+            }
+            if (it) {
+                showReadyToClaim()
             } else {
                 onUiThread {
-                    performClaimGAS()
+                    alert (getString(R.string.WALLET_sync_failed)) {
+                        yesButton { getString(R.string.ALERT_OK_Confirm_Button) }
+                    }.show()
                 }
+                showUnsyncedClaim(false)
             }
         }
     }
 
-    fun sendNEOToOneSelf(){
-        NeoNodeRPC(PersistentStore.getNodeURL()).sendNativeAssetTransaction(Account.getWallet()!!, NeoNodeRPC.Asset.NEO, neoBalance.value, Account.getWallet()!!.address, null) {
-            var error = it.second
-            var success = it.first
-            if (error != null) {
+    fun claimTapped() {
+        accountViewModel.performClaim { succeeded, error ->
+            if (error != null || succeeded == false) {
                 onUiThread {
-                    setClaiming(false)
-                    claimToast.cancel()
-                    context?.toast(error.message!!)
+                    alert (getString(R.string.WALLET_claim_error)) {
+                        yesButton { getString(R.string.ALERT_OK_Confirm_Button) }
+                    }.show()
                 }
-            } else if (success == true) {
-                Thread({
-                    performCheckBeforeClaim()
-                }).run()
+               return@performClaim
+            } else {
+                showClaimSucceeded()
             }
         }
-    }
-
-    fun claimGasTapped() {
-        if (this.currentAccountState == null) {
-            context?.toast(resources.getString(R.string.WALLET_Claim_Error_Load_Account_State))
-            return
-        }
-        claimToast = context!!.toastUntilCancel(resources.getString(R.string.WALLET_claiming_gas))
-        setClaiming(true)
-        claimProgress.visibility = View.VISIBLE
-        claimButton.isEnabled = false
-        claimToast.show()
-        //avoid double send
-        Thread({
-            O3PlatformClient().getClaimableGAS(Account.getWallet()!!.address) {
-                val claims = it.first
-                val error = it.second
-                if (error != null) {
-                    onUiThread {
-                        setClaiming(false)
-                        context?.toast(error.message!!)
-                        claimToast.cancel()
-                    }
-                } else if (claims?.data?.claims?.size == 0) {
-                    Thread({
-                        sendNEOToOneSelf()
-                    }).run()
-                } else {
-                    //if data is already in the array then we can claim.
-                    Thread({
-                        performClaimGAS()
-                    }).run()
-                }
-            }
-        }).run()
     }
 
     private fun menuButtonTapped() {
@@ -402,7 +385,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
                 context,
                 SendActivity::class.java
         )
-        intent.putExtra("assets", assets)
         intent.putExtra("address", "")
         val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this.activity!!, menuButton, ViewCompat.getTransitionName(menuButton))
         ActivityCompat.startActivity(context!!, intent, option.toBundle())

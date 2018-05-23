@@ -164,20 +164,28 @@ class NeoNodeRPC {
         }
     }
 
-    fun claimGAS(wallet: Wallet, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
-        O3PlatformClient().getClaimableGAS(wallet.address) {
-            val claims = it.first
-            var error = it.second
-            if (error != null) {
-                completion(Pair<Boolean?, Error?>(false, error))
-            } else {
-                val payload = generateClaimTransactionPayload(wallet, claims!!)
-                sendRawTransaction(payload) {
-                    var success = it.first
-                    var error = it.second
-                    completion(Pair<Boolean?, Error?>(success, error))
+    fun claimGAS(wallet: Wallet, storedClaims: ClaimData? = null, completion: (Pair<Boolean?, Error?>) -> (Unit)) {
+        if (storedClaims == null) {
+            O3PlatformClient().getClaimableGAS(wallet.address) {
+                val claims = it.first
+                var error = it.second
+                if (error != null) {
+                    completion(Pair<Boolean?, Error?>(false, error))
+                } else {
+                    val payload = generateClaimTransactionPayload(wallet, claims!!)
+                    sendRawTransaction(payload) {
+                        var success = it.first
+                        var error = it.second
+                        completion(Pair<Boolean?, Error?>(success, error))
+                    }
                 }
-
+            }
+        } else {
+            val payload = generateClaimTransactionPayload(wallet, storedClaims!!)
+            sendRawTransaction(payload) {
+                var success = it.first
+                var error = it.second
+                completion(Pair<Boolean?, Error?>(success, error))
             }
         }
     }
@@ -221,8 +229,8 @@ class NeoNodeRPC {
         }
     }
 
-    private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, assets: Assets): SendAssetReturn {
-        var sortedUnspents  = getSortedUnspents(asset, assets.data)
+    private fun getInputsNecessaryToSendAsset(asset: Asset, amount: Double, utxos: UTXOS): SendAssetReturn {
+        var sortedUnspents  = getSortedUnspents(asset, utxos.data)
         var neededForTransaction: MutableList<UTXO> = arrayListOf()
         if (sortedUnspents.sumByDouble { it.value.toDouble() } <  amount) {
             return SendAssetReturn(null, null, Error("insufficient balance"))
@@ -289,9 +297,9 @@ class NeoNodeRPC {
         return payload
     }
 
-    private fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, assets: Assets, attributes: Array<TransactionAttritbute>?): ByteArray {
+    private fun generateSendTransactionPayload(wallet: Wallet, asset: Asset, amount: Double, toAddress: String, utxos: UTXOS, attributes: Array<TransactionAttritbute>?): ByteArray {
         var error: Error?
-        val inputData = getInputsNecessaryToSendAsset(asset, amount, assets)
+        val inputData = getInputsNecessaryToSendAsset(asset, amount, utxos)
         val payloadPrefix = byteArrayOf(0x80.toUByte(), 0x00.toByte())
         val rawTransaction = packRawTransactionBytes(payloadPrefix, wallet,
                 asset, inputData.payload!!, inputData.totalAmount!!,
@@ -304,7 +312,7 @@ class NeoNodeRPC {
     }
 
     /*
-    private fun genereateInvokeInputData(wallet: Wallet, assets: Assets): ByteArray {
+    private fun genereateInvokeInputData(wallet: Wallet, assets: UTXOS): ByteArray {
        /* var payload: ByteArray = byteArrayOf(0xd1.toUByte()) //Invoke Transaction Type
         payload += byteArrayOf(0x00.toUByte()) // Version
         // TODO: Im making this a one input with absolute minimum gas cost since I only care about NEP-5 Transfer
@@ -315,8 +323,8 @@ class NeoNodeRPC {
     }*/
 
 
-    private fun generateInvokeTransactionPayload(wallet: Wallet, assets: Assets, script: String, contractAddress: String): ByteArray {
-        val inputData = getInputsNecessaryToSendAsset(NeoNodeRPC.Asset.GAS, 0.00000001, assets)
+    private fun generateInvokeTransactionPayload(wallet: Wallet, utxos: UTXOS, script: String, contractAddress: String): ByteArray {
+        val inputData = getInputsNecessaryToSendAsset(NeoNodeRPC.Asset.GAS, 0.00000001, utxos)
         val payloadPrefix = byteArrayOf(0xd1.toUByte(), 0x00.toUByte()) + script.hexStringToByteArray()
         var rawTransaction = packRawTransactionBytes(payloadPrefix, wallet, Asset.GAS,
                 inputData.payload!!, inputData.totalAmount!!, 0.00000001,

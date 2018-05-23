@@ -12,6 +12,7 @@ import android.widget.TextView
 import network.o3.o3wallet.*
 import network.o3.o3wallet.API.NEO.AccountAsset
 import network.o3.o3wallet.API.O3.Portfolio
+import network.o3.o3wallet.API.O3Platform.TransferableAsset
 import org.jetbrains.anko.runOnUiThread
 import java.text.NumberFormat
 
@@ -25,7 +26,7 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
 
     private val mContext: Context
     private val mfragment: HomeFragment
-    var assets = ArrayList<AccountAsset>()
+    var assets = ArrayList<TransferableAsset>()
     var portfolio: Portfolio? = null
     var referenceCurrency: CurrencyType = CurrencyType.USD
     init {
@@ -36,7 +37,7 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
     override fun getItem(position: Int): TableCellData {
         var assetData = TableCellData("", 0.0, 0.0, 0.0, 0.0)
         assetData.assetName = assets.get(position).symbol
-        assetData.assetAmount = assets.get(position).value
+        assetData.assetAmount = assets.get(position).value.toDouble()
 
         if (portfolio != null) {
             if (referenceCurrency == CurrencyType.USD) {
@@ -87,7 +88,7 @@ class AssetListAdapter(context: Context, fragment: HomeFragment): BaseAdapter() 
         }
 
         var formatter = NumberFormat.getNumberInstance()
-        formatter.maximumFractionDigits = assets[position].decimal
+        formatter.maximumFractionDigits = assets[position].decimals
         assetAmountView.text = formatter.format(asset.assetAmount)
 
 

@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import network.o3.o3wallet.API.NEO.NeoNodeRPC
 import network.o3.o3wallet.API.O3.O3API
+import network.o3.o3wallet.API.O3Platform.O3PlatformClient
 import java.nio.ByteBuffer
 
 /**
@@ -70,6 +71,18 @@ class APIUnitTests {
             latch.countDown()
         }
         latch.await(3000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun balances() {
+        var latch = CountDownLatch(1)
+        O3PlatformClient().getTransferableAssets("AafQxV6wQhtGYGYFboEyBjw3eMYNtBFW8J") {
+            assert(it.first != null)
+            print(it.first)
+            latch.countDown()
+        }
+
+        latch.await(100000, TimeUnit.MILLISECONDS)
     }
 
     @Test

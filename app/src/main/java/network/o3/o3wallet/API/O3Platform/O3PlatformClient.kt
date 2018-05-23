@@ -12,6 +12,7 @@ class O3PlatformClient {
     val baseAPIURL = "https://platform.o3.network/api/v1/neo/"
     enum class Route {
         CLAIMABLEGAS,
+        BALANCES,
         UTXO;
 
         fun routeName(): String {
@@ -38,7 +39,23 @@ class O3PlatformClient {
         }
     }
 
-    fun getUTXOS(address: String, completion: (Pair<Assets?, Error?>) -> Unit) {
+    fun getClaimableGasBlocking(address: String) : ClaimData? {
+        val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName()
+        var request = url.httpGet()
+        request.timeoutInMillisecond = 5000
+        request.headers["User-Agent"] =  ""
+        val (_, _, result) = request.responseString()
+        val (data, error) = result
+        if (error == null) {
+            val gson = Gson()
+            val platformResponse = gson.fromJson<PlatformResponse>(data!!)
+            val claims = Gson().fromJson<ClaimData>(platformResponse.result)
+            return claims
+        }
+        return null
+    }
+
+    fun getUTXOS(address: String, completion: (Pair<UTXOS?, Error?>) -> Unit) {
         val url = baseAPIURL + address + "/" + Route.UTXO.routeName()
         var request = url.httpGet()
         request.headers["User-Agent"] =  "O3Android"
@@ -47,12 +64,28 @@ class O3PlatformClient {
             if (error == null) {
                 val gson = Gson()
                 val platformResponse = gson.fromJson<PlatformResponse>(data!!)
-                val assets = Gson().fromJson<Assets>(platformResponse.result)
-                completion(Pair<Assets?, Error?>(assets, null))
+                val assets = Gson().fromJson<UTXOS>(platformResponse.result)
+                completion(Pair<UTXOS?, Error?>(assets, null))
             } else {
-                completion(Pair<Assets?, Error?>(null, Error(error.localizedMessage)))
+                completion(Pair<UTXOS?, Error?>(null, Error(error.localizedMessage)))
             }
         }
     }
 
+    fun getTransferableAssets(address: String, completion: (Pair<TransferableAssets?, Error?>) -> Unit) {
+        val url = baseAPIURL + address + "/" + Route.BALANCES.routeName()
+        var request = url.httpGet()
+        request.headers["User-Agent"] = ""
+        request.timeout(600000).responseString { _, _, result ->
+            val (data, error) = result
+            if (error == null) {
+                val gson = Gson()
+                val platformResponse = gson.fromJson<PlatformResponse>(data!!)
+                val balanceData = Gson().fromJson<TransferableBalanceData>(platformResponse.result)
+                completion(Pair<TransferableAssets?, Error?>(TransferableAssets(balanceData.data), null))
+            } else {
+                completion(Pair<TransferableAssets?, Error?>(null, Error(error.localizedMessage)))
+            }
+        }
+    }
 }
