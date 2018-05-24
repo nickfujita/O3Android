@@ -53,7 +53,7 @@ class TopupSecondFragmentInfo : AppCompatActivity() {
             val address = intent.getStringExtra("Address")
             Account.storeColdStorageKeyFragmentOnDevice(secretPieceOne)
             PersistentStore.setColdStorageVaultAddress(address)
-            PersistentStore.setColdStorageEnabledStatus(true)
+            //PersistentStore.setColdStorageEnabledStatus(true)
             val intent = Intent(this, TopupColdStorageBalanceActivity::class.java)
             startActivity(intent)
         }

@@ -6,20 +6,41 @@
     android:layout_height="match_parent"
     tools:context="network.o3.o3wallet.Settings.AdvancedSettingsActivity">
 
-    <EditText
-        android:id="@+id/customEndpointEditText"
+    <CheckBox
+        android:id="@+id/checkBoxPrivateNet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="localhost:3000"
-        tools:ignore="HardCodedText"
-        android:inputType="textUri"
-        android:text="http://192.168.0.27:30333"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Private"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customEndpointEditText" />
+
+    <CheckBox
+        android:id="@+id/checkBoxTestNet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Test"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/customEndpointEditText" />
+
+    <EditText
+        android:id="@+id/customEndpointEditText"
+        android:layout_width="344dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="localhost:3000"
+        android:inputType="textUri"
+        android:text="https://privatenet.o3.network:30333"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardCodedText" />
 
     <Button
         android:id="@+id/connectButton"
@@ -28,26 +49,22 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Connect to Custom RPC"
-        tools:ignore="HardcodedText"
+        android:layout_marginTop="76dp"
+        android:text="Connect to Custom Network"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customEndpointEditText"
+        tools:ignore="HardcodedText" />
+
+    <CheckBox
+        android:id="@+id/checkBoxMainNet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/customEndpointEditText" />
 
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Use this to set a custom URL for RPC connections. Only use this if you know what you're doing"
-        tools:ignore="HardcodedText"
-        android:textAlignment="center"
-        android:textAppearance="@style/RegularText.Error"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectButton" />
 </android.support.constraint.ConstraintLayout>

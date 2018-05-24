@@ -120,8 +120,6 @@ object PersistentStore {
         setColdStorageVaultAddress("")
     }
 
-
-
     fun setNodeURL(url: String) {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
         settingPref.putString("NODE_URL", url)
@@ -133,86 +131,14 @@ object PersistentStore {
                 .getString("NODE_URL", "http://seed2.neo.org:10332")
     }
 
-
-    fun getSelectedNEP5Tokens(): HashMap<String, NEP5Token> {
-        var jsonString = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
-                .getString("SELECTED_NEP5_TOKENS", null)
-        if (jsonString == null) {
-            return HashMap<String, NEP5Token>()
-        }
-
-        val gson = Gson()
-        val list = gson.fromJson(jsonString, Map::class.java)
-        var tokens = HashMap<String, NEP5Token>()
-        for (key in list.keys) {
-            val assetMap = list[key] as Map<String, *>
-            var asset =  NEP5Token(tokenHash = assetMap["tokenHash"] as String,
-                    name = assetMap["name"] as String,
-                    totalSupply = assetMap["totalSupply"] as Double,
-                    decimal = (assetMap["decimal"] as Double).toInt(),
-                    symbol = assetMap["symbol"] as String
-            )
-            tokens.put(key as String, asset)
-        }
-
-        return tokens
-    }
-
-    fun addToken(token: NEP5Token): HashMap<String,NEP5Token> {
-        val currentList = getSelectedNEP5Tokens()
-        if (currentList[token.tokenHash] != null) {
-            return currentList
-        }
-
-        currentList[token.tokenHash] = token
-        val gson = com.google.gson.Gson()
-        val jsonString = gson.toJson(currentList)
-
+    fun setNetworkType(network: String) {
         val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putString("SELECTED_NEP5_TOKENS", jsonString)
-        settingPref.apply()
-
-        return currentList
-    }
-
-    fun removeToken(token: NEP5Token): HashMap<String,NEP5Token> {
-        val currentList = getSelectedNEP5Tokens()
-        currentList.remove(token.tokenHash)
-        val gson = Gson()
-        val jsonString = gson.toJson(currentList)
-
-        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putString("SELECTED_NEP5_TOKENS", jsonString)
-        settingPref.apply()
-
-        return currentList
-    }
-
-    fun removeAllTokens() {
-        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putString("SELECTED_NEP5_TOKENS", null)
+        settingPref.putString("NETWORK_TYPE", network)
         settingPref.apply()
     }
 
-    fun getNeedClearTokens(): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).
-                getBoolean("NEED_CLEAR_TOKENS", true)
-    }
-
-    fun setNeedClearTokens(value: Boolean) {
-        val settingPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingPref.putBoolean("NEED_CLEAR_TOKENS", value)
-        settingPref.apply()
-    }
-
-    fun setColdStorageEnabledStatus(status: Boolean) {
-        var settingsPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
-        settingsPref.putBoolean("COLD_STORAGE_STATUS", status)
-        settingsPref.apply()
-    }
-
-    fun getColdStorageEnabledStatus(): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).
-                getBoolean("COLD_STORAGE_STATUS", false)
+    fun getNetworkType(): String {
+        return  PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("NETWORK_TYPE", "Main")
     }
 }

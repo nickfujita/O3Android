@@ -34,7 +34,7 @@ class SelectingBestNode : AppCompatActivity() {
 
     fun getBestNode() {
 
-        val nodes = "https://seed1.neo.org:10331," +
+        val mainNetNodes = "https://seed1.neo.org:10331," +
                 "http://seed2.neo.org:10332," +
                 "http://seed3.neo.org:10332," +
                 "http://seed4.neo.org:10332," +
@@ -48,6 +48,27 @@ class SelectingBestNode : AppCompatActivity() {
                 "http://seed2.o3node.org:10332," +
                 "http://seed3.o3node.org:10332"
 
+        val testNetNodes = "https://seed1.neo.org:20332," +
+                "http://seed2.neo.org:20332," +
+                "http://seed3.neo.org:20332," +
+                "http://seed4.neo.org:20332," +
+                "http://seed5.neo.org:20332," +
+                "http://test1.cityofzion.io:8080," +
+                "http://test2.cityofzion.io:8080," +
+                "http://test3.cityofzion.io:8080," +
+                "http://test4.cityofzion.io:8080," +
+                "http://test5.cityofzion.io:8080"
+
+        val privateNetNodes = "https://privatenet.o3.network:30333"
+
+        var nodes = ""
+        if (PersistentStore.getNetworkType() == "Main") {
+            nodes = mainNetNodes
+        } else if (PersistentStore.getNetworkType() == "Test") {
+            nodes = testNetNodes
+        } else {
+            nodes = privateNetNodes
+        }
 
         async(UI) {
             val data: Deferred<SeedNodeResponse> = bg {

@@ -152,15 +152,14 @@ class AccountViewModel: ViewModel() {
 
         NeoNodeRPC(PersistentStore.getNodeURL()).sendNativeAssetTransaction(Account.getWallet()!!,
                 NeoNodeRPC.Asset.NEO, neoBalance!!.toDouble(), Account.getWallet()!!.address, null) {
-            if (it.second != null) {
+            if (it.second != null || it.first == false) {
                 completion(false)
-                return@sendNativeAssetTransaction
-            } else if (it.first == true) {
+            } else {
                 checkSyncComplete {
                     if (it) {
                         this.needsSync = false
-                        completion(true)
                     }
+                    completion(it)
                 }
             }
         }

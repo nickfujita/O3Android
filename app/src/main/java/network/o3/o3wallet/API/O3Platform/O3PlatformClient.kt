@@ -3,6 +3,7 @@ package network.o3.o3wallet.API.O3Platform
 import com.github.kittinunf.fuel.httpGet
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
+import network.o3.o3wallet.PersistentStore
 
 /**
  * Created by drei on 11/24/17.
@@ -20,9 +21,19 @@ class O3PlatformClient {
         }
     }
 
+    fun networkQueryString(): String {
+        if (PersistentStore.getNetworkType() == "Main") {
+            return ""
+        } else if (PersistentStore.getNetworkType() == "Test") {
+            return "?network=test"
+        } else {
+            return "?network=private"
+        }
+    }
+
 
     fun getClaimableGAS(address: String, completion: (Pair<ClaimData?, Error?>) -> Unit) {
-        val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName()
+        val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName() + networkQueryString()
         var request = url.httpGet()
         request.headers["User-Agent"] =  "O3Android"
         request.responseString { _, _, result ->
@@ -40,7 +51,7 @@ class O3PlatformClient {
     }
 
     fun getClaimableGasBlocking(address: String) : ClaimData? {
-        val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName()
+        val url = baseAPIURL + address + "/" + Route.CLAIMABLEGAS.routeName() + networkQueryString()
         var request = url.httpGet()
         request.timeoutInMillisecond = 5000
         request.headers["User-Agent"] =  ""
@@ -56,7 +67,7 @@ class O3PlatformClient {
     }
 
     fun getUTXOS(address: String, completion: (Pair<UTXOS?, Error?>) -> Unit) {
-        val url = baseAPIURL + address + "/" + Route.UTXO.routeName()
+        val url = baseAPIURL + address + "/" + Route.UTXO.routeName() + networkQueryString()
         var request = url.httpGet()
         request.headers["User-Agent"] =  "O3Android"
         request.timeout(600000).responseString { _, _, result ->
@@ -73,7 +84,7 @@ class O3PlatformClient {
     }
 
     fun getTransferableAssets(address: String, completion: (Pair<TransferableAssets?, Error?>) -> Unit) {
-        val url = baseAPIURL + address + "/" + Route.BALANCES.routeName()
+        val url = baseAPIURL + address + "/" + Route.BALANCES.routeName() + networkQueryString()
         var request = url.httpGet()
         request.headers["User-Agent"] = ""
         request.timeout(600000).responseString { _, _, result ->

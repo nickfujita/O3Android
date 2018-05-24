@@ -34,7 +34,7 @@ class TopupColdStorageBalanceActivity : AppCompatActivity() {
                 if (itemId == R.id.remove_cold_storage) {
                     Account.removeColdStorageKeyFragment()
                     PersistentStore.removeColdStorageVaultAddress()
-                    PersistentStore.setColdStorageEnabledStatus(false)
+                   // PersistentStore.setColdStorageEnabledStatus(false)
                     this.finish()
                 }
                 true

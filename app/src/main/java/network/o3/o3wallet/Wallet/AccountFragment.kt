@@ -1,5 +1,4 @@
 package network.o3.o3wallet.Wallet
-
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.arch.lifecycle.Observer
@@ -11,25 +10,16 @@ import android.support.v4.app.Fragment
 import android.widget.*
 import android.support.v4.widget.SwipeRefreshLayout
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Handler
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.ViewCompat
-import android.util.Log
-import android.view.animation.DecelerateInterpolator
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.robinhood.ticker.TickerUtils
 import com.robinhood.ticker.TickerView
-import kotlinx.android.synthetic.main.wallet_fragment_account.*
 import network.o3.o3wallet.*
-import network.o3.o3wallet.API.NEO.*
 import network.o3.o3wallet.API.O3Platform.*
 import network.o3.o3wallet.TokenSales.TokenSalesActivity
 import org.jetbrains.anko.support.v4.onUiThread
@@ -37,16 +27,10 @@ import network.o3.o3wallet.Wallet.Send.SendActivity
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
-import org.w3c.dom.Text
 
 
-interface TokenListProtocol {
-    fun reloadTokenList()
-}
+class AccountFragment : Fragment() {
 
-class AccountFragment : Fragment(), TokenListProtocol {
-
-    private var fabExpanded = false
     private lateinit var menuButton: FloatingActionMenu
     private lateinit var myQrButton: FloatingActionButton
     private lateinit var sendButton: FloatingActionButton
@@ -55,33 +39,13 @@ class AccountFragment : Fragment(), TokenListProtocol {
     private lateinit var syncButton: Button
     private lateinit var claimButton: Button
     private lateinit var learnMoreClaimButton: Button
-    private lateinit var claims: ClaimData
-    private var currentAccountState: AccountState? = null
-    private lateinit var neoBalance: Balance
-    private lateinit var gasBalance: Balance
     private lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var assetListView: ListView
-    private lateinit var claimToast: Toast
     private lateinit var accountViewModel: AccountViewModel
     private var claimAmount: Double = 0.0
-    private var isClaiming = false
     private var firstLoad = true
     private var tickupHandler = Handler()
     private lateinit var tickupRunnable: Runnable
-
-    //var assets: ArrayList<AccountAsset> = arrayListOf<AccountAsset>()
-
-
-    fun setClaiming(claiming:Boolean) {
-        isClaiming = claiming
-        this.syncButton.isEnabled = !claiming
-        if (claiming) {
-            //claimProgress.visibility = View.VISIBLE
-        } else {
-            //claimProgress.visibility = View.INVISIBLE
-        }
-        //finished claiming but have user wait 5 minutes
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -140,8 +104,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         super.onViewCreated(view, savedInstanceState)
         accountViewModel = AccountViewModel()
 
-
-        //claimProgress.visibility = View.INVISIBLE
         syncButton = view.findViewById(R.id.syncButton)
         claimButton = view.find(R.id.claimButton)
         learnMoreClaimButton = view.find(R.id.learnMoreClaimButton)
@@ -162,8 +124,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
 
         setupActionButton(view)
 
-
-
         unclaimedGASTicker.text = "0.00000000"
         unclaimedGASTicker.textColor = resources.getColor(R.color.colorSubtitleGrey)
         syncButton.setOnClickListener {
@@ -179,16 +139,10 @@ class AccountFragment : Fragment(), TokenListProtocol {
             startActivity(browserIntent)
         }
 
-
-
-        //menuButton.transitionName = "reveal"
-
-
         activity?.title = "Account"
-
-
         reloadAllData()
     }
+
 
     private fun tickup() {
         var current = unclaimedGASTicker.text.toDouble()
@@ -216,10 +170,6 @@ class AccountFragment : Fragment(), TokenListProtocol {
         startActivity(tokenSaleIntent)
     }
 
-    override fun reloadTokenList() {
-       // loadAccountState()
-    }
-
     private fun showAssets(data: TransferableAssets) {
         swipeContainer.isRefreshing = false
         val adapter = AccountAssetsAdapter(this,context!!, Account.getWallet()!!.address,
@@ -232,6 +182,7 @@ class AccountFragment : Fragment(), TokenListProtocol {
         val amount = claims.data.gas.toDouble()
         unclaimedGASTicker.text =  "%.8f".format(accountViewModel.getEstimatedGas(claims))
         claimAmount = amount
+
         if (accountViewModel.getClaimingStatus()) {
             this.syncButton.isEnabled = false
         } else {
