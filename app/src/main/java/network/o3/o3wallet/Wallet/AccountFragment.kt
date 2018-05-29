@@ -189,7 +189,7 @@ class AccountFragment : Fragment() {
         val amount = claims.data.gas.toDouble()
         unclaimedGASTicker.text =  "%.8f".format(accountViewModel.getEstimatedGas(claims))
         claimAmount = amount
-        learnMoreClaimButton.visibility = View.VISIBLE
+        //learnMoreClaimButton.visibility = View.VISIBLE
         syncButton.visibility = View.VISIBLE
 
         if (accountViewModel.getClaimingStatus()) {
@@ -210,7 +210,7 @@ class AccountFragment : Fragment() {
             view?.find<TextView>(R.id.claimableGasHeader)?.visibility = View.GONE
             view?.find<TickerView>(R.id.unclaimedGasTicker)?.visibility = View.GONE
             view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.GONE
-            learnMoreClaimButton.visibility = View.GONE
+            //learnMoreClaimButton.visibility = View.GONE
             syncButton.visibility = View.GONE
         }
     }
@@ -219,7 +219,7 @@ class AccountFragment : Fragment() {
         onUiThread {
             unclaimedGASTicker.text = accountViewModel.getStoredClaims().data.gas
             unclaimedGASTicker.textColor = resources.getColor(R.color.colorBlack)
-            learnMoreClaimButton.visibility = View.GONE
+            //learnMoreClaimButton.visibility = View.GONE
             syncButton.visibility = View.GONE
 
             view?.find<ImageView>(R.id.syncingProgress)?.visibility = View.GONE
@@ -305,7 +305,7 @@ class AccountFragment : Fragment() {
             view?.find<ImageView>(R.id.claimableGasImageView)?.visibility = View.VISIBLE
             view?.find<View>(R.id.gasClaimDivider)?.visibility = View.VISIBLE
             unclaimedGASTicker.textColor = resources.getColor(R.color.colorSubtitleGrey)
-            learnMoreClaimButton.visibility = View.VISIBLE
+           // learnMoreClaimButton.visibility = View.VISIBLE
             syncButton.visibility = View.VISIBLE
 
             if (reload) {
