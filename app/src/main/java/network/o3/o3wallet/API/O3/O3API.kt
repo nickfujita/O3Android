@@ -119,11 +119,11 @@ class O3API {
     }
 
     fun getTokenSales(completion: (Pair<TokenSales?, Error?>) -> Unit) {
-        var url = "https://cdn.o3.network/data/tokensales.json"
+        var url = "https://platform.o3.network/api/v1/neo/tokensales"
         if (PersistentStore.getNetworkType() == "Test") {
-            url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+            url = "https://platform.o3.network/api/v1/neo/tokensales?network=test"
         } else if (PersistentStore.getNetworkType() == "Private") {
-            url = "https://s3-ap-northeast-1.amazonaws.com/network.o3.cdn/data/___tokensale.json"
+            url = "https://platform.o3.network/api/v1/neo/tokensales?network=private"
         }
 
         url.httpGet().responseString { request, response, result ->
