@@ -131,11 +131,16 @@ class HomeFragment : Fragment(), HomeViewModelProtocol {
             assetListAdapter?.portfolio = portfolio
             assetListAdapter?.referenceCurrency = homeModel.getCurrency()
             assetListAdapter?.notifyDataSetChanged()
-
             updateHeader(homeModel.getCurrentPortfolioValue().formattedCurrencyString(homeModel.getCurrency()),
                     homeModel.getPercentChange())
             chartDataAdapter.setData(homeModel.getPriceFloats())
             hideLoadingIndicator()
+            if (PersistentStore.getFirstTokenAppeared() && homeModel.getCurrentPortfolioValue() != 0.0
+                    && homeModel.getDisplayType() == HomeViewModel.DisplayType.HOT) {
+                val backupKeyCheck = DialogBackupKeyFragment.newInstance()
+                backupKeyCheck.show(this.fragmentManager, "backupkey")
+                PersistentStore.setFirstTokenAppeared(false)
+            }
         }
     }
 

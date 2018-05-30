@@ -157,6 +157,7 @@ class AccountFragment : Fragment() {
 
         activity?.title = "Account"
         reloadAllData()
+
     }
 
 
