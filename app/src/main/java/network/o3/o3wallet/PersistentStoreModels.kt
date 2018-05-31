@@ -141,4 +141,15 @@ object PersistentStore {
         return  PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
                 .getString("NETWORK_TYPE", "Main")
     }
+
+    fun setCurrency(currency: String) {
+        val settingsPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingsPref.putString("CURRENCY", currency)
+        settingsPref.apply()
+    }
+
+    fun getCurrency(): String {
+        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("CURRENCY", "usd")
+    }
 }

@@ -50,6 +50,7 @@ class O3API {
         for (asset in assets) {
             queryString = queryString + String.format(Locale.US, "&%s=%.8f", asset.symbol, asset.value)
         }
+        queryString += String.format("&currency=%s", PersistentStore.getCurrency())
 
         val url = baseURL + Route.HISTORICAL.routeName() + queryString
         var request = url.httpGet()
