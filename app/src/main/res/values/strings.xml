@@ -30,14 +30,15 @@
     <!-- Login Page -->
     <string name="ONBOARDING_scan" comment="Title for scan button, allowing users to login by scanning private key">Scan</string>
     <string name="ONBOARDING_login_footnote" comment="Footnote showing that the private key will be stored locally on the device">This private key will be stored on your device after logging in.</string>
-    <string name="ONBOARDING_scan_prompt" comment="Prompt asking the user to scan their QR code in order to log ib">Scan the QR code of your private key</string>>
+    <string name="ONBOARDING_scan_prompt" comment="Prompt asking the user to scan their QR code in order to log ib">Scan the QR code of your private key</string>
+    >
     <string name="ONBOARDING_Login_To_Existing" comment="Prompt when displaying passcode to login to existing wallet">Log in to your existing wallet</string>
 
     <!-- Settings: Menu -->
     <string name="SETTINGS_settings_title" comment="A title for the settings menu">Settings</string>
     <string-array name="SETTINGS_settings_menu_titles" comment="A title for the individual item in the settings menu">
         <item>My Private Key</item>
-        <item>Address Book</item>
+        <item>Currency</item>
         <item>Watch Only Address</item>
         <item>Network</item>
         <item>Support</item>
@@ -51,7 +52,15 @@
 
 
     <!-- Settings: Private Key -->
-    <string name="SETTINGS_private_key" comment="A comment for the private key screen in the settings menu">Private Key</string>
+    <string name="SETTINGS_write_down_warning" comment="A comment saying that writing down your private key is most secur ">
+        The most secure way to back up your key is to write it down on paper and store it somewhere safe from theft or damage
+    </string>
+    <string name="SETTINGS_copy_to_clipboard" comment="Copy private key to clipboard">Copy to Clipboard</string>
+    <string name="SETTINGS_save_as_qr" comment="save your qr image via sharing">Save as QR Key</string>
+    <string name="SETTINGS_copied_key" comment="displayed when copied to clipboard">Copied Key</string>
+
+    <!-- Settings: Currency -->
+    <string name="SETTINGS_currency" comment="A comment for the currency screen in the settings menu">Currency</string>
 
     <!-- Settings: Watch Addresses -->
     <string name="SETTINGS_watch_addresses" comment="A title for watch addresses">Watch Addresses</string>
@@ -119,9 +128,11 @@
 
     <!-- Wallet History -->
     <string name="WALLET_to" comment="to label in transaction history screen">To</string>>
-    <string name="WALLET_to_formatted" comment="to label in transaction history screen and send screen">To: %1$s</string>>
+    <string name="WALLET_to_formatted" comment="to label in transaction history screen and send screen">To: %1$s</string>
+    >
     <string name="WALLET_from" comment="from label in transaction history screen">From</string>>
-    <string name="WALLET_from_formatted" comment="to label in transaction history screen">From: %1$s</string>>
+    <string name="WALLET_from_formatted" comment="to label in transaction history screen">From: %1$s</string>
+    >
     <string name="WALLET_unknown_asset" comment="label for when the asset set is an unknwon asset">Unknown Asset</string>
     <string name="WALLET_to_O3_wallet" comment="label for when transaction goes to O3 wallet">To: O3 Wallet</string>
     <string name="WALLET_from_O3_wallet" comment="label for when transaction goes from O3 wallet">From: O3 Wallet</string>
@@ -147,7 +158,6 @@
 
     <string name="SEND_native_assets_header" comment="Section header for Native Assets(NEO/GAS) when selecting what asset to send">Native Assets</string>
     <string name="SEND_token_assets_header" comment="Section header for Token utxos when selecting what asset to send">Tokens</string>
-
 
 
     <!-- TokenSale -->
@@ -275,7 +285,7 @@
     <string name="PORTFOLIO_price_history">%1$s Price History</string>
 
     <string-array name="PORTFOLIO_headers">
-        <item>OZONE WALLET</item>
+        <item>O3 WALLET</item>
         <item>COMBINED</item>
         <item>COLD STORAGE</item>
     </string-array>
@@ -288,7 +298,7 @@
     <string name="PORTFOLIO_all" comment="alltime portfolio interval">ALL</string>
 
     <!-- Tab Titles -->
-    <string name="TABBAR_portfolio" comment="tabbar title for the portfolio screen">portfolio</string>
+    <string name="TABBAR_portfolio" comment="tabbar title for the portfolio screen">Portfolio</string>
     <string name="TABBAR_account" comment="tabbar title for the account screen">Account</string>
     <string name="TABBAR_news_feed" comment="tabbar title for the newsfeed screen">News Feed</string>
     <string name="TABBAR_logout_warning" comment="title when backing out of the app from the tabbar screen">Are you sure you want to exit the app?</string>
@@ -328,4 +338,13 @@
     <string name="WALLET_successful_claim_title">GAS claimed successfully</string>
     <string name="WALLET_sync_failed">Oh no! Something went wrong with the syncing process. Check back later and try again</string>
     <string name="WALLET_claim_error">An error occured while claiming, check the network in your settings and try again</string>
+    <string name="DIALOG_tokens_in_your_wallet">You\'ve got tokens in your wallet</string>
+    <string name="DIALOG_making_sure_backup">We just want to make sure you have backed up your private key to keep them safe</string>
+    <string name="DIALOG_confirm_backup">My private key is backed up in a safe place</string>
+    <string name="DIALOG_confirm_will_not_share">I will never share this key with anyone else</string>
+    <string name="DIALOG_can_lose_confirm">I understand that if I lose this key I will lose access to my wallet</string>
+    <string name="DIALOG_show_my_key">Show my key</string>
+    <string name="DIALOG_performed_backup">All Done!</string>
+    <string name="PORTFOLIO_pricing_not_available">No Pricing Data Available Yet</string>
+    <string name="PORTFOLIO_pricing_not_available_description">Our source for pricing data (CoinCap) has not yet registered this token, check back soon!</string>
 </resources>

@@ -9,6 +9,17 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="actionBarStyle">@style/NoShadowActionBar</item>
     </style>
+
+    <style name = "AppTheme.Dialog" parent ="Theme.AppCompat.Light">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+
+
     <style name="NoShadowActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:fontFamily">@font/muli_bold</item>
         <item name="elevation">0dp</item>
