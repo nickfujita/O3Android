@@ -152,4 +152,15 @@ object PersistentStore {
         settingPref.putBoolean("FIRST_TOKEN", firstToken)
         settingPref.apply()
     }
+  
+    fun setCurrency(currency: String) {
+        val settingsPref = PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext).edit()
+        settingsPref.putString("CURRENCY", currency)
+        settingsPref.apply()
+    }
+
+    fun getCurrency(): String {
+        return PreferenceManager.getDefaultSharedPreferences(O3Wallet.appContext)
+                .getString("CURRENCY", "usd")
+    }
 }
