@@ -333,7 +333,6 @@
     <string name="WALLET_successful_claim_title">GAS claimed successfully</string>
     <string name="WALLET_sync_failed">Oh no! Something went wrong with the syncing process. Check back later and try again</string>
     <string name="WALLET_claim_error">An error occured while claiming, check the network in your settings and try again</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="PORTFOLIO_pricing_not_available">No Pricing Data Available Yet</string>
+    <string name="PORTFOLIO_pricing_not_available_description">Our source for pricing data (CoinCap) has not yet registered this token, check back soon!</string>
 </resources>
