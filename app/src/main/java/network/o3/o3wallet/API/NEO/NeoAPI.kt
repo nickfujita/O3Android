@@ -21,6 +21,7 @@ import unsigned.toUByte
 import java.lang.Exception
 import java.math.BigDecimal
 import java.nio.*
+import java.util.*
 
 
 class NeoNodeRPC {
@@ -54,7 +55,7 @@ class NeoNodeRPC {
         INVOKEFUNCTION;
 
         fun methodName(): String {
-            return this.name.toLowerCase()
+            return this.name.toLowerCase(Locale.US)
         }
     }
 
