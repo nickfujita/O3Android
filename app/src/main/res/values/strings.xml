@@ -285,7 +285,7 @@
     <string name="PORTFOLIO_price_history">%1$s Price History</string>
 
     <string-array name="PORTFOLIO_headers">
-        <item>OZONE WALLET</item>
+        <item>O3 WALLET</item>
         <item>COMBINED</item>
         <item>COLD STORAGE</item>
     </string-array>
@@ -298,7 +298,7 @@
     <string name="PORTFOLIO_all" comment="alltime portfolio interval">ALL</string>
 
     <!-- Tab Titles -->
-    <string name="TABBAR_portfolio" comment="tabbar title for the portfolio screen">portfolio</string>
+    <string name="TABBAR_portfolio" comment="tabbar title for the portfolio screen">Portfolio</string>
     <string name="TABBAR_account" comment="tabbar title for the account screen">Account</string>
     <string name="TABBAR_news_feed" comment="tabbar title for the newsfeed screen">News Feed</string>
     <string name="TABBAR_logout_warning" comment="title when backing out of the app from the tabbar screen">Are you sure you want to exit the app?</string>
