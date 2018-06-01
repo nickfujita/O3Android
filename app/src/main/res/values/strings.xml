@@ -52,7 +52,12 @@
 
 
     <!-- Settings: Private Key -->
-    <string name="SETTINGS_private_key" comment="A comment for the private key screen in the settings menu">Private Key</string>
+    <string name="SETTINGS_write_down_warning" comment="A comment saying that writing down your private key is most secur ">
+        The most secure way to back up your key is to write it down on paper and store it somewhere safe from theft or damage
+    </string>
+    <string name="SETTINGS_copy_to_clipboard" comment="Copy private key to clipboard">Copy to Clipboard</string>
+    <string name="SETTINGS_save_as_qr" comment="save your qr image via sharing">Save as QR Key</string>
+    <string name="SETTINGS_copied_key" comment="displayed when copied to clipboard">Copied Key</string>
 
     <!-- Settings: Currency -->
     <string name="SETTINGS_currency" comment="A comment for the currency screen in the settings menu">Currency</string>
@@ -333,6 +338,13 @@
     <string name="WALLET_successful_claim_title">GAS claimed successfully</string>
     <string name="WALLET_sync_failed">Oh no! Something went wrong with the syncing process. Check back later and try again</string>
     <string name="WALLET_claim_error">An error occured while claiming, check the network in your settings and try again</string>
+    <string name="DIALOG_tokens_in_your_wallet">You\'ve got tokens in your wallet</string>
+    <string name="DIALOG_making_sure_backup">We just want to make sure you have backed up your private key to keep them safe</string>
+    <string name="DIALOG_confirm_backup">My private key is backed up in a safe place</string>
+    <string name="DIALOG_confirm_will_not_share">I will never share this key with anyone else</string>
+    <string name="DIALOG_can_lose_confirm">I understand that if I lose this key I will lose access to my wallet</string>
+    <string name="DIALOG_show_my_key">Show my key</string>
+    <string name="DIALOG_performed_backup">All Done!</string>
     <string name="PORTFOLIO_pricing_not_available">No Pricing Data Available Yet</string>
     <string name="PORTFOLIO_pricing_not_available_description">Our source for pricing data (CoinCap) has not yet registered this token, check back soon!</string>
 </resources>
