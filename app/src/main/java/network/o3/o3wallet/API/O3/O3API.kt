@@ -24,7 +24,7 @@ class O3API {
         FEED;
 
         fun routeName(): String {
-            return this.name.toLowerCase()
+            return this.name.toLowerCase(Locale.US)
         }
     }
 
@@ -46,7 +46,7 @@ class O3API {
     }
 
     fun getPortfolio(assets: ArrayList<TransferableAsset>, interval: String, completion: (Pair<Portfolio?, Error?>) -> Unit) {
-        var queryString = String.format("?i=%s", interval)
+        var queryString = String.format(Locale.US, "?i=%s", interval)
         for (asset in assets) {
             queryString = queryString + String.format(Locale.US, "&%s=%.8f", asset.symbol, asset.value)
         }
